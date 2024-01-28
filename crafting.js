@@ -124,7 +124,7 @@ const pickaxeRecipes = [
     ],
     //PICKAXE 11
     [
-        ["🌊", 250000000],
+        ["🌊", 200000000],
         ["💫", 1],
         ["🪩", 5],
         ["👿", 10],
@@ -136,6 +136,25 @@ const pickaxeRecipes = [
         ["🤿", 500],
         ["🎣", 500],
         ["⛵", 500]
+    ],
+    //PICKAXE 12
+    [
+        ["🧱", 150000000],
+        ["🪨", 150000000],
+        ["🌫️", 150000000],
+        ["🌇", 1],
+        ["🌈", 2],
+        ["👁️", 3],
+        ["💸", 15],
+        ["🧊", 30],
+        ["🥉", 30],
+        ["❄️", 40],
+        ["🧵", 50],
+        ["🤍", 750],
+        ["💚", 1500],
+        ["⚫", 50000000],
+        ["🟤", 35000000],
+
     ]
 ],
 gearRecipes = [
@@ -223,10 +242,10 @@ gearRecipes = [
     //SUGAR RUSH
     [
         ["☢️", 4000000],
-        ["🔳", 5],
-        ["⏹️", 3],
-        ["⚗️", 20],
-        ["🧪", 15]
+        ["🔳", 3],
+        ["⏹️", 5],
+        ["⚗️", 15],
+        ["🧪", 20]
     ],
     //SILLY TP
     [
@@ -242,7 +261,7 @@ function displayRecipe(num) {
     for (let i = 0; i < craftableChildren.length; i++) {
         craftableChildren[i].style.display = "none";
     }
-    if (document.getElementById("pickaxeCrafts").style.display === "block") {
+    if (!(document.getElementById("pickaxeCrafts").classList.contains("hidden"))) {
         let parent = document.getElementById("displayRecipe")
         while (parent.firstChild)
             parent.removeChild(parent.firstChild);
@@ -329,7 +348,7 @@ function createGearRecipes() {
 }
 
 function updateActiveRecipe() {
-    if (document.getElementById("pickaxeCrafts").style.display === "block") {
+    if (!(document.getElementById("pickaxeCrafts").classList.contains("hidden"))) {
         for (let i = 0; i < recipeElements[0].length; i++) {
             if (recipeElements[0][i].style.display === "block") {
                 let parent = recipeElements[0][i];
@@ -413,10 +432,10 @@ function craftGear(num) {
 }
 
 function showPickaxes() {
-    document.getElementById("pickaxeCrafts").style.display = "block";
-    document.getElementById("gearCrafts").style.display = "none";
+    appear(document.getElementById("pickaxeCrafts"));
+    disappear(document.getElementById("gearCrafts"));
 }
 function showGears() {
-    document.getElementById("pickaxeCrafts").style.display = "none";
-    document.getElementById("gearCrafts").style.display = "block";
+    disappear(document.getElementById("pickaxeCrafts"));
+    appear(document.getElementById("gearCrafts"));
 }

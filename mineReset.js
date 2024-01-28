@@ -30,12 +30,12 @@ async function mineReset() {
 
 function collectOres(temp) {
     return new Promise((resolve) => {
-    if (gears[3]) {
+    /*if (gears[3]) {
         for (let i = 0; i < loggedFinds.length; i++) {
             if (mine[loggedFinds[i][0]] !== undefined && mine[loggedFinds[i][0]][loggedFinds[i][1]] !== undefined)
                 mineBlock(loggedFinds[i][1], loggedFinds[i][0], "reset", 1);
         }
-    } else {
+    }*/
         let direction = "";
         if (temp !== "")
             direction = temp;
@@ -90,7 +90,6 @@ function collectOres(temp) {
                 }
             }
         }
-    }
     setTimeout(() => {
         resolve(true);
     }, 1000);
@@ -107,10 +106,6 @@ function mineResetAid() {
         for (let r = y - 50; r < y + 50; r++) {
             if(r > -1 && mine[r] === undefined) {
                 mine[r] = [];
-            }
-            for (let c = x - 50; c < x + 50; c++) {
-                if (mine[r] != undefined)
-                    mine[r][c] = "⬜";
             }
         }
         checkAllAround(curX, curY, 1);
