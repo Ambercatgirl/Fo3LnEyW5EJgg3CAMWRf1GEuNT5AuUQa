@@ -1,4 +1,3 @@
-let caveLuck = 1;
 function generateCave(x, y, rate, reps, type) {
     let caveType;
     if (type === undefined) {
@@ -11,25 +10,26 @@ function generateCave(x, y, rate, reps, type) {
         let distX = Math.round(Math.random() * 10) + 3;
         let distY = Math.round(Math.random() * 10) + 3;
         let newOrigins = [];
-        for (let r = y; r < y + distY; r++) {
-            for (let c = x; c < x + distX; c++) {
-                if (Math.random() < (0.1 - rate))
-                    newOrigins.push([c + (Math.round(Math.random() * 6)) - 4, r + (Math.round(Math.random() * 6)) - 2]);
-                
-                    if (r > 0) {
-                        if (mine[r][c] === "⬜") {
-                            let generated = generateCaveBlock(r, c, caveType);
-                            mine[r][c] = generated[0];
-                            if (generated[1])
-                                verifiedOres.verifyLog(r, c);
+            if ((mine[y] != undefined && mine[y + distY] != undefined) && !(mine[y][x] === "⚪" && mine[y + distY][x + distX] === "⚪")) {
+            for (let r = y; r < y + distY; r++) {
+                for (let c = x; c < x + distX; c++) {
+                    if (Math.random() < (0.1 - rate))
+                        newOrigins.push([c + (Math.round(Math.random() * 4)) - (5 + reps), r + (Math.round(Math.random() * 4)) - (5 + reps)]);
+                        if (r > 0) {
+                            if (mine[r][c] === undefined) {
+                                let generated = generateCaveBlock(r, c, caveType);
+                                mine[r][c] = generated[0];
+                                if (generated[1])
+                                    verifiedOres.verifyLog(r, c);
+                            }  
                         }
-                        
-                    }
-                    mineCaveBlock(c, r, caveType);
+                        mineCaveBlock(c, r, caveType);
+                }
             }
+            let newRate = Math.round(Math.random() * 10) / 450;
+            rate += newRate;
+            reps++;
         }
-        rate += 0.025;
-        reps++;
         for (let i = 0; i < newOrigins.length; i++) {
             generateCave(newOrigins[i][0], newOrigins[i][1], rate, reps, caveType);
         }
@@ -40,7 +40,7 @@ function mineCaveBlock(c, r, type) {
     let block = mine[r][c];
     let caveMulti = getCaveMulti(type);
     if (block != undefined) {
-        if (block != "⚪" && block != "⬜" && block != "⛏️") {
+        if (block != "⚪" && block != "⛏️") {
             giveBlock(block, c, r, false, true, caveMulti);
             mine[r][c] = "⚪";
         }
@@ -57,9 +57,6 @@ function mineCaveBlock(c, r, type) {
         mine[r + 1] = [];
     }
     if (mine[r + 1][c] === undefined) {
-        mine[r + 1][c] = "⬜";
-    }
-    if (mine[r + 1][c] === "⬜") {
         generated = generateCaveBlock(r + 1, c, type);
         mine[r + 1][c] = generated[0];
         if (generated[1]) 
@@ -68,9 +65,6 @@ function mineCaveBlock(c, r, type) {
     }
     //CHECK TO THE RIGHT OF THE BLOCK
     if (mine[r][c + 1] === undefined) {
-        mine[r][c + 1] = "⬜";
-    }
-    if (mine[r][c + 1] === "⬜") {
         generated = generateCaveBlock(r, c + 1, type);
         mine[r][c + 1] = generated[0];
         if (generated[1]) 
@@ -79,9 +73,6 @@ function mineCaveBlock(c, r, type) {
     }
     //CHECK TO THE LEFT OF THE BLOCK
     if (mine[r][c - 1] === undefined) {
-        mine[r][c - 1] = "⬜";
-    }
-    if (mine[r][c - 1] === "⬜") {
         generated = generateCaveBlock(r, c - 1, type);
         mine[r][c - 1] = generated[0];
         if (generated[1]) 
@@ -92,10 +83,7 @@ function mineCaveBlock(c, r, type) {
     if (r - 1 > 0 && mine[r - 1] === undefined) {
         mine[r - 1] = [];
     }
-    if (r - 1 > 0 && mine[r - 1] === undefined) {
-        mine[r - 1] = "⬜";
-    }
-    if (r - 1 > 0 && mine[r - 1][c] === "⬜") {
+    if (r - 1 > 0 && mine[r - 1][c] === undefined) {
         generated = generateCaveBlock(r - 1, c, type);
         mine[r - 1][c] = generated[0];
         if (generated[1]) 
@@ -103,13 +91,13 @@ function mineCaveBlock(c, r, type) {
         blocksRevealedThisReset++;
     }
 }
-
+//let caveLuck = 1;
 function generateCaveBlock(y, x, type) {
     let hasLog;
     let probabilityTable = type;
     let summedProbability = 0;
     let chosenValue = Math.random();
-    chosenValue /= caveLuck;
+    //chosenValue /= caveLuck;
     for (let propertyName in probabilityTable) {
         summedProbability += probabilityTable[propertyName];
         if (chosenValue < summedProbability) {
@@ -145,7 +133,9 @@ function generateCaveBlock(y, x, type) {
                 hasLog = true;
                 playSound("unfathomable")
             } else if (adjRarity > 250000000) { // 250M
+                verifiedOres.createLog(y,x,blockToGive, new Error(), 1);
                 spawnMessage(blockToGive, [y, x], [true, adjRarity]);
+                hasLog = true;
                 playSound("enigmatic");
             }
         }
@@ -252,9 +242,13 @@ let type4Ores = {
 }
 let allCaves = [type1Ores, type2Ores, type3Ores, type4Ores];
 function getCaveType() {
+    let caveTypeLuck = 1;
+    if (currentPickaxe === 12)
+        caveTypeLuck = 2;
     let caveType = undefined;
     let summedProbability = 0;
     let chosenValue = Math.random();
+    chosenValue /= caveTypeLuck;
     for (let propertyName in caveTypes) {
         summedProbability += caveTypes[propertyName];
         if (chosenValue < summedProbability) {

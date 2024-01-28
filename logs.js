@@ -2,7 +2,7 @@ class secureLogs {
     #spawnLogs;
     #verifiedLogs;
     #logsTimer;
-    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30];
+    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75];
     constructor() {
         this.#spawnLogs = [];
         this.#verifiedLogs = [];
@@ -16,7 +16,7 @@ class secureLogs {
             luckModifier *= 1.6;
         const maxLuck = (this.#maxLuck[currentPickaxe] * luckModifier) + 1;
         if ((obj.stack.includes("mine.js") || obj.stack.includes("caves.js")) && luck <= maxLuck) {
-            if (mine[r][c] === "⬜")
+            if (mine[r][c] === undefined)
                 this.#spawnLogs.push([r, c, intended, luck]);
         } else {
             console.log("failed to create, ", obj.stack, luck, maxLuck);
@@ -45,6 +45,8 @@ class secureLogs {
                     this.#verifiedLogs[i][4] = variant;
                     verified = true;
                     break;
+                } else {
+                    console.log("failed to verify find", block, this.#verifiedLogs[i][0]);
                 }
             }
         }

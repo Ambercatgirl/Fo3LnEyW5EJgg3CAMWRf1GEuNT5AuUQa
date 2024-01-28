@@ -8,6 +8,7 @@ let baseMineCapacity = 40000;
 let mineCapacity = 40000; // in case this ever needs to be raised
 let canMine = false;
 let lastDirection = "";
+let stopOnRare = false;
 let pickaxes = [
     ["is anyone gonna read these lol", true],
     ["hi!!! hii!!", false],
@@ -20,7 +21,8 @@ let pickaxes = [
     [">:C", false],
     ["IM HERE NOW TOO", false],
     ["mrrp meow meow!", false],
-    ["cataxe", false]
+    ["cataxe", false],
+    ["sorry chat, felt evil", false]
 ];
 let gears = [
     false, //ORE TRACKER 0
@@ -103,14 +105,15 @@ function loadContent() {
 
 //MOVEMENT
 
-function movePlayer(dir) {
+function movePlayer(dir, reps) {
+    for (let i = 0; i < reps; i++) {
         if (canMine) {
             switch (dir) {
                 case "s":
                     mineBlock(curX, curY + 1, "mining", 1);
                     mine[curY][curX] = "⚪";
-                    prepareArea("s");
                     curY++;
+                    createMineIndexes();
                     mine[curY][curX] = "⛏️";
                     setLayer(curY);
                     lastDirection = "s";
@@ -119,8 +122,8 @@ function movePlayer(dir) {
                     if (curY > 0) {
                         mineBlock(curX, curY - 1, "mining", 1);
                         mine[curY][curX] = "⚪";
-                        prepareArea("w");
                         curY--;
+                        createMineIndexes();
                         mine[curY][curX] = "⛏️";
                         lastDirection = "w";
                         setLayer(curY);
@@ -130,7 +133,6 @@ function movePlayer(dir) {
                     if (curX > 0) {
                         mineBlock(curX - 1, curY, "mining", 1);
                         mine[curY][curX] = "⚪";
-                        prepareArea("a");
                         curX--;
                         mine[curY][curX] = "⛏️";
                         lastDirection = "a";
@@ -139,15 +141,15 @@ function movePlayer(dir) {
                 case "d":
                     mineBlock(curX + 1, curY, "mining", 1);
                     mine[curY][curX] = "⚪";
-                    prepareArea("d");
                     curX++;
                     mine[curY][curX] = "⛏️";
                     lastDirection = "s";
                     break;
                 default:
-                    console.log("wrong key!!");
             }
-            displayArea();
+            gearAbility3();
+        }
+        displayArea();
         }
 }
 
@@ -195,7 +197,7 @@ document.addEventListener('keydown', (event) => {
     if (validInput) {
         clearInterval(loopTimer);
         curDirection = "";
-        movePlayer(name);
+        movePlayer(name, 1);
         energySiphonerDirection = "";
     }
 }, false);
@@ -212,6 +214,7 @@ function goDirection(direction, speed) {
             ability1Active = false;
         }
     } else {
+        let reps = 1
         clearInterval(loopTimer);
         if (speed === undefined) {
             if (gears[2])
@@ -221,7 +224,9 @@ function goDirection(direction, speed) {
         } else {
             miningSpeed = speed;
         }
-        loopTimer = setInterval(movePlayer, miningSpeed, direction);
+        if (currentPickaxe === 12)
+            reps = 2;
+        loopTimer = setInterval(movePlayer, miningSpeed, direction, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
     }
@@ -231,7 +236,7 @@ function moveOne(dir, button) {
     button.disabled = true;
     clearInterval(loopTimer);
     setTimeout(() => {
-        movePlayer(dir);
+        movePlayer(dir, 1);
     }, 15);
     curDirection = "";
     setTimeout(() => {
@@ -253,24 +258,47 @@ function changeCanDisplay(button) {
         displayArea();
     }
 }
+
+function changeStopOnRare(button) {
+    if (stopOnRare) {
+        stopOnRare = false;
+        button.style.backgroundColor = "red";
+    } else {
+        stopOnRare = true;
+        button.style.backgroundColor = "green";
+    }
+        
+}
+
+//TY TETRA FOR THE BACKGROUND CHANGING FUNCTION!!
+function changeBackgroundColor() {
+    // Get the input value
+    var hexColor = document.getElementById("colorInput").value;
+  
+    // Validate if the input is a valid hex color
+    if (/^#[0-9A-F]{6}$/i.test(hexColor)) {
+      // Set the background color
+      document.body.style.backgroundColor = hexColor;
+    }
+}
+
 function displayArea() {
     if (canDisplay) {
         let output ="";
         let constraints = getParams(9, 9);
         for (let r = curY - constraints[1]; r <= curY + 9 + (9-constraints[1]); r++) {
             for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
-                /*if (mine[r][c] === "⚪") {
-                    output += "<span style='opacity:0;'>" + mine[r][c] + "</span>"
-                } else {
+                if (mine[r][c]) {
                     output += mine[r][c];
-                }*/
-                output += mine[r][c];
+                } else {
+                    output += r === 0 ? "🟩" : "⬜";
+                }
             }  
             output += "<br>";
         }
         document.getElementById("blockDisplay").innerHTML = output;
     } else {
-        document.getElementById("blockDisplay").innerHTML = "DISABLED";
+        document.getElementById("blockDisplay").innerHTML = "D I S A B L E D";
     }
     document.getElementById("mineResetProgress").innerHTML = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
     document.getElementById("blocksMined").innerHTML = totalMined.toLocaleString() + " Blocks Mined";
@@ -325,6 +353,15 @@ function createIndex() {
         }
         output += "--------------<br>";
     }
+    for (let i = 0; i < allCaves.length; i++) {
+        let caveOres = Object.keys(allCaves[i]);
+        output += caveOres[5] + " Cave, 1/" + caveMultis[i] + "<br>";
+        for (let j = 0; j < caveOres.length - 1; j++) {
+            num = Math.round(1/allCaves[i][caveOres[j]]);
+            output += caveOres[j] + " | 1/" + num.toLocaleString() + " in caves.<br>";
+        }
+        output += "--------------<br>";
+    }
     for (let propertyName in oreList) {
         if (Math.round(1/(oreList[propertyName][0]) <= 2000000 && Math.round(1/(oreList[propertyName][0]) > 1)))
             output += propertyName + " | 1/" + (Math.round(1/(oreList[propertyName][0] * multi))).toLocaleString() + " | Everywhere<br>";
@@ -354,6 +391,13 @@ function updateInventory(type, inv) {
         document.getElementById(type + inv).style.display = "block";
     else
         document.getElementById(type + inv).style.display = "none";
+}
+
+function appear(element){
+    element.classList.remove("hidden")
+}
+function disappear(element){
+    element.classList.add("hidden")
 }
 
 //SPAWNS AND FINDS
@@ -416,11 +460,8 @@ function spawnMessage(block, location, caveInfo) {
             //IF ORE IS <1/2M WITH A PICKAXE OVER 7, DO NOT ADD TO LATEST
             addToLatest = false;
     if (gears[3]) {
-        if (currentPickaxe < 10) {
-            loggedFinds.push([location[0], location[1]]);
-        } else if (1 / (oreList[block][0]) > 2000001) {
-            loggedFinds.push([location[0], location[1]]);
-        }
+        if (oreList[block][0] < 1/2000000)
+        loggedFinds.push([location[0], location[1]]);
     }
     if (latestSpawns.length > 10)
         latestSpawns.splice(0, 1);
