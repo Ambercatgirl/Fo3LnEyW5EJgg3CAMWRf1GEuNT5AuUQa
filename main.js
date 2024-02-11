@@ -70,12 +70,13 @@ function init() {
     createInventory();
     createMine();
     let playedBefore = localStorage.getItem("playedBefore");
+    canContinue = true;
     if (playedBefore)
-        canContinue = loadAllData();
+        //canContinue = loadAllData();
     else
-        canContinue = true;
+        
     if (canContinue) {
-        repeatDataSave();
+        //repeatDataSave();
         localStorage.setItem("playedBefore", true);
         localStorage.setItem("game2DataChanges", true);
         createPickaxeRecipes();
