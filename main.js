@@ -71,9 +71,7 @@ function init() {
     createMine();
     let playedBefore = localStorage.getItem("playedBefore");
     canContinue = true;
-    if (playedBefore)
-        //canContinue = loadAllData();
-    else
+
         
     if (canContinue) {
         //repeatDataSave();
