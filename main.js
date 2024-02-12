@@ -70,7 +70,8 @@ function init() {
     createInventory();
     createMine();
     let playedBefore = localStorage.getItem("playedBefore");
-    
+    if (playedBefore)
+        canContinue = loadAllData();
     if (canContinue) {
         //repeatDataSave();
         localStorage.setItem("playedBefore", true);
