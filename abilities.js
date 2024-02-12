@@ -613,7 +613,7 @@ function pickaxeAbility10(x, y, boost) {
 }
 
 function pickaxeAbility11(x, y, boost) {
-    const thisLuck = 17.5 * boost;
+    const thisLuck = 15 * boost;
     return new Promise((resolve) => {
     for (let i = -3; i < 4; i++) {
         for (let j = -3; j < 4; j++) {
@@ -776,7 +776,6 @@ function pickaxeAbility14(translatex, translatey, boost) {
     return new Promise((resolve) => {
     let thisLuck = 1.05 * boost;
     let r = Math.round((Math.random() * 5) + 1)
-    console.log(r);
     let a = 0; //FAKE CENTER POINT
     let x = 0; //START POINT
     let nums = [];
@@ -926,7 +925,6 @@ function pickaxeAbility18(x, y, boost) {
         let i = 0;
         let generated;
         let thisLuck = 1.5 * boost;
-        console.log(startNums.length, endNums.length);
         for (let r = y + 22; r > y - 33; r--) {
             if (mine[r] != undefined) {
                 for (let c = x - startNums[i]; c > x - (startNums[i] + endNums[i]); c--) {
@@ -1025,7 +1023,6 @@ function pickaxeAbility20(x, y, boost) {
         [false, false, false],
         [false, false, false]
     ];
-    console.log(thisLuck);
     for (let i = 0; i < 3; i++) {
         if (board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
             toMine[i][0] = toMine[i][1] = toMine[i][2] = true;
@@ -1046,9 +1043,6 @@ function pickaxeAbility20(x, y, boost) {
         toMine[0][2] = toMine[1][1] = toMine[2][0] = true;
         thisLuck += 0.02
     } 
-    console.log(board);
-    console.log(toMine);
-    console.log(thisLuck);
     let generated;
     //CREATE SPACES ON THE BOARD    
     for (let i = 0; i < 3; i++) {
