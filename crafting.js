@@ -526,7 +526,8 @@ function craftPickaxe(num) {
     let sub = currentWorld === 1 ? 1 : worldOnePickaxes.length;
     canCraft = true;
     if (!(pickaxes[num][1])) {
-        let recipeList = list[num - sub];
+        let recipeList = list[num - sub - 1];
+        console.log(recipeList);
         for (let i = 0; i < recipeList.length; i++) {
             if (!(oreList[recipeList[i][0]][1][0] >= recipeList[i][1])) {
                 canCraft = false;
