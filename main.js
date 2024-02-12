@@ -70,11 +70,12 @@ function init() {
     createInventory();
     createMine();
     let playedBefore = localStorage.getItem("playedBefore");
-    canContinue = true;
-
-        
+    if (playedBefore)
+        canContinue = loadAllData();
+    else
+        canContinue = true;
     if (canContinue) {
-        //repeatDataSave();
+        repeatDataSave();
         localStorage.setItem("playedBefore", true);
         localStorage.setItem("game2DataChanges", true);
         createPickaxeRecipes();
@@ -417,7 +418,9 @@ function spawnMessage(block, location, caveInfo) {
     let output = "";
     let addToLatest = true;
     let fromCave = false;
-    let minRarity = (currentPickaxe > 9 ? 15000000 : (currentPickaxe > 6 ? 2000000 : 750000));
+    let pickaxeLevel1 = currentWorld === 1 ? 9 : 20
+    let pickaxeLevel2 = currentWorld === 1 ? 6 : 17
+    let minRarity = (currentPickaxe > pickaxeLevel1 ? 15000000 : (currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
     let oreRarity = 1/oreList[block][0];
     if (caveInfo != undefined && caveInfo[0]) {
         fromCave = true
