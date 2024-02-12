@@ -193,7 +193,10 @@ const worldOnePickaxes = [
 worldTwoPickaxes = [
     //SONAR SHRIEKER
     [
-        ["🥗", 1],
+        ["📺", 50000],
+        ["🔃", 1000],
+        ["↘️", 20],
+        ["⏬", 2],
     ],
     //PRISM OF CHAOS REAL
     [
