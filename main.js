@@ -72,14 +72,18 @@ function init() {
     let playedBefore = localStorage.getItem("playedBefore");
     if (playedBefore)
         canContinue = loadAllData();
+    else
+        canContinue = true;
     if (canContinue) {
-        //repeatDataSave();
+        repeatDataSave();
         localStorage.setItem("playedBefore", true);
         localStorage.setItem("game2DataChanges", true);
         createPickaxeRecipes();
         createGearRecipes();
         document.getElementById('dataText').value = "";
-        switchLayerIndex(0, 0)
+        switchLayerIndex(0, 0);
+        if (Math.random() < 1/1000)
+            document.getElementById("cat").innerText = "CatAxe";
         console.log("meow");
     }
 }
