@@ -759,7 +759,7 @@ function setLayer(y) {
 /*
 for (let propertyName in temp) {
     for (let j = 0; j < 4; j++) {
-        oreList[propertyName][1][j] = temp[propertyName][j]
+        oreList[propertyName][1][j] += temp[propertyName][j]
     }
 }
 */
