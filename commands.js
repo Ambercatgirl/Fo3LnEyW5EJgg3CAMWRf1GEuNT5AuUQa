@@ -1,3 +1,4 @@
+/*
 function adminGiveOres(block, amt) {
     if (amt === undefined)
         amt = 100;
@@ -15,7 +16,7 @@ function adminGivePickaxe(num) {
             pickaxes[i][1] = true;
         }
     } else {
-        pickaxes[num] = true;
+        pickaxes[num][1] = true;
     }
 }
 function adminGiveGear(num) {
@@ -33,7 +34,7 @@ function adminRemovePickaxe(num) {
             pickaxes[i][1] = false;
         }
     } else {
-        pickaxes[num] = false;
+        pickaxes[num][1] = false;
     }
 }
 function adminRemoveGear(num) {
@@ -66,6 +67,7 @@ let allGearNames = [
     "Infinity Collector II",
     "Clover's Undoing",
     "Fantastical Feather",
+    "NYI",
 ]
 function adminListNums() {
     let output = "";
@@ -86,3 +88,4 @@ function adminGetHelp() {
     console.log("adminRemoveGear(num) - Num is the gear you want to delete, leave blank for all.");
     console.log("adminListNums() - Lists all the numbers for specific pickaxes and gears.")
 }
+*/
