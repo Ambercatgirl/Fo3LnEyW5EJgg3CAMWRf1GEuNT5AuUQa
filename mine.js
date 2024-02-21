@@ -148,7 +148,6 @@ function giveBlock(type, x, y, fromReset, fromCave, caveInfo) {
                 oreList[block][1][0]++;
                 updateInventory(block, 1);
             }
-           
             if (gears[15]) {
                  if (oreRarity === 1 && (Math.random() < 0.5))
                     oreList[type][1][0] += 2;
@@ -362,6 +361,11 @@ function getParams(distanceX, distanceY, x, y) {
         }
     }
     return [displayLeft, displayUp];
+}
+function attemptSwitchWorld() {
+    if (pickaxes[13][1]) {
+        switchWorld();
+    }
 }
 function switchWorld() {
     distanceMulti = 1;
