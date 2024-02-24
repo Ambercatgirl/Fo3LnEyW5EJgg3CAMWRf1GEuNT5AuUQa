@@ -1,3 +1,4 @@
+/*
 function adminGiveOres(block, amt) {
     if (amt === undefined)
         amt = 100;
@@ -90,3 +91,4 @@ function adminGetHelp() {
     console.log("adminRemoveGear(num) - Num is the gear you want to delete, leave blank for all.");
     console.log("adminListNums() - Lists all the numbers for specific pickaxes and gears.")
 }
+*/
