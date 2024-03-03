@@ -1,3 +1,4 @@
+
 /*Copyright (C) Amber Blessing - All Rights Reserved
  
 Unauthorized copying of this file, via any medium is strictly prohibited
@@ -43,9 +44,19 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 
 .craftingAmountsDisplay {
   font-size: 1vw;
+  display: none;
+  border-style: solid;
+  border-color: white;
+  width: 55%;
+  text-align: center;
 }
-#displayRecipe > div > p {
-  margin-bottom: 0.1rem;
+.recipeOreDisplay {
+  align-self: center;
+}
+#displayRecipe {
+  margin:auto;
+  width: 100%;
+  text-align: center;
 }
 
 .latestDisplay {
@@ -323,9 +334,6 @@ button, .col-3 > div > button {
   margin-bottom: 0.5rem;
 }*/
 
-#displayRecipe > div {
-  border: none;
-}
 
 #latestSpawns  #latestFinds {
   height: 100%;
@@ -624,8 +632,22 @@ button, .col-3 > div > button {
 #pathBlocks {
   background-color: red;
 }
+
 @keyframes flashGreen {
   0% {background-color:white;}
+  50% {background-color:lightgreen;}
+  100% {background-color:white;}
+}
+@keyframes flashRed {
+  0% {background-color:white;}
+  50% {background-color:red;}
+  100% {background-color:white;}
+}
+@keyframes inventoryFlash {
+  0% {background-color:#1a1a1a;}
+  50% {background-color:lightgreen;}
+  100% {background-color:#1a1a1a;}
+
   50% {background-color:lightgreen;}
   100% {background-color:white;}
 }
