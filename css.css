@@ -594,27 +594,35 @@ button, .col-3 > div > button {
   vertical-align: middle;
 }
 #indexSwitchButton {
-  width: 11.9em;
-  height: 2.4em;
-  border-radius: 0px;
-  background-color: #3d3c3c;
-  border-style: solid;
-  border-width: 2px;
-  font-size: 125%;
-  margin: auto;
-  padding: 0.38em;
+    width: 13.9vw;
+    height: 6.1vh;
+    border-radius: 0px;
+    border: white;
+    background-color: #3d3c3c;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 3vh;
+    margin: auto;
+    padding: 0.38em;
+    position: absolute;
+    left: 50%;
+    top: 72.15%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 .indexDirectionButton {
-   width: 5em;
-   height: 3em;
-   border-radius: 0px;
-   border-width: 2px;
-   font-size: 100%;
-   background-color: #333;
-   margin-left: 7.25em;
-   margin-right: 6.625em;
-   position: relative;
-   top: -47.5;
+    width: 5vw;
+    height: 6.1vh;
+    border-radius: 9px;
+    font-size: 100%;
+    background-color: #333;
+    margin-left: 5%;
+    margin-right: 5%;
+    position: relative;
+    top: -8.5px;
 }
 .indexDirectionButton:hover {
   background-color: #2e2e2e;
