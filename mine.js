@@ -370,8 +370,8 @@ function switchWorld() {
     switchDistance();
     displayArea();
     switchWorldCraftables();
-    calculateCat();
     canMine = true;
+    calculateCat();
 }
 
 
