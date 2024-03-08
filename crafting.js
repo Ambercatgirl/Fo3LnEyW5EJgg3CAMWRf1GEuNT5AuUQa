@@ -445,7 +445,7 @@ worldTwoGears = [
     [
         ["🌐", 90000000],
         ["➡️", 37500],
-        ["⏩", 45000],
+        ["⏩", 30000],
         ["⏭️", 4500],
         ["▶️", 1500],
         ["🖱️", 40],
@@ -712,6 +712,7 @@ function craftPickaxe(num) {
         document.getElementById("craftPickaxe" + num).innerText = "Equipped!";
         currentPickaxe = num;
     }
+    calculateCat();
     switchLayerIndex(0);
 }
 function craftGear(num) {
@@ -741,6 +742,7 @@ function craftGear(num) {
             gears[num] = true;
         }
     }
+    calculateCat();
     switchLayerIndex(0);
     if (currentWorld === 1 && num === 9)
         gearAbility2();
