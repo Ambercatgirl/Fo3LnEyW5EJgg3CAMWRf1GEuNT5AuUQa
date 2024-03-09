@@ -41,6 +41,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   width: 7vw!important;
   height: 2vw;
   font-size: 1vw!important;
+  background: none;
 }
 #leftAutoMine {
  background-image:url('leftautomine.png'); 
@@ -67,7 +68,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   background-position: center;
   position: relative;
   top: 10.5px;
-  background-size: 80% 70%;
+  background-size: 70% 95%;
 }
 #downAutoMine {
   background-image:url('downautomine.png'); 
@@ -76,7 +77,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   background-position: center;
   position: relative;
   top: 10.5px;
-  background-size: 80% 70%;
+  background-size: 70% 95%;
 }
 
 .craftingAmountsDisplay {
