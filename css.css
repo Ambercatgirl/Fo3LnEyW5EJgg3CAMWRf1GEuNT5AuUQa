@@ -47,24 +47,36 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
  background-size:contain;
  background-repeat:no-repeat;
  background-position: center;
+ position: relative;
+ top: 10.5px;
+ background-size: 30% 70%;
 }
 #rightAutoMine {
   background-image:url('rightautomine.png'); 
   background-size:contain;
   background-repeat:no-repeat;
   background-position: center;
+  position: relative;
+  top: 10.5px;
+  background-size: 30% 70%;
 }
 #upAutoMine {
   background-image:url('upautomine.png'); 
   background-size:contain;
   background-repeat:no-repeat;
   background-position: center;
+  position: relative;
+  top: 10.5px;
+  background-size: 30% 70%;
 }
 #downAutoMine {
   background-image:url('downautomine.png'); 
   background-size:contain;
   background-repeat:no-repeat;
   background-position: center;
+  position: relative;
+  top: 10.5px;
+  background-size: 30% 70%;
 }
 
 .craftingAmountsDisplay {
@@ -78,7 +90,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 .recipeOreDisplay {
   align-self: center;
-  font-size: 1.5vw;
+  font-size: 1.25vw;
   font-weight: 1000;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
