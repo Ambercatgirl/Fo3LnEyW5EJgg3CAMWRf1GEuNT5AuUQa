@@ -42,6 +42,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   height: 2vw;
   font-size: 1vw!important;
   background: none;
+  border: none;
 }
 #leftAutoMine {
  background-image:url('leftautomine.png'); 
