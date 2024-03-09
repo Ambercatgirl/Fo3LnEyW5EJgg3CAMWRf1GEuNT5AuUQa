@@ -102,18 +102,20 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 
 .latestDisplay {
-  text-align: left !important;
+  text-align: center !important;
   border-style: solid;
-  border-color: rgb(149, 149, 149);
+  border-color: white;
   border-radius: 1px;
   padding-left: 0.1em;
   padding-right: 0.1em;
   float: left;
   width: 50%;
-  font-size: 0.75vw;
+  font-size: 0.8vw;
   min-height: 4em;
   max-height: 16em;
   background-color: #1a1a1a;
+  position: relative;
+  top: 8px;
 }
 .itemDescription {
   font-size:1vw;
@@ -252,6 +254,8 @@ img.roundcat {
   border-radius: 10px;
   border-style: solid;
   border-color: #fff;
+  position: relative;
+  top: 18px;
 }
 
 #spawnMessage {
