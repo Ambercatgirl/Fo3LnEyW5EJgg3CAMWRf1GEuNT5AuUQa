@@ -77,19 +77,27 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   background-image:url('media/leftone.png'); 
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  background-size: 110% 70%;
+  border-top: 1px solid white;
 }
 #rightOne {
   background-image:url('media/rightone.png'); 
   border-right: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  background-size: 110% 70%;
+  border-top: 1px solid white;
 }
 #upOne {
   background-image:url('media/upone.png'); 
   border-bottom: 1px solid #fff;
+  background-size: 60% 110%;
+  border-top: 1px solid white;
 }
 #downOne {
   background-image:url('media/downone.png'); 
   border-bottom: 1px solid #fff;
+  background-size: 60% 110%;
+  border-top: 1px solid white;
 }
 .horizontalArrow {
   background-size:contain;
