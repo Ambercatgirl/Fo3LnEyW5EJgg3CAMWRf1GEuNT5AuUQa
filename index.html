@@ -69,13 +69,13 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button onclick="goDirection('s')" class="movementButton verticalArrow" id="downAutoMine"></button>
                     <button onclick="goDirection('w')" class="movementButton verticalArrow" id="upAutoMine"></button>
                     <button onclick="goDirection('d')" class="movementButton horizontalArrow" id="rightAutoMine"></button>
-                    <button onclick="teleport()" class="movementButton">Teleport</button>
+                    <button onclick="teleport()" class="movementButton" id="teleportButton">Teleport</button>
                     <br>
                     <button onclick="moveOne('a', this)" class="movementButton horizontalArrow" id="leftOne"></button>
                     <button onclick="moveOne('s', this)" class="movementButton verticalArrow" id="downOne"></button>
                     <button onclick="moveOne('w', this)" class="movementButton verticalArrow" id="upOne"></button>
                     <button onclick="moveOne('d', this)" class="movementButton horizontalArrow" id="rightOne"></button>
-                    <button onclick="switchDistance()" class="movementButton" id="meterDisplay">🟫 1,000m</button>
+                    <button onclick="switchDistance()" class="movementButton" id="meterDisplay" style="border: 1px solid white; position: relative; left: 4px; top: -2.5px;">🟫 1,000m</button>
             </div>
             <p id="blockDisplay"></p>
             <div>
