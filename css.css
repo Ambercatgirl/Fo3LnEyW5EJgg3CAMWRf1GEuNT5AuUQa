@@ -53,20 +53,25 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 #leftAutoMine {
  background-image:url('media/leftautomine.png'); 
  border-left: 1px solid #fff;
+ padding-left: 0em;
  border-top: 1px solid #fff;
+ border-bottom: 1px solid white;
 }
 #rightAutoMine {
   background-image:url('media/rightautomine.png'); 
   border-right: 1px solid #fff;
   border-top: 1px solid #fff;
+  border-bottom: 1px solid white;
 }
 #upAutoMine {
   background-image:url('media/upautomine.png'); 
   border-top: 1px solid #fff;
+  border-bottom: 1px solid white;
 }
 #downAutoMine {
   background-image:url('media/downautomine.png'); 
   border-top: 1px solid #fff;
+  border-bottom: 1px solid white;
 }
 #leftOne {
   background-image:url('media/leftone.png'); 
@@ -102,6 +107,13 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   position: relative;
   top: 10.5px;
   background-size: 70% 95%;
+}
+
+#teleportButton {
+    border: 1px solid white;
+    position: relative;
+    left: 4px;
+    top: -2.5px;
 }
 
 .craftingAmountsDisplay {
