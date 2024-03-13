@@ -24,21 +24,21 @@ function checkAllAround(x, y, luck) {
     mine[y] ??= [];
     if (x - 1 >= 0) {
         if (mine[y][x - 1] === undefined) {
-            generated = generateBlock(luck, [y, x-1]);
+            generated = generateBlock({"Y" : y, "X" : x-1});
             mine[y][x - 1] = generated[0];
             if (generated[1])
                 verifiedOres.verifyLog(y, x-1);
         }
     }
     if (mine[y][x + 1] === undefined) {
-        generated = generateBlock(luck, [y, x+1]);
+        generated = generateBlock({"Y" : y, "X" : x+1});
         mine[y][x + 1] = generated[0];
         if (generated[1])
             verifiedOres.verifyLog(y, x+1);
     }
     mine[y + 1] ??= [];
     if (mine[y + 1][x] === undefined) {
-        generated = generateBlock(luck, [y+1, x]);
+        generated = generateBlock({"Y" : y+1, "X" : x});
         mine[y + 1][x] = generated[0];
         if (generated[1])
             verifiedOres.verifyLog(y+1, x);
@@ -47,7 +47,7 @@ function checkAllAround(x, y, luck) {
     if (y - 1 >= 0) {
         mine[y - 1] ??= [];
         if (mine[y - 1][x] === undefined) {
-            generated = generateBlock(luck, [y-1, x]);
+            generated = generateBlock({"Y" : y-1, "X" : x});
             mine[y - 1][x] = generated[0];
             if (generated[1])
                 verifiedOres.verifyLog(y-1, x);
@@ -70,7 +70,7 @@ function checkAllAround(x, y, luck) {
 }
 //MINING
 
-function mineBlock(x, y, cause, luck) {
+function mineBlock(x, y, cause) {
     let ore = mine[y][x];
     if (ore === "🟩") ore = "🟫";
     if (ore === "⚪") return;
@@ -89,7 +89,7 @@ function mineBlock(x, y, cause, luck) {
         } else {
             giveBlock(mine[y][x], x, y);
             mine[y][x] = "⚪";
-            checkAllAround(x, y, luck);
+            checkAllAround(x, y);
             totalMined++;
             if (cause !== "ability") {
                 rollAbilities();
@@ -157,17 +157,17 @@ function giveBlock(type, x, y, fromReset, fromCave) {
 }
 let cat = 1;
 let generationProbabilities;
-function generateBlock(luck, location) {
+function generateBlock(location) {
     blocksRevealedThisReset++;
     let probabilityTable = currentLayer;
-    if (location[0] === 1 && currentWorld === 1) {
+    if (location["Y"] === 1 && currentWorld === 1) {
         probabilityTable = layerList[specialLayers[2]];
     }
     if (currentWorld === 2) {
-        if (location[0] === 10000 && currentWorld === 2)
+        if (location["Y"] === 10000 && currentWorld === 2)
             probabilityTable = layerList[specialLayers[3]];
     }
-    if ((location[0] === 0 && currentWorld === 1) || (location[0] === 2000 && currentWorld === 2))
+    if ((location["Y"] === 0 && currentWorld === 1) || (location["Y"] === 2000 && currentWorld === 2))
         return ["🟩", false];
 
     let blockToGive = "";
@@ -189,7 +189,7 @@ function generateBlock(luck, location) {
         if (oreRarity >= minRarity) {
             hasLog = oreList[blockToGive]["hasLog"];
             if (hasLog) {
-                verifiedOres.createLog(location[0],location[1],blockToGive, new Error(), verifiedOres.getCurrentLuck());
+                verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error(), verifiedOres.getCurrentLuck());
             }
             spawnMessage(blockToGive, location);
             playSound(oreList[blockToGive]["oreTier"]);
