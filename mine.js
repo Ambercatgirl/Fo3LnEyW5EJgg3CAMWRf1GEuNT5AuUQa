@@ -82,7 +82,6 @@ function mineBlock(x, y, cause) {
             checkAllAround(x, y, 1);
             totalMined++;
         } else {
-        
         if (cause === "reset") {
             giveBlock(mine[y][x], x, y, true);
             mine[y][x] = "⚪";
@@ -108,10 +107,7 @@ function giveBlock(type, x, y, fromReset, fromCave) {
         if (type === "⚪") return;
         //CREATE VARIABLES
         let oreRarity = Math.round(oreList[type]["numRarity"]);
-        let pickaxeLevel1 = currentWorld === 1 ? 9 : 100
-        let pickaxeLevel2 = currentWorld === 1 ? 6 : 100
-        let minRarity = (currentPickaxe > pickaxeLevel1 ? 15000000 : (currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
-        inv = 1;
+        let inv = 1;
         //SELECT VARIANT
         if (Math.floor(Math.random() * 50) === 25)
             inv = 2;
@@ -121,9 +117,8 @@ function giveBlock(type, x, y, fromReset, fromCave) {
             inv = 4;
         if (!fromCave) {
             if (currentWorld === 1 && gears[4]) {
-                let block = currentLayer.slice(-1);
-                oreList[block][variantInvNames[inv - 1]]++;
-                updateInventory(block, 1);
+                oreList[currentLayer.slice(-1)][variantInvNames[inv - 1]]++;
+                updateInventory(currentLayer.slice(-1), 1);
             }
             if (gears[15]) {
                  if (oreRarity === 1 && (Math.random() < 0.5))
@@ -155,6 +150,7 @@ function giveBlock(type, x, y, fromReset, fromCave) {
         updateInventory(type, inv);
     }
 }
+let minRarity = 750000;
 let cat = 1;
 let generationProbabilities;
 function generateBlock(location) {
@@ -181,19 +177,14 @@ function generateBlock(location) {
         }
     }
     let oreRarity = oreList[blockToGive]["numRarity"];
-    let hasLog;
-    if (oreRarity >= 750000) {
-        let pickaxeLevel1 = currentWorld === 1 ? 9 : 100
-        let pickaxeLevel2 = currentWorld === 1 ? 6 : 100
-        let minRarity = (currentPickaxe > pickaxeLevel1 ? 15000000 : (currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
-        if (oreRarity >= minRarity) {
-            hasLog = oreList[blockToGive]["hasLog"];
-            if (hasLog) {
-                verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error(), verifiedOres.getCurrentLuck());
-            }
-            spawnMessage(blockToGive, location);
-            playSound(oreList[blockToGive]["oreTier"]);
+    let hasLog = false;
+    if (oreRarity >= minRarity) {
+        hasLog = oreList[blockToGive]["hasLog"];
+        if (hasLog) {
+            verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error(), verifiedOres.getCurrentLuck());
         }
+        spawnMessage(blockToGive, location);
+        playSound(oreList[blockToGive]["oreTier"]);
     }
     return [blockToGive, hasLog];
 }
@@ -340,7 +331,7 @@ function switchWorld() {
     switchDistance();
     displayArea();
     switchWorldCraftables();
-    applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+    utilitySwitchActions();
     canMine = true;
 }
 function stopMining() {

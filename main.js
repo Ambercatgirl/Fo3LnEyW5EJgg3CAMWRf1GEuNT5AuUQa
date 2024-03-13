@@ -98,7 +98,7 @@ function init() {
             sortCaveRarities(caveList[propertyName]);
         }
         cat = verifiedOres.getCurrentLuck();
-        applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+        utilitySwitchActions();
         let limitedTimer = setInterval(checkLimitedOres, 10000);
         console.log("meow");
     }
@@ -304,6 +304,12 @@ function moveOne(dir, button) {
     energySiphonerDirection = "";
 }
 
+function updateStats() {
+    let pickaxeLevel1 = currentWorld === 1 ? 9 : 100
+    let pickaxeLevel2 = currentWorld === 1 ? 6 : 100
+    minRarity = (currentPickaxe > pickaxeLevel1 ? 15000000 : (currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
+}
+
 //DISPLAY
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 function displayArea() {
@@ -385,7 +391,9 @@ function createInventory() {
             let rarity = oreList[propertyName]["numRarity"];
             if (oreList[propertyName]["caveExclusive"])
                 rarity *= getCaveMultiFromOre(propertyName);
-            tempElement.innerHTML = propertyName + " | 1/" + rarity.toLocaleString() * multis[i - 1].toLocaleString() + " | x" + oreNum.toLocaleString();
+            console.log(rarity);
+            tempElement.innerText = propertyName + " | 1/" + (rarity * multis[i - 1]).toLocaleString() + " | x";
+            tempElement.innerHTML += "<span id=\"" + propertyName + "amt" + i + "\">" + oreNum.toLocaleString() + "</span>"
             document.getElementById(("inventory") + i).appendChild(tempElement);
         }
     });  
@@ -393,18 +401,11 @@ function createInventory() {
 
 let variant = 1;
 function updateInventory(type, inv) {
-    let rarity = oreList[type]["numRarity"] * multis[inv - 1];
     let amt = oreList[type][variantInvNames[inv - 1]];
-    let multi = 1;
-    if (oreList[type]["caveExclusive"])
-        multi *= getCaveMultiFromOre(type);
-    rarity *= multi;
-    let ast = multi > 1 ? "*" : "";
-    document.getElementById(type + inv).innerHTML = type + " | " + ast + "1/" + rarity.toLocaleString() + " | x" + amt.toLocaleString();
-    if (amt)
-        document.getElementById(type + inv).style.display = "block";
-    else
-        document.getElementById(type + inv).style.display = "none";
+    let element = document.getElementById((type + "amt" + (inv)));
+    element.innerText = amt;
+    if (amt > 0) element.parentElement.style.display = "block";
+    else element.parentElement.style.display = "none";
 }
 
 function appear(element){
