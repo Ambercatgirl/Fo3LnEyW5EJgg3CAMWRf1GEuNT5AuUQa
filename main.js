@@ -426,7 +426,7 @@ function spawnMessage(block, location, caveInfo) {
     let oreRarity = oreList[block]["numRarity"];
     if ((currentWorld === 1 && gears[3]) || currentWorld === 2 && gears[17]) {
         if (oreRarity > 2000000)
-        loggedFinds.push([location[0], location[1]]);
+        loggedFinds.push([location["Y"], location["X"]]);
     }
     let spawnElement = document.getElementById("latestSpawns");
     let sub = currentWorld === 1 ? 0 : 2000;
