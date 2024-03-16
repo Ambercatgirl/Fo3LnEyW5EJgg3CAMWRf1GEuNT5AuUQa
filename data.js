@@ -158,6 +158,7 @@ function loadAllData() {
                     document.getElementById("mainContent").style.backgroundColor = data[3][12];
             } 
             if (data[3][13] != undefined) {
+                /*
                 let toChange = document.getElementsByClassName("latestDisplay");
                 if (data[3][13][0] != "") {
                     toChange[0].style.color = data[3][13][0];
@@ -167,24 +168,31 @@ function loadAllData() {
                     toChange[0].style.borderColor = data[3][13][1];
                     toChange[1].style.borderColor = data[3][13][1];
                 }
+                
                 if (data[3][13][2] != "") {
                     toChange[0].style.backgroundColor = data[3][13][2];
                     toChange[1].style.backgroundColor = data[3][13][2];
                 }
+                */
             }
             if (data[3][14] != undefined) {
+                /*
                 let element = document.getElementById("inventoryDisplay");
                 if (data[3][14][0] != "")
                     element.style.borderColor = data[3][14][0];
+                
                 if (data[3][14][1] != "")
-                    element.style.backgroundColor = data[3][14][1];
+                    element.style.borderColor = data[3][14][0];
+                */
             }
             if (data[3][15] != undefined) {
+                /*
                 let element = document.getElementsByClassName("col-2")[0];
                 if (data[3][15][0] != "")
                     element.style.borderColor = data[3][15][0];
                 if (data[3][15][1] != "")
                     element.style.backgroundColor = data[3][15][1];
+                */
             }
             if (data[3][16] != undefined) {
                 usePathBlocks = data[3][16];
@@ -262,13 +270,15 @@ function importData(data) {
             clearInterval(dataTimer);
             try {
                 data = fromBinary(data);
-                localStorage.setItem("playerData", data);
+                if (!debug) localStorage.setItem("playerData", data);
+                else localStorage.setItem("testingData", data);
                 setTimeout(() => {
                     location.reload();
                 }, 1000);
             } catch(error) {
                 console.log(error);
-                localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
+                if (!debug) localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
+                else localStorage.setItem("testingData", localStorage.getItem("dataBackup"));
                 window.alert("DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD");
             }
         }
