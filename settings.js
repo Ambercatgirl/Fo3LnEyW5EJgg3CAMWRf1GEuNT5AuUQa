@@ -16,19 +16,21 @@ function openFrame(frameId) {
     
     const selectedFrame = document.getElementById(frameId + "-frame");
     if (selectedFrame) {
-      selectedFrame.style.display = 'block';
+      selectedFrame
+      .style.display = 'block';
     }
+    if (frameId === "stats") createStats();
 }
 
 
 let canDisplay = true;
 function changeCanDisplay(button) {
     if (canDisplay) {
-        button.style.backgroundColor = "red";
+        button.style.backgroundColor = "#FF3D3D";
         document.getElementById("blockDisplay").innerHTML = "❌";
         canDisplay = false;
     } else {
-        button.style.backgroundColor = "green";
+        button.style.backgroundColor = "#6BC267";
         canDisplay = true;
         displayArea();
     }
@@ -55,7 +57,7 @@ let allPickaxeNames =
 "Lunar Lightsabre",
 "Gemstone Engraver",
 "Gambler's Fallacy",
-"Swirly Subjugator",
+"Exponential Centrifuge",
 "Singularity Slammer",
 "Staff of Binding",
 "Stormseer's Superspark Sceptre",
@@ -68,7 +70,7 @@ function changeUseNumbers(button) {
             elements[i].firstChild.innerText = "Pickaxe " + (i + 1);
         }
         if (button != undefined) {
-            button.style.backgroundColor = "green";
+            button.style.backgroundColor = "#6BC267";
         }
         useNumbers = true;
     } else {
@@ -77,33 +79,32 @@ function changeUseNumbers(button) {
             elements[i].firstChild.innerText = allPickaxeNames[i];
         }
         if (button != undefined) {
-            button.style.backgroundColor = "red";
+            button.style.backgroundColor = "#FF3D3D";
         }
         useNumbers = false;
     }
 }
-let stopRareValues = ["Exotic+", "Transcendent+", "Enigmatic+", "Unfathomable+", "Otherworldly+", "Metaversal+", "Zenith+", "Ethereal+", "Celestial+"];
-let stopRareColors = ["#ffd966", "#6d9eeb", "#c0ff1d", "#003487", "#a64d79", "#fffeab", "#000000", "#ac47ff", "#870000"]
+
 let stopRareNum = 0;
 function changeMinRarity(button) {
     stopRareNum++;
-    if (stopRareNum > 8) {
+    if (stopRareNum > 9) {
         stopRareNum = 0;
     }
-    button.innerText = stopRareValues[stopRareNum];
-    const color2 = (stopRareNum === 2 || stopRareNum === 5 || stopRareNum === 0) ? "black" : "white";
-    button.style.color = color2;
-    button.style.backgroundImage = "linear-gradient(to right, " + stopRareColors[stopRareNum] + " 70%, black)";
+    let tier = oreInformation.getTierAt(stopRareNum + 5);
+    button.innerText = tier + "+";
+    const colors = oreInformation.getColors(tier);
+    button.style.color = colors["textColor"]
+    button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
 }
 function changeStopOnRare(button) {
     if (stopOnRare) {
         stopOnRare = false;
-        button.style.backgroundColor = "red";
+        button.style.backgroundColor = "#FF3D3D";
     } else {
         stopOnRare = true;
-        button.style.backgroundColor = "green";
-    }
-        
+        button.style.backgroundColor = "#6BC267";
+    }   
 }
 
 //TY TETRA FOR THE BACKGROUND CHANGING FUNCTION!!
@@ -216,6 +217,7 @@ function showSettings() {
     canMine = false;
     document.getElementById("mainContent").style.display = "none";
     document.getElementById("settingsContainer").style.display = "block";
+    createStats();
     switchLayerIndex(0, 0)
 }
 
@@ -265,11 +267,11 @@ function changeMinMiningSpeed(element) {
 function toggleCaves() {
     if (cavesEnabled) {
         cavesEnabled = false;
-        document.getElementById("caveToggle").style.backgroundColor = "red";
+        document.getElementById("caveToggle").style.backgroundColor = "#FF3D3D";
     }
     else {
         cavesEnabled = true;
-        document.getElementById("caveToggle").style.backgroundColor = "green";
+        document.getElementById("caveToggle").style.backgroundColor = "#6BC267";
     }
 }
 
@@ -305,82 +307,98 @@ function switchLayerIndex(num, overrideNum, world) {
     layerNum = overrideNum === undefined ? layerNum : overrideNum;
     if (layerNum > (add - 1)) {
         let caveNum = caveBase - layerNum;
-        layerToIndex = caveList[allCaves[caveNum]];
+        layerToIndex = allCaves[caveNum];
     } else {
         if (world === 1) {
-            layerToIndex = layerList[worldOneLayers[layerNum]];
+            layerToIndex = worldOneLayers[layerNum];
         } else {
-            layerToIndex = layerList[worldTwoLayers[layerNum]];
+            layerToIndex = worldTwoLayers[layerNum];
         }
     }
     
-    layerToIndex = layerNum === 101 ? layerList["worldOneCommons"] : layerToIndex;
-    layerToIndex = layerNum === 102 ? layerList["worldTwoCommons"] : layerToIndex;
-    let layerMaterial = layerToIndex.slice(-1);
-    document.getElementById("indexSwitchButton").innerHTML = layerMaterial;
+    layerToIndex = layerNum === 101 ? "worldOneCommons" : layerToIndex;
+    layerToIndex = layerNum === 102 ? "worldTwoCommons" : layerToIndex;
+    let layerMaterial
+    if (layerList[layerToIndex] != undefined) layerMaterial = layerList[layerToIndex].slice(-1);
+    if (caveList[layerToIndex] != undefined) layerMaterial = caveList[layerToIndex].slice(-1);
+    document.getElementById("indexSwitchButton").innerText = layerMaterial;
     let oreIndexCards = [];
-    for (let i = 0; i < layerToIndex.length; i++) {
-        if (oreList[layerToIndex[i]]["numRarity"] > 1) {
-            if (ignoreList.indexOf(layerToIndex[i]) === -1 || indexHasOre(layerToIndex[i]))
-                oreIndexCards.push(createIndexCards(layerToIndex, layerToIndex[i]))
-        }
-    }
+    let elements = createIndexCards(layerToIndex);
+    for (let i = 0; i < elements.length; i++) oreIndexCards.push(elements[i])
     for (let i = oreIndexCards.length - 1; i >= 0; i--) {
         document.getElementById("oreCardHolder").appendChild(oreIndexCards[i]);
     }
 }
-let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞";
-function createIndexCards(layer, property) {
-        let parentObject = document.createElement("div");
-        parentObject.classList = "oreCard";
-        if (oreList[property]["explosiveAmt"]) {
-            parentObject.style.backgroundImage = "linear-gradient(to bottom right, #c91800, #ff722b, #383838)";
-        } else if (oreList[property]["radioactiveAmt"]) {
-            parentObject.style.backgroundImage = "linear-gradient(to bottom right, #062404, #c9fc3a, #062404)";
-        } else if (oreList[property]["electrifiedAmt"]) {
-            parentObject.style.backgroundImage = "linear-gradient(to bottom right, #f7f368, #ffc629, #e365fc)";
-        } else if (oreList[property]["normalAmt"]) {
-            parentObject.style.backgroundColor = "green";
-        } else {
-            parentObject.style.backgroundColor = "red";
+let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱";
+function createIndexCards(layer) {
+        let toReturn = [];
+        let isCave = false;
+        let caveMulti;
+        let spawnMessage = true;
+        let minIndexRarity = 2;
+        if (layer === "worldOneCommons" || layer === "worldTwoCommons") {
+            layer = layerList[layer];
+            spawnMessage = false;
+        } else if (layerList[layer] != undefined) {
+            layer = layerList[layer];
+            minIndexRarity = 5000000;
         }
-        //ADD NAME TO CARD
-        let oreName = document.createElement("p");
-        oreName.style.fontSize = "2vw";
-        oreName.innerHTML = property;
-        parentObject.appendChild(oreName);
-        //ADD BASE RARITY TO CARD
-        let oreRarity = document.createElement("p");
-        oreRarity.style.fontSize = "1.25vw";
-        oreRarity.style.fontWeight = "bold";
-        oreRarity.innerHTML = "1/" + oreList[property]["numRarity"].toLocaleString() + " base rarity.";
-        parentObject.appendChild(oreRarity);
-        //ADD RARITY WITH LUCK TO CARD
-        let oreRarityLuck;
-        oreRarityLuck = document.createElement("p");
-        oreRarityLuck.style.fontSize = "1.25vw";
-        oreRarityLuck.style.fontWeight = "bold";
-        let tempBool = true;
-        if (getCaveTypeFromOre(property) != currentLayer) {
-            if (getCaveMulti(layer) > 1) {
+        else if (caveList[layer] != undefined) {
+            caveMulti = getCaveMulti(layer)
+            layer = caveList[layer];
+            isCave = true;
+        }
+        for (let i = 0; i < layer.length; i++) {
+        let property = layer[i];
+        if ((ignoreList.indexOf(property) < 0 || indexHasOre(property)) && oreList[property]["numRarity"] >= minIndexRarity) {
+            let parentObject = document.createElement("div");
+            let parentWrapper = document.createElement("div");
+            parentObject.classList = "oreCard";
+            parentWrapper.classList = "indexWrapper"
+            
+            let output = "<span class='indexOre'>" + property + "</span>"
+            output += "<span class='indexRarity'>1/"
+            if (isCave) {
                 let rarity = oreList[property]["numRarity"];
-                rarity *= getCaveMultiFromOre(property);
-                oreRarityLuck.innerHTML = "1/" + rarity.toLocaleString() + " adjusted.";
-                tempBool = false;
+                if (oolProbabilities[property] != undefined) rarity = Math.round(1/oolProbabilities[property]);
+                output += rarity.toLocaleString();
+                output += " Base Rarity.</span>";
+                rarity *= caveMulti;
+                output += "<span class='indexWithLuck'>1/" + rarity.toLocaleString() + " Adjusted.</span>";
+            } else {
+                output += oreList[property]["numRarity"].toLocaleString();
+                output += " Base Rarity.</span>";
+                output += "<span class='indexWithLuck'>1/" + Math.round((oreList[property]["numRarity"] / verifiedOres.getCurrentLuck())).toLocaleString() + " With Luck.</span>";
             }
+            if (oreList[property]["spawnMessage"] !== "") {
+                output += "<span class='indexSpawnMessage'>" + oreList[property]["spawnMessage"] + "</span>";
+            }
+            let colors = oreInformation.getColors(oreList[property]["oreTier"]);
+            if (oreList[property]["explosiveAmt"]) {
+                parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #c91800, #ff722b, #383838)"
+            } else if (oreList[property]["radioactiveAmt"]) {
+                parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #062404, #c9fc3a, #062404)"
+            } else if (oreList[property]["electrifiedAmt"]) {
+                parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #f7f368, #ffc629, #e365fc)"
+            } else if (oreList[property]["normalAmt"]) {
+                parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to top right, #6BC267 20%, black, #6BC267 80%)"
+            } else {
+                parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
+            }
+            //border-image-source: linear-gradient(to bottom right, #743ad5, #d53a9d);
+            parentWrapper.innerHTML = output;
+            parentObject.appendChild(parentWrapper)
+            toReturn.push(parentObject);
         }
-        if (tempBool)
-            oreRarityLuck.innerHTML = "1/" + Math.floor(oreList[property]["numRarity"] / verifiedOres.getCurrentLuck()).toLocaleString() + " with luck.";
-        parentObject.appendChild(oreRarityLuck);
-    
-        return parentObject;
+        
+    }
+        return toReturn;
 }
 
-function randomFunction(text, cause) {
+function randomFunction(ore, cause) {
     if ((cause === "inv" && invToIndex) || (cause === "crafting" && craftingToIndex)) {
         let num = -1;
         let world = currentWorld;
-        let ore = text.substring(0, text.indexOf(" "));
         if (ore === "❤️‍🔥")
             return;
         if (ignoreList.indexOf(ore) === -1 || indexHasOre(ore)) {
@@ -402,8 +420,8 @@ function randomFunction(text, cause) {
             }
             if (num < 1) {
                 for (let i = allCaves.length - 1; i >= 0; i--) {
-                    if (allCaves[i][ore] != undefined) {
-                        num = 11 - i;
+                    if (caveList[allCaves[i]].includes(ore)) {
+                        num = currentWorld === 1 ? (11 - i) : (8 - i);
                         break;
                     }
                 }
@@ -431,28 +449,28 @@ function switchToIndex(button, num) {
     if (num === 0) {
         if (invToIndex) {
             invToIndex = false;
-            button.style.backgroundColor = "red";
+            button.style.backgroundColor = "#FF3D3D";
         } else {
             invToIndex = true;
-            button.style.backgroundColor = "green";
+            button.style.backgroundColor = "#6BC267";
         }
     } else if (num === 1) {
         if (craftingToIndex) {
             craftingToIndex = false;
-            button.style.backgroundColor = "red";
+            button.style.backgroundColor = "#FF3D3D";
         } else {
             craftingToIndex = true;
-            button.style.backgroundColor = "green";
+            button.style.backgroundColor = "#6BC267";
         }
     }
     
 }
 function togglePathBlocks() {
     if (usePathBlocks) {
-        document.getElementById("pathBlocks").style.backgroundColor = "green";
+        document.getElementById("pathBlocks").style.backgroundColor = "#6BC267";
         usePathBlocks = false;
     } else {
-        document.getElementById("pathBlocks").style.backgroundColor = "red";
+        document.getElementById("pathBlocks").style.backgroundColor = "#FF3D3D";
         usePathBlocks = true;
     }
     displayArea();
@@ -463,9 +481,9 @@ function testSound(num) {
     let time = (allAudios[num].duration * 1000);
     if (allAudios[num].currentTime === 0) {
         allAudios[num].play();
-        element.style.backgroundColor = "green";
+        element.style.backgroundColor = "#6BC267";
         testSoundTimeout = setTimeout(() => {
-            element.style.backgroundColor = "red";
+            element.style.backgroundColor = "#FF3D3D";
             allAudios[num].pause();
             allAudios[num].currentTime = 0;
             clearTimeout(testSoundTimeout);
@@ -473,17 +491,17 @@ function testSound(num) {
     } else {
         allAudios[num].pause();
         allAudios[num].currentTime = 0;
-        element.style.backgroundColor = "red";
+        element.style.backgroundColor = "#FF3D3D";
         clearTimeout(testSoundTimeout);
     }
 }
 function enableDisguisedChills() {
     if (useDisguisedChills) {
         useDisguisedChills = false;
-        document.getElementById("disguisedChills").style.backgroundColor = "red";
+        document.getElementById("disguisedChills").style.backgroundColor = "#FF3D3D";
     } else {
         useDisguisedChills = true;
-        document.getElementById("disguisedChills").style.backgroundColor = "green";
+        document.getElementById("disguisedChills").style.backgroundColor = "#6BC267";
     }
 }
 let usingNewEmojis = false;
@@ -491,16 +509,67 @@ function switchFont() {
     if (usingNewEmojis) {
         usingNewEmojis = false;
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
-        document.getElementById("switchFont").style.backgroundColor = "red";
+        document.getElementById("switchFont").style.backgroundColor = "#FF3D3D";
         distanceMulti--;
         y -= 2000;
         switchDistance();
     } else {
         usingNewEmojis = true;
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");
-        document.getElementById("switchFont").style.backgroundColor = "green";
+        document.getElementById("switchFont").style.backgroundColor = "#6BC267";
         distanceMulti--;
         y -= 2000;
         switchDistance();
+    }
+}
+let minTier = "Antique";
+let minRarityNum = 0
+function changeSpawnMessageRarity(button) {
+    minRarityNum++;
+    if (minRarityNum > 9) minRarityNum = 0;
+    minTier = oreInformation.getTierAt(minRarityNum + 5);
+    button.innerText = "Minimum Spawn Message Tier: " + minTier + "+";
+    let colors = oreInformation.getColors(minTier);
+    button.style.color = colors["textColor"]
+    button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
+}
+function createStats() {
+    let elements = document.getElementsByClassName("oreStats")
+    let tier = "Flawless";
+    let i = 0;
+    while (tier !== "Common") {
+        let ores = oreInformation.getOresByTier(tier);
+        let isOwned = new Array(ores.length - 1)
+        let output = "";
+        let currentTotal = 0;
+        for (let j = 0; j < ores.length; j++) {
+            currentTotal += oreList[ores[j]]["normalAmt"];
+            if (oreList[ores[j]]["normalAmt"] > 0) isOwned[j] = true;
+        }
+        output += "You have " + currentTotal.toLocaleString() + " normal " + tier + " ores, ";
+        currentTotal = 0;
+        for (let j = 0; j < ores.length; j++) {
+            currentTotal += oreList[ores[j]]["electrifiedAmt"];
+            if (oreList[ores[j]]["electrifiedAmt"] > 0) isOwned[j] = true;
+        }
+        output += currentTotal.toLocaleString() + " electrified " + tier + " ores, ";
+        currentTotal = 0;
+        for (let j = 0; j < ores.length; j++) {
+            currentTotal += oreList[ores[j]]["radioactiveAmt"];
+            if (oreList[ores[j]]["radioactiveAmt"] > 0) isOwned[j] = true;
+        }
+        output += currentTotal.toLocaleString() + " radioactive " + tier + " ores, and ";
+        currentTotal = 0;
+        for (let j = 0; j < ores.length; j++) {
+            currentTotal += oreList[ores[j]]["explosiveAmt"];
+            if (oreList[ores[j]]["explosiveAmt"] > 0) isOwned[j] = true;
+        }
+        let totalExisting = 0;
+        for (let j = 0; j < isOwned.length; j++) if (isOwned[j]) totalExisting++;
+        output += currentTotal.toLocaleString() + " explosive " + tier + " ores.";
+        elements[i].innerText = output;
+        elements[i + 1].innerText = "You have " + totalExisting + "/" + ores.length + " of the ores in this tier."
+        i+= 2;
+        tier = oreInformation.getNextTier(tier);
     }
 }

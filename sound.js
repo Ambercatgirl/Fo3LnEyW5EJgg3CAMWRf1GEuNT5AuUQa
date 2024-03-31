@@ -31,7 +31,7 @@ function toggleMusic() {
     }
 }
 
-let canPlay = [true, true, true, true, true, true, true, true, true];
+let canPlay = [true, true, true, true, true, true, true, true, true, true];
 function changeCanPlay(num, button) {
     let text = button.innerHTML;
     text = text.substring(text.indexOf(" "));
@@ -47,8 +47,9 @@ function changeCanPlay(num, button) {
 
 function playSound(type) {
     type = type.toLowerCase();
+    type = type === "imaginary" ? "ethereal" : type;
     switch (type) {
-        case "exotic":
+        case "antique":
             if (canPlay[0]) {
                 chill.currentTime = 0;
                 chill.play();
@@ -56,7 +57,7 @@ function playSound(type) {
             if (stopOnRare && stopRareNum < 1)
                 stopMining();
             break;
-        case "transcendent":
+        case "mystical":
             if (canPlay[1]) {
                 if (useDisguisedChills) {
                     chill.currentTime = 0;
@@ -69,7 +70,7 @@ function playSound(type) {
             if (stopOnRare && stopRareNum < 2)
                 stopMining();
             break;
-        case "enigmatic":
+        case "divine":
             if (canPlay[2]) {
                 if (useDisguisedChills) {
                     chill.currentTime = 0;
@@ -82,7 +83,7 @@ function playSound(type) {
             if (stopOnRare && stopRareNum < 3)
                 stopMining();
             break;
-        case "unfathomable":
+        case "flawless":
             if (canPlay[3]) {
                 if (useDisguisedChills) {
                     chill.currentTime = 0;
@@ -95,7 +96,7 @@ function playSound(type) {
             if (stopOnRare && stopRareNum < 4)
                 stopMining();
             break;
-        case "otherworldly":
+        case "interstellar":
             if (canPlay[4]) {
                 if (useDisguisedChills) {
                     chill.currentTime = 0;
@@ -108,7 +109,7 @@ function playSound(type) {
             if (stopOnRare && stopRareNum < 5)
                 stopMining();
             break;
-        case "zenith":
+        case "sacred":
             if (canPlay[6]) {
                 if (useDisguisedChills) {
                     chill.currentTime = 0;

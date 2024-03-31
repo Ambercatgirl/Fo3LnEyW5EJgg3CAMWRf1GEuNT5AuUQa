@@ -4,8 +4,21 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
+let a12 = 0;
+let a13 = false;
 function toSurface() {
+    if (currentWorld === 1) a12++;
+    if (currentWorld === 1 && a12 === 10) {
+        insertIntoLayers({"ore":"🐢","layers":["paperLayer"], "useLuck":true});
+        insertIntoLayers({"ore":"🐰","layers":["paperLayer"], "useLuck":true});
+        a13 = true;
+        document.getElementById("spawnMessage").innerText = "The air becomes hard to breathe as particle flow slows to a halt...";
+        document.getElementById("teleportButton").disabled = true;
+        eventSpawn.currentTime = 0;
+        eventSpawn.play();
+    }
     clearInterval(loopTimer);
+    insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     curDirection = "";
     mine[curY][curX] = "⚪";
     curX = 1000000000;
@@ -26,6 +39,8 @@ function toSurface() {
 let resetting = false;
 async function mineReset() {
     if (!resetting) {
+        a12 = 0;
+        caveOreLocations = [];
         resetting = true;
         mineCapacity = baseMineCapacity;
         const temp = curDirection;

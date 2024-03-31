@@ -33,6 +33,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 
 .oreDisplay {
   margin: 0;
+  font-weight: 500;
+  width: 100%!important;
 }
 
 .movementButton {
@@ -45,6 +47,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   padding: 0%;
   float: left;
   border:0.1vw solid #2e2e2e;
+  z-index: 9999;
 }
 .movementButton:hover {
   background-color: gray;
@@ -52,7 +55,23 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 .latestFind {
   margin: 0;
 }
-
+.inventoryElement1 {
+  width: 10%;
+  text-align: left;
+  text-shadow:1px 1px 5px black;
+}
+.inventoryElement2 {
+  width: 50%;
+  font-weight: 750;
+}
+.inventoryElement3 {
+  width: 40%;
+  font-weight: 750;
+}
+.inventoryHolder {
+  width: 100%!important;
+  min-height: 75vw;
+}
 #leftAutoMine {
  background-image:url('media/leftautomine.png'); 
  background-size:50%;
@@ -112,7 +131,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   display: inline-block;
   cursor:default;
   width: 100%;
-  height: 6%;
+  height: 4vw;
   vertical-align: middle;
   
 }
@@ -123,6 +142,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   display: none;
   width: 100%;
   border:3px solid #333; 
+  border-left: none;
+  border-right: none;
   text-align: center;
   margin: auto;
 }
@@ -130,7 +151,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   align-self: center;
   font-size: 1.25vw;
   font-weight: 1000;
-  -webkit-text-stroke-width: 0.025vw;
+  border: none;
+  -webkit-text-stroke-width: 0.025em;
   -webkit-text-stroke-color: white;
 }
 #displayRecipe {
@@ -187,7 +209,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   color: white;
   font-weight: 1000;
   padding-bottom: 10%;
-  -webkit-text-stroke-width: 0.075vw;
+  -webkit-text-stroke-width: 0.05em;
   -webkit-text-stroke-color: black;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -196,31 +218,36 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 .craftingSelector {
   width: 50%;
-  height: 4%;
+  height: 100%;
   float: left;
   background:none;
   border-bottom: none;
   border-color: #333;
 }
+#craftingSelectionContainer {
+  height: 4%;
+}
 #switchInventory {
-  width: 75%;
+  width: 70%;
   float: left;
   background: none;
   cursor: default;
 }
 #inventoryLeft {
-  width: 12.5%;
+  width: 15%;
   float: left;
   background: none;
 }
 #inventoryRight {
-  width: 12.5%;
+  width: 15%;
   float: left;
   background: none;
 }
 .inventoryButtons {
-  height: 100%;
+  height: 2vw;
   font-weight: 750;
+  font-size: 100%;
+  margin: 0;
 }
 #inventoryRight:hover {
   background-color: gray;
@@ -244,7 +271,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   background-color: gray;
 }
 #crafting {
-  border-top:1px solid #333; 
   padding-bottom: 5%;
   font-size: 2.5vw;
 }
@@ -282,13 +308,26 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 #pressPlay {
   font-family: 'Arial', sans-serif;
   overflow-y: hidden;
+  background-image:url("media/silly caverns picture.png");
+  background-repeat: no-repeat;
+  background-size:cover;
+  height: 100%;
+  width: 100%;
 }
 
 .hidden{display: none !important;}
 
 #mineResetProgress {
+  margin: 0.5vw;
   font-size: 1vw;
-  padding-top: 0.75em;
+}
+#blocksMined {
+  margin: 0.5vw;
+  font-size: 1vw;
+}
+#location {
+  margin: 0.5vw;
+  font-size: 1vw;
 }
 #resetMine {
   border-right:1px solid #333;
@@ -335,26 +374,29 @@ img.roundcat {
   max-height: 40vh;
 }
 .credits {
-  position: absolute;
-  bottom: 2%;
-  left: 3%;
-  color: #fff;
-  width: 80vw;
-  line-height: 2.5;
-  font-size: 1.2vw;
+  color: black;
+  float: left;
+  width: 33%;
+  font-size: 1vw;
+  text-align: center;
+  font-weight: 1000;
 }
 .play-button {
   position: absolute;
-  top: 50%;
+  top: 28%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333333;
-  color: #fff;
+  color: black;
   padding: 0.25vw 1.2vw;
-  font-size: 1.75vw;
+  font-size: 5vw;
+  font-weight: 750;
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  animation: playButton 1.25s infinite;
+}
+@keyframes playButton {
+  50% {font-size: 4vw;}
 }
 .server-link {
   color: #3498db;
@@ -394,13 +436,14 @@ img.roundcat {
   text-align: center;
   letter-spacing: -0.2em;
   position: relative;
-  border-top:5px solid #333;
+  border-top:3px solid #333;
   border-bottom:3px solid #333;
 }
 
 #spawnMessage {
-  font-size: 1vw;
-  width: 100%;
+  margin-top: 1vw;
+  margin-bottom: 0;
+  font-size: 0.75vw;
   font-weight: 400;
 }
 
@@ -434,6 +477,8 @@ button, .col-3 > div > button {
 }
 
 .col-7 {
+  overscroll-behavior-y: contain;
+  overflow-y: auto;
   height: 100vh;
   max-height: 100vh;
   width: 50%;
@@ -441,19 +486,37 @@ button, .col-3 > div > button {
   text-align: center;
   padding-right: 0;
   padding-left: 0;
+  background-color: #1a1a1a;
 }
 
 .col-2 {
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
   width: 25%;
-  height: 100vh;
-  max-height: 100vh;
-  overflow-y: auto;
+  height: 100%;
+  max-height: 100%;
   border-style: solid;
   border-color: rgb(49, 49, 49);
+  background-color: #1a1a1a;
   border-top: 0;
   border-bottom: 0;
   padding-left: 0%;
   padding-right: 0%;
+}
+#mainTop {
+width: 100%;
+height: auto;
+border-bottom:1px solid #333; 
+}
+#mainLower {
+  bottom: 0;
+  overscroll-behavior-y: contain;
+  overflow-y: auto;
+  width: 100%;
+  min-height: 80vh;
+  max-height: 80vh;
+  border-bottom:1px solid #333; 
+  border-right:1px solid #333; 
 }
 ::-webkit-scrollbar {
   width: 0;
@@ -465,6 +528,7 @@ button, .col-3 > div > button {
   max-height: 100vh;
   padding: 0px;
   border-left:3px solid #333;
+  background-color: #1a1a1a;
 }
 
 #musicStuff > label {
@@ -509,8 +573,12 @@ button, .col-3 > div > button {
 #latestFinds {
   border-left:1px solid #333;
 }
-
-
+.tempOreDisplay {
+  color: white;
+}
+.latestSpawnHolder td{
+  font-weight: 500;
+}
 
 .container-fluid {
   height: 100%;
@@ -553,16 +621,16 @@ button, .col-3 > div > button {
 .settingsCategorySelector {
    display: block;
    padding: 10px;
-   width: 25em;
+   width: 25%;
    background-color: #333;
    color: #fff;
    border: none;
    border-radius: 5px;
    cursor: pointer;
-   font-size: 2vh;
-   height: 3em;
+   font-size: 1vw;
+   height: 4vw;
    margin: auto;
-   margin-top: 14px;
+   margin-top: 1vw;
 }
 .settingsCategorySelector:hover {
   background-color: #2e2e2e;
@@ -641,7 +709,7 @@ button, .col-3 > div > button {
   height: 100%;
   margin-left: 1%;
   width: 2%;
-  background-color: red;
+  background-color: #FF3D3D;
   border: none;
 }
 .settingsSeparator {
@@ -660,7 +728,7 @@ button, .col-3 > div > button {
 .inputAndButton {
    border-style: solid;
    border-color: white;
-   height: 4%;
+   height: 3vw;
    margin: auto;
    width: 33%;
    background-color: white;
@@ -690,7 +758,7 @@ button, .col-3 > div > button {
 .stopOnRareButton {
   width: 50%;
   border-style: solid;
-  background-color: red;
+  background-color: #FF3D3D;
 }
 .stopOnRareSelector {
   width:50%;
@@ -698,20 +766,20 @@ button, .col-3 > div > button {
   padding: 1px;
 }
 #stopOnRareDisplay {
-  font-size: 100%;
+  font-size: 1vw;
   font-weight: 750;
 }
 .toggleDisplay {
   width: 100%;
   background-color: #333;
-  background-color: green;
+  background-color: #6BC267;
 }
 .inputButton:hover {
   background-color: #2e2e2e;
 }
 .invSettingButton {
   width: 100%;
-  background-color: green;
+  background-color: #6BC267;
   border-radius: 20px;
 }
 .displayColorButton {
@@ -767,34 +835,41 @@ button, .col-3 > div > button {
   vertical-align: middle;
 }
 #indexSwitchButton {
-  width: 100%;
-  height: 2.35em;
+  width: 50%;
+  height: 3em;
   border-radius: 0px;
   background-color: #3d3c3c;
   border-style: solid;
   border-width: 2px;
-  font-size: 150%;
-  display: flex;
+  font-size: 1vw;
+  display: inline-flex;
   position: relative;
-  top: -1.5px;
   align-content: space-around;   
   flex-wrap: wrap;
   justify-content: center;
   line-height: 5em;
+  margin-right: -5%;
+  margin-left: -5%;
+  margin-bottom: 0;
 }
 .indexDirectionButton {
-   width: 9.5%;
-   height: 3.7em;
+   width: 30%;
+   height: 3vw;
    border-radius: 10px;
    border-width: 2px;
-   font-size: 100%;
+   font-size: 1vw;
    background-color: #333;
-   vertical-align: middle;
    position: relative;
-   top: -0.17vw;
+   margin: 0;
+   z-index: 99999;
 }
 .indexDirectionButton:hover {
   background-color: #2e2e2e;
+}
+#indexButtonHolder {
+  display: inline-block;
+  width: 30%;
+  margin-bottom: 3vw;
 }
 
 #oreCardHolder {
@@ -803,20 +878,70 @@ button, .col-3 > div > button {
   height: 100%;
 }
 .oreCard {
+  position: relative;
   display: inline-block;
   text-align: center;
-  border-style: solid;
-  border-radius: 15px;
-  width: 19%;
-  height: 20%;
-  margin: 5px;
+  font-weight: 1000;
+  color: white;
+  -webkit-text-stroke-width: 0.1vw;
+  -webkit-text-stroke-color: black;
+  width: 30vw;
+  height: 15vw;
+  margin: 0.25vw;
+  border-radius: 30px;
 }
-
+.indexOre {
+  text-shadow:1px 1px 3px black;
+  font-size: 5vw;
+  position: absolute;
+  top: 0%;
+  left: 0px;
+  padding-left: 0.75vw;
+  padding-right: 0.75vw;
+}
+.indexRarity {
+  text-align: left;
+  line-height: 100%;
+  font-size: 1.5vw;
+  position: absolute;
+  top: 1.5vw;
+  left: 8vw;
+  padding-left: 0.75vw;
+  padding-right: 0.75vw;
+}
+.indexWithLuck {
+  text-align: left;
+  font-size: 1.5vw;
+  position: absolute;
+  top: 4.5vw;
+  left: 8vw;
+  padding-left: 0.75vw;
+  padding-right: 0.75vw;
+}
+.indexSpawnMessage {
+  text-align: center;
+  position: absolute;
+  font-size: 1vw;
+  top: 9vw;
+  left: 1px;
+  right: 1px;
+  padding-left: 0.75vw;
+  padding-right: 0.75vw;
+}
+.indexWrapper {
+  height: 100%;
+  border: solid 0.6vw transparent;
+  border-radius: 2vw;
+ 
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
 #pathBlocks {
-  background-color: red;
+  background-color: #FF3D3D;
 }
 .h-10 {
   height: 10%;
+  align-items: center;
 }
 #largeDisplay {
   padding: 0.5em;
@@ -841,17 +966,42 @@ button, .col-3 > div > button {
   font-weight: 1000;
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
-
+#changeSMrarityDisplay {
+  width: 100%;
+  font-size:1vw;
+  font-weight: 750;
+}
+#secretButton {
+  background: none;
+  width: 4vw;
+  height: 4vw;
+  border: none;
+  position: fixed;
+  top: 50%;
+}
+#celestialContainer {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+#statsTitle {
+  font-size: 3vw;
+  font-weight: 750;
+}
+.oreStats {
+  text-align: center;
+  font-size: 1vw;
+  font-weight: bold;
+  margin-top: 0.05vw;
+  margin-bottom: 0.05vw;
+}
 @keyframes flashGreen {
   0% {background-color:white;}
-  50% {background-color:lightgreen;}
+  50% {background-color:#6BC267;}
   100% {background-color:white;}
 }
 @keyframes flashRed {
   0% {background-color:white;}
-  50% {background-color:red;}
+  50% {background-color:#FF3D3D;}
   100% {background-color:white;}
-}
-@keyframes inventoryFlash {
-  50% {background-color:green;}
 }

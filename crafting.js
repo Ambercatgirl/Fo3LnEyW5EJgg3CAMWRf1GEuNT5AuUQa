@@ -162,8 +162,8 @@ const worldOnePickaxes = [
         ["🧱", 150000000],
         ["🪨", 150000000],
         ["🌫️", 150000000],
-        ["🟤", 35000000],
-        ["⚫", 50000000],
+        ["🟤", 6400000],
+        ["⚫", 5000000],
         ["💚", 1500],
         ["🤍", 750],
         ["🧵", 50],
@@ -199,23 +199,23 @@ worldTwoPickaxes = [
     //SONAR SHRIEKER
     [
         ["📺", 50000],
-        ["🔃", 825],
-        ["↘️", 20],
+        ["🔃", 500],
+        ["↘️", 10],
         ["⏬", 1],
     ],
     //PRISM OF CHAOS REAL
     [
         ["🚪", 400000],
-        ["🔁", 2000],
+        ["🔁", 1800],
         ["⬇️", 150],
-        ["⏫", 15],
+        ["⏫", 18],
         ["▶️", 2],
     ],
     //STARBYS!!!!
     [
         ["🌐", 1000000],
-        ["⤵️", 2000],
-        ["↪️", 1000],
+        ["⤵️", 1900],
+        ["↪️", 960],
         ["🔽", 100],
         ["⏮️", 20],
         ["📕", 1],
@@ -223,9 +223,9 @@ worldTwoPickaxes = [
     //HOLY SHIT IS THIS A REAL CAT
     [
         ["♟️", 6000000],
-        ["🔂", 8000],
-        ["⏺️", 150],
-        ["⏏️", 50],
+        ["🔂", 28000],
+        ["⏺️", 75],
+        ["⏏️", 25],
         ["📗", 5],
         ["📘", 3],
         ["✏️", 1],
@@ -233,9 +233,9 @@ worldTwoPickaxes = [
     //THE MOON!!!
     [
         ["☁️", 15000000],
-        ["⬅️", 20000],
-        ["↖️", 4000],
-        ["➡️", 3000],
+        ["⬅️", 12800],
+        ["↖️", 2500],
+        ["➡️", 2250],
         ["📙", 6],
         ["🌧️", 2],
         ["🌤️", 1],
@@ -243,10 +243,10 @@ worldTwoPickaxes = [
     //REPEATING PRISM OF CHAOS NO WAY
     [
         ["♟️", 25000000],
-        ["⬆️", 30000],
-        ["◀️", 4500],
-        ["⏯️", 400],
-        ["⏸️", 300],
+        ["⬆️", 19000],
+        ["◀️", 2400],
+        ["⏯️", 275],
+        ["⏸️", 240],
         ["📗", 15],
         ["🧠", 2],
         ["📐", 1],
@@ -255,8 +255,8 @@ worldTwoPickaxes = [
     [
         ["❌", 2000000],
         ["📺", 70000000],
-        ["🔼", 22500],
-        ["⏪", 8500],
+        ["🔼", 6700],
+        ["⏪", 1950],
         ["✴️", 3],
         ["📙", 20],
         ["🛡️", 20],
@@ -266,8 +266,8 @@ worldTwoPickaxes = [
     [
         ["☁️", 75000000],
         ["🚪", 75000000],
-        ["🔃", 6500000],
-        ["⏏️", 5000],
+        ["🔃", 2670000],
+        ["⏏️", 850],
         ["📘", 50],
         ["🔑", 20],
         ["🌨️", 10],
@@ -277,10 +277,10 @@ worldTwoPickaxes = [
     [
         ["❌", 150000000],
         ["📺", 200000000],
-        ["🔄", 4250000],
-        ["↪️", 530000],
-        ["⏬", 15000],
-        ["⏯️", 4500],
+        ["🔄", 2675000],
+        ["↪️", 310000],
+        ["⏬", 9000],
+        ["⏯️", 2400],
         ["📗", 35],
         ["📕", 30],
         ["📙", 25],
@@ -292,9 +292,9 @@ worldTwoPickaxes = [
     ],
     [
         ["🚪", 400000000],
-        ["↘️", 450000],
-        ["➡️", 220000],
-        ["🔽", 130000],
+        ["↘️", 175000],
+        ["➡️", 85000],
+        ["🔽", 57000],
         ["🔒", 125],
         ["🔑", 100],
         ["🖇️", 35],
@@ -303,12 +303,12 @@ worldTwoPickaxes = [
     ],
     [
         ["☁️", 1250000000],
-        ["🔃", 25000000],
-        ["⤵️", 3500000],
-        ["⏬", 50000],
-        ["⏺️", 25000],
-        ["📙", 17500],
-        ["📘", 15000],
+        ["🔃", 18500000],
+        ["⤵️", 2800000],
+        ["⏬", 33000],
+        ["⏺️", 21000],
+        ["📙", 5000],
+        ["📘", 4000],
         ["🌨️", 300],
         ["🪁", 200],
         ["⛈️", 120],
@@ -317,16 +317,41 @@ worldTwoPickaxes = [
     ],
     [
         ["🌐", 3000000000],
-        ["🔂", 26000000],
-        ["⬇️", 2200000],
-        ["◀️", 325000],
-        ["⏫", 260000],
+        ["🔂", 30000000],
+        ["⬇️", 1700000],
+        ["◀️", 250000],
+        ["⏫", 200000],
         ["🖱️", 3500],
         ["💔", 300],
         ["🔪", 75],
         ["🧂", 35],
         ["📽️", 15],
         ["💘", 1]
+    ],
+    [
+        ["❌", 15000000000],
+        ["🕳️", 50000],
+        ["⛏️", 1],
+        ["🌳", 20],
+        ["🏰", 20],
+        ["🚿", 20],
+        ["🐋", 20],
+        ["🏔️", 20],
+        ["⚠️", 20],
+        ["🐪", 20],
+        ["💵", 20],
+        ["🍃", 10],
+        ["👾", 10],
+        ["🪡", 10],
+        ["🚽", 5],
+        ["🎓", 10],
+        ["⚡", 5],
+        ["💘", 20],
+        ["💢", 30],
+        ["⛔", 1],
+        ["🪽", 1],
+        ["🗝️", 1]
+        
     ]
     
 ],
@@ -430,8 +455,8 @@ worldOneGears = [
 worldTwoGears = [
     [
         ["🌐", 5000000],
-        ["🔄", 40000],
-        ["🔀", 15000],
+        ["🔄", 28000],
+        ["🔀", 10000],
         ["💻", 1],
     ],
     [
@@ -443,7 +468,7 @@ worldTwoGears = [
     ],
     [
         ["🚪", 17500000],
-        ["⏪", 425],
+        ["⏪", 625],
         ["⏏️", 125],
         ["🔒", 8],
         ["🔑", 5],
@@ -451,18 +476,18 @@ worldTwoGears = [
     ],
     [
         ["🌐", 30000000],
-        ["🔃", 450000],
-        ["⤴️", 60000],
-        ["➡️", 6000],
-        ["⏺️", 450],
+        ["🔃", 675000],
+        ["⤴️", 67500],
+        ["➡️", 6750],
+        ["⏺️", 675],
         ["💻", 15],
         ["🖱️", 5],
     ],
     [
         ["♟️", 45000000],
-        ["🔂", 360000],
-        ["↩️", 75000],
-        ["▶️", 300],
+        ["🔂", 450000],
+        ["↩️", 90000],
+        ["▶️", 450],
         ["✏️", 15],
         ["🧠", 6],
         ["📖", 5],
@@ -475,8 +500,8 @@ worldTwoGears = [
         ["🚪", 20000000],
         ["🌐", 20000000],
         ["♟️", 20000000],
-        ["⏺️", 2250],
-        ["◀️", 11250],
+        ["◀️", 12625],
+        ["⏺️", 1400],
         ["📗", 60],
         ["📕", 50],
         ["📙", 40],
@@ -485,17 +510,17 @@ worldTwoGears = [
     ],
     [
         ["🌐", 90000000],
-        ["➡️", 37500],
+        ["➡️", 27500],
         ["⏩", 5000],
-        ["⏭️", 4500],
-        ["▶️", 1500],
+        ["⏭️", 3800],
+        ["▶️", 920],
         ["🖱️", 30],
         ["🍆", 3],
         ["💔", 1],
     ],
     [
         ["♟️", 175000000],
-        ["🔼", 20000],
+        ["🔼", 30000],
         ["✏️", 50],
         ["🧠", 35],
         ["📖", 30],
@@ -506,9 +531,9 @@ worldTwoGears = [
     [
         ["📺", 500000000],
         ["🔀", 2000000],
-        ["⬅️", 570000],
-        ["⏩", 15000],
-        ["⏮️", 14000],
+        ["⬅️", 580000],
+        ["⏩", 9500],
+        ["⏮️", 13500],
         ["⏸️", 5000],
         ["🛡️", 250],
         ["🪃", 200],
@@ -518,10 +543,10 @@ worldTwoGears = [
     ],
     [
         ["🚪", 1750000000],
-        ["⤴️", 3500000],
-        ["↪️", 2400000],
-        ["⏪", 60000],
-        ["⏯️", 20000],
+        ["⤴️", 2700000],
+        ["↪️", 1850000],
+        ["⏪", 45000],
+        ["⏯️", 15000],
         ["🔒", 3200],
         ["🖇️", 1000],
         ["⛓️", 90],
@@ -530,17 +555,27 @@ worldTwoGears = [
     ],
     [
         ["♟️", 3000000000],
-        ["↩️", 4800000],
-        ["⬆️", 2400000],
-        ["↖️", 666666],
-        ["⏭️", 70000],
-        ["✏️", 6500],
+        ["↩️", 4500000],
+        ["⬆️", 2300000],
+        ["↖️", 640000],
+        ["⏭️", 60000],
+        ["✏️", 5000],
         ["📐", 1500],
         ["🔎", 75],
         ["📌", 40],
         ["📍", 10],
         ["🎓", 5]
     ],
+    [
+        ["🦠", 70000000],
+        ["☣️", 40000000],
+        ["🎵", 20000000],
+        ["❓", 15000000],
+        ["🪇", 1],
+        ["🧬", 1],
+        ["🔭", 1],
+        ["🕸️", 1],
+    ]
     
 ];
 
@@ -556,7 +591,8 @@ function displayRecipe(num, element) {
     if (currentRecipe[0] === null) {
         if (type === "pickaxe") {
             if (pickaxes[num + 1][1] && currentPickaxe === num + 1) {
-                recipe.lastChild.innerText = "Equipped!";
+                if (num !== 25) recipe.lastChild.innerText = "Equipped!";
+                else recipe.lastChild.innerText = "Equipped..?";
             } else if (pickaxes[num + 1][1]) {
                 recipe.lastChild.innerText = "Equip!"
             }
@@ -606,7 +642,8 @@ function displayRecipe(num, element) {
         } else {
             if (type === "pickaxe") {
                 if (pickaxes[num + 1][1] && currentPickaxe === num + 1) {
-                    recipe.lastChild.innerText = "Equipped!";
+                    if (num !== 25) recipe.lastChild.innerText = "Equipped!";
+                    else recipe.lastChild.innerText = "Equipped..?";
                 } else if (pickaxes[num + 1][1]) {
                     recipe.lastChild.innerText = "Equip!"
                 }
@@ -667,15 +704,15 @@ function createPickaxeRecipes() {
             element.id = (ore + ("pickaxeRecipe" + (j + 1) + "Display"));
             element.classList = "recipeOreDisplay";
             element.innerHTML = ore + " " + amtHave.toLocaleString() + "/" + amtNeeded.toLocaleString();
-            element.setAttribute("onclick", "randomFunction(this.innerHTML, 'crafting')");
-            let colors = getBackgroundColor(oreList[ore]["oreTier"]);
-            element.style.backgroundColor = colors["backgroundColor"];
+            element.setAttribute("onclick", "randomFunction(\"" + ore + "\", 'crafting')");
+            let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+            element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
             element.style.margin = "0px";
 
             if (amtHave >= amtNeeded)
-                element.style.color = "green";
+                element.style.color = "#6BC267";
             else
-                element.style.color = "red";
+                element.style.color = "#FF3D3D";
             tempElement.appendChild(element);
         });
 
@@ -695,7 +732,7 @@ function createPickaxeRecipes() {
         if (pickaxes[j + 1][1]) {
             tempButton.innerHTML = "Equip!";
         } else
-            tempButton.innerHTML = "Craft!";
+            tempButton.innerHTML = j === 25 ? "Sacrifice..." : "Craft!";
         tempElement.appendChild(tempButton);
         recipeElements[0].push(tempElement);
     }
@@ -719,15 +756,15 @@ for (let i = 0; i < worlds.length; i++) {
             let element = document.createElement('p');
             element.id = (ore + ("gearRecipe" + (j) + "Display"));
             element.innerHTML = ore + " " + amtHave.toLocaleString() + "/" + amtNeeded.toLocaleString();
-            element.setAttribute("onclick", "randomFunction(this.innerHTML, 'crafting')");
+            element.setAttribute("onclick", "randomFunction(\"" + ore + "\", 'crafting')");
             element.classList = "recipeOreDisplay";
-            let colors = getBackgroundColor(oreList[ore]["oreTier"]);
-            element.style.backgroundColor = colors["backgroundColor"];
+            let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+            element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
             element.style.margin = "0px";
             if (amtHave >= amtNeeded)
-                element.style.color = "green";
+                element.style.color = "#6BC267";
             else
-                element.style.color = "red";
+                element.style.color = "#FF3D3D";
             tempElement.appendChild(element);
         });
         let tempButton = document.createElement('button');
@@ -770,7 +807,8 @@ const buttonGradients = {
     "craftPickaxe23" : {"gradient" : "linear-gradient(to right, #F5F5F5, #0D0D0D, #FFFDAF, #0D0D0D, #F5F5F5)","applied" : false},
     "craftPickaxe24" : {"gradient" : "linear-gradient(to right, #F6FF58 7%, #0030F1, #676767, #57FDFF, #FC5EFF 93%","applied" : false},
     "craftPickaxe25" : {"gradient" : "linear-gradient(to right, #FF2454, #600018, #FF8DCC, #121212, #FF8DCC, #600018, #FF2454","applied" : false},
-
+    "craftPickaxe26" : {"gradient" : "linear-gradient(to right, #000000, #5D0000, #734600, #807A00, #074D00, #006564, #021652 , #3B0076, #460038, #5D0000, #000000)","applied" : false},
+    
     "craftGear0" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
     "craftGear1" : {"gradient" : "linear-gradient(to right, #FFF1C0, #FF9E40","applied" : false},
     "craftGear2" : {"gradient" : "linear-gradient(to right, #F9F9F9, #FFFB48","applied" : false},
@@ -792,6 +830,7 @@ const buttonGradients = {
     "craftGear18" : {"gradient" : "linear-gradient(to right, #FF7C00 10%, #032A00, #11E900, #032A00, #FF7C00 90%","applied" : false},
     "craftGear19" : {"gradient" : "linear-gradient(to right, #CDCDCD 5%, #F55D2F, #474747, #EFD754, #474747, #F55D2F, #CDCDCD 95%","applied" : false},
     "craftGear20" : {"gradient" : "linear-gradient(to right, #000000 5%, #FF3636, #E94585, #000ACE, #FFFFFF 95%","applied" : false},
+    "craftGear21" : {"gradient" : "linear-gradient(to right, #44533D, #37085A, #76734E, #116666, #58340B, #04370A, #3B0505, #740A32, #451676, #236B4B)","applied" : false},
 
     
 }
@@ -809,11 +848,11 @@ function updateActiveRecipe() {
                 let amtOwned = oreList[ore]["normalAmt"];
                 recipe[i].innerText = ore + " " + amtOwned.toLocaleString() + "/" + needed.toLocaleString();
                 if(amtOwned >= needed) {
-                    recipe[i].style.color = "green";
+                    recipe[i].style.color = "#6BC267";
                     count++;
                 }
                 else
-                    recipe[i].style.color = "red";
+                    recipe[i].style.color = "#FF3D3D";
             }
         }
         let button = currentRecipe[0].lastChild;
@@ -825,7 +864,7 @@ function updateActiveRecipe() {
         } else if (count > lastCount){
             lastCount = count;
             let percent = 100 * (count/length);
-            button.style.backgroundImage = "linear-gradient(to right, green " + percent + "%, red " + (percent + 5) + "%)";
+            button.style.backgroundImage = "linear-gradient(to right, #6BC267 " + percent + "%, #FF3D3D " + (percent + 5) + "%)";
         }
         
     }
@@ -851,25 +890,27 @@ function craftPickaxe(num) {
         if (canCraft) {
             for (let i = 0; i < recipeList.length; i++) {
                 oreList[recipeList[i][0]]["normalAmt"] -= recipeList[i][1];
-                updateInventory(recipeList[i][0], 1);
+                inventoryObj[recipeList[i][0]] = 0;
             }
             let temp = document.getElementById("craftPickaxe" + num);
-            temp.innerText = "Equipped!";
+            if (num !== 26) temp.innerText = "Equipped!";
+            else temp.innerText = "Equipped..?";
             updateActiveRecipe();
             pickaxes[num][1] = true;
             currentPickaxe = num;
         }
     } else {
-        document.getElementById("craftPickaxe" + num).innerText = "Equipped!";
+        if (num !== 26) document.getElementById("craftPickaxe" + num).innerText = "Equipped!";
+        else document.getElementById("craftPickaxe" + num).innerText = "Equipped..?";
         currentPickaxe = num;
     }
     utilitySwitchActions();
 }
 function utilitySwitchActions() {
-    updateStats();
     changeLayerOres();
     applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
     switchLayerIndex(0);
+    updateStats();
 }
 function craftGear(num) {
     let list = currentWorld === 1 ? worldOneGears : worldTwoGears;
@@ -886,7 +927,7 @@ function craftGear(num) {
         if (canCraft) {
             for (let i = 0; i < list.length; i++) {
                 oreList[list[i][0]]["normalAmt"] -= list[i][1];
-                updateInventory(list[i][0], 1);
+                inventoryObj[recipeList[i][0]] = 0;
             }
             if (num === 9) {
                 document.getElementById("craftGear" + num).innerText = "SILLIFY!";
@@ -902,14 +943,37 @@ function craftGear(num) {
     if (currentWorld === 1 && num === 9)
         gearAbility2();
 }
-
+let m87 = 0;
+let m88 = 0;
 function showPickaxes() {
     appear(document.getElementById("pickaxeCrafts"));
     disappear(document.getElementById("gearCrafts"));
+    m87 = 0;
+    m88++;
+    if (m88 === 6 && currentWorld === 2) {
+        let show = true;
+        for (let i = 0; i < gears.length; i++) if(!gears[i]) show = false;
+        for (let i = 0; i < pickaxes.length - 1; i++) if (!pickaxes[i][1]) show = false;
+        if (show) {
+            let children = document.getElementById("pickaxeCrafts").children;
+            for (let i = 0; i < children.length; i++) children[i].style.display = "none";
+            document.getElementById("nullChroma").style.display = "block";
+        } else m88 = 0;
+        
+    }
+    document.getElementById("oblivionFracturer").style.display = "none";
 }
 function showGears() {
     disappear(document.getElementById("pickaxeCrafts"));
     appear(document.getElementById("gearCrafts"));
+    m87++;
+    m88 = 0;
+    if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
+    if (currentWorld === 2) {
+        let children = document.getElementById("pickaxeCrafts").children;
+        for (let i = worldOnePickaxes.length - 1; i < worldOnePickaxes.length + worldTwoPickaxes.length; i++) children[i].style.display = "block";
+        document.getElementById("nullChroma").style.display = "none";
+    }
 }
 function switchWorldCraftables() {
     let elements = document.getElementsByClassName("craftingButton");
@@ -960,5 +1024,6 @@ function switchWorldCraftables() {
             elements[i].style.display = "block";
         }
         elements[worldOnePickaxes.length - 1].style.display = "block";
+        document.getElementById("oblivionFracturer").style.display = "none";
     }
 }

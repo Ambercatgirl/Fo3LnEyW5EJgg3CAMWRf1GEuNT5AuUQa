@@ -59,21 +59,19 @@ function checkAllAround(x, y, luck) {
 
 function mineBlock(x, y, cause) {
     let ore = mine[y][x];
-    if (ore === "🟩") ore = "🟫";
     if (ore === "⚪") return;
     if (oreList[ore]["isBreakable"]) {
-        if (checkFromCave([y, x])) {
-            let adjMulti = getCaveMultiFromOre(mine[y][x]);
-            giveBlock(mine[y][x], x, y, false, true, adjMulti);
+        if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
+            giveBlock(ore, x, y, false, true, checkFromCave({"X":x, "Y":y})["multi"]);
             mine[y][x] = "⚪";
             checkAllAround(x, y, 1);
             totalMined++;
         } else {
         if (cause === "reset") {
-            giveBlock(mine[y][x], x, y, true);
+            giveBlock(ore, x, y, true);
             mine[y][x] = "⚪";
         } else {
-            giveBlock(mine[y][x], x, y);
+            giveBlock(ore, x, y);
             mine[y][x] = "⚪";
             checkAllAround(x, y);
             totalMined++;
@@ -90,10 +88,9 @@ function mineBlock(x, y, cause) {
 let multis = [1, 50, 250, 500];
 let inv;
 function giveBlock(type, x, y, fromReset, fromCave, caveMulti) {
-    if (type !== "⛏️") {
         if (type === "⚪") return;
         //CREATE VARIABLES
-        let oreRarity = Math.round(oreList[type]["numRarity"]);
+        let oreRarity = oreList[type]["numRarity"];
         let inv = 1;
         //SELECT VARIANT
         if (Math.floor(Math.random() * 50) === 25)
@@ -103,9 +100,14 @@ function giveBlock(type, x, y, fromReset, fromCave, caveMulti) {
         else if (Math.floor(Math.random() * 500) === 250)
             inv = 4;
         if (!fromCave) {
+            if (oreRarity >= 750000) {
+                if (currentWorld === 1 && gears[7])
+                    gearAbility1();
+                if (oreInformation.tierGrOrEqTo({"tier1" : oreList[type]["oreTier"], "tier2" : minTier}))
+                    logFind(type, x, y, namesemojis[inv - 1], totalMined, fromReset);     
+            }
             if (currentWorld === 1 && gears[4]) {
-                oreList[currentLayer.slice(-1)][variantInvNames[inv - 1]]++;
-                updateInventory(currentLayer.slice(-1), 1);
+                oreList[currentLayer.slice(-1)]["normalAmt"]++;
             }
             if (gears[15]) {
                  if (oreRarity === 1 && (Math.random() < 0.5))
@@ -116,31 +118,29 @@ function giveBlock(type, x, y, fromReset, fromCave, caveMulti) {
                     if (Math.random < 0.75)
                         oreList[type]["normalAmt"]++;
             }
-            if (oreList[type]["hasLog"])
+            if (oreList[type]["hasLog"]) {
                 verifiedOres.verifyFind(mine[y][x], y, x, names[inv - 1]);
-            if (oreRarity > minRarity) {
-                if (currentWorld === 1 && gears[7])
-                    gearAbility1();
-            logFind(type, x, y, namesemojis[inv - 1], totalMined, fromReset);     
-        }
+            }
         } else {
                 oreRarity *= caveMulti;
+                if (oreRarity >= 750000) { 
+                    if (currentWorld === 1 && gears[7])
+                        gearAbility1();
+                    if (oreInformation.tierGrOrEqTo({"tier1" : oreList[type]["oreTier"], "tier2" : minTier}))
+                        logFind(type, x, y, namesemojis[inv - 1], totalMined, fromReset);     
+                }
                 if (oreList[type]["hasLog"] || oreRarity >= 160000000) {
                     verifiedOres.verifyFind(mine[y][x], y, x, names[inv - 1]);
                 }
-                if (oreRarity > minRarity) {
-                    logFind(type, x, y, namesemojis[inv - 1], totalMined, fromReset);
-                }
-                if (currentWorld === 1 && gears[7] && oreRarity >= 750000)
-                    gearAbility1();
+                
         }
         oreList[type][variantInvNames[inv - 1]]++;
-        updateInventory(type, inv);
-    }
+        inventoryObj[type] = 0;
 }
 let minRarity = 750000;
 let cat = 1;
 let probabilityTable;
+const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸";
 function generateBlock(location) {
     blocksRevealedThisReset++;
     probabilityTable = currentLayer;
@@ -152,8 +152,7 @@ function generateBlock(location) {
             probabilityTable = layerList[specialLayers[3]];
     }
     if ((location["Y"] === 0 && currentWorld === 1) || (location["Y"] === 2000 && currentWorld === 2)) {
-        mine[location["Y"]][location["X"]] = "🟩";
-        return;
+        probabilityTable = layerList[specialLayers[5]]
     }
         
 
@@ -168,19 +167,89 @@ function generateBlock(location) {
         }
     }
     let oreRarity = oreList[blockToGive]["numRarity"];
-    let hasLog = false;
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
-        playSound(oreList[blockToGive]["oreTier"]);
-        if (oreRarity > minRarity) {
-            hasLog = oreList[blockToGive]["hasLog"];
-            if (hasLog) {
-                verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error(), verifiedOres.getCurrentLuck());
-            }
-            spawnMessage(blockToGive, location);
-            
+        if (specialCases.indexOf(blockToGive) > -1) {
+            blockToGive = checkSpecials(blockToGive);
+            mine[location["Y"]][location["X"]] = blockToGive;
         }
+        const tier = oreList[blockToGive]["oreTier"];
+        if (oreList[blockToGive]["hasLog"]) {
+            verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error(), verifiedOres.getCurrentLuck());
+            verifiedOres.verifyLog(location["Y"], location["X"]);
+        }
+        playSound(oreList[blockToGive]["oreTier"]);
+        if (oreInformation.tierGrOrEqTo({"tier1" : tier, "tier2" : minTier})) spawnMessage(blockToGive, location);
+        if ((currentWorld === 1 && gears[3]) || currentWorld === 2 && gears[17]) mineBlock(location["X"], location["Y"], "ability");
     }
+}
+
+const checkSpecials = function(block) {
+    if (Math.random() < 1/1000)
+    switch(block) {
+        case "💙" : 
+        if (curDirection === "")
+            block = "🩵";
+        break;
+        case "⌛" : 
+        block = "⏳";
+        break;
+        case "🍃" : 
+        block = "🍂";
+        break;
+        case "🦾" : 
+        if (curDirection === "")
+            block = "🦿";
+        break;
+        case "👀" : 
+        block = "👁‍🗨";
+        break;
+        case "🔋" : 
+        if (curDirection === "")
+            block = "🪫";
+        break;
+        case "⛔" : 
+        block = "📛";
+        break;
+        case "🌻" : 
+        if (curDirection === "")
+            block = "🌼";
+        break;
+        case "🌈" : 
+        block = "🏳️‍🌈";
+        break;
+        case "🎉" : 
+        block = "🎊";
+        break;
+        case "🔒" : 
+        if (curDirection === "")
+            block = "🔓";
+        break;
+        case "📽️" : 
+        block = "🎥";
+        break;
+        case "🧂" : 
+        block = "🌶️";
+        break;
+        case "🏯" : 
+        block = "⛩️";
+        break;
+        case "🖊️" : 
+        block = "🖋️";
+        break;
+        case "🏔️" : 
+        block = "🌋";
+        break;
+        case "💔" : 
+        if (curDirection === "")
+            block = "❤️‍🩹";
+        break;
+        case "🩸" : 
+        block = "💧";
+        break;
+            
+    }
+    return block;
 }
 /*
 let totalSpeeds = 0;
@@ -223,6 +292,7 @@ function switchDistance() {
 
 async function teleport() {
     canMine = false;
+    insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
     curDirection = "";
     pa1 = [];
@@ -304,11 +374,11 @@ function attemptSwitchWorld() {
     }
 }
 function switchWorld() {
-    distanceMulti = 1;
-    y = 1000;
     canMine = false;
     stopMining();
     mine = [];
+    m87 = 0;
+    m88 = 0;
     if (currentWorld === 1) {
         currentWorld = 2;
         allLayers = worldTwoLayers;
@@ -317,8 +387,26 @@ function switchWorld() {
         currentLayerNum = -1;
         setLayer(curY);
         createMine();
-        mine[curY + 1][curX] = "📺";
+        distanceMulti = 1;
+        y = 1000;
+        if (currentPickaxe === 25) {
+            if (Math.random() < 1/10000) {
+                mine[curY + 1][curX] = "🩷";
+                playSound(oreList["🩷"]["oreTier"]);
+                document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
+            } else {
+                mine[curY + 1][curX] = "📺";
+            }
+
+        } else {
+            mine[curY + 1][curX] = "📺";
+        }
+        if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
     } else {
+        let children = document.getElementById("pickaxeCrafts").children;
+        for (let i = worldOnePickaxes.length - 1; i < worldOnePickaxes.length + worldTwoPickaxes.length; i++) children[i].style.display = "block";
+        distanceMulti = 0;
+        y = 1000;
         currentWorld = 1;
         allLayers = worldOneLayers;
         currentLayer = allLayers[0];
@@ -327,15 +415,32 @@ function switchWorld() {
         currentLayerNum = -1;
         setLayer(curY);
         createMine();
+        if (currentPickaxe === 1) {
+            if (Math.random() < 1/10000) {
+                mine[curY + 1][curX] = "🩶";
+                playSound(oreList["🩶"]["oreTier"]);
+                document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
+            } else {
+                mine[curY + 1][curX] = "🟫";
+            }
+        }
+        if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
     }
     switchDistance();
     displayArea();
     switchWorldCraftables();
+    document.getElementById("nullChroma").style.display = "none";
     utilitySwitchActions();
+    removeFromLayers({"ore":"🐢","layers":["paperLayer"]})
+    removeFromLayers({"ore":"🐰","layers":["paperLayer"]});
+    a12 = 0;
+    a13 = false;
+    document.getElementById("teleportButton").disabled = false;
     canMine = true;
 }
 function stopMining() {
     curDirection = "";
+    insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
     if (ability1Active) {
         clearTimeout(ability1Timeout);

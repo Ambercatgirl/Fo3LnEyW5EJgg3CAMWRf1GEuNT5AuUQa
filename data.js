@@ -42,7 +42,8 @@ function saveAllData() {
         usePathBlocks,
         cavesEnabled,
         useDisguisedChills,
-        usingNewEmojis
+        usingNewEmojis,
+        minRarityNum
         );
     dataStorage[4].push(gears);
     if (!debug) localStorage.setItem("playerData", JSON.stringify(dataStorage));
@@ -80,13 +81,10 @@ function loadAllData() {
         totalMined = data[2];
         document.getElementById("blocksMined").innerHTML = totalMined.toLocaleString() + " Blocks Mined";
         for (let propertyName in oreList) {
-            if (document.getElementById(propertyName + "1") !== null) {
                 for (let i = 1; i < 5; i++) {
-                    updateInventory(propertyName, i);
-                    if (oreList[propertyName][variantInvNames[i-1]] > 0)
-                        document.getElementById(propertyName + i).style.display = "block";
+                    inventoryObj[propertyName] = 0;
+                    updateInventory();
                 }
-            }
         }
         if (data[3].length > 14) {
             if (data[3][0] != undefined) {
@@ -124,7 +122,7 @@ function loadAllData() {
             if (data[3][6] != undefined) {
                 stopOnRare = data[3][6];
                 if (stopOnRare)
-                    document.getElementById("stopOnRare").style.backgroundColor = "green";
+                    document.getElementById("stopOnRare").style.backgroundColor = "#6BC267";
             }
             if (data[3][7] != undefined) {
                 stopRareNum = data[3][7] - 1;
@@ -133,7 +131,7 @@ function loadAllData() {
             if (data[3][8] != undefined) {
                 canDisplay = data[3][8];
                 if (!canDisplay) {
-                    document.getElementById("blockUpdates").style.backgroundColor = "red";
+                    document.getElementById("blockUpdates").style.backgroundColor = "#FF3D3D";
                     document.getElementById("blockDisplay").innerHTML = "❌"
                 }
             }
@@ -141,18 +139,18 @@ function loadAllData() {
                 if (data[3][9]) {
                     changeUseNumbers();
                     useNumbers = data[3][9]; 
-                    document.getElementById("useNumbers").style.backgroundColor = "green";
+                    document.getElementById("useNumbers").style.backgroundColor = "#6BC267";
                 }
             }
             if (data[3][10] != undefined) {
                 invToIndex = data[3][10];
                 if (!invToIndex)
-                    document.getElementById("invIndex").style.backgroundColor = "red";
+                    document.getElementById("invIndex").style.backgroundColor = "#FF3D3D";
             }
             if (data[3][11] != undefined) {
                 craftingToIndex = data[3][11];
                 if (!craftingToIndex)
-                    document.getElementById("craftIndex").style.backgroundColor = "red";
+                    document.getElementById("craftIndex").style.backgroundColor = "#FF3D3D";
             }
             if (data[3][12] != undefined) {
                 if (data[3][12] != "")
@@ -198,7 +196,7 @@ function loadAllData() {
             if (data[3][16] != undefined) {
                 usePathBlocks = data[3][16];
                 if (!usePathBlocks)
-                    document.getElementById("pathBlocks").style.backgroundColor = "green"
+                    document.getElementById("pathBlocks").style.backgroundColor = "#6BC267"
             }
             if (data[3][17] != undefined) {
                 cavesEnabled = data[3][17];
@@ -210,10 +208,15 @@ function loadAllData() {
                     enableDisguisedChills();
                 }
             }
-            if (data[3][18] != undefined) {
+            if (data[3][19] != undefined) {
                 if (data[3][19]) {
                     switchFont();
                 }
+            }
+            if (data[3][20] != undefined) {
+                    minRarityNum = data[3][20];
+                    minRarityNum--;
+                    changeSpawnMessageRarity(document.getElementById("changeSMrarityDisplay"));
             }
         }
             if (data[4] !== undefined || data[4] !== null) {
@@ -256,7 +259,7 @@ function fromBinary(encoded) {
 
 function exportData() {
     let data;
-    data = debug ? (toBinary(localStorage.getItem("playerData"))) : (toBinary(localStorage.getItem("testingData")));
+    data = !debug ? (toBinary(localStorage.getItem("playerData"))) : (toBinary(localStorage.getItem("testingData")));
     let textField = document.getElementById("dataText");
     textField.value = data;
     if (confirm("Download save data as file?"))

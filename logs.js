@@ -8,14 +8,14 @@ class secureLogs {
     #spawnLogs;
     #verifiedLogs;
     #logsTimer;
-    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 3, 4, 15, 20];
+    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 20, 150];
     constructor() {
         this.#spawnLogs = [];
         this.#verifiedLogs = [];
         this.#logsTimer = null;
     }
     createLog(r, c, intended, obj, luck, fromCave) {
-        fromCave = fromCave === undefined ? [false, false] : fromCave;
+        fromCave = fromCave === undefined ? [false, 1, "none"] : fromCave;
         let luckModifier1 = 1;
         if (currentWorld === 1 && gears[1])
             luckModifier1 *= 1.1;
@@ -81,9 +81,9 @@ class secureLogs {
                     output += this.#verifiedLogs[i][0] + ", " + this.#verifiedLogs[i][2] + ", " + this.#verifiedLogs[i][3] + ", " + this.#verifiedLogs[i][4];
                     output += this.#verifiedLogs[i][6][0] === true ? ", Cave, " : ", "
                     output += this.#verifiedLogs[i][1][0] + ", ";
-                    if (this.#verifiedLogs[i][6][1]) {
+                    if (this.#verifiedLogs[i][6][1] > 1) {
                         let something = oreList[this.#verifiedLogs[i][0]]["numRarity"];
-                        something *= getCaveMultiFromOre(this.#verifiedLogs[i][0]);
+                        something *= this.#verifiedLogs[i][6][1];
                         output += (something * multi).toLocaleString();
                     } else {
                         output += Math.floor(((oreList[this.#verifiedLogs[i][0]]["numRarity"]) * multi)/ this.#verifiedLogs[i][5]).toLocaleString();
