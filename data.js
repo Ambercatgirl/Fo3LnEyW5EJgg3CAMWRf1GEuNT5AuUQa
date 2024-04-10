@@ -4,8 +4,10 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
-function saveAllData() {
-    let dataStorage = [
+function saveAllData(forceCloudSave=false) {
+    saveNewData();
+    return;
+    /*let dataStorage = [
         //ORES, 0
         [],
         //PICKAXES, 1
@@ -24,47 +26,94 @@ function saveAllData() {
     dataStorage[2].push(totalMined);
     dataStorage[3].push(
         canPlay, 
-        getAllSpawnVolumes(), //
-        keepRunningAudio.paused, //
-        Number(document.getElementById("musicVolume").value), //
-        baseMineCapacity, //
-        minMiningSpeed, //
-        stopOnRare, //
-        stopRareNum, //
-        canDisplay, //
-        useNumbers, //
-        invToIndex, //
-        craftingToIndex, //
-        document.getElementById("mainContent").style.backgroundColor, //
-        getLatestColors(), //
+        getAllSpawnVolumes(), 
+        keepRunningAudio.paused, 
+        Number(document.getElementById("musicVolume").value), 
+        baseMineCapacity, 
+        minMiningSpeed, 
+        stopOnRare, 
+        stopRareNum, 
+        canDisplay, 
+        useNumbers, 
+        invToIndex, 
+        craftingToIndex, 
+        document.getElementById("mainContent").style.backgroundColor, 
+        getLatestColors(), 
         getInventoryColors(),
         getCraftingColors(),
         usePathBlocks,
         cavesEnabled,
         useDisguisedChills,
         usingNewEmojis,
-        minRarityNum
+        minRarityNum,
         );
     dataStorage[4].push(gears);
-    if (!debug) localStorage.setItem("playerData", JSON.stringify(dataStorage));
+    
+    console.log("meow")
+    if (!debug) {
+			localStorage.setItem("playerData", JSON.stringify(dataStorage))
+			cloudSave(JSON.stringify(dataStorage),forceCloudSave)
+	}
     else localStorage.setItem("testingData", JSON.stringify(dataStorage));
-    checkLimitedOres();
+    */
 }
-function getAllSpawnVolumes() {
-    let volumes = document.getElementsByClassName("spawnVolume");
-    let values = []
-    for (let i = 0; i < volumes.length; i++) {
-        values.push(Number(volumes[i].value));
-    }
-    return values;
-}
-
+/*
+console.log(error);
+        window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+        return false;
+*/
 function loadAllData() {
-    localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
-    try {
         let data;
-        if (!debug) data = JSON.parse(localStorage.getItem("playerData"));
-        else data = JSON.parse(localStorage.getItem("testingData"));
+        if (!debug) {
+            if (localStorage.getItem("newPlayerData") !== null) {
+                try {
+                    localStorage.setItem("dataBackup", localStorage.getItem("newPlayerData"));
+                    loadNewData(JSON.parse(localStorage.getItem("newPlayerData")));
+                    return true;
+                } catch (error) {
+                    console.log(error);
+                    localStorage.setItem("newPlayerData", localStorage.getItem("dataBackup"));
+                    window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+                    return false;
+                }
+            } else {
+                data = JSON.parse(localStorage.getItem("playerData"));
+            }
+        } else {
+            if (localStorage.getItem("newTestingData") !== null) {
+                try {
+                    localStorage.setItem("dataBackup", localStorage.getItem("newTestingData"));
+                    loadNewData(JSON.parse(localStorage.getItem("newTestingData")));
+                    return true;
+                } catch (error) {
+                    console.log(error);
+                    localStorage.setItem("newTestingData", localStorage.getItem("dataBackup"));
+                    window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+                    return false;
+                }
+            } else {
+                data = JSON.parse(localStorage.getItem("testingData"));
+            }
+        }
+        if (Array.isArray(data)) {
+            try {
+                if (!debug)  localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
+                else  localStorage.setItem("dataBackup", localStorage.getItem("testingData"));
+                data = oldDataToNew(data);
+                loadNewData(data);
+                return true;
+            } catch (error) {
+                console.log(error);
+                if (!debug) localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
+                else localStorage.setItem("testingData", localStorage.getItem("dataBackup"));
+                window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+                return false;
+            }
+            
+        }
+        /*
+        while (Array.isArray(data[2])) data[2] = data[2][0];
+        totalMined = data[2];
         for (let i = 0; i < data[0].length; i++) {
             if (oreList[data[0][i][0]] !== undefined) {
                 oreList[data[0][i][0]]["normalAmt"] = data[0][i][1][0][0];
@@ -72,13 +121,11 @@ function loadAllData() {
                 oreList[data[0][i][0]]["radioactiveAmt"] = data[0][i][1][0][2];
                 oreList[data[0][i][0]]["explosiveAmt"] = data[0][i][1][0][3];
             }
-                
         }
         for (let i = 0; i < data[1][0][0].length; i++)
             if(pickaxes[i] != undefined)
                 pickaxes[i][1] = data[1][0][0][i][1];
         currentPickaxe = data[1][0][1];
-        totalMined = data[2];
         document.getElementById("blocksMined").innerHTML = totalMined.toLocaleString() + " Blocks Mined";
         for (let propertyName in oreList) {
                 for (let i = 1; i < 5; i++) {
@@ -100,8 +147,6 @@ function loadAllData() {
                     elements[i].value = data[3][1][i];
                     changeSpawnVolume(data[3][1][i], i)
                 }
-                   
-                    
             }
             if (data[3][2] != undefined) {
                 if (data[3][2])
@@ -153,45 +198,16 @@ function loadAllData() {
                     document.getElementById("craftIndex").style.backgroundColor = "#FF3D3D";
             }
             if (data[3][12] != undefined) {
-                if (data[3][12] != "")
-                    document.getElementById("mainContent").style.backgroundColor = data[3][12];
+                //disabled
             } 
             if (data[3][13] != undefined) {
-                /*
-                let toChange = document.getElementsByClassName("latestDisplay");
-                if (data[3][13][0] != "") {
-                    toChange[0].style.color = data[3][13][0];
-                    toChange[1].style.color = data[3][13][0];
-                }
-                if (data[3][13][1] != "") {
-                    toChange[0].style.borderColor = data[3][13][1];
-                    toChange[1].style.borderColor = data[3][13][1];
-                }
-                
-                if (data[3][13][2] != "") {
-                    toChange[0].style.backgroundColor = data[3][13][2];
-                    toChange[1].style.backgroundColor = data[3][13][2];
-                }
-                */
+                //disabled
             }
             if (data[3][14] != undefined) {
-                /*
-                let element = document.getElementById("inventoryDisplay");
-                if (data[3][14][0] != "")
-                    element.style.borderColor = data[3][14][0];
-                
-                if (data[3][14][1] != "")
-                    element.style.borderColor = data[3][14][0];
-                */
+                //disabled
             }
             if (data[3][15] != undefined) {
-                /*
-                let element = document.getElementsByClassName("col-2")[0];
-                if (data[3][15][0] != "")
-                    element.style.borderColor = data[3][15][0];
-                if (data[3][15][1] != "")
-                    element.style.backgroundColor = data[3][15][1];
-                */
+                //disabled
             }
             if (data[3][16] != undefined) {
                 usePathBlocks = data[3][16];
@@ -201,7 +217,7 @@ function loadAllData() {
             if (data[3][17] != undefined) {
                 cavesEnabled = data[3][17];
                 if (!cavesEnabled)
-                    document.getElementById("caveToggle").style.backgroundColor = "red";
+                    document.getElementById("caveToggle").style.backgroundColor = "#FF3D3D";
             }
             if (data[3][18] != undefined) {
                 if (data[3][18]) {
@@ -226,22 +242,17 @@ function loadAllData() {
         if (oreList["🎂"]["normalAmt"] > 0 || gears[9])
             document.getElementById("sillyRecipe").style.display = "block";
         localStorage.removeItem("dataBackup");
-        checkLimitedOres();
         return true;
-    } catch(error) {
-        console.log(error);
-        localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
-        window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
-        return false;
-    }
+        */
+        
 }
+
 
 let dataTimer = null;
 let dataLooping = false;
 function repeatDataSave() {
     dataTimer = setInterval(saveAllData, 3000);
 }
-
 function toBinary(string) {
     const codeUnits = new Uint16Array(string.length);
     for (let i = 0; i < codeUnits.length; i++)
@@ -259,7 +270,9 @@ function fromBinary(encoded) {
 
 function exportData() {
     let data;
-    data = !debug ? (toBinary(localStorage.getItem("playerData"))) : (toBinary(localStorage.getItem("testingData")));
+    if (!debug && localStorage.getItem("newPlayerData") !== null) data = toBinary(localStorage.getItem("newPlayerData"));
+    else if (localStorage.getItem("newTestingData") !== null) data = toBinary(localStorage.getItem("newTestingData"));
+    else data = !debug ? (toBinary(localStorage.getItem("playerData"))) : (toBinary(localStorage.getItem("testingData")));
     let textField = document.getElementById("dataText");
     textField.value = data;
     if (confirm("Download save data as file?"))
@@ -277,10 +290,12 @@ function importData(data) {
             if (confirm("YOUR SAVE FILE WILL BE ERASED. PLEASE BE SURE THIS IS WHAT YOU WANT.")) {
                 if (debug) {
                     localStorage.removeItem("testingData");
+                    localStorage.removeItem("newTestingData");
                     localStorage.removeItem("testingPlayedBefore");
                 }
                 else  {
                     localStorage.removeItem("playerData");
+                    localStorage.removeItem("newPlayerData");
                     localStorage.removeItem("playedBefore");
                 }
                 location.reload();
@@ -288,24 +303,48 @@ function importData(data) {
         }
     } else {
         if (confirm("Are you sure you want to do this? Any mistakes in imported data will corrupt your savefile.")) {
-            localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
+            if (!debug && localStorage.getItem("newPlayerData") !== null) localStorage.setItem("dataBackup", localStorage.getItem("newPlayerData"));
+            else if (!debug && localStorage.getItem("playerData") !== null) localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
+            else if (localStorage.getItem("newTestingData") !== null) localStorage.setItem("dataBackup", localStorage.getItem("newTestingData"));
+            else localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
             clearInterval(dataTimer);
             try {
                 data = fromBinary(data);
-                if (!debug) localStorage.setItem("playerData", data);
-                else localStorage.setItem("testingData", data);
+                if (checkSaveType(data)) {
+                    data = oldDataToNew(JSON.parse(data));   
+                }
+                if (!debug && localStorage.getItem("newPlayerData") !== null) localStorage.setItem("newPlayerData", JSON.stringify(data));
+                else localStorage.setItem("newTestingData", JSON.stringify(data));
                 setTimeout(() => {
                     location.reload();
                 }, 1000);
             } catch(error) {
                 console.log(error);
-                if (!debug) localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
-                else localStorage.setItem("testingData", localStorage.getItem("dataBackup"));
+                if (checkSaveType(localStorage.getItem("dataBackup"))) {
+                    if (!debug) localStorage.setItem("playerData", localStorage.getItem("dataBackup"));
+                    else localStorage.setItem("testingData", localStorage.getItem("dataBackup"));
+                } else {
+                    if (!debug) localStorage.setItem("newPlayerData", localStorage.getItem("dataBackup"));
+                    else localStorage.setItem("newTestingData", localStorage.getItem("dataBackup"));
+                }
                 window.alert("DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD");
             }
         }
     }
 }
+function checkSaveType(data) {
+    let parsedData;
+    try {
+        parsedData = JSON.parse(data);
+    } catch {
+        parsedData = data;
+    }
+    if (Array.isArray(parsedData)) {
+        return true;
+    }
+    return false;
+}
+
 
 function exportDataAsFile(textToWrite, fileNameToSaveAs, fileType) {
     const textFileAsBlob = new Blob([textToWrite], { type: fileType });
@@ -323,3 +362,78 @@ function exportDataAsFile(textToWrite, fileNameToSaveAs, fileType) {
 }
 
 
+//galaxy api stuff
+let cloudsaving = {
+	website_name: "https://galaxy.click", 
+	//website_name:"http://localhost:4321",//for testing with local instance of galaxy
+	ongalaxy: false, //if the game runs embedded to galaxy or not
+	logged_in: false,
+	dosave: true, //toggles cloud save if every other condition is met
+	save_interval: 900000, //15 minutes, game like this doesn't really need to make backups very often
+	next_save_time: Date.now() + 10000 //10s delay
+}
+
+function cloudSave(data,forceCloudSave) {
+	if(cloudsaving.ongalaxy && cloudsaving.logged_in && ((cloudsaving.dosave && Date.now() >= cloudsaving.next_save_time)||forceCloudSave)){
+		//save if the user is on galaxy, logged in and
+		//(saving is enabled a minimum save interval is reached)or(forced save parameter is true) 
+		//forced save can be used for example to save when some button is clicked manually
+		cloudsaving.next_save_time = Date.now() + cloudsaving.save_interval
+		//reset interval
+		window.top.postMessage({
+			action: "save",
+			slot: 0,
+			label: "Autosave",//how it's going to be called in cloud saves tab in the sidebar
+			data: data,
+		}, cloudsaving.website_name)
+
+	}
+}
+
+window.addEventListener("message", e => {
+	if (e.origin === cloudsaving.website_name) {
+		//this is the initial message
+		if (e.data.type === "info") {
+			cloudsaving.ongalaxy = e.data.galaxy
+			//it's now known that the player is on galaxy
+			if(e.data.logged_in){
+				cloudsaving.logged_in = true;
+                sinceLastAutosaveTimer = setInterval(timeSinceLastAutosave, 500);
+				//user is both on galaxy and logged into their account, post load request
+				window.top.postMessage({
+					action: "load",
+					slot: 0,
+				}, cloudsaving.website_name);
+			}
+		} 
+		//this is a response to the load request
+		else if (e.data.type === "save_content"){
+			if(!e.data.error){
+				let cloud_data = JSON.parse(e.data.content)
+				//if there's no error it's guarantee that there's a cloud save
+				let local_data = (JSON.parse(localStorage.getItem("playerData"))??[[],[],[]])
+				//[[],[],[]] will be used if the player with no local save opens the game
+				//alert((cloud_data[2][0]??0)+" "+(local_data[2][0]??0)) //for testing
+				if((cloud_data[2][0]??0) > (local_data[2][0]??0)){
+					//I have no idea how total amount of mined is stored but basically
+					//here in the line above you compare amount of total mined blocks and if
+					//it's bigger for the cloud save then load that save instead
+					localStorage.setItem("playerData", e.data.content)
+					//set local storage entry to the cloud save and refresh the page 
+					//would be nicer without a refresh but I don't know how the game loads a save
+					location.reload()
+				}
+			}
+			else {
+				if(e.data.message === "empty_slot"){
+					//there's no cloud save, do nothing ig
+					//maybe ask if user wants to enable it or not
+				}
+				else {
+					//probably something is wrong with the server, don't save in this session
+					cloudsaving.dosave = false
+				}
+			}
+		}
+	}
+})

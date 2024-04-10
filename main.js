@@ -19,10 +19,8 @@ let mine = [];
 let curX = 1000000000;
 let curY = 0;
 let currentDisplay = ""
-let totalMined = 0;
 let blocksRevealedThisReset = 0;
-let baseMineCapacity = 40000;
-let mineCapacity = 40000; // in case this ever needs to be raised
+let mineCapacity = 250000; // in case this ever needs to be raised
 let canMine = false;
 let lastDirection = "";
 let stopOnRare = false;
@@ -79,7 +77,6 @@ let gears = [
     false, //15% OF CURRENT PICKAXE LUCK 20
     false, //ABYSSTONE CAVES 21
 ];
-let currentPickaxe = 0;
 let currentWorld = 1;
 let currentLayerNum = 0;
 const birthdays = {
@@ -96,6 +93,7 @@ let minedElement;
 let revealedElement;
 let locationElement;
 let blockElement;
+let emojiNames;
 function init() {
     minedElement = document.getElementById("blocksMined");
     revealedElement = document.getElementById("mineResetProgress");
@@ -105,30 +103,12 @@ function init() {
     createSpecialLayers();
     createInventory();
     createMine();
-    let playedBefore
-    if (!debug) playedBefore = localStorage.getItem("playedBefore");
-    else playedBefore = localStorage.getItem("testingPlayedBefore");
-    if (playedBefore)
-        canContinue = loadAllData();
-    else {
-        canContinue = true;
-        saveAllData();
-    }
-        
-    
-    if (canContinue) {
-        repeatDataSave();
-        if (!debug) localStorage.setItem("playedBefore", true);
-        else localStorage.setItem("testingPlayedBefore", true);
-        createPickaxeRecipes();
-        createGearRecipes();
+    createGearRecipes();
+    createPickaxeRecipes();
         document.getElementById('dataText').value = "";
-        switchLayerIndex(0, 0);
         if (Math.random() < 1/1000)
             document.getElementById("cat").innerText = "CatAxe";
-        cat = verifiedOres.getCurrentLuck();
-        utilitySwitchActions();
-        limitedTimer = setInterval(checkLimitedOres, 10000);
+        limitedTimer = setInterval(checkLimitedOres, 1000);
         inventoryTimer = setInterval(updateInventory, 500);
         if (date.getMonth() === 3 && date.getDate() === 1) {
             document.title = "The Sily Caverns";
@@ -139,8 +119,72 @@ function init() {
                 document.getElementById("spawnMessage").innerText = "Happy Birthday " + birthdays[propertyName] + "!!!";
             }
         }
+    let playedBefore;
+    if (!debug) playedBefore = localStorage.getItem("playedBefore");
+    else playedBefore = localStorage.getItem("testingPlayedBefore");
+    if (playedBefore) {
+        canContinue = loadAllData();
+        console.log(canContinue);
+    }
+    else {
+        canContinue = true;
+        saveAllData();
+    }
+        fetch("emoji.json")
+        .then((response) => response.json())
+        .then((json) => setEmojiNames(json))
+        .catch(error => {
+            failedFetch();
+        });
+    if (canContinue) {
+        repeatDataSave();
+        if (!debug) localStorage.setItem("playedBefore", true);
+        else localStorage.setItem("testingPlayedBefore", true);
+        cat = verifiedOres.getCurrentLuck();
+        utilitySwitchActions();
         console.log("meow");
     }
+}
+function failedFetch() {
+    for (let ore in oreList) oreList[ore]["oreName"] = "FAILED TO FETCH NAMES";
+    switchLayerIndex(0, "dirtLayer", 1);
+    for (let ore in oreList) {
+        oreList[ore]["Normal"].parentElement.setAttribute("title", oreList[ore]["oreName"]);
+        oreList[ore]["Electrified"].parentElement.setAttribute("title", oreList[ore]["oreName"]);
+        oreList[ore]["Radioactive"].parentElement.setAttribute("title", oreList[ore]["oreName"]);
+        oreList[ore]["Explosive"].parentElement.setAttribute("title", oreList[ore]["oreName"]);
+    }
+    for (let i = 0; i < recipeElements.length; i++) {
+        for (let j = 0; j < recipeElements[i].length; j++) {
+            let elements = recipeElements[i][j].children;
+            for (let k = 0; k < elements.length; k++) {
+                let text = elements[k].innerText;
+                if (oreList[text.substring(0, text.indexOf(" "))] != undefined) elements[k].setAttribute("title", oreList[text.substring(0, text.indexOf(" "))]["oreName"]);
+            }
+        }
+    }
+}
+function setEmojiNames(emojis) {
+    for (let i = 0; i < emojis.length; i++) {
+        if (oreList[emojis[i]["character"]] != undefined) {
+            oreList[emojis[i]["character"]]["oreName"] = emojis[i]["unicodeName"].substring(emojis[i]["unicodeName"].indexOf(" ") + 1);
+            oreList[emojis[i]["character"]]["Normal"].parentElement.setAttribute("title", oreList[emojis[i]["character"]]["oreName"]);
+            oreList[emojis[i]["character"]]["Electrified"].parentElement.setAttribute("title", oreList[emojis[i]["character"]]["oreName"]);
+            oreList[emojis[i]["character"]]["Radioactive"].parentElement.setAttribute("title", oreList[emojis[i]["character"]]["oreName"]);
+            oreList[emojis[i]["character"]]["Explosive"].parentElement.setAttribute("title", oreList[emojis[i]["character"]]["oreName"]);
+        }
+    }
+    for (let i = 0; i < recipeElements.length; i++) {
+        for (let j = 0; j < recipeElements[i].length; j++) {
+            let elements = recipeElements[i][j].children;
+            for (let k = 0; k < elements.length; k++) {
+                let text = elements[k].innerText;
+                if (oreList[text.substring(0, text.indexOf(" "))] != undefined) elements[k].setAttribute("title", oreList[text.substring(0, text.indexOf(" "))]["oreName"]);
+            }
+        }
+    }
+    document.getElementById("meterDisplay").setAttribute("title", oreList["🟫"]["oreName"]);
+    switchLayerIndex(0, "dirtLayer", 1);
 }
 
 let chill;
@@ -155,7 +199,18 @@ let celestial;
 let imaginary;
 let keepRunningAudio;
 let eventSpawn;
-let allAudios = [];
+let allAudios = {
+    "Antique" : undefined,
+    "Mystical" : undefined,
+    "Divine" : undefined,
+    "Flawless" : undefined,
+    "Interstellar" : undefined,
+    "Metaversal" : undefined,
+    "Sacred" : undefined,
+    "Ethereal" : undefined,
+    "Celestial" : undefined,
+    "Imaginary" : undefined
+};
 function loadContent() {
     keepRunningAudio = new Audio("audios/ambiencebyx2corp.mp3")
     keepRunningAudio.load();
@@ -171,19 +226,18 @@ function loadContent() {
     magnificent = new Audio("audios/magnificent.mp3");
     ethereal = new Audio("audios/ethereal sound by elysia.mp3");
     celestial = new Audio("audios/celestial.mp3");
-    imaginary = new Audio("audios/ethereal sound by elysia.mp3")
-    allAudios.push(chill);
-    allAudios.push(ringing);
-    allAudios.push(visionblur);
-    allAudios.push(unfath);
-    allAudios.push(ow);
-    allAudios.push(magnificent);
-    allAudios.push(zenith);
-    allAudios.push(ethereal);
-    allAudios.push(celestial);
-    allAudios.push(imaginary);
-    for (let i = 0; i < allAudios.length; i++)
-        allAudios[i].load();
+    imaginary = new Audio("audios/ethereal sound by elysia.mp3");
+    allAudios["Antique"] = chill;
+    allAudios["Mystical"] = ringing;
+    allAudios["Divine"] = visionblur;
+    allAudios["Flawless"] = unfath;
+    allAudios["Interstellar"] = ow;
+    allAudios["Metaversal"] = magnificent;
+    allAudios["Sacred"] = zenith;
+    allAudios["Ethereal"] = ethereal;
+    allAudios["Celestial"] = celestial;
+    allAudios["Imaginary"] = imaginary;
+    for (let property in allAudios) allAudios[property].load();
     document.getElementById("pressPlay").style.display = "none";
     document.getElementById("mainContent").style.display = "block";
     canMine = true;
@@ -197,7 +251,7 @@ function movePlayer(dir, reps) {
         if (canMine) {
             switch (dir) {
                 case "s":
-                    if (currentWorld === 1 || currentPickaxe > 12) {
+                    if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
                         if (oreList[mine[curY + 1][curX]]["isBreakable"]) {
                             mine[curY][curX] = "⚪";
                             curY++;
@@ -223,7 +277,7 @@ function movePlayer(dir, reps) {
                     }
                 case "w":
                     if (curY > 0) {
-                        if (currentWorld === 1 || currentPickaxe > 12) {
+                        if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
                             if (oreList[mine[curY - 1][curX]]["isBreakable"]) {
                                 mine[curY][curX] = "⚪";
                                 curY--;
@@ -250,7 +304,7 @@ function movePlayer(dir, reps) {
                     break;
                 case "a":
                     if (curX > 0) {
-                        if (currentWorld === 1 || currentPickaxe > 12) {
+                        if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
                             if (oreList[mine[curY][curX - 1]]["isBreakable"]) {
                                 mineBlock(curX - 1, curY, "mining");
                                 mine[curY][curX] = "⚪";
@@ -275,7 +329,7 @@ function movePlayer(dir, reps) {
                     }
                     break;
                 case "d":
-                    if (currentWorld === 1 || currentPickaxe > 12) {
+                    if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
                         if (oreList[mine[curY][curX + 1]]["isBreakable"]) {
                             mineBlock(curX + 1, curY, "mining");
                             mine[curY][curX] = "⚪";
@@ -298,7 +352,6 @@ function movePlayer(dir, reps) {
                         }
                     break;
                     }
-                default:
             }
         }
         displayArea();
@@ -374,20 +427,20 @@ function goDirection(direction, speed) {
         clearInterval(loopTimer);
         removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]})
         if (speed === undefined) {
-        if (currentWorld === 1 && gears[2])
+        if (currentWorld === 1 && player.gears["gear2"])
             miningSpeed = 15;
-        if (currentWorld === 1 && gears[6])
+        if (currentWorld === 1 && player.gears["gear6"])
             miningSpeed = 10;
-        if (currentWorld === 2 || (gears[13] && gears[19]))
-            miningSpeed = 25 - (gears[11] ? 3 : 0) - (gears[13] ? 5 : 0) - (gears[19] ? 15 : 0);
+        if (currentWorld === 2 || (player.gears["gear13"] && player.gears["gear19"]))
+            miningSpeed = 25 - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear13"] ? 5 : 0) - (player.gears["gear19"] ? 15 : 0);
         } else {
             miningSpeed = speed;
         }
-        if (miningSpeed < minMiningSpeed)
-            miningSpeed = minMiningSpeed;
-        if (currentPickaxe === 12)
+        if (miningSpeed < player.settings.minSpeed)
+            miningSpeed = player.settings.minSpeed;
+        if (player.stats.currentPickaxe === 12)
             reps++;
-        reps += gears[19] ? 2 : 0;
+        reps += player.gears["gear19"] ? 2 : 0;
         if (a13) {
             reps = 1;
             miningSpeed = 35;
@@ -413,13 +466,13 @@ function moveOne(dir, button) {
 function updateStats() {
     let pickaxeLevel1 = currentWorld === 1 ? 9 : 23;
     let pickaxeLevel2 = currentWorld === 1 ? 6 : 20;
-    minRarity = (currentPickaxe > pickaxeLevel1 ? 20000000 : (currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
+    minRarity = (player.stats.currentPickaxe > pickaxeLevel1 ? 20000000 : (player.stats.currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
 }
 
 //DISPLAY
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 function displayArea() {
-    if (canDisplay) {
+    if (player.settings.canDisplay) {
         let output ="";
         let constraints = getParams(9, 9);
         let grass = 0;
@@ -429,7 +482,7 @@ function displayArea() {
             mine[r] ??= [];
             for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
                 if (mine[r][c]) {
-                    if (usePathBlocks)
+                    if (player.settings.usePathBlocks)
                         output += mine[r][c];
                     else
                         output += mine[r][c] === "⚪" ? invisibleBlock : mine[r][c];   
@@ -444,7 +497,7 @@ function displayArea() {
         blockElement.innerText = "❌";
     }
     revealedElement.innerText = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
-    minedElement.innerText = totalMined.toLocaleString() + " Blocks Mined";
+    minedElement.innerText = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
     let sub = currentWorld === 2 ? 2000 : 0;
     locationElement.innerText = "X: " + (curX - 1000000000).toLocaleString() + " | Y: " + (-(curY - sub)).toLocaleString();
 }
@@ -515,6 +568,16 @@ function createInventory() {
                 oreAmountBlock.innerText = "x" + oreNum.toLocaleString();
                 oreAmountBlock.classList = "inventoryElement3";
                 oreList[propertyName][names[i - 1]] = oreAmountBlock;
+                if (colors["textColor"] === "#ffffff") 
+                {
+                    oreRarityBlock.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
+                    oreAmountBlock.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
+                }
+                else
+                {
+                    oreRarityBlock.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
+                    oreAmountBlock.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
+                } 
                 tempElement.appendChild(oreNameBlock);
                 tempElement.appendChild(oreRarityBlock);
                 tempElement.appendChild(oreList[propertyName][names[i - 1]]);
@@ -552,23 +615,26 @@ function disappear(element){
 let spawnOre = null;
 function spawnMessage(block, location, caveInfo) {
     //ADD TO MINE CAPACITY IF NEAR RESET
-    if ((currentWorld === 1 && !gears[3]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < baseMineCapacity + 50000)
+    if ((currentWorld === 1 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
         mineCapacity += 10000;
-    else if (!gears[17] && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < baseMineCapacity + 50000)
+    else if (!player.gears["gear17"] && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
         mineCapacity += 10000;
     let oreRarity = oreList[block]["numRarity"];
     let spawnElement = document.getElementById("latestSpawns");
     let sub = currentWorld === 1 ? 0 : 2000;
     let output = "";
     let element = document.createElement("p");
+    element.setAttribute("title", oreList[block]["oreName"]);
     element.classList = "latestFind";
-    if (caveInfo != undefined) output += block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
-    else output += block + " 1/" + oreRarity.toLocaleString();
-    if (gears[0] || currentPickaxe === 5) output += " | X: " + (location["X"] - 1000000000).toLocaleString() + ", Y: " + (-(location["Y"] - sub)).toLocaleString();
+    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">` + block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
+    else output += `<span title="${oreList[block]["oreName"]}">` + block + "</span> 1/" + oreRarity.toLocaleString();
+    if (player.gears["gear0"] || player.stats.currentPickaxe === 5) output += " | X: " + (location["X"] - 1000000000).toLocaleString() + ", Y: " + (-(location["Y"] - sub)).toLocaleString();
     let colors = oreInformation.getColors(oreList[block]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
-    element.innerText = output;
+    if (colors["textColor"] === "#ffffff") element.style.textShadow = "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000";
+    else element.style.textShadow = "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff";
+    element.innerHTML = output;
     if (spawnElement.children.length > 0) {
         spawnElement.insertBefore(element, spawnElement.firstChild);
     } else {
@@ -584,11 +650,11 @@ function spawnMessage(block, location, caveInfo) {
         else if (oreList[block]["spawnMessage"].indexOf(" Has Spawned!") < 0)
             createSpawnMessage = true;
         if (createSpawnMessage || oreInformation.tierGrOrEqTo({"tier1":oreList[block]["oreTier"], "tier2":"Flawless"})) {
-            let spawnText = "<i>" + oreList[block]["spawnMessage"] + "</i><br>";
+            let spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreList[block]["spawnMessage"] + "</span></i><br>";
             if (caveInfo != undefined) {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();(currentPickaxe === 5 || gears[0]? "<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
+                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();(player.stats.currentPickaxe === 5 || player.gears["gear0"]? "<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
             } else {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString() + (currentPickaxe === 5 || gears[0]?"<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
+                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString() + (player.stats.currentPickaxe === 5 || player.gears["gear0"]?"<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
             }
             clearTimeout(spawnOre);
             spawnOre = setTimeout(() => {
@@ -610,7 +676,10 @@ function logFind(type, x, y, variant, atMined, fromReset) {
     let colors = oreInformation.getColors(oreList[type]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
-    output += "<span onclick='goToOre(\"" + type + "\", \"" + variant + "\")'>";
+    if (colors["textColor"] === "#ffffff") element.style.textShadow = "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000";
+    else element.style.textShadow = "-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff";
+    element.setAttribute("title", oreList[type]["oreName"]);
+    output += `<span onclick='goToOre(\"${type}\", \"${variant}\")'>`;
     output += variant + " ";
     output += type + " | X: " + (x - 1000000000).toLocaleString() + ", Y: " + (-(y - sub)).toLocaleString();
     if (fromReset) output += " | FROM RESET<br>";
@@ -698,3 +767,6 @@ ay.onload = () => {
         data[i]>125?null:pickaxe25Nums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
     }
 }
+window.onbeforeunload = function(){
+    localStorage.setItem("test", true);
+ }

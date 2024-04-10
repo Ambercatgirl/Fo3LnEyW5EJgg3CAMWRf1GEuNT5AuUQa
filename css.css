@@ -54,6 +54,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 .latestFind {
   margin: 0;
+  font-size: 100%;
+  font-weight: 750;
 }
 .inventoryElement1 {
   width: 10%;
@@ -152,11 +154,11 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   font-size: 1.25vw;
   font-weight: 1000;
   border: none;
-  -webkit-text-stroke-width: 0.025em;
-  -webkit-text-stroke-color: white;
+  margin: 0;
 }
 #displayRecipe {
   margin:auto;
+  height: auto;
   width: 100%;
   margin: 0%;
   text-align: center;
@@ -175,7 +177,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 
 .itemDescription {
-  font-size: 1.5vw;
+  font-size:1.5vw;
   font-family:'Times New Roman', Times, serif
 }
 #gearCrafts {
@@ -209,8 +211,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   color: white;
   font-weight: 1000;
   padding-bottom: 10%;
-  -webkit-text-stroke-width: 0.05em;
-  -webkit-text-stroke-color: black;
+  text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .craftPickaxeButton:hover {
@@ -287,12 +288,19 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   width: 100%;
 }
 .topButtons {
-  width: 50%;
+  height: 2vw;
   float: left;
   background: none;
-  border: none;
-  border-bottom:3px solid #333;
+  border:0.2vw solid #333;
+  border-top: 1px solid #333;
   margin-bottom: 2%;
+  margin-top: 0;
+}
+#settings {
+  width: 30%;
+}
+#resetMine {
+  width: 30%;
 }
 #settings:hover {
   background-color: gray;
@@ -328,12 +336,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 #location {
   margin: 0.5vw;
   font-size: 1vw;
-}
-#resetMine {
-  border-right:1px solid #333;
-}
-#settings {
-  border-left:1px solid #333;
 }
 
 .col-5 {
@@ -513,8 +515,8 @@ border-bottom:1px solid #333;
   overscroll-behavior-y: contain;
   overflow-y: auto;
   width: 100%;
-  min-height: 80vh;
-  max-height: 80vh;
+  min-height: 75vh;
+  max-height: 75vh;
   border-bottom:1px solid #333; 
   border-right:1px solid #333; 
 }
@@ -827,12 +829,17 @@ border-bottom:1px solid #333;
   width: 37.5%!important;
 }
 .dataButton {
-  width: 10%;
+  width: auto;
+  height: 100%;
   background-color: #333;
 }
 .dataDiv {
-  height: 3%;
+  height: 2.5vw;
   vertical-align: middle;
+}
+#lastAutoSave {
+  font-size: 0.5vw;
+  width: 40%;
 }
 #indexSwitchButton {
   width: 50%;
@@ -883,10 +890,8 @@ border-bottom:1px solid #333;
   text-align: center;
   font-weight: 1000;
   color: white;
-  -webkit-text-stroke-width: 0.1vw;
-  -webkit-text-stroke-color: black;
   width: 30vw;
-  height: 15vw;
+  height: 17.5vw;
   margin: 0.25vw;
   border-radius: 30px;
 }
@@ -927,6 +932,9 @@ border-bottom:1px solid #333;
   right: 1px;
   padding-left: 0.75vw;
   padding-right: 0.75vw;
+}
+.indexTextOutline {
+  text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
 }
 .indexWrapper {
   height: 100%;
@@ -984,6 +992,271 @@ border-bottom:1px solid #333;
   width: 100%;
   height: 100%;
 }
+#conversionContainer {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+#conversionTitle {
+  font-size: 2.5vw;
+  text-align: center;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+#conversionDescription {
+  font-size: 1vw;
+  text-align: center;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+#machineHolder {
+  height: 10vw;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  vertical-align: middle;
+}
+#machineForm {
+  display: inline-flex;
+  margin:0;
+}
+#oreInput {
+  float: left;
+  height: 6vw;
+  width: 6vw;
+  font-size: 4vw;
+  align-self: center;
+  background: none;
+  color: white;
+  text-shadow:1px 1px 5px white;
+  border-left:0.1em solid white;
+  border-bottom:0.1em solid white;
+  border-top:0.1em solid white;
+  border-right:0.1em solid white;
+}
+#oreInput:focus {
+  outline: none;
+}
+#amtInput {
+  float: left;
+  height: 6vw;
+  width: 10vw;
+  font-size: 4vw;
+  align-self: center;
+  background: none;
+  color: white;
+  border-bottom:0.1em solid white;
+  border-top:0.1em solid white;
+  border-left: none;
+  text-shadow:1px 1px 5px white;
+}
+#amtInput:focus {
+  outline: none;
+}
+#variantSelect {
+  align-self: center;
+  text-align: center;
+  height: 6vw;
+  background: white;
+  font-size: 3vw;
+  color: white;
+  background-color: black;
+  border-bottom:0.1em solid white;
+  border-top:0.1em solid white;
+  border-left: 0.1em solid white;
+}
+#variantConvert {
+  align-self: center;
+  height: 6vw;
+  width: 12vw;
+  font-size: 2vw;
+  border-bottom:0.2em solid white;
+  border-top:0.2em solid white;
+  border-left: 0.2em solid white;
+  font-weight: bolder;
+  background: none;
+}
+#variantConvert:hover {
+  background-color: #494949;
+}
+#leaveConversion {
+  height: 6vw;
+  font-size: 2vw;
+  width: 15vw;
+  align-self: center;
+  background: none;
+  border:0.2em solid white;
+}
+#leaveConversion:hover {
+  background-color: #494949;
+}
+#machineError {
+  font-size: 3vw;
+  text-align: center;
+  font-weight: 1000;
+}
+#conversionButton {
+  height: 3vw;
+  font-size: 1vw;
+  width: 50%;
+  background: none;
+  border-left: none;
+  border-top: none;
+  border-color: #2e2e2e;
+  border-width: 0.25em;
+  float: left;
+}
+#conversionButton:hover {
+  background-color: #494949;
+}
+#forgeButton {
+  height: 3vw;
+  font-size: 1vw;
+  width: 50%;
+  background: none;
+  border-right: none;
+  border-top: none;
+  border-color: #2e2e2e;
+  border-width: 0.25em;
+}
+#forgeButton:hover {
+  background-color: #494949;
+}
+#forgeContainer {
+  background-color: black;
+  width: 100%;
+  height: 100vw;
+  overflow-y: auto;
+}
+#forgeTitle {
+  width: 100%;
+  font-size: 4vw;
+  margin-bottom: 3vw;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+}
+#forgeSelectionContainer {
+  height: 3vw;
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+}
+.forgeTypeSelect {
+  height: 100%;
+  width: 25%;
+  font-size: 2.5vw;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  line-height: 100%;
+  background: none;
+}
+.forgeTypeSelect:hover {
+  background-color: #494949;
+}
+#descriptionContainer {
+  margin-left: 12.5%;
+  width: 75%;
+  display: inline-flex;
+}
+.buttonDescriptor {
+  font-size: 0.75vw;
+  float: left;
+  margin-right: 9.5%;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#forgeSeparator {
+  height: 0.25vw;
+  width: 100%;
+  color: #d3d3d3;
+}
+#craftingSelections {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+.forgeCraftingButton {
+  height: 3vw;
+  width: 20%;
+  margin: 0;
+  font-size: 1.5vw;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background: none;
+}
+.forgeCraftingButton:hover {
+  background-color: #494949;
+}
+.forgeOreDisplay {
+  text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
+}
+#forgeRecipeDisplayContainer {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+}
+#forgeRecipeDisplay {
+  width: 50%;
+  height: 100%;
+  border: 1px solid white;
+  justify-self: center;
+  text-align: center;
+}
+#forgeSettings {
+  width: 20%;
+  height: 100%;
+  color: white;
+  border: 1px solid white;
+  text-align: center;
+}
+#forgeCraftingAmount {
+  width: 100%;
+  height: 3vw;
+  font-size: 2vw;
+  margin: 0;
+}
+#forgeAmountContainer {
+  display: inline-flex;
+  width: 100%;
+}
+#amountInput {
+  width: 100%;
+  height: 15%;
+  margin: 0;
+  font-size: 1vw;
+}
+#amountInputText {
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  font-size: 1vw;
+}
+#setForgeAmount {
+  font-size: 1vw;
+  width: 100%;
+  margin: 0;
+  height: 15%;
+  background: none;
+}
+#setForgeAmount:hover {
+  background-color: #494949;
+}
+.forgeRecipeOreDisplay {
+  text-align: center;
+  margin: 0;
+  height: 3vw;
+  line-height: 3vw;
+  font-size: 2vw;
+  width: 100%;
+}
+#craftOreButton {
+  background: orange;
+  background-image:url('media/forge_hammer-1.png'), linear-gradient(to right, black, orange, black);
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-position: center;
+  height: 2vw;
+  width: 100%;
+}
+
 #statsTitle {
   font-size: 3vw;
   font-weight: 750;

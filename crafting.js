@@ -309,11 +309,11 @@ worldTwoPickaxes = [
         ["⏺️", 21000],
         ["📙", 5000],
         ["📘", 4000],
-        ["🌨️", 300],
-        ["🪁", 200],
-        ["⛈️", 120],
-        ["🌩️", 50],
-        ["🪶", 5]
+        ["🌨️", 200],
+        ["🪁", 130],
+        ["⛈️", 80],
+        ["🌩️", 30],
+        ["🪶", 3]
     ],
     [
         ["🌐", 3000000000],
@@ -321,37 +321,55 @@ worldTwoPickaxes = [
         ["⬇️", 1700000],
         ["◀️", 250000],
         ["⏫", 200000],
-        ["🖱️", 3500],
-        ["💔", 300],
-        ["🔪", 75],
-        ["🧂", 35],
-        ["📽️", 15],
+        ["🖱️", 2300],
+        ["💔", 200],
+        ["🔪", 50],
+        ["🧂", 20],
+        ["📽️", 10],
         ["💘", 1]
     ],
     [
-        ["❌", 15000000000],
-        ["🕳️", 50000],
+        ["❌", 44444444444],
+        ["🕳️", 260000],
+        ["✴️", 260],
+        ["⚙️", 1750000],
+        ["💠", 1460000],
+        ["🫧", 1000000],
+        ["💍", 584000],
+        ["🎍", 240000],
+        ["👑", 14000],
+        ["💎", 51500],
+        ["🌟", 34000],
+        ["💥", 23360],
+        ["🌀", 14175],
+        ["🪐", 12350],
+        ["🥗", 10950],
+        ["🪩", 8750],
+        ["💫", 4350],
+        ["📌", 275],
+        ["🚧", 320],
         ["⛏️", 1],
-        ["🌳", 20],
-        ["🏰", 20],
-        ["🚿", 20],
-        ["🐋", 20],
-        ["🏔️", 20],
-        ["⚠️", 20],
-        ["🐪", 20],
-        ["💵", 20],
-        ["🍃", 10],
-        ["👾", 10],
-        ["🪡", 10],
-        ["🚽", 5],
-        ["🎓", 10],
-        ["⚡", 5],
-        ["💘", 20],
-        ["💢", 30],
-        ["⛔", 1],
-        ["🪽", 1],
-        ["🗝️", 1]
-        
+        ["☯️", 1],
+        ["🌳", 30],
+        ["🏰", 30],
+        ["🚿", 30],
+        ["🏔️", 30],
+        ["⚠️", 30],
+        ["🐪", 30],
+        ["🐋", 1095],
+        ["💵", 30],
+        ["🍃", 25],
+        ["👾", 15],
+        ["🪡", 15],
+        ["🚽", 15],
+        ["🎓", 15],
+        ["⚡", 15],
+        ["💘", 30],
+        ["💢", 50],
+        ["🪽", 2],
+        ["🗝️", 2],
+        ["🚫", 2],
+        ["♨️", 1]
     ]
     
 ],
@@ -366,7 +384,7 @@ worldOneGears = [
     ],
     //THE REAL CANDILLIUM CANDLE
     [
-        ["🌫️", 1000000],
+        ["🌫️", 7500000],
         ["🧡", 10],
         ["💜", 5],
         ["🎭", 1],
@@ -375,7 +393,7 @@ worldOneGears = [
     ],
     //THE REAL VITRIOL VIGOR
     [
-        ["🌵", 1750000],
+        ["🌵", 12500000],
         ["🖤", 1],
         ["🤍", 7],
         ["🖍️", 2],
@@ -385,7 +403,7 @@ worldOneGears = [
     ],
     //INFINITE ORE COLLECTOR
     [
-        ["🪨", 15000000],
+        ["🪨", 30000000],
         ["💠", 25],
         ["⚜️", 25],
         ["🔋", 10],
@@ -395,14 +413,14 @@ worldOneGears = [
     ],
     //LAYER MATERIALIZER
     [
-        ["🟫", 2500000],
-        ["🧱", 2500000],
-        ["🌫️", 2500000],
-        ["🌊", 2500000],
-        ["🪨", 2500000],
-        ["☢️", 2500000],
-        ["🌵", 2500000],
-        ["📰", 2500000],
+        ["🟫", 10000000],
+        ["🧱", 10000000],
+        ["🌫️", 10000000],
+        ["🌊", 10000000],
+        ["🪨", 10000000],
+        ["☢️", 10000000],
+        ["🌵", 10000000],
+        ["📰", 10000000],
         ["📟", 15],
         ["⌚", 2],
         ["🔥", 1]
@@ -420,7 +438,7 @@ worldOneGears = [
     ],
     //VITRIOL V2 IDK WHAT TO NAME IT
     [
-        ["🌵", 75000000],
+        ["🌵", 150000000],
         ["⚱️", 75],
         ["🗡️", 50],
         ["🎀", 20],
@@ -431,7 +449,7 @@ worldOneGears = [
     ],
     //ENERGY SIPHONER
     [
-        ["🌫️", 3000000],
+        ["🌫️", 17500000],
         ["🎭", 10],
         ["🎴", 5],
         ["🎨", 2],
@@ -439,7 +457,7 @@ worldOneGears = [
     ],
     //SUGAR RUSH
     [
-        ["☢️", 4000000],
+        ["☢️", 20000000],
         ["🧪", 20],
         ["⚗️", 15],
         ["⏹️", 5],
@@ -542,29 +560,29 @@ worldTwoGears = [
         ["💣", 3],
     ],
     [
-        ["🚪", 1750000000],
+        ["🚪", 3500000000],
         ["⤴️", 2700000],
         ["↪️", 1850000],
         ["⏪", 45000],
         ["⏯️", 15000],
-        ["🔒", 3200],
-        ["🖇️", 1000],
-        ["⛓️", 90],
+        ["🔒", 4200],
+        ["🖇️", 1300],
+        ["⛓️", 100],
         ["🚧", 30],
         ["🛎️", 5],
     ],
     [
-        ["♟️", 3000000000],
+        ["♟️", 9000000000],
         ["↩️", 4500000],
         ["⬆️", 2300000],
         ["↖️", 640000],
         ["⏭️", 60000],
-        ["✏️", 5000],
-        ["📐", 1500],
-        ["🔎", 75],
-        ["📌", 40],
-        ["📍", 10],
-        ["🎓", 5]
+        ["✏️", 10000],
+        ["📐", 3000],
+        ["🔎", 150],
+        ["📌", 75],
+        ["📍", 15],
+        ["🎓", 9]
     ],
     [
         ["🦠", 70000000],
@@ -590,11 +608,12 @@ function displayRecipe(num, element) {
     description = description.cloneNode(true);
     if (currentRecipe[0] === null) {
         if (type === "pickaxe") {
-            if (pickaxes[num + 1][1] && currentPickaxe === num + 1) {
+            if (player.pickaxes[`pickaxe${num+1}`] && player.stats.currentPickaxe === num + 1) {
                 if (num !== 25) recipe.lastChild.innerText = "Equipped!";
                 else recipe.lastChild.innerText = "Equipped..?";
-            } else if (pickaxes[num + 1][1]) {
-                recipe.lastChild.innerText = "Equip!"
+            } else if (player.pickaxes[`pickaxe${num+1}`]) {
+                if (num !== 25) recipe.lastChild.innerText = "Equip!";
+                else recipe.lastChild.innerText = "Pledge.";
             }
             if (num > worldOnePickaxes.length - 1) {
                 currentRecipe[2] = worldTwoPickaxes[num - worldOnePickaxes.length];
@@ -604,7 +623,7 @@ function displayRecipe(num, element) {
             }
         }
         if (type === "gear") {
-            if (gears[num]) {
+            if (player.gears[`gear${num}`]) {
                 if (num === 9)
                     recipe.lastChild.innerText = "SILLIFY!"
                 else
@@ -641,11 +660,13 @@ function displayRecipe(num, element) {
             document.getElementById("craftingRecipeTitle").style.display = "none";
         } else {
             if (type === "pickaxe") {
-                if (pickaxes[num + 1][1] && currentPickaxe === num + 1) {
+                if (player.pickaxes[`pickaxe${num+1}`] && player.stats.currentPickaxe === num + 1) {
                     if (num !== 25) recipe.lastChild.innerText = "Equipped!";
                     else recipe.lastChild.innerText = "Equipped..?";
-                } else if (pickaxes[num + 1][1]) {
-                    recipe.lastChild.innerText = "Equip!"
+                } else if (player.pickaxes[`pickaxe${num+1}`]) {
+                    if (num !== 25) recipe.lastChild.innerText = "Equip!";
+                    else recipe.lastChild.innerText = "Pledge.";
+                    
                 }
                 if (num > worldOnePickaxes.length - 1) {
                     currentRecipe[2] = worldTwoPickaxes[num - worldOnePickaxes.length];
@@ -656,7 +677,7 @@ function displayRecipe(num, element) {
             }
             
             if (type === "gear") {
-                if (gears[num]) {
+                if (player.gears[`gear${num}`]) {
                     if (num === 9)
                         recipe.lastChild.innerText = "SILLIFY!"
                     else
@@ -699,11 +720,11 @@ function createPickaxeRecipes() {
             let ore = relation[0];
             let amtNeeded = relation[1];
             let amtHave = oreList[ore]["normalAmt"];
-
             let element = document.createElement('p');
             element.id = (ore + ("pickaxeRecipe" + (j + 1) + "Display"));
             element.classList = "recipeOreDisplay";
-            element.innerHTML = ore + " " + amtHave.toLocaleString() + "/" + amtNeeded.toLocaleString();
+            let tempText = ore + " " + amtHave.toLocaleString() + "/" + amtNeeded.toLocaleString() + "";
+            element.innerHTML = tempText;
             element.setAttribute("onclick", "randomFunction(\"" + ore + "\", 'crafting')");
             let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
             element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
@@ -729,7 +750,7 @@ function createPickaxeRecipes() {
         tempButton.classList = "craftPickaxeButton";
         tempButton.setAttribute("onclick", "craftPickaxe(" + (j + 1) + ")");
         tempButton.style.width = j === 12 ? "50%" : "100%";
-        if (pickaxes[j + 1][1]) {
+        if (player.pickaxes[`pickaxe${j+1}`]) {
             tempButton.innerHTML = "Equip!";
         } else
             tempButton.innerHTML = j === 25 ? "Sacrifice..." : "Craft!";
@@ -770,7 +791,7 @@ for (let i = 0; i < worlds.length; i++) {
         let tempButton = document.createElement('button');
         tempButton.id="craftGear" + (j);
         tempButton.setAttribute("onclick", "craftGear(" + (j) + ")");
-        if (gears[j])
+        if (player.gears[`gear${j}`])
             tempButton.innerHTML = "Owned!";
         else
             tempButton.innerHTML = "Craft!";
@@ -837,34 +858,47 @@ const buttonGradients = {
 
 let lastCount = -1;
 function updateActiveRecipe() {
+    let totalCount = 0;
     let count = 0;
     if (currentRecipe[0] != undefined) {
         let recipe = currentRecipe[0].children;
         let length = currentRecipe[2].length;
+        let totalRarity = 0;
+        let currentRarity = 0;
         for (let i = 0; i < length; i++) {
             let ore = currentRecipe[2][i][0];
             if (oreList[ore] != undefined) {
+                totalCount++;
                 let needed = currentRecipe[2][i][1];
                 let amtOwned = oreList[ore]["normalAmt"];
-                recipe[i].innerText = ore + " " + amtOwned.toLocaleString() + "/" + needed.toLocaleString();
+                totalRarity += oreList[ore]["numRarity"] * needed;
+                currentRarity
+                recipe[i].innerHTML = ore + " <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>" + amtOwned.toLocaleString() + "/" + needed.toLocaleString() + "</span>";
                 if(amtOwned >= needed) {
-                    recipe[i].style.color = "#6BC267";
                     count++;
+                    recipe[i].style.color = "#6BC267";
+                    currentRarity += oreList[ore]["numRarity"] * needed;
                 }
-                else
+                else {
                     recipe[i].style.color = "#FF3D3D";
+                    currentRarity += oreList[ore]["numRarity"] * amtOwned;
+                }  
             }
         }
         let button = currentRecipe[0].lastChild;
-        if (button.innerText != "Craft!") {
+        let text = button.innerText;
+        if (text.includes("Equip") || text.includes("Owned") || text.includes("SILLIFY") || text.includes("Pledge")) {
             if (!(buttonGradients[button.id]["applied"])) {
                 button.style.backgroundImage = buttonGradients[button.id]["gradient"];
                 buttonGradients[button.id]["applied"] = true;
             }
-        } else if (count > lastCount){
-            lastCount = count;
-            let percent = 100 * (count/length);
+        } else {
+            let percent = 100 * (currentRarity/totalRarity);
+            percent = Math.round(percent * 100) / 100;
+            if (count < totalCount && percent === 100) percent = 99.99; 
             button.style.backgroundImage = "linear-gradient(to right, #6BC267 " + percent + "%, #FF3D3D " + (percent + 5) + "%)";
+            if (percent < 100) button.innerText = percent + "%";
+            else button.innerText = "Craft!"
         }
         
     }
@@ -876,10 +910,10 @@ function craftPickaxe(num) {
     let sub = currentWorld === 1 ? 1 : worldOnePickaxes.length + 1;
     let canCraft = true;
     if (num === 13) {
-        if (!(pickaxes[9][1]))
+        if (!(player.pickaxes[`pickaxe9`]))
             canCraft = false;
     }
-    if (!(pickaxes[num][1])) {
+    if (!(player.pickaxes[`pickaxe${num}`])) {
         let recipeList = list[num - sub];
         for (let i = 0; i < recipeList.length; i++) {
             if (!(oreList[recipeList[i][0]]["normalAmt"] >= recipeList[i][1])) {
@@ -896,13 +930,13 @@ function craftPickaxe(num) {
             if (num !== 26) temp.innerText = "Equipped!";
             else temp.innerText = "Equipped..?";
             updateActiveRecipe();
-            pickaxes[num][1] = true;
-            currentPickaxe = num;
+            player.pickaxes[`pickaxe${num}`] = true;
+            player.stats.currentPickaxe = num;
         }
     } else {
         if (num !== 26) document.getElementById("craftPickaxe" + num).innerText = "Equipped!";
         else document.getElementById("craftPickaxe" + num).innerText = "Equipped..?";
-        currentPickaxe = num;
+        player.stats.currentPickaxe = num;
     }
     utilitySwitchActions();
 }
@@ -917,7 +951,7 @@ function craftGear(num) {
     let canCraft = true;
     let sub = currentWorld === 1 ? 0 : worldOneGears.length;
     list = list[num - sub];
-    if (!(gears[num])) {
+    if (!(player.gears[`gear${num}`])) {
         for (let i = 0; i < list.length; i++) {
             if (!(oreList[list[i][0]]["normalAmt"] >= list[i][1])) {
                 canCraft = false;
@@ -927,7 +961,7 @@ function craftGear(num) {
         if (canCraft) {
             for (let i = 0; i < list.length; i++) {
                 oreList[list[i][0]]["normalAmt"] -= list[i][1];
-                inventoryObj[recipeList[i][0]] = 0;
+                inventoryObj[list[i][0]] = 0;
             }
             if (num === 9) {
                 document.getElementById("craftGear" + num).innerText = "SILLIFY!";
@@ -936,7 +970,7 @@ function craftGear(num) {
             }
             applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
             updateActiveRecipe();
-            gears[num] = true;
+            player.gears[`gear${num}`] = true;
         }
     }
     utilitySwitchActions();
@@ -952,8 +986,8 @@ function showPickaxes() {
     m88++;
     if (m88 === 6 && currentWorld === 2) {
         let show = true;
-        for (let i = 0; i < gears.length; i++) if(!gears[i]) show = false;
-        for (let i = 0; i < pickaxes.length - 1; i++) if (!pickaxes[i][1]) show = false;
+        for (let i = 0; i < gears.length; i++) if(!player.gears[`gear${i}`]) show = false;
+        for (let i = 0; i < pickaxes.length - 1; i++) if (!player.pickaxes[`pickaxe${i}`]) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
@@ -1026,4 +1060,135 @@ function switchWorldCraftables() {
         elements[worldOnePickaxes.length - 1].style.display = "block";
         document.getElementById("oblivionFracturer").style.display = "none";
     }
+}
+function toggleOreForge() {
+    let element = document.getElementById("forgeContainer")
+    if (element.style.display === "block") {
+        element.style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        canMine = true;
+    } else {
+        element.style.display = "block";
+        document.getElementById("mainContent").style.display = "none";
+        displayOreRecipe(currentOreRecipe);
+        canMine = false;
+    }
+}
+let currentOreRecipe;
+const oreRecipes = {
+    "gearCraft" : {
+        "cost" : [{"ore":"🤍","amt":1}, {"ore":"🖤","amt":2}, {"ore":"⚫","amt":10000}],
+        "result" : {"ore":"⚙️", "amt":1},
+        "multiplier" : 1
+    },
+    "batteryCraft" : {
+        "cost" : [{"ore":"💍","amt":2}, {"ore":"🥏","amt":3}, {"ore":"🤍","amt":5}, {"ore":"💚","amt":10}, {"ore":"🔵","amt":50000}],
+        "result" : {"ore":"🔋", "amt":1},
+        "multiplier" : 1
+    }
+}
+function getRecipeById(id) {
+    return oreRecipes[id];
+}
+function displayOreRecipe(id) {
+    if (id === currentOreRecipe) {
+        document.getElementById("forgeSettings").style.display = "none";
+        let parent = document.getElementById("forgeRecipeDisplay");
+        parent.style.display = "none";
+        while (parent.firstChild) parent.removeChild(parent.firstChild);
+        currentOreRecipe = "";
+    } else {
+        let parent = document.getElementById("forgeRecipeDisplay");
+        while (parent.firstChild) parent.removeChild(parent.firstChild);
+        parent.style.display = "block";
+        document.getElementById("forgeSettings").style.display = "block";
+        currentOreRecipe = id;
+        let recipe = getRecipeById(id);
+        recipe["multiplier"] = 1;
+        document.getElementById("forgeCraftingAmount").innerText = "1x";
+        for (let i = 0; i < recipe["cost"].length; i++) {
+            let ore = recipe["cost"][i]["ore"];
+            let amt = recipe["cost"][i]["amt"];
+            let element = document.createElement("p");
+            let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+            element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
+            element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"]}/${amt}</span>`;
+            element.classList = "recipeOreDisplay";
+            if (oreList[ore]["normalAmt"] >= amt)
+                element.style.color = "#6BC267";
+            else
+                element.style.color = "#FF3D3D";
+            parent.appendChild(element);
+        }
+        let ore = oreRecipes[id]["result"]["ore"]
+        let element = document.createElement("p");
+        let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+        element.style.borderTop = "1px solid white";
+        element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
+        element.style.color = colors["textColor"];
+        if (colors["textColor"] === "ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
+        else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
+        element.innerText = `${ore} x${oreRecipes[id]["result"]["amt"] * oreRecipes[id]["multiplier"]}`;
+        element.classList = "recipeOreDisplay";
+        parent.appendChild(element);
+    }
+    
+}
+function multiplyRecipe(amt) {
+    amt = Number(amt);
+    if (isNaN(amt)) return;
+    if (amt < 1) amt = 1;
+    amt = Math.floor(amt);
+    document.getElementById("forgeCraftingAmount").innerText = `${amt}x`;
+    document.getElementById('amountInputText').value = "";
+    let recipe = getRecipeById(currentOreRecipe);
+    recipe["multiplier"] = amt;
+    let parent = document.getElementById("forgeRecipeDisplay");
+    while (parent.firstChild) parent.removeChild(parent.firstChild);
+    for (let i = 0; i < recipe["cost"].length; i++) {
+        let ore = recipe["cost"][i]["ore"];
+        let amt = recipe["cost"][i]["amt"] * recipe["multiplier"];
+        let element = document.createElement("p");
+        let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+        element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
+        element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"]}/${amt}</span>`;
+        element.classList = "recipeOreDisplay";
+        if (oreList[ore]["normalAmt"] >= amt)
+            element.style.color = "#6BC267";
+        else
+            element.style.color = "#FF3D3D";
+        parent.appendChild(element);
+    }
+    let ore = oreRecipes[currentOreRecipe]["result"]["ore"]
+    let element = document.createElement("p");
+    let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+    element.style.borderTop = "1px solid white";
+    element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
+    element.innerText = `${ore} x${oreRecipes[currentOreRecipe]["result"]["amt"] * oreRecipes[currentOreRecipe]["multiplier"]}`;
+    element.classList = "recipeOreDisplay";
+    parent.appendChild(element);
+}
+function craftOre(id) {
+    let recipe = getRecipeById(id);
+    let canCraft = true;
+    for (let i = 0; i < recipe["cost"].length; i++) {
+        let ore = recipe["cost"][i]["ore"];
+        let amt = recipe["cost"][i]["amt"] * recipe["multiplier"];
+        if (oreList[ore]["normalAmt"] < amt) {
+            canCraft = false; 
+            break;
+        }
+    }
+    if (canCraft) {
+        for (let i = 0; i < recipe["cost"].length; i++) {
+            let ore = recipe["cost"][i]["ore"];
+            let amt = recipe["cost"][i]["amt"] * recipe["multiplier"];
+            oreList[ore]["normalAmt"] -= amt;
+            inventoryObj[ore] = 0;
+        }
+        oreList[recipe["result"]["ore"]]["normalAmt"] += (recipe["result"]["amt"] * recipe["multiplier"]);
+        inventoryObj[recipe["result"]["ore"]] = 0;
+        multiplyRecipe(oreRecipes[id]["multiplier"]);
+    }
+        
 }

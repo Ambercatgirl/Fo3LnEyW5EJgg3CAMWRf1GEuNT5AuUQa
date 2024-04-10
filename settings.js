@@ -4,11 +4,6 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
-let invToIndex = true;
-let craftingToIndex = true;
-let usePathBlocks = true;
-let useDisguisedChills = false;
-
 function openFrame(frameId) {
     document.querySelectorAll('.frame').forEach(frame => {
       frame.style.display = 'none';
@@ -23,15 +18,14 @@ function openFrame(frameId) {
 }
 
 
-let canDisplay = true;
 function changeCanDisplay(button) {
-    if (canDisplay) {
+    if (player.settings.canDisplay) {
         button.style.backgroundColor = "#FF3D3D";
         document.getElementById("blockDisplay").innerHTML = "❌";
-        canDisplay = false;
+        player.settings.canDisplay = false;
     } else {
         button.style.backgroundColor = "#6BC267";
-        canDisplay = true;
+        player.settings.canDisplay = true;
         displayArea();
     }
 }
@@ -61,10 +55,11 @@ let allPickaxeNames =
 "Singularity Slammer",
 "Staff of Binding",
 "Stormseer's Superspark Sceptre",
-"Coronary Catastrophe"
+"Coronary Catastrophe",
+"N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡"
 ];
 function changeUseNumbers(button) {
-    if (!useNumbers) {
+    if (!player.settings.useNumbers) {
         let elements = document.getElementById("pickaxeCrafts").children;
         for (let i = 0; i < elements.length; i++) {
             elements[i].firstChild.innerText = "Pickaxe " + (i + 1);
@@ -72,7 +67,7 @@ function changeUseNumbers(button) {
         if (button != undefined) {
             button.style.backgroundColor = "#6BC267";
         }
-        useNumbers = true;
+        player.settings.useNumbers = true;
     } else {
         let elements = document.getElementById("pickaxeCrafts").children;
         for (let i = 0; i < elements.length; i++) {
@@ -81,28 +76,26 @@ function changeUseNumbers(button) {
         if (button != undefined) {
             button.style.backgroundColor = "#FF3D3D";
         }
-        useNumbers = false;
+        player.settings.useNumbers = false;
     }
 }
 
-let stopRareNum = 0;
 function changeMinRarity(button) {
-    stopRareNum++;
-    if (stopRareNum > 9) {
-        stopRareNum = 0;
-    }
-    let tier = oreInformation.getTierAt(stopRareNum + 5);
-    button.innerText = tier + "+";
-    const colors = oreInformation.getColors(tier);
+    let nextTier = oreInformation.getNextTier(player.settings.stopOnRare.minimum);
+    if (nextTier === "Common") nextTier = "Antique";
+    player.settings.stopOnRare.minimum = nextTier;
+    button.innerText = nextTier + "+";
+    const colors = oreInformation.getColors(nextTier);
     button.style.color = colors["textColor"]
     button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
 }
 function changeStopOnRare(button) {
-    if (stopOnRare) {
-        stopOnRare = false;
+    console.log(player.settings.stopOnRare.active)
+    if (player.settings.stopOnRare.active) {
+        player.settings.stopOnRare.active = false;
         button.style.backgroundColor = "#FF3D3D";
     } else {
-        stopOnRare = true;
+        player.settings.stopOnRare.active = true;
         button.style.backgroundColor = "#6BC267";
     }   
 }
@@ -218,7 +211,6 @@ function showSettings() {
     document.getElementById("mainContent").style.display = "none";
     document.getElementById("settingsContainer").style.display = "block";
     createStats();
-    switchLayerIndex(0, 0)
 }
 
 function hideSettings() {
@@ -236,13 +228,13 @@ let magnificent;
 let zenith;
 let keepRunningAudio;
 */
-function changeSpawnVolume(percent, num) {
+function changeSpawnVolume(percent, name) {
     percent = Number(percent);
     if (!(isNaN(percent))) {
     if (percent > 100)
         percent = 100;
-
-    allAudios[num].volume = (percent / 100);
+    allAudios[name].volume = (percent / 100);
+    player.settings.audioSettings[name].volume = percent;
     }
 }
 
@@ -257,7 +249,7 @@ function changeMinMiningSpeed(element) {
             num = 25;
         if (num < 0)
             num = 0;
-        minMiningSpeed = num;
+        player.settings.minSpeed = num;
         flashGreen(element);
     } else {
         flashRed(element);
@@ -265,12 +257,12 @@ function changeMinMiningSpeed(element) {
 }
 
 function toggleCaves() {
-    if (cavesEnabled) {
-        cavesEnabled = false;
+    if (player.settings.cavesEnabled) {
+        player.settings.cavesEnabled = false;
         document.getElementById("caveToggle").style.backgroundColor = "#FF3D3D";
     }
     else {
-        cavesEnabled = true;
+        player.settings.cavesEnabled = true;
         document.getElementById("caveToggle").style.backgroundColor = "#6BC267";
     }
 }
@@ -280,62 +272,82 @@ function updateCapacity(element) {
     let value = elementValue === "" ? "none" : elementValue;
     value = Number(value);
     if (!(isNaN(value)) && value > 0) {
-        baseMineCapacity = value;
+        player.settings.baseMineCapacity = value;
         mineCapacity = value;
         flashGreen(element);
     } else {
         flashRed(element);
     }        
 }
+const indexOrder = {
+    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
+    "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
+}
 let layerNum = 0;
-function switchLayerIndex(num, overrideNum, world) {
+function switchLayerIndex(num, overrideLayer, world) {
     while (document.getElementById("oreCardHolder").firstChild) {
         document.getElementById("oreCardHolder").removeChild(document.getElementById("oreCardHolder").firstChild);
     }
-    if (world === undefined) {
-        world = currentWorld;
-    }
-    layerNum += num;
-    let add = world === 1 ? 8 : 5;
-    if (layerNum > (add + 3)) {
-        layerNum = 0;
-    }
-    if (layerNum < 0)
-        layerNum = (add + 3);
     let layerToIndex;
-    let caveBase = currentWorld === 1 ? 11 : 8;
-    layerNum = overrideNum === undefined ? layerNum : overrideNum;
-    if (layerNum > (add - 1)) {
-        let caveNum = caveBase - layerNum;
-        layerToIndex = allCaves[caveNum];
+    let worldLayer;
+    if (world === undefined) {
+        worldLayer = currentWorld === 1 ? indexOrder["worldOne"] : indexOrder["worldTwo"];
     } else {
-        if (world === 1) {
-            layerToIndex = worldOneLayers[layerNum];
-        } else {
-            layerToIndex = worldTwoLayers[layerNum];
-        }
+        worldLayer = world === 1 ? indexOrder["worldOne"] : indexOrder["worldTwo"];
+    }
+    if (overrideLayer === undefined) {
+        layerNum += num;
+        if (layerNum < 0) layerNum = worldLayer.length - 1;
+        else if (layerNum > worldLayer.length - 1) layerNum = 0;
+        layerToIndex = worldLayer[layerNum];
+    } else {
+        layerToIndex = overrideLayer;
     }
     
-    layerToIndex = layerNum === 101 ? "worldOneCommons" : layerToIndex;
-    layerToIndex = layerNum === 102 ? "worldTwoCommons" : layerToIndex;
-    let layerMaterial
+    if (layerToIndex === "sillyLayer") if (oreList["🎂"]["normalAmt"] < 1000000) {
+        if (num === undefined) return; else {
+            switchLayerIndex(num);
+            return;
+        }
+    }
+    if (layerToIndex === "borderLayer") if (oreList["❌"]["normalAmt"] < 1000000) {
+        if (num === undefined) return; else {
+            switchLayerIndex(num);
+            return;
+        }
+    }
+    if (layerToIndex === "fluteLayer") if (oreList["🪈"]["normalAmt"] < 1000000) {
+        if (num === undefined) return; else {
+            switchLayerIndex(num);
+            return;
+        }
+    }
+    if (layerToIndex === "grassLayer") if (oreList["🟩"]["normalAmt"] < 1000000) {
+        if (num === undefined) return; else {
+            switchLayerIndex(num);
+            return;
+        }
+    }
     if (layerList[layerToIndex] != undefined) layerMaterial = layerList[layerToIndex].slice(-1);
     if (caveList[layerToIndex] != undefined) layerMaterial = caveList[layerToIndex].slice(-1);
-    document.getElementById("indexSwitchButton").innerText = layerMaterial;
+    document.getElementById("indexSwitchButton").innerHTML = `<span title="${oreList[layerMaterial]["oreName"]}">${layerMaterial}</span>`;
     let oreIndexCards = [];
     let elements = createIndexCards(layerToIndex);
     for (let i = 0; i < elements.length; i++) oreIndexCards.push(elements[i])
     for (let i = oreIndexCards.length - 1; i >= 0; i--) {
         document.getElementById("oreCardHolder").appendChild(oreIndexCards[i]);
     }
+    return 0;
 }
-let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱";
+let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕";
+let noLuck = "✴️🌹";
 function createIndexCards(layer) {
         let toReturn = [];
         let isCave = false;
         let caveMulti;
         let spawnMessage = true;
         let minIndexRarity = 2;
+        let affectedByLuck = true;
         if (layer === "worldOneCommons" || layer === "worldTwoCommons") {
             layer = layerList[layer];
             spawnMessage = false;
@@ -350,28 +362,32 @@ function createIndexCards(layer) {
         }
         for (let i = 0; i < layer.length; i++) {
         let property = layer[i];
-        if ((ignoreList.indexOf(property) < 0 || indexHasOre(property)) && oreList[property]["numRarity"] >= minIndexRarity) {
+        if ((ignoreList.indexOf(property) < 0 || indexHasOre(property)) && (oreList[property]["numRarity"] >= minIndexRarity || property === "✴️")) {
+            if (oreInformation.isCommon(oreList[property]["oreTier"])) affectedByLuck = false;
+            if (noLuck.indexOf(property) > -1) affectedByLuck = false;
             let parentObject = document.createElement("div");
             let parentWrapper = document.createElement("div");
             parentObject.classList = "oreCard";
-            parentWrapper.classList = "indexWrapper"
+            parentWrapper.classList = "indexWrapper";
             
-            let output = "<span class='indexOre'>" + property + "</span>"
-            output += "<span class='indexRarity'>1/"
+            let output = `<span class='indexOre' title="${oreList[property]["oreName"]}">` + property + "</span>"
+            output += "<span class='indexRarity indexTextOutline'>1/"
             if (isCave) {
                 let rarity = oreList[property]["numRarity"];
                 if (oolProbabilities[property] != undefined) rarity = Math.round(1/oolProbabilities[property]);
                 output += rarity.toLocaleString();
                 output += " Base Rarity.</span>";
                 rarity *= caveMulti;
-                output += "<span class='indexWithLuck'>1/" + rarity.toLocaleString() + " Adjusted.</span>";
+                output += "<span class='indexWithLuck indexTextOutline'>1/" + rarity.toLocaleString() + " Adjusted.</span>";
             } else {
-                output += oreList[property]["numRarity"].toLocaleString();
+                let rarity = oreList[property]["numRarity"]
+                output += rarity.toLocaleString();
                 output += " Base Rarity.</span>";
-                output += "<span class='indexWithLuck'>1/" + Math.round((oreList[property]["numRarity"] / verifiedOres.getCurrentLuck())).toLocaleString() + " With Luck.</span>";
+                if (affectedByLuck) output += "<span class='indexWithLuck indexTextOutline'>1/" + Math.round(rarity / verifiedOres.getCurrentLuck()).toLocaleString() + " With Luck.</span>";
+                else  output += "<span class='indexWithLuck indexTextOutline'>Unaffected By Luck</span>";
             }
             if (oreList[property]["spawnMessage"] !== "") {
-                output += "<span class='indexSpawnMessage'>" + oreList[property]["spawnMessage"] + "</span>";
+                output += "<span class='indexSpawnMessage indexTextOutline'>" + oreList[property]["spawnMessage"] + "</span>";
             }
             let colors = oreInformation.getColors(oreList[property]["oreTier"]);
             if (oreList[property]["explosiveAmt"]) {
@@ -396,47 +412,59 @@ function createIndexCards(layer) {
 }
 
 function randomFunction(ore, cause) {
-    if ((cause === "inv" && invToIndex) || (cause === "crafting" && craftingToIndex)) {
-        let num = -1;
+    if ((cause === "inv" && player.settings.inventorySettings.invToIndex) || (cause === "crafting" && player.settings.inventorySettings.craftingToIndex)) {
+        let layer = undefined;
         let world = currentWorld;
         if (ore === "❤️‍🔥")
+            return;
+        if (ore === "🕳️")
             return;
         if (ignoreList.indexOf(ore) === -1 || indexHasOre(ore)) {
             for (let i = 0; i < worldOneLayers.length; i++) {
                 if (layerList[worldOneLayers[i]].includes(ore)) {
-                    num = i;
+                    layer = worldOneLayers[i];
                     world = 1;
                     break;
                 }
             }
-            if (num < 0) {
+            if (layer === undefined) {
                 for (let i = 0; i < worldTwoLayers.length; i++) {
                     if (layerList[worldTwoLayers[i]].includes(ore)) {
-                        num = i;
+                        layer = worldTwoLayers[i];
                         world = 2;
                         break;
                     }
                 }
             }
-            if (num < 1) {
+            if (layer === undefined) {
                 for (let i = allCaves.length - 1; i >= 0; i--) {
                     if (caveList[allCaves[i]].includes(ore)) {
-                        num = currentWorld === 1 ? (11 - i) : (8 - i);
+                        layer = allCaves[i];
+                        break;
+                    }
+                }
+            }
+            if (layer === undefined) {
+                for (let i = specialLayers.length - 1; i >= 0; i--) {
+                    if (layerList[specialLayers[i]].includes(ore)) {
+                        layer = specialLayers[i];
                         break;
                     }
                 }
             }
             if (layerList["worldOneCommons"].includes(ore)) {
-                num = 101;
+                layer = "worldOneCommons";
+                world = 1;
             }
             if (layerList["worldTwoCommons"].includes(ore)) {
-                num = 102;
+                layer = "worldTwoCommons";
+                world = 2;
             }
             
-            if (num > -1) {
+            if (layer != undefined) {
                 showSettings();
                 openFrame('index');
-                switchLayerIndex(0, num, world);
+                switchLayerIndex(0, layer, world);
             }
         }
     }
@@ -447,74 +475,72 @@ function indexHasOre(ore) {
 }
 function switchToIndex(button, num) {
     if (num === 0) {
-        if (invToIndex) {
-            invToIndex = false;
+        if (player.settings.inventorySettings.invToIndex) {
+            player.settings.inventorySettings.invToIndex = false;
             button.style.backgroundColor = "#FF3D3D";
         } else {
-            invToIndex = true;
+            player.settings.inventorySettings.invToIndex = true;
             button.style.backgroundColor = "#6BC267";
         }
     } else if (num === 1) {
-        if (craftingToIndex) {
-            craftingToIndex = false;
+        if (player.settings.inventorySettings.craftingToIndex) {
+            player.settings.inventorySettings.craftingToIndex = false;
             button.style.backgroundColor = "#FF3D3D";
         } else {
-            craftingToIndex = true;
+            player.settings.inventorySettings.craftingToIndex = true;
             button.style.backgroundColor = "#6BC267";
         }
     }
     
 }
 function togglePathBlocks() {
-    if (usePathBlocks) {
+    if (player.settings.usePathBlocks) {
         document.getElementById("pathBlocks").style.backgroundColor = "#6BC267";
-        usePathBlocks = false;
+        player.settings.usePathBlocks = false;
     } else {
         document.getElementById("pathBlocks").style.backgroundColor = "#FF3D3D";
-        usePathBlocks = true;
+        player.settings.usePathBlocks = true;
     }
     displayArea();
 }
 let testSoundTimeout = null;
-function testSound(num) {
-    let element = document.getElementsByClassName("testButton")[num];
-    let time = (allAudios[num].duration * 1000);
-    if (allAudios[num].currentTime === 0) {
-        allAudios[num].play();
+function testSound(name, element) {
+    let time = (allAudios[name].duration * 1000);
+    if (allAudios[name].currentTime === 0) {
+        allAudios[name].play();
         element.style.backgroundColor = "#6BC267";
         testSoundTimeout = setTimeout(() => {
             element.style.backgroundColor = "#FF3D3D";
-            allAudios[num].pause();
-            allAudios[num].currentTime = 0;
+            allAudios[name].pause();
+            allAudios[name].currentTime = 0;
             clearTimeout(testSoundTimeout);
         }, time);
     } else {
-        allAudios[num].pause();
-        allAudios[num].currentTime = 0;
+        allAudios[name].pause();
+        allAudios[name].currentTime = 0;
         element.style.backgroundColor = "#FF3D3D";
         clearTimeout(testSoundTimeout);
     }
 }
 function enableDisguisedChills() {
-    if (useDisguisedChills) {
-        useDisguisedChills = false;
+    if (player.settings.useDisguisedChills) {
+        player.settings.useDisguisedChills = false;
         document.getElementById("disguisedChills").style.backgroundColor = "#FF3D3D";
     } else {
-        useDisguisedChills = true;
+        player.settings.useDisguisedChills = true;
         document.getElementById("disguisedChills").style.backgroundColor = "#6BC267";
     }
 }
-let usingNewEmojis = false;
 function switchFont() {
-    if (usingNewEmojis) {
-        usingNewEmojis = false;
+    if (player.settings.usingNewEmojis) {
+        player.settings.usingNewEmojis = false;
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
         document.getElementById("switchFont").style.backgroundColor = "#FF3D3D";
         distanceMulti--;
         y -= 2000;
         switchDistance();
     } else {
-        usingNewEmojis = true;
+        player.settings.usingNewEmojis = true;
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");
         document.getElementById("switchFont").style.backgroundColor = "#6BC267";
         distanceMulti--;
@@ -523,11 +549,10 @@ function switchFont() {
     }
 }
 let minTier = "Antique";
-let minRarityNum = 0
 function changeSpawnMessageRarity(button) {
-    minRarityNum++;
-    if (minRarityNum > 9) minRarityNum = 0;
-    minTier = oreInformation.getTierAt(minRarityNum + 5);
+    player.settings.minRarityNum++;
+    if (player.settings.minRarityNum > 9) player.settings.minRarityNum = 0;
+    minTier = oreInformation.getTierAt(player.settings.minRarityNum + 5);
     button.innerText = "Minimum Spawn Message Tier: " + minTier + "+";
     let colors = oreInformation.getColors(minTier);
     button.style.color = colors["textColor"]
@@ -573,3 +598,73 @@ function createStats() {
         tier = oreInformation.getNextTier(tier);
     }
 }
+function toggleVariantConversions() {
+    let element = document.getElementById("conversionContainer")
+    if (element.style.display === "block") {
+        element.style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        canMine = true;
+    } else {
+        element.style.display = "block";
+        document.getElementById("mainContent").style.display = "none";
+        canMine = false;
+    }
+}
+function convertVariants() {
+    let ore = document.getElementById("oreInput").value;
+    let variant = document.getElementById("variantSelect").value;
+    let amt = document.getElementById("amtInput").value;
+    document.getElementById("amtInput").value = "";
+    document.getElementById("oreInput").value = "";
+    if (oreList[ore] === undefined) {
+        document.getElementById("machineError").innerText = "Error! Ore Doesn't Exist!";
+        document.getElementById("machineError").style.color = "red";
+        setTimeout(() => {
+            document.getElementById("machineError").innerText = "";
+        }, 2000);
+        return;
+    }
+    amt = Number(amt);
+    if (isNaN(amt) || amt <= 0) {
+        document.getElementById("machineError").innerText = "Error! Invalid Amount!";
+        document.getElementById("machineError").style.color = "red";
+        setTimeout(() => {
+            document.getElementById("machineError").innerText = "";
+        }, 2000);
+        return;
+    }
+    const obj = {"ore":ore, "variant":variant, "amt":amt};
+    let amtToGive = 0;
+    if (obj["variant"] === "Explosive") amtToGive = 8;
+    else if (obj["variant"] === "Radioactive") amtToGive = 6;
+    else if (obj["variant"] === "Electrified") amtToGive = 4;
+    let name = variantInvNames[names.indexOf(obj["variant"])];
+    if (oreList[obj["ore"]][name] >= obj["amt"]) {
+        oreList[obj["ore"]][name] -= obj["amt"];
+        oreList[obj["ore"]]["normalAmt"] += (obj["amt"] * amtToGive);
+        inventoryObj[obj["ore"]] = 0;
+        document.getElementById("machineError").innerText = "Success!";
+        document.getElementById("machineError").style.color = "green";
+        setTimeout(() => {
+            document.getElementById("machineError").innerText = "";
+        }, 2000);
+    } else {
+        document.getElementById("machineError").innerText = "Error! You do not own enough of this ore to perform this action!";
+        document.getElementById("machineError").style.color = "red";
+        setTimeout(() => {
+            document.getElementById("machineError").innerText = "";
+        }, 2000);
+    }
+}
+function timeSinceLastAutosave() {
+    let milliseconds = (cloudsaving.save_interval - (cloudsaving.next_save_time - Date.now()));
+    let seconds = Math.floor((milliseconds / 1000) % 60);
+    let minutes = Math.floor((milliseconds / 1000 / 60) % 60);
+    let hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
+    document.getElementById("lastAutosave").innerHTML = `Time Since Last Galaxy Cloud Save: ${[
+        hours.toString().padStart(2, "0"),
+        minutes.toString().padStart(2, "0"),
+        seconds.toString().padStart(2, "0")
+    ].join(":")}`;
+}
+//convertVariants({"ore":"", "variant":"Explosive", "amt":1})

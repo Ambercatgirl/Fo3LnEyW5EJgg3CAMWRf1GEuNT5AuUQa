@@ -4,18 +4,18 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
-let cavesEnabled = true;
+
 async function rollAbilities() {
     let m = 1;
-    if (currentWorld === 1 && gears[8])
+    if (currentWorld === 1 && player.gears["gear8"])
         m = 1.2;
-    if (!resetting && ((currentWorld === 1 && currentPickaxe > 5)||(currentWorld === 2 && gears[14]))) {
-        if (Math.random() < 1/750 && cavesEnabled) {
+    if (!resetting && ((currentWorld === 1 && player.stats.currentPickaxe > 5)||(currentWorld === 2 && player.gears["gear14"]))) {
+        if (Math.random() < 1/750 && player.settings.cavesEnabled) {
             generateCave(curX, curY, 0, 0);
             displayArea();
         }
     }
-    switch (currentPickaxe) {
+    switch (player.stats.currentPickaxe) {
         case 1:
             if (Math.random() < (1/30 * m)) {
                 pickaxeAbility1(curX, curY);
@@ -159,7 +159,7 @@ async function rollAbilities() {
             }
             break;
         case 25:
-            if (Math.random() <= 1/350 * m) {
+            if (Math.random() <= 1/300 * m) {
                 pickaxeAbility25(curX, curY);
                 
             }
@@ -196,7 +196,7 @@ function gearAbility1() {
 }
 
 function gearAbility2() {
-    if (currentWorld === 1 && gears[9]) {
+    if (currentWorld === 1 && player.gears["gear9"]) {
         currentLayer = createLayer([layerList["sillyLayer"]]);
         currentLayerNum = 7777;
     }

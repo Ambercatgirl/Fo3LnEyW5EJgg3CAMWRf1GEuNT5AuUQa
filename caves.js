@@ -204,21 +204,21 @@ function generateCaveBlock(y, x, type) {
                 adjRarity = (1/oolProbabilities[blockToGive]) * multi;
             if (oreList[blockToGive]["numRarity"] >= 25000000 || adjRarity >= 250000000) {
                 playSound(oreList[blockToGive]["oreTier"]);
-                verifiedOres.createLog(y,x,blockToGive, new Error(), 1, [true, getCaveMulti(type), type]);
+                verifiedOres.createLog(y,x,blockToGive, new Error(), [true, getCaveMulti(type), type]);
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage(blockToGive, {"Y" : y, "X" : x}, {"adjRarity" : adjRarity, "caveType" : type});
-            if ((currentWorld === 1 && gears[3]) || currentWorld === 2 && gears[17]) mineCaveBlock(x, y, type);
+            if ((currentWorld === 1 && player.gears["gears"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
         }
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {
             playSound(oreList[blockToGive]["oreTier"]);
             if (oreList[blockToGive]["hasLog"]) {
-                verifiedOres.createLog(y, x, blockToGive, new Error(), 1, [true, 1]);
+                verifiedOres.createLog(y, x, blockToGive, new Error(), [true, 1]);
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage(blockToGive, {"Y" : y, "X" : x});
-            if ((currentWorld === 1 && gears[3]) || currentWorld === 2 && gears[17]) mineCaveBlock(x, y, type);
+            if ((currentWorld === 1 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
         }
     }
     
@@ -284,7 +284,7 @@ let oolProbabilities = {
 }
 function getCaveType() {
     let caveTypeLuck = 1;
-    if (currentPickaxe === 12)
+    if (player.stats.currentPickaxe === 12)
         caveTypeLuck = 2;
     let caveType = undefined;
     let summedProbability = 0;
@@ -297,7 +297,7 @@ function getCaveType() {
             break;
         }
     }
-    if (!gears[21] && caveType === "type5Ores") caveType = "type4Ores";
+    if (!player.gears["gear21"] && caveType === "type5Ores") caveType = "type4Ores";
     return caveType;
 }
 

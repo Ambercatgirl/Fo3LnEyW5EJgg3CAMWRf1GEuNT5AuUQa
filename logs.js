@@ -8,24 +8,35 @@ class secureLogs {
     #spawnLogs;
     #verifiedLogs;
     #logsTimer;
-    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 20, 150];
+    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 30, 175];
     constructor() {
         this.#spawnLogs = [];
         this.#verifiedLogs = [];
         this.#logsTimer = null;
     }
-    createLog(r, c, intended, obj, luck, fromCave) {
+    createLog(r, c, intended, obj, fromCave) {
         fromCave = fromCave === undefined ? [false, 1, "none"] : fromCave;
         let luckModifier1 = 1;
-        if (currentWorld === 1 && gears[1])
+        if (currentWorld === 1 && player.gears["gear1"])
             luckModifier1 *= 1.1;
-        if (currentWorld === 1 && gears[5])
+        if (currentWorld === 1 && player.gears["gear5"])
             luckModifier1 *= 1.6;
         let luckModifier2 = 0;
-        luckModifier2 +=  (gears[18] ? 2.5 : 0) + (gears[12] ? 0.35 : 0) + (gears[10] ? 0.25 : 0);
-        luckModifier1 *= gears[20] ? ((verifiedOres.getLuckBoosts()[currentPickaxe] * 0.1) + 1) : 1;
-        const maxLuck = ((this.#maxLuck[currentPickaxe] + luckModifier2) * luckModifier1) + 1;
-        if ((obj.stack.includes("mine.js") || obj.stack.includes("caves.js")) && luck <= maxLuck) {
+        luckModifier2 +=  (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
+        luckModifier1 *= player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.1) + 1) : 1;
+        const maxLuck = ((this.#maxLuck[player.stats.currentPickaxe] + luckModifier2) * luckModifier1) + 0.25;
+        let luck;
+        if (fromCave[0]) {
+            if (caveLuck > 10000000) {
+                console.log("failed to create, ", obj.stack, caveLuck);
+                return;
+            } else {
+                luck = 1;
+            }
+        } else {
+            luck = oreList[intended]["numRarity"] * oreList[intended]["decimalRarity"];
+        }
+        if (((obj.stack.includes("mine.js") || obj.stack.includes("caves.js")) && luck <= maxLuck) || debug) {
             this.#spawnLogs.push([r, c, intended, luck, fromCave]);
         } else {
             console.log("failed to create, ", obj.stack, luck, maxLuck);
@@ -82,16 +93,19 @@ class secureLogs {
                     output += this.#verifiedLogs[i][6][0] === true ? ", Cave, " : ", "
                     output += this.#verifiedLogs[i][1][0] + ", ";
                     if (this.#verifiedLogs[i][6][1] > 1) {
-                        let something = oreList[this.#verifiedLogs[i][0]]["numRarity"];
+                        let something;
+                        if (oolProbabilities[this.#verifiedLogs[i][0]] !== undefined && this.#verifiedLogs[i][6][2] !== "type5Ores") something = oolProbabilities[this.#verifiedLogs[i][0]];
+                        else something = oreList[this.#verifiedLogs[i][0]]["numRarity"];
                         something *= this.#verifiedLogs[i][6][1];
                         output += (something * multi).toLocaleString();
                     } else {
-                        output += Math.floor(((oreList[this.#verifiedLogs[i][0]]["numRarity"]) * multi)/ this.#verifiedLogs[i][5]).toLocaleString();
+                        let rarity = oreList[this.#verifiedLogs[i][0]]["numRarity"] * multi;
+                        output += Math.floor(rarity / this.#verifiedLogs[i][5]).toLocaleString();
                     }
                     output += ", " + (Math.log10(this.#verifiedLogs[i][5] * (this.#verifiedLogs[i][1][0] + 1))) * 2 + "<br>";
                     
                 }
-                this.#logsTimer = setInterval(this.#reloadLogs, 50, output!==""?output:"none");
+                this.#logsTimer = setInterval(this.#reloadLogs, 500, output!==""?output:"none");
         } else {
             clearInterval(this.#logsTimer);
             this.#logsTimer = null;
@@ -106,11 +120,11 @@ class secureLogs {
         return this.#maxLuck;
     }
     getCurrentLuck() {
-        let luck = this.#maxLuck[currentPickaxe];
-        luck += (gears[18] ? 2.5 : 0) + (gears[12] ? 0.35 : 0) + (gears[10] ? 0.25 : 0);
+        let luck = this.#maxLuck[player.stats.currentPickaxe];
+        luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         if (currentWorld === 1)
-            luck *= (gears[1] ? 1.1 : 1) * (gears[5] ? 1.6 : 1);
-        luck *= (gears[20] ? ((verifiedOres.getLuckBoosts()[currentPickaxe] * 0.1) + 1) : 1);
+            luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
+        luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.1) + 1) : 1);
         return luck;
     }
 }
