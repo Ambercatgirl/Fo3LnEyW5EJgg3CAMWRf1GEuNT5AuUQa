@@ -52,6 +52,7 @@ async function mineReset() {
         checkAllAround(curX, curY, 1);
         mine[curY][curX] = "⛏️";
         loggedFinds = [];
+        player.oreTracker.existingOres = [];
         displayArea();
         goDirection(temp);
         resetting = false;

@@ -382,6 +382,13 @@ function switchWorld() {
     canMine = false;
     stopMining();
     mine = [];
+    player.oreTracker.existingOres = [];
+    document.getElementById("trackerOre").innerText = `Ore: N/A`
+    document.getElementById("trackerX").innerText = `X: N/A`
+    document.getElementById("trackerY").innerText = `Y: N/A`
+    player.oreTracker.tracking = false;
+    player.oreTracker.locationX = 0;
+    player.oreTracker.locationY = 0;
     m87 = 0;
     m88 = 0;
     if (currentWorld === 1) {

@@ -21,11 +21,14 @@ function openFrame(frameId) {
 function changeCanDisplay(button) {
     if (player.settings.canDisplay) {
         button.style.backgroundColor = "#FF3D3D";
-        document.getElementById("blockDisplay").innerHTML = "❌";
+        document.getElementById("blockDisplay").style.display = "none";
+        document.getElementById("displayDisabled").style.display = "block";
         player.settings.canDisplay = false;
     } else {
         button.style.backgroundColor = "#6BC267";
         player.settings.canDisplay = true;
+        document.getElementById("blockDisplay").style.display = "block";
+        document.getElementById("displayDisabled").style.display = "none";
         displayArea();
     }
 }
@@ -90,7 +93,6 @@ function changeMinRarity(button) {
     button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
 }
 function changeStopOnRare(button) {
-    console.log(player.settings.stopOnRare.active)
     if (player.settings.stopOnRare.active) {
         player.settings.stopOnRare.active = false;
         button.style.backgroundColor = "#FF3D3D";
@@ -362,32 +364,34 @@ function createIndexCards(layer) {
         }
         for (let i = 0; i < layer.length; i++) {
         let property = layer[i];
-        if ((ignoreList.indexOf(property) < 0 || indexHasOre(property)) && (oreList[property]["numRarity"] >= minIndexRarity || property === "✴️")) {
+        if ((oreList[property]["numRarity"] >= minIndexRarity || property === "✴️") && oreList[property]["oreTier"] !== "Celestial") {
             if (oreInformation.isCommon(oreList[property]["oreTier"])) affectedByLuck = false;
             if (noLuck.indexOf(property) > -1) affectedByLuck = false;
             let parentObject = document.createElement("div");
             let parentWrapper = document.createElement("div");
             parentObject.classList = "oreCard";
             parentWrapper.classList = "indexWrapper";
-            
-            let output = `<span class='indexOre' title="${oreList[property]["oreName"]}">` + property + "</span>"
-            output += "<span class='indexRarity indexTextOutline'>1/"
+            let blackOut = false;
+            if (ignoreList.indexOf(property) > -1 && !indexHasOre(property)) blackOut = true;
+            let output = `<span class='indexOre ${(blackOut) ? "indexBlackout" : ""}' title="${oreList[property]["oreName"]}">${property}</span>${blackOut ? "</span>" : ""}`;
+            output += `<span class='indexVariants indexTextOutline'>${indexVariants(property)}</span>`
+            output += "<span class='indexRarity indexTextOutline'>1/";
             if (isCave) {
                 let rarity = oreList[property]["numRarity"];
                 if (oolProbabilities[property] != undefined) rarity = Math.round(1/oolProbabilities[property]);
-                output += rarity.toLocaleString();
+                output += (blackOut ? "???" : rarity.toLocaleString());
                 output += " Base Rarity.</span>";
                 rarity *= caveMulti;
-                output += "<span class='indexWithLuck indexTextOutline'>1/" + rarity.toLocaleString() + " Adjusted.</span>";
+                output += `<span class='indexWithLuck indexTextOutline'>1/${(blackOut ? "???" : rarity.toLocaleString())} Adjusted.</span>`;
             } else {
                 let rarity = oreList[property]["numRarity"]
-                output += rarity.toLocaleString();
+                output += (blackOut ? "???" : rarity.toLocaleString());
                 output += " Base Rarity.</span>";
-                if (affectedByLuck) output += "<span class='indexWithLuck indexTextOutline'>1/" + Math.round(rarity / verifiedOres.getCurrentLuck()).toLocaleString() + " With Luck.</span>";
+                if (affectedByLuck) output += "<span class='indexWithLuck indexTextOutline'>1/" + (blackOut ? "???" : Math.round(rarity / verifiedOres.getCurrentLuck()).toLocaleString()) + " With Luck.</span>";
                 else  output += "<span class='indexWithLuck indexTextOutline'>Unaffected By Luck</span>";
             }
             if (oreList[property]["spawnMessage"] !== "") {
-                output += "<span class='indexSpawnMessage indexTextOutline'>" + oreList[property]["spawnMessage"] + "</span>";
+                output += `<span class='indexSpawnMessage indexTextOutline'>${blackOut ? "???" : oreList[property]["spawnMessage"]}</span>`;
             }
             let colors = oreInformation.getColors(oreList[property]["oreTier"]);
             if (oreList[property]["explosiveAmt"]) {
@@ -401,7 +405,7 @@ function createIndexCards(layer) {
             } else {
                 parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
             }
-            //border-image-source: linear-gradient(to bottom right, #743ad5, #d53a9d);
+            if (blackOut) parentWrapper.style.backgroundImage = "linear-gradient(to bottom right, black 5%, #383838 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
             parentWrapper.innerHTML = output;
             parentObject.appendChild(parentWrapper)
             toReturn.push(parentObject);
@@ -472,6 +476,9 @@ function randomFunction(ore, cause) {
 
 function indexHasOre(ore) {
     return (oreList[ore]["normalAmt"] || oreList[ore]["electrifiedAmt"] || oreList[ore]["radioactiveAmt"] || oreList[ore]["explosiveAmt"]);
+}
+function indexVariants(ore) { 
+    return "" + (oreList[ore]["normalAmt"] ? `${ore}` : `<span style='color:transparent; text-shadow:0 0 0 black;'>${ore}</span>`) + (oreList[ore]["electrifiedAmt"] ? "⚡️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>⚡️</span>") + (oreList[ore]["radioactiveAmt"] ? "☢️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>☢️</span>") + (oreList[ore]["explosiveAmt"] ? "💥" : "<span style='color:transparent; text-shadow:0 0 0 black;'>💥</span>")
 }
 function switchToIndex(button, num) {
     if (num === 0) {
@@ -612,6 +619,7 @@ function toggleVariantConversions() {
 }
 function convertVariants() {
     let ore = document.getElementById("oreInput").value;
+    ore = ore.replaceAll(" ", "");
     let variant = document.getElementById("variantSelect").value;
     let amt = document.getElementById("amtInput").value;
     document.getElementById("amtInput").value = "";

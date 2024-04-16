@@ -575,9 +575,14 @@ let commons = ["Common","Uncommon","Rare","Legendary","Godly"];
 function applyLuckToLayer(layer, luck) {
     for (let i = 0; i < layer.length; i++) {
         luck = debug ? cat : luck;
+        if (player.powerupVariables.currentChosenOre.ore === layer[i])
+            luck *= 1.5;
         let newRarity = (oreList[layer[i]]["numRarity"] / luck);
         if (commons.indexOf(oreList[layer[i]]["oreTier"]) < 0)
             oreList[layer[i]]["decimalRarity"] = (1/newRarity);
+        else {
+            if (player.powerupVariables.commonsAffected.state) oreList[layer[i]]["decimalRarity"] = 1/(oreList[layer[i]]["numRarity"] / (luck >= 3.5 ? 3.5 : luck));
+        }
     }
     if (layer != layerList["dirtLayer2"])
         updateSpecialLayers();

@@ -105,6 +105,7 @@ function init() {
     createMine();
     createGearRecipes();
     createPickaxeRecipes();
+    switchPowerupDisplay(0)
         document.getElementById('dataText').value = "";
         if (Math.random() < 1/1000)
             document.getElementById("cat").innerText = "CatAxe";
@@ -124,7 +125,6 @@ function init() {
     else playedBefore = localStorage.getItem("testingPlayedBefore");
     if (playedBefore) {
         canContinue = loadAllData();
-        console.log(canContinue);
     }
     else {
         canContinue = true;
@@ -142,6 +142,7 @@ function init() {
         else localStorage.setItem("testingPlayedBefore", true);
         cat = verifiedOres.getCurrentLuck();
         utilitySwitchActions();
+        switchPowerupDisplay(0)
         console.log("meow");
     }
 }
@@ -493,13 +494,14 @@ function displayArea() {
             output += "<br>";
         }
         blockElement.innerHTML = (output.substring(0, output.length - 4));
-    } else {
-        blockElement.innerText = "❌";
     }
     revealedElement.innerText = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
     minedElement.innerText = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
     let sub = currentWorld === 2 ? 2000 : 0;
     locationElement.innerText = "X: " + (curX - 1000000000).toLocaleString() + " | Y: " + (-(curY - sub)).toLocaleString();
+    if (player.oreTracker.tracking) {
+        getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
+    }
 }
 
 //HTML EDITING
@@ -591,6 +593,7 @@ function createInventory() {
 
 let variant = 1;
 let inventoryObj = {};
+let lastTime = Date.now();
 function updateInventory() {
     for (let propertyName in inventoryObj) {
         for (let i = 1; i < 5; i++) {
@@ -599,8 +602,37 @@ function updateInventory() {
             else (oreList[propertyName][names[i - 1]].parentElement).style.display = "none";
         }
     }
-   inventoryObj = {};
-   updateActiveRecipe();
+    inventoryObj = {};
+    updateActiveRecipe();
+        if (player.powerupVariables.currentChosenOre.ore !== undefined && Date.now() >= player.powerupVariables.currentChosenOre.removeAt) {
+            player.powerupVariables.currentChosenOre.ore = undefined;
+            applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+        }
+    if (player.powerupVariables.commonsAffected.state && Date.now() >= player.powerupVariables.commonsAffected.removeAt) {
+        player.powerupVariables.commonsAffected.state = false;
+        applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+    }
+    if (player.powerupVariables.fakeEquipped.item !== "" && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
+        if (player.gears[player.powerupVariables.fakeEquipped.item] != undefined) {
+            if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
+            player.gears[player.powerupVariables.fakeEquipped.item] = false;
+            player.powerupVariables.fakeEquipped.item = "";
+        }
+        if (player.pickaxes[player.powerupVariables.fakeEquipped.item] != undefined) {
+            player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
+            player.stats.currentPickaxe = player.powerupVariables.fakeEquipped.originalState;
+            player.powerupVariables.fakeEquipped.item = "";
+            player.powerupVariables.fakeEquipped.originalState = undefined;
+        }
+        let tempDirection = curDirection;
+        stopMining();
+        goDirection(tempDirection);
+        applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+    }
+    checkPowerupCooldowns();
+    updatePowerupCooldowns();
+    player.stats.timePlayed += Date.now() - lastTime;
+    lastTime = Date.now();
 }
 
 function appear(element){
@@ -615,6 +647,7 @@ function disappear(element){
 let spawnOre = null;
 function spawnMessage(block, location, caveInfo) {
     //ADD TO MINE CAPACITY IF NEAR RESET
+    player.oreTracker.existingOres.push({block: block, posX : location["X"], posY : location["Y"]});
     if ((currentWorld === 1 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
         mineCapacity += 10000;
     else if (!player.gears["gear17"] && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
@@ -628,7 +661,6 @@ function spawnMessage(block, location, caveInfo) {
     element.classList = "latestFind";
     if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">` + block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
     else output += `<span title="${oreList[block]["oreName"]}">` + block + "</span> 1/" + oreRarity.toLocaleString();
-    if (player.gears["gear0"] || player.stats.currentPickaxe === 5) output += " | X: " + (location["X"] - 1000000000).toLocaleString() + ", Y: " + (-(location["Y"] - sub)).toLocaleString();
     let colors = oreInformation.getColors(oreList[block]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
@@ -652,9 +684,9 @@ function spawnMessage(block, location, caveInfo) {
         if (createSpawnMessage || oreInformation.tierGrOrEqTo({"tier1":oreList[block]["oreTier"], "tier2":"Flawless"})) {
             let spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreList[block]["spawnMessage"] + "</span></i><br>";
             if (caveInfo != undefined) {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();(player.stats.currentPickaxe === 5 || player.gears["gear0"]? "<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
+                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();
             } else {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString() + (player.stats.currentPickaxe === 5 || player.gears["gear0"]?"<br>X: " + (location["X"] - 1000000000).toLocaleString() + "<br>Y: " + (-(location["Y"] - sub)).toLocaleString():"");
+                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString();
             }
             clearTimeout(spawnOre);
             spawnOre = setTimeout(() => {
@@ -669,6 +701,7 @@ let loggedFinds = [];
 function logFind(type, x, y, variant, atMined, fromReset) {
     let output = "";
     //latestFinds.push([type, x, y, variant, atMined, fromReset]);
+    removeExistingOre({x: x, y:y})
     let sub = currentWorld === 1 ? 0 : 2000;
     let spawnElement = document.getElementById("latestFinds");
     let element = document.createElement("p");
@@ -693,6 +726,58 @@ function logFind(type, x, y, variant, atMined, fromReset) {
         spawnElement.appendChild(element)
     }
     if (spawnElement.children.length > 10) spawnElement.removeChild(spawnElement.lastChild);
+}
+
+function getAngleBetweenPoints(obj) {
+    let x = obj.x - curX;
+    let y = obj.y - curY;
+    let angle = Math.atan2(y, x);
+    if(angle < 0) angle += Math.PI * 2;
+    angle *= (180 / Math.PI);
+    document.getElementById("trackerArrow").style.transform = `rotate(${angle}deg)`;
+    return angle;
+}
+function checkExistingOres() {
+    let closestIndex = -1;
+    let closestLocation = Infinity;
+    for (let i = 0; i < player.oreTracker.existingOres.length; i++) {
+        let num = Math.abs(curX - player.oreTracker.existingOres[i].posX) + Math.abs(curY - player.oreTracker.existingOres[i].posY);
+        mine[player.oreTracker.existingOres[i].posY] ??= [];
+        if (num < closestLocation && (mine[player.oreTracker.existingOres[i].posY][player.oreTracker.existingOres[i].posX] === player.oreTracker.existingOres[i].block)) {
+            closestIndex = i;
+            closestLocation = num;
+        }
+    }
+    if (closestIndex > -1) {
+        mine[player.oreTracker.existingOres[closestIndex].posY] ??= [];
+        if (mine[player.oreTracker.existingOres[closestIndex].posY][player.oreTracker.existingOres[closestIndex].posX] === player.oreTracker.existingOres[closestIndex].block) {
+            player.oreTracker.tracking = true;
+            player.oreTracker.locationX = player.oreTracker.existingOres[closestIndex].posX;
+            player.oreTracker.locationY = player.oreTracker.existingOres[closestIndex].posY;
+            document.getElementById("trackerOre").innerText = `Ore: ${player.oreTracker.existingOres[closestIndex].block}`
+            document.getElementById("trackerX").innerText = `X: ${(player.oreTracker.locationX - 1000000000).toLocaleString()}`
+            document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld === 1 ? 0 : 2000))).toLocaleString()}`
+            getAngleBetweenPoints({x:player.oreTracker.locationX, y:player.oreTracker.locationY});
+        }
+    }
+}
+function removeExistingOre(location) {
+    for (let i = 0; i < player.oreTracker.existingOres.length; i++) {
+        let num1 = player.oreTracker.existingOres[i].posX;
+        let num2 = player.oreTracker.existingOres[i].posY;
+        if (location.x === num1 && location.y === num2) {
+            player.oreTracker.existingOres.splice(i, 1);
+            if (location.x === player.oreTracker.locationX && location.y === player.oreTracker.locationY) {
+                document.getElementById("trackerOre").innerText = `Ore: N/A`
+                document.getElementById("trackerX").innerText = `X: N/A`
+                document.getElementById("trackerY").innerText = `Y: N/A`
+                player.oreTracker.tracking = false;
+                player.oreTracker.locationX = 0;
+                player.oreTracker.locationY = 0;
+            }
+            break;
+        }
+    }
 }
 
 function goToOre(block, variantType) {
@@ -767,6 +852,3 @@ ay.onload = () => {
         data[i]>125?null:pickaxe25Nums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
     }
 }
-window.onbeforeunload = function(){
-    localStorage.setItem("test", true);
- }

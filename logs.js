@@ -8,6 +8,7 @@ class secureLogs {
     #spawnLogs;
     #verifiedLogs;
     #logsTimer;
+    #startTime = Date.now();
     #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 30, 175];
     constructor() {
         this.#spawnLogs = [];
@@ -23,7 +24,7 @@ class secureLogs {
             luckModifier1 *= 1.6;
         let luckModifier2 = 0;
         luckModifier2 +=  (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
-        luckModifier1 *= player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.1) + 1) : 1;
+        luckModifier1 *= player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1;
         const maxLuck = ((this.#maxLuck[player.stats.currentPickaxe] + luckModifier2) * luckModifier1) + 0.25;
         let luck;
         if (fromCave[0]) {
@@ -49,7 +50,7 @@ class secureLogs {
                     const num = this.#spawnLogs[i][3];
                     const fromCave = this.#spawnLogs[i][4];
                     this.#spawnLogs.splice(i, 1);
-                    this.#verifiedLogs.push([mine[r][c], [r, c], new Date(), false, "Normal", num, fromCave]);
+                    this.#verifiedLogs.push([mine[r][c], [r, c], Date.now() - this.#startTime, false, "Normal", num, fromCave]);
                     break;
                 } else {
                     console.log('failed to verify', r, c);
@@ -88,8 +89,11 @@ class secureLogs {
                 document.getElementById("logHolder").appendChild(element);
                 let output = "";
                 for (let i = 0; i < this.#verifiedLogs.length; i++) {
+                    let times;
+                    if (this.#verifiedLogs[i - 1] !== undefined) times = this.#verifiedLogs[i][2] - this.#verifiedLogs[i - 1][2];
+                    else times = this.#verifiedLogs[i][2];
                     let multi = multis[names.indexOf(this.#verifiedLogs[i][4])];
-                    output += this.#verifiedLogs[i][0] + ", " + this.#verifiedLogs[i][2] + ", " + this.#verifiedLogs[i][3] + ", " + this.#verifiedLogs[i][4];
+                    output += this.#verifiedLogs[i][0] + ", " + this.#verifiedLogs[i][2] + ", " + times + ", " + this.#verifiedLogs[i][3] + ", " + this.#verifiedLogs[i][4];
                     output += this.#verifiedLogs[i][6][0] === true ? ", Cave, " : ", "
                     output += this.#verifiedLogs[i][1][0] + ", ";
                     if (this.#verifiedLogs[i][6][1] > 1) {
@@ -124,8 +128,11 @@ class secureLogs {
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         if (currentWorld === 1)
             luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
-        luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.1) + 1) : 1);
+        luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1);
         return luck;
+    }
+    getStartTime() {
+        return this.#startTime;
     }
 }
 let verifiedOres = new secureLogs();
