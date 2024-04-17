@@ -334,7 +334,7 @@ function oldDataToNew(data) {
             player.settings.useDisguisedChills = data[3][18]
         }
         if (data[3][19] != undefined) {
-            player.settings.usingNewEmojis = data[3][19]
+            player.settings.usingNewEmojis = data[3][19];
         }
         if (data[3][20] != undefined) {
             player.settings.minRarityNum = data[3][20];
@@ -420,17 +420,29 @@ function loadNewData(data) {
             if (!player.settings.stopOnRare.active) document.getElementById("stopOnRare").style.backgroundColor = "#FF3D3D";
             changeMinRarity(document.getElementById("stopOnRareDisplay"));
         }
-        if (data.settings.useDisguisedChills!== undefined) {
-            if (data.settings.useDisguisedChills) enableDisguisedChills();
+        if (data.settings.useDisguisedChills !== undefined) {
+            if (data.settings.useDisguisedChills) {
+                player.settings.useDisguisedChills = false;
+                enableDisguisedChills();
+            }
         }
-        if (data.settings.useNumbers!== undefined) {
-            if (data.settings.useNumbers) changeUseNumbers(document.getElementById("useNumbers"));
+        if (data.settings.useNumbers !== undefined) {
+            if (data.settings.useNumbers) {
+                player.settings.useNumbers = false;
+                changeUseNumbers(document.getElementById("useNumbers"));
+            }
         }
-        if (data.settings.usePathBlocks!== undefined) {
-            if (!data.settings.usePathBlocks) togglePathBlocks();
+        if (data.settings.usePathBlocks !== undefined) {
+            if (data.settings.usePathBlocks) {
+                player.settings.usePathBlocks = true;
+                togglePathBlocks();
+            }
         }
-        if (data.settings.usingNewEmojis!== undefined) {
-            if (data.settings.usingNewEmojis) switchFont();
+        if (data.settings.usingNewEmojis !== undefined) {
+            if (data.settings.usingNewEmojis) {
+                player.settings.usingNewEmojis = false;
+                switchFont();
+            }
         }
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {

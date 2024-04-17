@@ -428,7 +428,8 @@ img.roundcat {
 #blockDisplay {
   position: absolute;
   margin-bottom: 0;
-  width: 23em;
+  width: 40vw;
+  text-wrap: nowrap;
 }
 #blockContainer {
   margin-top: 1%;
@@ -459,6 +460,7 @@ img.roundcat {
   position: absolute;
   bottom:0px;
   width: 100%;
+  font-size: 1vw;
   height: 10%;
   border: none;
   border-top:0.25vw solid #333;
