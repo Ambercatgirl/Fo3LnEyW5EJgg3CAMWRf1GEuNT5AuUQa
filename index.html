@@ -198,7 +198,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button onclick="switchDistance()" class="movementButton"id="meterDisplay">🟫 1,000m</button>
             </div>
             <div id="blockContainer">
-                <button id="powerupScrollUp" onclick="switchPowerupDisplay(1)"><</button>
+                <button id="powerupScrollUp" onclick="switchPowerupDisplay(1)"><span><</span></button>
                 <div id="powerupLock">
                     <img src="media/featureLock.png" id="lockImage">
                     <p id="powerupRequirement">0/500,000 Blocks Mined.</p>
@@ -209,7 +209,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <p class="powerupText" id="powerupCooldown">Cooldown: 00:00:00</p>
                     <p class="powerupText" id="powerupActive">Active for: 00:00:00</p>
                 </div>
-                <button id="powerupScrollDown" onclick="switchPowerupDisplay(-1)">></button>
+                <button id="powerupScrollDown" onclick="switchPowerupDisplay(-1)"><span>></span></button>
                 <button style="display: none;" id="powerup1" class="powerupActivateButton" onclick="powerup1(curX, curY)">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup2" onclick="powerup2(curX, curY)">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup3" onclick="powerup3()">Activate!</button>
