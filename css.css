@@ -301,6 +301,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 #resetMine {
   width: 30%;
+  font-size: 1vw;
+  text-wrap: nowrap;
 }
 #settings:hover {
   background-color: gray;
@@ -429,21 +431,23 @@ img.roundcat {
   position: absolute;
   margin-bottom: 0;
   width: 40vw;
+  height: 100%;
   text-wrap: nowrap;
 }
 #blockContainer {
   margin-top: 1%;
   padding: 0;
   width: 100%;
-  height: 22em;
-  line-height: 1.8vw;
-  font-size: 1.55vw;
+  height: 27vw;
+  line-height: 1.4vw;
+  font-size: 1.4vw;
   user-select: none;
   text-wrap: nowrap;
   text-align: center;
-  letter-spacing: -0.2em;
+  letter-spacing: -0.4vw;
   position: relative;
   display: inline-flex;
+  flex-wrap: nowrap;
   justify-content: center;
 }
 #powerupContainer {
