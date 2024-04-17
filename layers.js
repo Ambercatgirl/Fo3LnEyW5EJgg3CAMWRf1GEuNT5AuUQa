@@ -575,6 +575,7 @@ let commons = ["Common","Uncommon","Rare","Legendary","Godly"];
 function applyLuckToLayer(layer, luck) {
     for (let i = 0; i < layer.length; i++) {
         luck = debug ? cat : luck;
+        luck *= 1.5;
         if (player.powerupVariables.currentChosenOre.ore === layer[i])
             luck *= 1.5;
         let newRarity = (oreList[layer[i]]["numRarity"] / luck);

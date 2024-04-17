@@ -408,19 +408,18 @@ window.addEventListener("message", e => {
 		} 
 		//this is a response to the load request
 		else if (e.data.type === "save_content"){
-			if(!e.data.error){
+			if(!e.data.error) {
 				let cloud_data = JSON.parse(e.data.content)
-				//if there's no error it's guarantee that there's a cloud save
-				let local_data = (JSON.parse(localStorage.getItem("playerData"))??[[],[],[]])
-				//[[],[],[]] will be used if the player with no local save opens the game
-				//alert((cloud_data[2][0]??0)+" "+(local_data[2][0]??0)) //for testing
-				if((cloud_data[2][0]??0) > (local_data[2][0]??0)){
-					//I have no idea how total amount of mined is stored but basically
-					//here in the line above you compare amount of total mined blocks and if
-					//it's bigger for the cloud save then load that save instead
-					localStorage.setItem("playerData", e.data.content)
-					//set local storage entry to the cloud save and refresh the page 
-					//would be nicer without a refresh but I don't know how the game loads a save
+				let local_data;
+                if (localStorage.getItem("newPlayerData") !== undefined) {
+                    local_data = JSON.parse(localStorage.getItem("newPlayerData"));
+                } else {
+                    local_data = (JSON.parse(localStorage.getItem("playerData"))??player);
+                    if (checkSaveType(local_data)) local_data = oldDataToNew(local_data);
+                }
+                if (checkSaveType(cloud_data)) cloud_data = oldDataToNew(cloud_data);
+				if((cloud_data.stats.blocksMined??0) > (local_data.stats.blocksMined??0)){
+					localStorage.setItem("newPlayerData", JSON.stringify(cloud_data))
 					location.reload()
 				}
 			}

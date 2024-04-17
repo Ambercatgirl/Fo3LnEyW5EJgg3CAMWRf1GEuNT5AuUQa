@@ -345,9 +345,9 @@ worldTwoPickaxes = [
         ["🪐", 12350],
         ["🥗", 10950],
         ["🪩", 8750],
-        ["💫", 4350],
         ["📌", 275],
         ["🚧", 320],
+        ["💫", 4350],
         ["⛏️", 1],
         ["☯️", 1],
         ["🌳", 30],
@@ -1000,8 +1000,8 @@ function showPickaxes() {
     m88++;
     if (m88 === 6 && currentWorld === 2) {
         let show = true;
-        for (let i = 0; i < gears.length; i++) if(!player.gears[`gear${i}`]) show = false;
-        for (let i = 0; i < pickaxes.length - 1; i++) if (!player.pickaxes[`pickaxe${i}`]) show = false;
+        for (let i = 0; i < player.gears.length; i++) if(!player.gears[`gear${i}`]) show = false;
+        for (let i = 0; i < player.pickaxes.length - 1; i++) if (!player.pickaxes[`pickaxe${i}`]) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";

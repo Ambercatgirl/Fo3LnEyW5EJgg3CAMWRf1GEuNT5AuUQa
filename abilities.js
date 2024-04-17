@@ -223,10 +223,10 @@ function powerup4() {
     }
 }
 function powerup5() {
-    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown) {
+    if (Date.now() >= /*player.powerupCooldowns["powerup5"].cooldown*/0) {
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
-            if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]]) toChooseFrom.splice(i, 1);
+            if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
         }
         if (toChooseFrom.length > 0) {
             let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];
@@ -238,9 +238,8 @@ function powerup5() {
             }
             if (player.gears[toGive] !== undefined) {
                 player.gears[toGive] = true;
-                if (toGive === "gear0") {
-                    document.getElementById("trackerLock").style.display = "none";
-                }
+                if (toGive === "gear0") document.getElementById("trackerLock").style.display = "none";
+                if (toGive === "gear9") document.getElementById("sillyRecipe").style.display = "block";
             }
             applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
             let tempDirection = curDirection;
@@ -248,32 +247,23 @@ function powerup5() {
             goDirection(tempDirection);
             player.powerupVariables.fakeEquipped.removeAt = Date.now() + 30000;
             player.powerupCooldowns["powerup5"].cooldown = Date.now() + 10800000;
-            console.log(toGive)
         }
     }
 }
 
-
-
-
-
-
-
-
 let ability1Active = false;
 let ability1Timeout;
-let energySiphonerSpeed;
 let energySiphonerDirection;
 function gearAbility1() {
     if (!ability1Active && !resetting) {
         ability1Active = true;
-        energySiphonerSpeed = miningSpeed;
         energySiphonerDirection = curDirection;
         curDirection = "";
+        baseSpeed -= 3;
         clearInterval(loopTimer);
-        goDirection(energySiphonerDirection, energySiphonerSpeed - 3);
+        goDirection(energySiphonerDirection);
         ability1Timeout = setTimeout(() => {
-            miningSpeed = energySiphonerSpeed;
+            baseSpeed += baseSpeed <= 22 ? 3 : 0;
             clearInterval(loopTimer);
             curDirection = "";
             if (energySiphonerDirection != "") {

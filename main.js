@@ -18,65 +18,11 @@ const pixelcoordinate = (x, y, width) => {
 let mine = [];
 let curX = 1000000000;
 let curY = 0;
-let currentDisplay = ""
+let currentDisplay = "";
 let blocksRevealedThisReset = 0;
 let mineCapacity = 250000; // in case this ever needs to be raised
 let canMine = false;
 let lastDirection = "";
-let stopOnRare = false;
-let pickaxes = [
-    ["is anyone gonna read these lol", true], //0
-    ["hi!!! hii!!", false], //1
-    ["wait no get out of here", false], //2
-    ["stop it get out", false], //3
-    ["leave!!!!!!!!", false], //4
-    ["i have your ip", false], //5
-    ["grrrrr leave!!", false], //6
-    [":pouting-cat:", false], //7
-    [">:C", false], //8
-    ["IM HERE NOW TOO", false], //9
-    ["mrrp meow meow!", false], //10
-    ["cataxe", false], //11
-    ["sorry chat, felt evil", false], //12
-    ['THE KEY TO WHAT??', false], //13 1 consistency
-    ['yawns, too good at naming things', false], //14 1.524 consistency
-    ['prism of chaos...', false], //15 2 consistency
-    ['starbyssss!!', false], //16 3.796 consistency
-    ['ermmm cataxe', false], //17 6.24 consistency
-    ['LA LUNA', false], //18 11.6 consistency
-    ['this is just lazy', false], //19 ~24 consistency
-    ['knots...', false], //20 ~40 consistency
-    ['hey wait ive seen this one before', false], //21 ~75 consistency
-    ['jesus christ what is it with world 2 and circles', false], //22 ~113 consistency
-    ['man this ability sucks', false], //23 ~215 consistency
-    ["NOBODY WILL SURVIVE THIS ABILITY ACTIVATING", false],
-    ['ITS HUGE WHAT', false],
-    ['the final one... or is it?', false]
-];
-let gears = [
-    false, //ORE TRACKER 0
-    false, //REAL CANDILIUM 1
-    false, //REAL VITRIOL 2
-    false, //INFINITY COLLECTOR 3
-    false, //LAYER MATERIALIZER 4
-    false, //FORTUNE III BOOK 5
-    false, //HASTE II BEACON 6
-    false, //ENERGY SIPHONER 7
-    false, //SUGAR RUSH 8
-    false, //SILLY TP 9
-    false, //LUCK 1 10
-    false, //SPEED 1 11
-    false, //LUCK 2 12
-    false, //COMMON DUPLICATION 13
-    false, //CAVE UNLOCK 14
-    false, //+2 LAYER BLOCKS 15
-    false, //SPEED 2 16
-    false, //INFINITY COLLECTOR 2 17
-    false, //LUCK 3 18
-    false, //SPEED 3 19
-    false, //15% OF CURRENT PICKAXE LUCK 20
-    false, //ABYSSTONE CAVES 21
-];
 let currentWorld = 1;
 let currentLayerNum = 0;
 const birthdays = {
@@ -250,109 +196,35 @@ function loadContent() {
 function movePlayer(dir, reps) {
     for (let i = 0; i < reps; i++) {
         if (canMine) {
-            switch (dir) {
-                case "s":
-                    if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
-                        if (oreList[mine[curY + 1][curX]]["isBreakable"]) {
+            if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
+                if (dir.y < 0 && !(curY > 0)) {
+                    return;
+                } else if (dir.x < 0 && !(curX > 0)) {
+                    return;
+                }
+                if (oreList[mine[curY + dir.y][curX + dir.x]]["isBreakable"]) { 
+                    mine[curY][curX] = "⚪";
+                    curY += dir.y;
+                    curX += dir.x;
+                    if (dir.y !== 0) setLayer(curY);
+                    mineBlock(curX, curY, "mining");
+                    mine[curY][curX] = "⛏️";
+                    lastDirection = dir.key;
+                } else {
+                    if (mine[curY + dir.y][curX + dir.x] === "✖️") {
+                        if (Math.random() < 1/10000000) {
                             mine[curY][curX] = "⚪";
-                            curY++;
-                            setLayer(curY);
-                            mineBlock(curX, curY, "mining");
+                            curY += dir.y;
+                            curX += dir.x;
+                            if (dir.y !== 0) setLayer(curY)
                             mine[curY][curX] = "⛏️";
-                            lastDirection = "s";
-                        } else {
-                            if (mine[curY + 1][curX] === "✖️") {
-                                if (Math.random() < 1/10000000) {
-                                    mine[curY][curX] = "⚪";
-                                    curY++;
-                                    setLayer(curY);
-                                    mine[curY][curX] = "⛏️";
-                                    lastDirection = "s";
-                                    spawnMessage("⛏️", {"X" : curX, "Y" : curY})
-                                    giveBlock("⛏️", curX, curY, false);
-                                    checkAllAround(curX, curY);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                case "w":
-                    if (curY > 0) {
-                        if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
-                            if (oreList[mine[curY - 1][curX]]["isBreakable"]) {
-                                mine[curY][curX] = "⚪";
-                                curY--;
-                                setLayer(curY);
-                                mineBlock(curX, curY, "mining");
-                                mine[curY][curX] = "⛏️";
-                                lastDirection = "w";   
-                            } else {
-                            if (mine[curY - 1][curX] === "✖️") {
-                                if (Math.random() < 1/10000000) {
-                                    mine[curY][curX] = "⚪";
-                                    curY--
-                                    setLayer(curY);
-                                    mine[curY][curX] = "⛏️";
-                                    lastDirection = "s";
-                                    spawnMessage("⛏️", {"X" : curX, "Y" : curY})
-                                    giveBlock("⛏️", curX, curY, false);
-                                    checkAllAround(curX, curY);
-                                }
-                            }
+                            lastDirection = dir.key;
+                            spawnMessage("⛏️", {"X" : curX, "Y" : curY})
+                            giveBlock("⛏️", curX, curY, false);
+                            checkAllAround(curX, curY);
                         }
                     }
-                    }
-                    break;
-                case "a":
-                    if (curX > 0) {
-                        if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
-                            if (oreList[mine[curY][curX - 1]]["isBreakable"]) {
-                                mineBlock(curX - 1, curY, "mining");
-                                mine[curY][curX] = "⚪";
-                                curX--;
-                                mine[curY][curX] = "⛏️";
-                                lastDirection = "a";
-                            } else {
-                                if (mine[curY][curX - 1] === "✖️") {
-                                    if (Math.random() < 1/10000000) {
-                                        mine[curY][curX] = "⚪";
-                                        curX--;
-                                        setLayer(curY);
-                                        mine[curY][curX] = "⛏️";
-                                        lastDirection = "s";
-                                        spawnMessage("⛏️", {"X" : curX, "Y" : curY})
-                                        giveBlock("⛏️", curX, curY, false);
-                                        checkAllAround(curX, curY);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case "d":
-                    if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
-                        if (oreList[mine[curY][curX + 1]]["isBreakable"]) {
-                            mineBlock(curX + 1, curY, "mining");
-                            mine[curY][curX] = "⚪";
-                            curX++;
-                            mine[curY][curX] = "⛏️";
-                            lastDirection = "s";
-                        } else {
-                            if (mine[curY][curX + 1] === "✖️") {
-                                if (Math.random() < 1/10000000) {
-                                    mine[curY][curX] = "⚪";
-                                    curX++;
-                                    setLayer(curY);
-                                    mine[curY][curX] = "⛏️";
-                                    lastDirection = "s";
-                                    spawnMessage("⛏️", {"X" : curX, "Y" : curY})
-                                    giveBlock("⛏️", curX, curY, false);
-                                    checkAllAround(curX, curY);
-                                }
-                            }
-                        }
-                    break;
-                    }
+                }
             }
         }
         displayArea();
@@ -406,14 +278,17 @@ document.addEventListener('keydown', (event) => {
         clearInterval(loopTimer);
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         curDirection = "";
-        movePlayer(name, 1);
+        let movements = {x:0, y:0, key:name};
+        movements.x = (name === "a" ? -1 : (name === "d" ? 1 : 0));
+        movements.y = (name === "s" ? 1 : (name === "w" ? -1 : 0));
+        movePlayer(movements, 1);
         energySiphonerDirection = "";
     }
 }, false);
 
 let loopTimer = null;
 let curDirection = "";
-let miningSpeed = 25;
+let baseSpeed = 25;;
 function goDirection(direction, speed) {
     if (curDirection === direction) {
         clearInterval(loopTimer);
@@ -424,16 +299,18 @@ function goDirection(direction, speed) {
             ability1Active = false;
         }
     } else {
-        let reps = 1
+        let reps = 1;
+        let miningSpeed;
         clearInterval(loopTimer);
-        removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]})
+        removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]});
+        
         if (speed === undefined) {
         if (currentWorld === 1 && player.gears["gear2"])
-            miningSpeed = 15;
+            miningSpeed = baseSpeed - 10;
         if (currentWorld === 1 && player.gears["gear6"])
-            miningSpeed = 10;
-        if (currentWorld === 2 || (player.gears["gear13"] && player.gears["gear19"]))
-            miningSpeed = 25 - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear13"] ? 5 : 0) - (player.gears["gear19"] ? 15 : 0);
+            miningSpeed = baseSpeed - 15;
+        if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear13"] && player.gears["gear19"]))
+            miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear13"] ? 5 : 0) - (player.gears["gear19"] ? 15 : 0);
         } else {
             miningSpeed = speed;
         }
@@ -446,7 +323,11 @@ function goDirection(direction, speed) {
             reps = 1;
             miningSpeed = 35;
         }
-        loopTimer = setInterval(movePlayer, miningSpeed, direction, reps);
+        let movements = {x:0, y:0, key:direction};
+        movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
+        movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
+        miningSpeed ??= 25;
+        loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
     }
@@ -455,8 +336,11 @@ function goDirection(direction, speed) {
 function moveOne(dir, button) {
     button.disabled = true;
     clearInterval(loopTimer);
-    insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
-    movePlayer(dir, 1);
+    insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
+    let movements = {x:0, y:0, key:dir};
+    movements.x = (dir === "a" ? -1 : (dir === "d" ? 1 : 0));
+    movements.y = (dir === "s" ? 1 : (dir === "w" ? -1 : 0));
+    movePlayer(movements, 1);
     curDirection = "";
     setTimeout(() => {
         button.disabled = false;
@@ -615,6 +499,7 @@ function updateInventory() {
     if (player.powerupVariables.fakeEquipped.item !== "" && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
         if (player.gears[player.powerupVariables.fakeEquipped.item] != undefined) {
             if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
+            if (player.powerupVariables.fakeEquipped.item === "gear9") document.getElementById("sillyRecipe").style.display = "none";
             player.gears[player.powerupVariables.fakeEquipped.item] = false;
             player.powerupVariables.fakeEquipped.item = "";
         }

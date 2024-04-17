@@ -19,8 +19,7 @@ function createMine() {
     displayArea();
 }
 
-function checkAllAround(x, y, luck) {
-    let generated;
+function checkAllAround(x, y) {
     mine[y] ??= [];
     if (x - 1 >= 0) {
         if (mine[y][x - 1] === undefined) {
@@ -50,6 +49,7 @@ function checkAllAround(x, y, luck) {
             if (ability1Active) {
                 clearTimeout(ability1Timeout);
                 ability1Active = false;
+                baseSpeed += baseSpeed <= 22 ? 3 : 0;
             }
             mineReset();
         }, 250);
@@ -461,6 +461,7 @@ function stopMining() {
     if (ability1Active) {
         clearTimeout(ability1Timeout);
         ability1Active = false;
+        baseSpeed += baseSpeed <= 22 ? 3 : 0;
     }
 }
 

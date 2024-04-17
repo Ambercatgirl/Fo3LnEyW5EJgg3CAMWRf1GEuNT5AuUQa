@@ -108,6 +108,7 @@ const player = {
         locationY : 0
     }
 }
+
 const powerupOrder = ["powerup1", "powerup2", "powerup3", "powerup4", "powerup5"];
 const powerupList = {
     "powerup1" : {
@@ -240,6 +241,7 @@ function updatePowerupCooldowns() {
             player.powerupCooldowns[player.powerupVariables.currentPowerupDisplayed].unlocked = true;
             document.getElementById("powerupLock").style.display = "none";
         } else {
+            document.getElementById("powerupLock").style.display = "inline-flex";
             document.getElementById("powerupRequirement").innerText = `${eval(powerupList[player.powerupVariables.currentPowerupDisplayed].condition1).toLocaleString()}${powerupList[player.powerupVariables.currentPowerupDisplayed].condition2}`
         }
     }
@@ -343,7 +345,6 @@ function oldDataToNew(data) {
 
 function loadNewData(data) {
     try {
-        console.log("loaded new");
         for (let propertyName in data.blocks) {
             if (oreList[propertyName] !== undefined) {
                 oreList[propertyName]["normalAmt"] = data.blocks[propertyName].normalAmt;
@@ -433,7 +434,7 @@ function loadNewData(data) {
         }
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
-                if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property]) {
+                if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
                     if (data.powerupCooldowns[property].cooldown !== undefined)
                         player.powerupCooldowns[property].cooldown = data.powerupCooldowns[property].cooldown;
                     if (data.powerupCooldowns[property].unlocked !== undefined)
