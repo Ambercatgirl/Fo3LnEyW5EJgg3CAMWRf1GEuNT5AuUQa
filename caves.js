@@ -208,7 +208,7 @@ function generateCaveBlock(y, x, type) {
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage(blockToGive, {"Y" : y, "X" : x}, {"adjRarity" : adjRarity, "caveType" : type});
-            if ((currentWorld === 1 && player.gears["gears"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
+            if ((currentWorld === 1 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
         }
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {

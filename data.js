@@ -5,7 +5,7 @@ Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
 function saveAllData(forceCloudSave=false) {
-    let data = JSON.stringify(saveNewData(true));
+    let data = JSON.stringify(saveNewData({override: undefined, return: true}));
 	cloudSave(data,forceCloudSave)
     return;
 }
@@ -16,11 +16,13 @@ function loadAllData() {
                 try {
                     localStorage.setItem("dataBackup", localStorage.getItem("newPlayerData"));
                     loadNewData(JSON.parse(localStorage.getItem("newPlayerData")));
+                    localStorage.removeItem("dataBackup");
                     return true;
                 } catch (error) {
                     console.log(error);
                     localStorage.setItem("newPlayerData", localStorage.getItem("dataBackup"));
                     window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+                    localStorage.removeItem("dataBackup");
                     return false;
                 }
             } else {
@@ -31,11 +33,13 @@ function loadAllData() {
                 try {
                     localStorage.setItem("dataBackup", localStorage.getItem("newTestingData"));
                     loadNewData(JSON.parse(localStorage.getItem("newTestingData")));
+                    localStorage.removeItem("dataBackup");
                     return true;
                 } catch (error) {
                     console.log(error);
                     localStorage.setItem("newTestingData", localStorage.getItem("dataBackup"));
                     window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
+                    localStorage.removeItem("dataBackup");
                     return false;
                 }
             } else {
@@ -47,7 +51,9 @@ function loadAllData() {
                 if (!debug)  localStorage.setItem("dataBackup", localStorage.getItem("playerData"));
                 else  localStorage.setItem("dataBackup", localStorage.getItem("testingData"));
                 data = oldDataToNew(data);
+                saveNewData({override: data, return: false});
                 loadNewData(data);
+                localStorage.removeItem("dataBackup");
                 return true;
             } catch (error) {
                 console.log(error);
@@ -56,7 +62,6 @@ function loadAllData() {
                 window.alert("DATA CORRUPTION DETECTED, EXPORT YOUR SAVE FILE AND CONTACT A MODERATOR IN THE DISCORD");
                 return false;
             }
-            
         }  
 }
 
@@ -124,7 +129,7 @@ function importData(data) {
             try {
                 data = fromBinary(data);
                 if (checkSaveType(data)) {
-                    data = oldDataToNew(JSON.parse(data));   
+                    data = JSON.stringify(oldDataToNew(JSON.parse(data)));   
                 }
                 if (!debug && localStorage.getItem("newPlayerData") !== null) localStorage.setItem("newPlayerData", data);
                 else localStorage.setItem("newTestingData", data);
@@ -177,8 +182,8 @@ function exportDataAsFile(textToWrite, fileNameToSaveAs, fileType) {
 
 //galaxy api stuff
 let cloudsaving = {
-	//website_name: "https://galaxy.click", 
-	website_name:"http://localhost:4321",//for testing with local instance of galaxy
+	website_name: "https://galaxy.click", 
+	//website_name:"http://localhost:4321",//for testing with local instance of galaxy
 	ongalaxy: false, //if the game runs embedded to galaxy or not
 	logged_in: false,
 	dosave: true, //toggles cloud save if every other condition is met
@@ -202,7 +207,7 @@ function cloudSave(data,forceCloudSave) {
 
 	}
 }
-
+/*
 window.addEventListener("message", e => {
 	if (e.origin === cloudsaving.website_name) {
 		//this is the initial message
@@ -227,11 +232,10 @@ window.addEventListener("message", e => {
 				if (localStorage.getItem("newPlayerData") !== null) {
 					local_data = JSON.parse(localStorage.getItem("newPlayerData"));
 				} else {
-					local_data = (JSON.parse(localStorage.getItem("playerData"))??player);
+					local_data = (JSON.parse(localStorage.getItem("playerData"))??{blocks: {}, player: player});
 					if (checkSaveType(local_data)) local_data = oldDataToNew(local_data);
 				}
 				if (checkSaveType(cloud_data)) cloud_data = oldDataToNew(cloud_data);
-				console.log(cloud_data.player.stats.blocksMined, local_data.player.stats.blocksMined)
 				if((cloud_data.player.stats.blocksMined??0) > (local_data.player.stats.blocksMined??0)){
 					localStorage.setItem("newPlayerData", JSON.stringify(cloud_data))
 					location.reload()
@@ -250,3 +254,4 @@ window.addEventListener("message", e => {
 		}
 	}
 })
+*/

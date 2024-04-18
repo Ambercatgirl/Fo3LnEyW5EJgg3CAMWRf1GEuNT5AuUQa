@@ -9,7 +9,7 @@ class secureLogs {
     #verifiedLogs;
     #logsTimer;
     #startTime = Date.now();
-    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 30, 175];
+    #maxLuck = [1, 1.2, 1.35, 1.8, 2, 5, 10, 3, 4, 20, 17.5, 30, 75, 1, 1.05, 1.075, 1.3, 1, 1.5, 2, 3.16, 1.25, 4, 5, 11, 50, 175];
     constructor() {
         this.#spawnLogs = [];
         this.#verifiedLogs = [];
@@ -22,7 +22,7 @@ class secureLogs {
         const maxLuck = luckModifier;
         let luck;
         if (fromCave[0]) {
-            if (caveLuck > 10) {
+            if (caveLuck > 2) {
                 console.log("failed to create, ", obj.stack, caveLuck);
                 return;
             } else {
@@ -42,9 +42,11 @@ class secureLogs {
         for (let i = 0; i < this.#spawnLogs.length; i++) {
             if (this.#spawnLogs[i].y === r && this.#spawnLogs[i].x === c) {
                 if (mine[r][c] === this.#spawnLogs[i].block) {
-                    this.#verifiedLogs.push({block: this.#spawnLogs[i].block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: "Normal", luck: this.#spawnLogs[i].luck, caveInfo: this.#spawnLogs[i].caveInfo, rarity: oreList[this.#spawnLogs[i].block]["decimalRarity"]})
+                    let rng;
+                    if (this.#spawnLogs[i].caveInfo[0]) rng = 1/oreList[this.#spawnLogs[i].block]["numRarity"];
+                    else rng = oreList[this.#spawnLogs[i].block]["decimalRarity"];
+                    this.#verifiedLogs.push({block: this.#spawnLogs[i].block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: "Normal", luck: this.#spawnLogs[i].luck, caveInfo: this.#spawnLogs[i].caveInfo, rarity: rng})
                     this.#spawnLogs.splice(i, 1);
-                    //this.#verifiedLogs.push([mine[r][c], [r, c], Date.now() - this.#startTime, false, "Normal", num, fromCave]);
                     break;
                 } else {
                     console.log('failed to verify', r, c);
@@ -61,6 +63,7 @@ class secureLogs {
                         this.#verifiedLogs[i].mined = true;
                         this.#verifiedLogs[i].variant = variant;
                         this.#verifiedLogs[i].rarity /= multis[names.indexOf(variant)];
+                        if (player.settings.highRarityLogs && this.#verifiedLogs[i].rarity > 1/250000000) this.#verifiedLogs.splice(i, 1)
                         verified = true;
                         break;
                     }
@@ -91,10 +94,10 @@ class secureLogs {
                     output += `${this.#verifiedLogs[i].caveInfo[0] === true ? "Cave, " : ""} ${this.#verifiedLogs[i].y}, `
                     if (this.#verifiedLogs[i].caveInfo[1] > 1) {
                         let something;
-                        if (oolProbabilities[this.#verifiedLogs[i][0]] !== undefined && this.#verifiedLogs[i][6][2] !== "type5Ores") something = 1/(oolProbabilities[this.#verifiedLogs[i][0]]);
-                        else something = oreList[this.#verifiedLogs[i][0]]["numRarity"];
+                        if (oolProbabilities[this.#verifiedLogs[i].block] !== undefined && this.#verifiedLogs[i].caveInfo[2] !== "type5Ores") something = 1/(oolProbabilities[this.#verifiedLogs[i].block]);
+                        else something = oreList[this.#verifiedLogs[i].block]["numRarity"];
                         something *= this.#verifiedLogs[i].caveInfo[1];
-                        output += (something * multis[names.indexOf(variant)]).toLocaleString();
+                        output += `${(something * multis[names.indexOf(this.#verifiedLogs[i].variant)]).toLocaleString()}, `;
                     } else {
                         output += `${Math.round(1/(this.#verifiedLogs[i].rarity)).toLocaleString()}, `;
                     }
@@ -121,6 +124,7 @@ class secureLogs {
         if (currentWorld === 1)
             luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1);
+        luck *= 1.5;
         return luck;
     }
     getStartTime() {

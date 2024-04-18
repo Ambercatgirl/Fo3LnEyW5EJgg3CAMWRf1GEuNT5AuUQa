@@ -223,7 +223,7 @@ function powerup4() {
     }
 }
 function powerup5() {
-    if (Date.now() >= /*player.powerupCooldowns["powerup5"].cooldown*/0) {
+    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown) {
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
             if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
@@ -245,8 +245,8 @@ function powerup5() {
             let tempDirection = curDirection;
             stopMining();
             goDirection(tempDirection);
-            player.powerupVariables.fakeEquipped.removeAt = Date.now() + 30000;
-            player.powerupCooldowns["powerup5"].cooldown = Date.now() + 10800000;
+            player.powerupVariables.fakeEquipped.removeAt = Date.now() + 60000;
+            player.powerupCooldowns["powerup5"].cooldown = Date.now() + 3600000;
         }
     }
 }
