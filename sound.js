@@ -22,12 +22,14 @@ function changeMusicVolume(percent) {
 
 
 function toggleMusic() {
-    if (keepRunningAudio.paused) {
+    if (!player.settings.musicSettings.active) {
         keepRunningAudio.play();
         document.getElementById("musicButton").innerHTML = "Mute Music";
+        player.settings.musicSettings.active = true;
     } else {
         keepRunningAudio.pause();
         document.getElementById("musicButton").innerHTML = "Unmute Music";
+        player.settings.musicSettings.active = false;
     }
 }
 
@@ -44,7 +46,32 @@ function changeCanPlay(name, button) {
 
 
 function playSound(type) {
+    oldType = type;
     type = type === "Imaginary" ? "Ethereal" : type;
-    if (player.settings.useDisguisedChills) allAudios["Antique"].play();
-    else if (player.settings.audioSettings[type].canPlay) allAudios[type].play();
+    if (player.settings.audioSettings[type].canPlay) {
+        if (player.settings.useDisguisedChills) {
+            allAudios["Antique"].currentTime = 0;
+            allAudios["Antique"].play();
+        } else {
+            allAudios[type].currentTime = 0;;
+            allAudios[type].play();
+        } 
+        if (player.settings.doSpawnEffects && oreInformation.tierGrOrEqTo({"tier1":type, "tier2": "Interstellar"}) && ( player.currentEffect === "" ? true : oreInformation.tierGrOrEqTo({"tier1":type, "tier2": (player.currentEffect)}))) {
+            let timeoutAmt = 0;
+            if (document.getElementById("blockContainer").style.animation !== "") {
+                document.getElementById("blockContainer").style.animation = "";
+                timeoutAmt = 10;
+            }
+            type = oldType;
+            setTimeout(() => {
+                document.getElementById("blockContainer").style.animation = oreInformation.getEffectByTier(type);  
+                player.currentEffect = type;
+            }, timeoutAmt);
+        }
+    }
+    
 }
+addEventListener("animationend", (event) => {
+    if (event.target.id === "blockContainer") document.getElementById("blockContainer").style.animation = "";
+    player.currentEffect = "";
+});

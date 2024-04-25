@@ -307,13 +307,13 @@ worldTwoPickaxes = [
         ["⤵️", 2800000],
         ["⏬", 33000],
         ["⏺️", 21000],
-        ["📙", 5000],
-        ["📘", 4000],
-        ["🌨️", 200],
-        ["🪁", 130],
-        ["⛈️", 80],
-        ["🌩️", 30],
-        ["🪶", 3]
+        ["📙", 7500],
+        ["📘", 6000],
+        ["🌨️", 300],
+        ["🪁", 200],
+        ["⛈️", 120],
+        ["🌩️", 45],
+        ["🪶", 4]
     ],
     [
         ["🌐", 3000000000],
@@ -1000,10 +1000,10 @@ function showPickaxes() {
     disappear(document.getElementById("gearCrafts"));
     m87 = 0;
     m88++;
-    if (m88 === 6 && currentWorld === 2) {
+    if (m88 === 6) {
         let show = true;
-        for (let i = 0; i < player.gears.length; i++) if(!player.gears[`gear${i}`]) show = false;
-        for (let i = 0; i < player.pickaxes.length - 1; i++) if (!player.pickaxes[`pickaxe${i}`]) show = false;
+        for (let gear in player.gears) if (!player.gears[gear]) show = false;
+        for (let pickaxe in player.pickaxes) if (pickaxe !== "pickaxe26" && !player.pickaxes[pickaxe]) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
@@ -1019,11 +1019,9 @@ function showGears() {
     m87++;
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
-    if (currentWorld === 2) {
         let children = document.getElementById("pickaxeCrafts").children;
-        for (let i = worldOnePickaxes.length - 1; i < worldOnePickaxes.length + worldTwoPickaxes.length; i++) children[i].style.display = "block";
+        for (let i = (currentWorld === 2 ? worldOnePickaxes.length - 1 : 0); i < (currentWorld === 2 ? worldOnePickaxes.length + worldTwoPickaxes.length : worldOnePickaxes.length); i++) children[i].style.display = "block";
         document.getElementById("nullChroma").style.display = "none";
-    }
 }
 function switchWorldCraftables() {
     let elements = document.getElementsByClassName("craftingButton");
@@ -1051,7 +1049,7 @@ function switchWorldCraftables() {
         }
         for (let i = gearStartNum; i < gearStartNum + worldOneGears.length; i++) {
             if (i - gearStartNum === 9) {
-                if (oreList["🎂"]["normalAmt"] > 0 || gears[9]) 
+                if (oreList["🎂"]["normalAmt"] > 0 || player.gears["gear9"]) 
                     elements[i].style.display = "block";
             } else {
                 elements[i].style.display = "block";
@@ -1147,7 +1145,7 @@ function displayOreRecipe(id) {
         element.style.borderTop = "1px solid white";
         element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
         element.style.color = colors["textColor"];
-        if (colors["textColor"] === "ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
+        if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
         else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
         element.innerText = `${ore} x${oreRecipes[id]["result"]["amt"] * oreRecipes[id]["multiplier"]}`;
         element.classList = "recipeOreDisplay";
@@ -1185,6 +1183,9 @@ function multiplyRecipe(amt) {
     let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
     element.style.borderTop = "1px solid white";
     element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
+    element.style.color = colors["textColor"];
+    if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
+    else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
     element.innerText = `${ore} x${oreRecipes[currentOreRecipe]["result"]["amt"] * oreRecipes[currentOreRecipe]["multiplier"]}`;
     element.classList = "recipeOreDisplay";
     parent.appendChild(element);

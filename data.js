@@ -63,6 +63,7 @@ function loadAllData() {
                 return false;
             }
         }  
+        if (data === null) return true;
 }
 
 
@@ -106,17 +107,20 @@ function importData(data) {
     if (data === "") {
         if (confirm("You are importing nothing, this will perform a hard reset on your save file. Are you sure you want to do this?")) {
             if (confirm("YOUR SAVE FILE WILL BE ERASED. PLEASE BE SURE THIS IS WHAT YOU WANT.")) {
+                clearInterval(dataTimer);
                 if (debug) {
                     localStorage.removeItem("testingData");
                     localStorage.removeItem("newTestingData");
                     localStorage.removeItem("testingPlayedBefore");
-                }
-                else  {
+                } else {
                     localStorage.removeItem("playerData");
                     localStorage.removeItem("newPlayerData");
                     localStorage.removeItem("playedBefore");
                 }
-                location.reload();
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+                
             }
         }
     } else {
@@ -207,7 +211,7 @@ function cloudSave(data,forceCloudSave) {
 
 	}
 }
-/*
+
 window.addEventListener("message", e => {
 	if (e.origin === cloudsaving.website_name) {
 		//this is the initial message
@@ -254,4 +258,3 @@ window.addEventListener("message", e => {
 		}
 	}
 })
-*/

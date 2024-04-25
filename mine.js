@@ -60,26 +60,18 @@ function checkAllAround(x, y) {
 function mineBlock(x, y, cause) {
     let ore = mine[y][x];
     if (ore === "⚪") return;
+    checkAllAround(x, y);
+    player.stats.blocksMined++;
+    cause !== "ability" ? rollAbilities() : undefined;
     if (oreList[ore]["isBreakable"]) {
-        if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
-            giveBlock(ore, x, y, false, true, checkFromCave({"X":x, "Y":y})["multi"]);
-            mine[y][x] = "⚪";
-            checkAllAround(x, y, 1);
-            player.stats.blocksMined++;
-        } else {
-        if (cause === "reset") {
-            giveBlock(ore, x, y, true);
-            mine[y][x] = "⚪";
-        } else {
-            giveBlock(ore, x, y);
-            mine[y][x] = "⚪";
-            checkAllAround(x, y);
-            player.stats.blocksMined++;
-            if (cause !== "ability") {
-                rollAbilities();
+        if (oreList[ore]["numRarity"] >= 750000) {
+            if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
+                giveBlock(ore, x, y, false, true, checkFromCave({"X":x, "Y":y})["multi"]);
+                return;
             }
         }
-        }
+        giveBlock(ore, x, y, (cause === "reset"));
+        mine[y][x] = "⚪";
     }
 }
 
@@ -386,9 +378,7 @@ function switchWorld() {
     document.getElementById("trackerOre").innerText = `Ore: N/A`
     document.getElementById("trackerX").innerText = `X: N/A`
     document.getElementById("trackerY").innerText = `Y: N/A`
-    player.oreTracker.tracking = false;
-    player.oreTracker.locationX = 0;
-    player.oreTracker.locationY = 0;
+    removeTrackerInformation();
     m87 = 0;
     m88 = 0;
     if (currentWorld === 1) {

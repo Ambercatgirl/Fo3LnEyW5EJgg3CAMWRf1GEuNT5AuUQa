@@ -66,16 +66,8 @@ function init() {
                 document.getElementById("spawnMessage").innerText = "Happy Birthday " + birthdays[propertyName] + "!!!";
             }
         }
-    let playedBefore;
-    if (!debug) playedBefore = localStorage.getItem("playedBefore");
-    else playedBefore = localStorage.getItem("testingPlayedBefore");
-    if (playedBefore) {
         canContinue = loadAllData();
-    }
-    else {
-        canContinue = true;
         saveAllData();
-    }
         fetch("emoji.json")
         .then((response) => response.json())
         .then((json) => setEmojiNames(json))
@@ -84,8 +76,6 @@ function init() {
         });
     if (canContinue) {
         repeatDataSave();
-        if (!debug) localStorage.setItem("playedBefore", true);
-        else localStorage.setItem("testingPlayedBefore", true);
         cat = verifiedOres.getCurrentLuck();
         utilitySwitchActions();
         switchPowerupDisplay(0)
@@ -135,12 +125,12 @@ function setEmojiNames(emojis) {
 }
 
 let chill;
-let ringing;
-let visionblur;
-let unfath;
-let ow;
+let mystical;
+let divine;
+let flawless;
+let interstellar;
 let magnificent;
-let zenith;
+let sacred;
 let ethereal;
 let celestial;
 let imaginary;
@@ -164,23 +154,23 @@ function loadContent() {
     keepRunning();
     eventSpawn = new Audio("audios/Glitch.mp3");
     eventSpawn.volume = 0.1;
-    chill = new Audio("audios/spinechill.mp3");
-    ringing = new Audio("audios/Transcendent.mp3");
-    visionblur = new Audio("audios/visionblur.mp3");
-    unfath = new Audio("audios/Unfathsound.mp3");
-    ow = new Audio("audios/Otherworldly.mp3");
-    zenith = new Audio("audios/Zenithsound.mp3");
+    chill = new Audio("audios/chill.mp3");
+    mystical = new Audio("audios/mystical.mp3");
+    divine = new Audio("audios/divine.mp3");
+    flawless = new Audio("audios/flawless.mp3");
+    interstellar = new Audio("audios/interstellar.mp3");
+    sacred = new Audio("audios/sacred.mp3");
     magnificent = new Audio("audios/magnificent.mp3");
     ethereal = new Audio("audios/ethereal sound by elysia.mp3");
     celestial = new Audio("audios/celestial.mp3");
     imaginary = new Audio("audios/ethereal sound by elysia.mp3");
     allAudios["Antique"] = chill;
-    allAudios["Mystical"] = ringing;
-    allAudios["Divine"] = visionblur;
-    allAudios["Flawless"] = unfath;
-    allAudios["Interstellar"] = ow;
+    allAudios["Mystical"] = mystical;
+    allAudios["Divine"] = divine;
+    allAudios["Flawless"] = flawless;
+    allAudios["Interstellar"] = interstellar;
     allAudios["Metaversal"] = magnificent;
-    allAudios["Sacred"] = zenith;
+    allAudios["Sacred"] = sacred;
     allAudios["Ethereal"] = ethereal;
     allAudios["Celestial"] = celestial;
     allAudios["Imaginary"] = imaginary;
@@ -266,10 +256,33 @@ document.addEventListener('keydown', (event) => {
             return;
         case "escape":
             //toggleCelestials(false)
-            if (document.getElementById("settingsContainer").style.display === "block") 
+            if (document.getElementById("settingsContainer").style.display === "block") {
                 hideSettings();
-            else
+            } else if (document.getElementById("conversionContainer").style.display === "block") {
+                toggleVariantConversions();
+            } else  if (document.getElementById("forgeContainer").style.display === "block") {
+                toggleOreForge();
+            } else {
                 showSettings();
+            }
+            break;
+        case "t":
+            checkExistingOres();
+            break;
+        case "1":
+            toggleSpecificPowerup(1);
+            break;
+        case "2":
+            toggleSpecificPowerup(2);
+            break;
+        case "3":
+            toggleSpecificPowerup(3);
+            break;
+        case "4":
+            toggleSpecificPowerup(4);
+            break;
+        case "5":
+            toggleSpecificPowerup(5);
             break;
         default:
             break;
@@ -497,17 +510,18 @@ function updateInventory() {
         applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
     }
     if (player.powerupVariables.fakeEquipped.item !== "" && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
-        if (player.gears[player.powerupVariables.fakeEquipped.item] != undefined) {
+        if (player.gears[player.powerupVariables.fakeEquipped.item] !== undefined) {
             if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
             if (player.powerupVariables.fakeEquipped.item === "gear9") document.getElementById("sillyRecipe").style.display = "none";
             player.gears[player.powerupVariables.fakeEquipped.item] = false;
             player.powerupVariables.fakeEquipped.item = "";
         }
-        if (player.pickaxes[player.powerupVariables.fakeEquipped.item] != undefined) {
+        if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
             player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
             player.stats.currentPickaxe = player.powerupVariables.fakeEquipped.originalState;
             player.powerupVariables.fakeEquipped.item = "";
             player.powerupVariables.fakeEquipped.originalState = undefined;
+            utilitySwitchActions();
         }
         let tempDirection = curDirection;
         stopMining();
@@ -656,13 +670,16 @@ function removeExistingOre(location) {
                 document.getElementById("trackerOre").innerText = `Ore: N/A`
                 document.getElementById("trackerX").innerText = `X: N/A`
                 document.getElementById("trackerY").innerText = `Y: N/A`
-                player.oreTracker.tracking = false;
-                player.oreTracker.locationX = 0;
-                player.oreTracker.locationY = 0;
+                removeTrackerInformation();
             }
             break;
         }
     }
+}
+function removeTrackerInformation() {
+    player.oreTracker.tracking = false;
+    player.oreTracker.locationX = 0;
+    player.oreTracker.locationY = 0;
 }
 
 function goToOre(block, variantType) {

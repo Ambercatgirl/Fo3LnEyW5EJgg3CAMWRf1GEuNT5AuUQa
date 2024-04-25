@@ -82,6 +82,7 @@ class playerTemplate {
             usingNewEmojis: false,
             minRarityNum: 0,
             highRarityLogs: false,
+            doSpawnEffects: true,
         },
         this.stats = {
             currentPickaxe: 0,
@@ -108,7 +109,8 @@ class playerTemplate {
             tracking : false,
             locationX : 0,
             locationY : 0
-        }
+        },
+        this.currentEffect = ""
     }
 }
 let player = new playerTemplate();
@@ -181,9 +183,9 @@ const powerupList = {
             buttonUp: {background: "darkgray", text: "white"},
             buttonDown: {background: "darkgray", text: "white"},
         },
-        requirement: `(player.powerupCooldowns['powerup1'].unlocked && player.powerupCooldowns['powerup2'].unlocked && player.powerupCooldowns['powerup3'].unlocked && player.powerupCooldowns['powerup4'].unlocked)`,
-        condition1: "(0 + (player.powerupCooldowns['powerup1'].unlocked ? 1 : 0) + (player.powerupCooldowns['powerup2'].unlocked ? 1 : 0) + (player.powerupCooldowns['powerup3'].unlocked ? 1 : 0) + (player.powerupCooldowns['powerup4'].unlocked ? 1 : 0))",
-        condition2: "/4 Powerups Unlocked"
+        requirement: `(countFlawlessOres() >= 400)`,
+        condition1: "(countFlawlessOres())",
+        condition2: "/400 Flawless Ores Owned."
     },
 }
 function switchPowerupDisplay(num) {
@@ -258,18 +260,26 @@ function checkPowerupCooldowns() {
         }
     }
 }
-
-
+function toggleSpecificPowerup(num) {
+    const current = Number(player.powerupVariables.currentPowerupDisplayed.substring(7));
+    switchPowerupDisplay(num - current)
+}
+function countFlawlessOres() {
+    const ores = oreInformation.getOresByTier("Flawless");
+    let count = 0;
+    for (let i = 0; i < ores.length; i++) count += oreList[ores[i]]["normalAmt"];
+    return count;
+}
 
 function oldDataToNew(data) {
     console.log("transfered old");
     let newData = {blocks: {}, player: new playerTemplate()};
     for (let i = 0; i < data[0].length; i++) {
         newData.blocks[data[0][i][0]] = {
-            normalAmt : data[0][i][1][0][0],
-            electrifiedAmt : data[0][i][1][0][1],
-            radioactiveAmt : data[0][i][1][0][2],
-            explosiveAmt : data[0][i][1][0][3]
+            n : data[0][i][1][0][0],
+            l : data[0][i][1][0][1],
+            r : data[0][i][1][0][2],
+            e : data[0][i][1][0][3]
         }
     }
     if (data[1] !== undefined) {
@@ -351,15 +361,23 @@ function loadNewData(data) {
     try {
         for (let propertyName in data.blocks) {
             if (oreList[propertyName] !== undefined) {
-                oreList[propertyName]["normalAmt"] = data.blocks[propertyName].normalAmt;
-                oreList[propertyName]["electrifiedAmt"] = data.blocks[propertyName].electrifiedAmt;
-                oreList[propertyName]["radioactiveAmt"] = data.blocks[propertyName].radioactiveAmt;
-                oreList[propertyName]["explosiveAmt"] = data.blocks[propertyName].explosiveAmt;
+                if (data.blocks[propertyName].normalAmt !== undefined) {
+                    oreList[propertyName]["normalAmt"] = data.blocks[propertyName].normalAmt;
+                    oreList[propertyName]["electrifiedAmt"] = data.blocks[propertyName].electrifiedAmt;
+                    oreList[propertyName]["radioactiveAmt"] = data.blocks[propertyName].radioactiveAmt;
+                    oreList[propertyName]["explosiveAmt"] = data.blocks[propertyName].explosiveAmt;
+                    inventoryObj[propertyName] = 0;
+                } else if (data.blocks[propertyName].n !== undefined) {
+                    oreList[propertyName]["normalAmt"] = data.blocks[propertyName].n;
+                oreList[propertyName]["electrifiedAmt"] = data.blocks[propertyName].l;
+                oreList[propertyName]["radioactiveAmt"] = data.blocks[propertyName].r;
+                oreList[propertyName]["explosiveAmt"] = data.blocks[propertyName].e;
                 inventoryObj[propertyName] = 0;
+                }
+                
             }
         }
         data = data.player;
-        console.log(data);
         if (data.powerupVariables !== undefined && data.powerupVariables.fakeEquipped !== undefined && data.powerupVariables.fakeEquipped.item !== "") {
             let item = data.powerupVariables.fakeEquipped.item;
             if (player.gears[item] !== undefined) data.gears[item] = false;
@@ -403,8 +421,8 @@ function loadNewData(data) {
             if (!data.settings.cavesEnabled) toggleCaves(document.getElementById("caveToggle"));
         }
         if (data.settings.inventorySettings !== undefined) {
-            if (!data.settings.inventorySettings.craftingToIndex) switchToIndex(document.getElementById("invIndex"), 0);
-            if (!data.settings.inventorySettings.invToIndex) switchToIndex(document.getElementById("craftIndex"), 1);
+            if (!data.settings.inventorySettings.invToIndex) switchToIndex(document.getElementById("invIndex"), 0);
+            if (!data.settings.inventorySettings.craftingToIndex) switchToIndex(document.getElementById("craftIndex"), 1);
         }
         if (data.settings.minRarityNum !== undefined) {
             player.settings.minRarityNum = (data.settings.minRarityNum) - 1;
@@ -416,8 +434,12 @@ function loadNewData(data) {
         if (data.settings.musicSettings !== undefined) {
             player.settings.musicSettings.active = data.settings.musicSettings.active;
             player.settings.musicSettings.volume = data.settings.musicSettings.volume;
-            if (!player.settings.musicSettings.active) document.getElementById("musicButton").click();
             document.getElementById("musicVolume").value = data.settings.musicSettings.volume;
+            changeMusicVolume(player.settings.musicSettings.volume);
+            if (!player.settings.musicSettings.active) {
+                player.settings.musicSettings.active = true;
+                document.getElementById("musicButton").click();
+            }
         }
         if (data.settings.stopOnRare !== undefined) {
             player.settings.stopOnRare.minimum = oreInformation.getPreviousTier(data.settings.stopOnRare.minimum);
@@ -455,6 +477,11 @@ function loadNewData(data) {
                 switchHighRarity(document.getElementById("highRarity"));
             }
         }
+        if (data.settings.doSpawnEffects !== undefined) {
+            if (!data.settings.doSpawnEffects) {
+                toggleSpawnEffects(document.getElementById("spawnEffects"));
+            }
+        }
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
                 if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
@@ -479,10 +506,10 @@ function saveNewData(obj) {
         let data = {blocks: {}, player: player};
         for (let propertyName in oreList) {
             data.blocks[propertyName] = {
-                normalAmt: oreList[propertyName]["normalAmt"],
-                electrifiedAmt: oreList[propertyName]["electrifiedAmt"],
-                radioactiveAmt: oreList[propertyName]["radioactiveAmt"],
-                explosiveAmt: oreList[propertyName]["explosiveAmt"]
+                n: oreList[propertyName]["normalAmt"],
+                l: oreList[propertyName]["electrifiedAmt"],
+                r: oreList[propertyName]["radioactiveAmt"],
+                e: oreList[propertyName]["explosiveAmt"]
             };
         }
         if (obj.override !== undefined) data.player = obj.override;

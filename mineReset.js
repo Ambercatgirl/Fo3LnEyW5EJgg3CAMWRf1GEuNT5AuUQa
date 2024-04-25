@@ -53,6 +53,7 @@ async function mineReset() {
         mine[curY][curX] = "⛏️";
         loggedFinds = [];
         player.oreTracker.existingOres = [];
+        removeTrackerInformation();
         displayArea();
         goDirection(temp);
         resetting = false;
@@ -72,7 +73,7 @@ function collectOres(temp) {
                 for (let c = curX - constraints[0]; c < curX + 30; c++) {
                     if (mine[r] !== undefined) {
                         if (oreList[mine[r][c]] !== undefined) {
-                            if (Math.round(1 / (oreList[mine[r][c]][0])) >= 750000)
+                            if (oreList[mine[r][c]]["numRarity"] >= 750000)
                                 mineBlock(c, r, "reset", 1);
                         }
                     }
@@ -84,8 +85,8 @@ function collectOres(temp) {
                 for (let c = curX - constraints[0]; c < curX + 30; c++) {
                     if (mine[r] !== undefined) {
                         if (oreList[mine[r][c]] !== undefined) {
-                            if (Math.round(1 / (oreList[mine[r][c]][0])) >= 750000)
-                                mineBlock(c, r, "reset", 1);
+                            if (oreList[mine[r][c]]["numRarity"] >= 750000)
+                                mineBlock(c, r, "reset");
                         }
                     }
                 }
@@ -96,7 +97,7 @@ function collectOres(temp) {
                 for (let c = curX - constraints[0]; c < curX + 500; c++) {
                     if (mine[r] !== undefined) {
                         if (oreList[mine[r][c]] !== undefined) {
-                            if (Math.round(1 / (oreList[mine[r][c]][0])) >= 750000)
+                            if (oreList[mine[r][c]]["numRarity"] >= 750000)
                                 mineBlock(c, r, "reset", 1);
                         }
                     }
@@ -108,8 +109,8 @@ function collectOres(temp) {
                 for (let c = curX - constraints[0]; c < curX + 30; c++) {
                     if (mine[r] !== undefined) {
                         if (oreList[mine[r][c]] !== undefined) {
-                            if (Math.round(1 / (oreList[mine[r][c]][0])) >= 750000)
-                                mineBlock(c, r, "reset", 1);
+                            if (oreList[mine[r][c]]["numRarity"] >= 750000)
+                                mineBlock(c, r, "reset");
                         }
                     }
                 }

@@ -341,7 +341,7 @@ function switchLayerIndex(num, overrideLayer, world) {
     }
     return 0;
 }
-let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕";
+let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕🎉🧌♾️💅😁🪢";
 let noLuck = "✴️🌹";
 function createIndexCards(layer) {
         let toReturn = [];
@@ -375,6 +375,7 @@ function createIndexCards(layer) {
             if (ignoreList.indexOf(property) > -1 && !indexHasOre(property)) blackOut = true;
             let output = `<span class='indexOre ${(blackOut) ? "indexBlackout" : ""}' title="${oreList[property]["oreName"]}">${property}</span>${blackOut ? "</span>" : ""}`;
             output += `<span class='indexVariants indexTextOutline'>${indexVariants(property)}</span>`
+            output += `<span class='indexTier indexTextOutline'>${blackOut ? "???" : oreList[property]["oreTier"]}</span>`
             output += "<span class='indexRarity indexTextOutline'>1/";
             if (isCave) {
                 let rarity = oreList[property]["numRarity"];
@@ -683,5 +684,14 @@ function timeSinceLastAutosave() {
         minutes.toString().padStart(2, "0"),
         seconds.toString().padStart(2, "0")
     ].join(":")}`;
+}
+function toggleSpawnEffects(button) {
+    if (player.settings.doSpawnEffects) {
+        button.style.backgroundColor = "#FF3D3D";
+        player.settings.doSpawnEffects = false;
+    } else {
+        button.style.backgroundColor = "#6BC267";
+        player.settings.doSpawnEffects = true;
+    }
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})
