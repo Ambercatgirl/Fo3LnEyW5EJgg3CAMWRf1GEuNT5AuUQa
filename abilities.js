@@ -7,9 +7,9 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 
 async function rollAbilities() {
     let m = 1;
-    if (currentWorld === 1 && player.gears["gear8"])
-        m = 1.2;
-    if (!resetting && ((currentWorld === 1 && player.stats.currentPickaxe >= 5)||(currentWorld === 2 && player.gears["gear14"]))) {
+    if (currentWorld < 2 && player.gears["gear8"]) m = 1.2;
+    if (player.gears["gear23"]) m += 0.15;
+    if (!resetting && ((currentWorld < 2 && player.stats.currentPickaxe >= 5)||(currentWorld === 2 && player.gears["gear14"]))) {
         if (Math.random() < 1/750 && player.settings.cavesEnabled) {
             player.stats.cavesGenerated++;
             generateCave(curX, curY, 0, 0);
@@ -277,7 +277,7 @@ function gearAbility1() {
 }
 
 function gearAbility2() {
-    if (currentWorld === 1 && player.gears["gear9"]) {
+    if (currentWorld < 2 && player.gears["gear9"]) {
         currentLayer = createLayer([layerList["sillyLayer"]]);
         currentLayerNum = 7777;
     }
@@ -748,15 +748,15 @@ function pickaxeAbility19(x, y, reps) {
             pickaxeAbilityMineBlock(c, r);
             pickaxeAbilityMineBlock(c, r2);
             if (r2 < y) {
-                if (c < x && Math.random() < 1/30)
+                if (c < x && Math.random() < 1/60)
                     newOrigins[0] = [y - 8, x - 8];
-                if (c > x && Math.random() < 1/30)
+                if (c > x && Math.random() < 1/60)
                     newOrigins[1] = [y - 8, x + 8];
             }
             if (r > y) {
-                if (c < x && Math.random() < 1/30)
+                if (c < x && Math.random() < 1/60)
                     newOrigins[2] = [y + 8, x - 8];
-                if (c > x && Math.random() < 1/30)
+                if (c > x && Math.random() < 1/60)
                     newOrigins[3] = [y + 8, x + 8];
             }
         }

@@ -48,11 +48,11 @@ function generateCave(x, y, rate, reps, type) {
 
 function mineCaveBlock(c, r, type) {
     let block = mine[r][c];
-    if (currentWorld === 2 && block === "✖️") {
-        return;
-    }
-    let caveMulti = getCaveMulti(type);
     if (block != undefined) {
+        if (currentWorld === 2 && block === "✖️") {
+            return;
+        }
+        let caveMulti = getCaveMulti(type);
         if (oreList[block]["isBreakable"]) {
             if (checkFromCave({"X":c, "Y":r})["fromCave"]) giveBlock(block, c, r, false, true, caveMulti);
             else giveBlock(block, c, r);
@@ -60,7 +60,6 @@ function mineCaveBlock(c, r, type) {
         }
     }
     //CHECK BELOW THE BLOCK
-    let generated;
     if (mine[r + 1] === undefined) {
         mine[r + 1] = [];
     }
@@ -209,7 +208,7 @@ function generateCaveBlock(y, x, type) {
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage(blockToGive, {"Y" : y, "X" : x}, {"adjRarity" : adjRarity, "caveType" : type});
-            if ((currentWorld === 1 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
+            if ((currentWorld < 2 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
         }
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {
@@ -219,7 +218,7 @@ function generateCaveBlock(y, x, type) {
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage(blockToGive, {"Y" : y, "X" : x});
-            if ((currentWorld === 1 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
+            if ((currentWorld < 2 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
         }
     }
     
@@ -291,6 +290,7 @@ function getCaveType() {
     let summedProbability = 0;
     let chosenValue = Math.random();
     chosenValue /= caveTypeLuck;
+    if (player.gears["gear25"]) chosenValue /= 1.75;
     for (let propertyName in caveTypes) {
         summedProbability += caveTypes[propertyName];
         if (chosenValue < summedProbability) {

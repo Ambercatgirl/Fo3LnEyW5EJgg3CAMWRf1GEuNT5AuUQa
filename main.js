@@ -151,7 +151,6 @@ let allAudios = {
 function loadContent() {
     keepRunningAudio = new Audio("audios/ambiencebyx2corp.mp3")
     keepRunningAudio.load();
-    keepRunning();
     eventSpawn = new Audio("audios/Glitch.mp3");
     eventSpawn.volume = 0.1;
     chill = new Audio("audios/chill.mp3");
@@ -175,6 +174,14 @@ function loadContent() {
     allAudios["Celestial"] = celestial;
     allAudios["Imaginary"] = imaginary;
     for (let property in allAudios) allAudios[property].load();
+    musicPlayer.songs["song1"].src = new Audio("audios/ely_audio_1.mp3");
+    musicPlayer.songs["song2"].src = new Audio("audios/ely_audio_2.mp3");
+    musicPlayer.songs["song3"].src = new Audio("audios/ely_audio_3.mp3");
+    musicPlayer.songs["song4"].src = new Audio("audios/mooing_audio_1.mp3");
+    for (let property in musicPlayer.songs) {
+        musicPlayer.songs[property].src.load();
+        musicPlayer.songs[property].src.volume = musicPlayer.songs[property].baseVolume;
+    }
     document.getElementById("pressPlay").style.display = "none";
     document.getElementById("mainContent").style.display = "block";
     canMine = true;
@@ -186,7 +193,7 @@ function loadContent() {
 function movePlayer(dir, reps) {
     for (let i = 0; i < reps; i++) {
         if (canMine) {
-            if (currentWorld === 1 || player.stats.currentPickaxe > 12) {
+            if (currentWorld < 2 || player.stats.currentPickaxe > 12) {
                 if (dir.y < 0 && !(curY > 0)) {
                     return;
                 } else if (dir.x < 0 && !(curX > 0)) {
@@ -256,14 +263,8 @@ document.addEventListener('keydown', (event) => {
             return;
         case "escape":
             //toggleCelestials(false)
-            if (document.getElementById("settingsContainer").style.display === "block") {
-                hideSettings();
-            } else if (document.getElementById("conversionContainer").style.display === "block") {
-                toggleVariantConversions();
-            } else  if (document.getElementById("forgeContainer").style.display === "block") {
-                toggleOreForge();
-            } else {
-                showSettings();
+            if (document.getElementById("menuSelectionContainer").style.display !== "none") {
+                closeMenu()
             }
             break;
         case "t":
@@ -318,9 +319,9 @@ function goDirection(direction, speed) {
         removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]});
         
         if (speed === undefined) {
-        if (currentWorld === 1 && player.gears["gear2"])
+        if (currentWorld < 2 && player.gears["gear2"])
             miningSpeed = baseSpeed - 10;
-        if (currentWorld === 1 && player.gears["gear6"])
+        if (currentWorld < 2 && player.gears["gear6"])
             miningSpeed = baseSpeed - 15;
         if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear13"] && player.gears["gear19"]))
             miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear13"] ? 5 : 0) - (player.gears["gear19"] ? 13 : 0);
@@ -530,6 +531,7 @@ function updateInventory() {
     }
     checkPowerupCooldowns();
     updatePowerupCooldowns();
+    if (player.gears["gear24"]) autoPowerups();
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
 }
@@ -547,7 +549,7 @@ let spawnOre = null;
 function spawnMessage(block, location, caveInfo) {
     //ADD TO MINE CAPACITY IF NEAR RESET
     player.oreTracker.existingOres.push({block: block, posX : location["X"], posY : location["Y"]});
-    if ((currentWorld === 1 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
+    if ((currentWorld < 2 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
         mineCapacity += 10000;
     else if (!player.gears["gear17"] && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
         mineCapacity += 10000;
@@ -572,7 +574,7 @@ function spawnMessage(block, location, caveInfo) {
         spawnElement.innerText = "";
         spawnElement.appendChild(element)
     }
-    if (spawnElement.children.length > 10) spawnElement.removeChild(spawnElement.lastChild);
+    if (spawnElement.children.length > player.settings.latestLength) spawnElement.removeChild(spawnElement.lastChild);
         let createSpawnMessage = false;
         if (spawnOre === null) 
             createSpawnMessage = true;
@@ -601,7 +603,7 @@ function logFind(type, x, y, variant, atMined, fromReset) {
     let output = "";
     //latestFinds.push([type, x, y, variant, atMined, fromReset]);
     removeExistingOre({x: x, y:y})
-    let sub = currentWorld === 1 ? 0 : 2000;
+    let sub = currentWorld < 2 ? 0 : 2000;
     let spawnElement = document.getElementById("latestFinds");
     let element = document.createElement("p");
     element.classList = "latestFind";
@@ -624,7 +626,8 @@ function logFind(type, x, y, variant, atMined, fromReset) {
         spawnElement.innerText = "";
         spawnElement.appendChild(element)
     }
-    if (spawnElement.children.length > 10) spawnElement.removeChild(spawnElement.lastChild);
+    if (spawnElement.children.length > player.settings.latestLength) spawnElement.removeChild(spawnElement.lastChild);
+    if (spawnElement.children.length > document.getElementById("latestSpawns").children.length) console.log("something seems off")
 }
 
 function getAngleBetweenPoints(obj) {
@@ -655,7 +658,7 @@ function checkExistingOres() {
             player.oreTracker.locationY = player.oreTracker.existingOres[closestIndex].posY;
             document.getElementById("trackerOre").innerText = `Ore: ${player.oreTracker.existingOres[closestIndex].block}`
             document.getElementById("trackerX").innerText = `X: ${(player.oreTracker.locationX - 1000000000).toLocaleString()}`
-            document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld === 1 ? 0 : 2000))).toLocaleString()}`
+            document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld < 2 ? 0 : 2000))).toLocaleString()}`
             getAngleBetweenPoints({x:player.oreTracker.locationX, y:player.oreTracker.locationY});
         }
     }
@@ -667,9 +670,6 @@ function removeExistingOre(location) {
         if (location.x === num1 && location.y === num2) {
             player.oreTracker.existingOres.splice(i, 1);
             if (location.x === player.oreTracker.locationX && location.y === player.oreTracker.locationY) {
-                document.getElementById("trackerOre").innerText = `Ore: N/A`
-                document.getElementById("trackerX").innerText = `X: N/A`
-                document.getElementById("trackerY").innerText = `Y: N/A`
                 removeTrackerInformation();
             }
             break;
@@ -678,6 +678,9 @@ function removeExistingOre(location) {
 }
 function removeTrackerInformation() {
     player.oreTracker.tracking = false;
+    document.getElementById("trackerOre").innerText = `Ore: N/A`
+    document.getElementById("trackerX").innerText = `X: N/A`
+    document.getElementById("trackerY").innerText = `Y: N/A`
     player.oreTracker.locationX = 0;
     player.oreTracker.locationY = 0;
 }

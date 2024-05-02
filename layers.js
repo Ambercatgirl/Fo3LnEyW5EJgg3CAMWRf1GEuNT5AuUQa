@@ -410,10 +410,12 @@ const layerList = {
 "barrierLayer" : ["❔",  "✴️", "✖️"],
 "borderLayer" : ["🩸", "♨️", "🚫", "🔈", "⛔", "💢", "🔇", "🛑", "⭕", "🔕", "❌"],
 "worldTwoCommons" : ["🍀", "☘️", "📘", "📙", "📕", "📗", "⏏️", "▶️", "⏸️", "⏯️", "⏺️", "⏭️", "⏮️", "⏩", "⏪", "⏬", "⏫", "◀️", "🔼", "🔽", "➡️", "↖️", "↘️", "⬇️", "⬆️", "⬅️", "↪️", "↩️", "⤴️", "⤵️", "🔀", "🔁", "🔂", "🔄", "🔃"],
-"grassLayer" : ["🌹", "🟩"]
+"grassLayer" : ["🌹", "🟩"],
+"testLayer" : ["🌹", "🟩"]
 }
 let worldOneLayers = ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer", "paperLayer"];
 let worldTwoLayers = ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer"];
+let subRealmOneLayers = ["testLayer"];
 let specialLayers = ["sillyLayer", "fluteLayer", "dirtLayer2", "barrierLayer", "borderLayer", "grassLayer"];
 let allLayers = ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer", "paperLayer"];
 
@@ -462,6 +464,10 @@ function setLayer(y) {
                 }
             }
         }
+    } else if (currentWorld === 1.1) {
+        let tempNum = Math.floor(y / 2000)
+        tempNum = tempNum > allLayers.length - 1 ? allLayers.length - 1 : tempNum;
+        currentLayer = createLayer([layerList[allLayers[tempNum]]])
     } else {
         let tempNum = y;
         if (tempNum < 10000) {

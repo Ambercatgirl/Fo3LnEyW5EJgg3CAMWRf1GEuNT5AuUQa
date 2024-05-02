@@ -54,8 +54,16 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
         <div id="mainTop">
             <div style="height: 2vw;">
                 <button id="resetMine" class="topButtons" onclick="toSurface()">To Surface</button>
-                <button id="settings" class="topButtons" onclick="showSettings()">Settings</button>
+                <button id="settings" class="topButtons" onmouseover="toggleMenu()" onmouseleave="toggleMenu()">Menu</button>
                 <p id="lastAutosave" class="topButtons">Please Login to Galaxy for Cloud autosave. <a href="https://galaxy.click/" target="_blank">Login Here.</a></p>
+            </div>
+            <div id="menuHolder" onmouseover="keepShowingMenu()" onmouseleave="toggleMenu()">
+                <button class="menuButton" onclick="showMenuScreen('settings')">Settings</button>
+                <button class="menuButton"onclick="showMenuScreen('data')">Data</button>
+                <button class="menuButton"onclick="showMenuScreen('logs')">Logs</button>
+                <button class="menuButton"onclick="showMenuScreen('statistics')">Statistics</button>
+                <button class="menuButton"onclick="showMenuScreen('index')">Ore Index</button>
+                <button class="menuButton"onclick="showMenuScreen('locations')">Locations</button>
             </div>
             <p id="mineResetProgress"></p>
             <p id="blocksMined">0 Blocks Mined</p>
@@ -72,88 +80,88 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button onclick="showGears()" class="craftingSelector" style="border-right: none;">Gears</button>
                 </div>
                 <div id="pickaxeCrafts">
-                    <button class="craftingButton" onclick="displayRecipe(0, this)" id="mulchMallet"><span>Mulch Mallet</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(1, this)" id="mudSickle"><span>Mud Sickle</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(2, this)" id="dirtRavager"><span>Dirt Ravager</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(3, this)" id="voidCrusher"><span>Void Crusher</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(4, this)" id="geodeStaff"><span>Geode Staff</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(5, this)" id="earthSoiler"><span>Earth Soiler</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(6, this)" id="cryptSmasher"><span>Crypt Smasher</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(7, this)" id="labyrinthianTide"><span>Labyrinthian Tide</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(8, this)" id="LeafDestroyer"><span>77 Leaf Destroyer</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(9, this)" id="planetBuster"><span>Planet Buster</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(10, this)" id="whirlpoolOfFate"><span>Whirlpool of Fate</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(11, this)" id="wingsOfGlory"><span>Wings of Glory</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(12, this)" id="theKey"><span>The Key</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(13, this)" id ="extremeEcholocator" style="display: none;"><span>Extreme Echolocator</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(14, this)" id="corundumCaver" style="display: none;"><span>Corundum Caver</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(15, this)" id="starborneSlasher" style="display: none;"><span>Starborne Slasher</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(16, this)" id="nyabomb" style="display: none;" id="cat"><span>Nyabomb</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(17, this)" id="lunarLightsabre" style="display: none;"><span>Lunar Lightsabre</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(18, this)" id="gemstoneEngraver" style="display: none;"><span>Gemstone Engraver</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(19, this)" id="gamblersFallacy" style="display: none;"><span>Gambler's Fallacy</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(20, this)" id="exponentialCentrifuge" style="display: none;"><span>Exponential Centrifuge</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(21, this)" id="singularitySlammer" style="display: none;"><span>Singularity Slammer</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(22, this)" id="staffOfBinding" style="display: none;"><span>Staff of Binding</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(23, this)" id="stormseersSupersparkSceptre" style="display: none;"><span>Stormseer's Superspark Sceptre</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(24, this)" id="coronaryCatastrophe" style="display: none;"><span>Coronary Catastrophe</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(25, this)" id="nullChroma" style="display: none;"><span>N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe1`)" id="mulchMallet"><span>Mulch Mallet</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe2`)" id="mudSickle"><span>Mud Sickle</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe3`)" id="dirtRavager"><span>Dirt Ravager</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe4`)" id="voidCrusher"><span>Void Crusher</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe5`)" id="geodeStaff"><span>Geode Staff</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe6`)" id="earthSoiler"><span>Earth Soiler</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe7`)" id="cryptSmasher"><span>Crypt Smasher</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe8`)" id="labyrinthianTide"><span>Labyrinthian Tide</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe9`)" id="LeafDestroyer"><span>77 Leaf Destroyer</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe10`)" id="planetBuster"><span>Planet Buster</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe11`)" id="whirlpoolOfFate"><span>Whirlpool of Fate</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe12`)" id="wingsOfGlory"><span>Wings of Glory</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe13`)" id="theKey"><span>The Key</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe14`)" id ="extremeEcholocator" style="display: none;"><span>Extreme Echolocator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe15`)" id="corundumCaver" style="display: none;"><span>Corundum Caver</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe16`)" id="starborneSlasher" style="display: none;"><span>Starborne Slasher</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe17`)" id="nyabomb" style="display: none;" id="cat"><span>Nyabomb</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe18`)" id="lunarLightsabre" style="display: none;"><span>Lunar Lightsabre</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe19`)" id="gemstoneEngraver" style="display: none;"><span>Gemstone Engraver</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe20`)" id="gamblersFallacy" style="display: none;"><span>Gambler's Fallacy</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe21`)" id="exponentialCentrifuge" style="display: none;"><span>Exponential Centrifuge</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe22`)" id="singularitySlammer" style="display: none;"><span>Singularity Slammer</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe23`)" id="staffOfBinding" style="display: none;"><span>Staff of Binding</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe24`)" id="stormseersSupersparkSceptre" style="display: none;"><span>Stormseer's Superspark Sceptre</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe25`)" id="coronaryCatastrophe" style="display: none;"><span>Coronary Catastrophe</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe26`)" id="nullChroma" style="display: none;"><span>N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡</span></button>
                 </div>
                 <div id="gearCrafts" class="hidden">
-                    <button class="craftingButton" onclick="displayRecipe(0, this)" id="oreTracker"><span>Ore Tracker</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(1, this)" id="realCandilium"><span>Real Candilium</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(2, this)" id="realVitriol"><span>Real Vitriol</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(7, this)" id="energySiphoner"><span>Energy Siphoner</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(8, this)" id="sugarRush"><span>Sugar Rush</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(3, this)" id="infinityCollector"><span>Infinity Collector</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(4, this)" id="layerMaterializer"><span>Layer Materializer</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(5, this)" id="fortuneIIIBook"><span>Fortune III Book</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(6, this)" id="hasteIIBeacon"><span>Haste II Beacon</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(9, this)" id="sillyRecipe" style="display: none;"><span>SILLYYYY</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(10, this)" style="display: none;" id="logicalRandomiser"><span>Logical Randomiser</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(11, this)" style="display: none;" id=stormSneakers><span>Storm Sneakers</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(12, this)" style="display: none;" id="artificeAnnihilator"><span>Artifice Annihilator</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(13, this)" style="display: none;" id="repurposedReplicator"><span>Repurposed Replicator</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(14, this)" style="display: none;" id="cavernCapacitator"><span>Cavern Capacitator</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(15, this)" style="display: none;" id="highPoweredVacuum"><span>High Powered Vacuum</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(16, this)" style="display: none;" id="unlockedSpeedcap"><span>Unlocked Speedcap</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(17, this)" style="display: none;" id="infinityCollector"><span>Infinity Collector II</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(18, this)" style="display: none;" id="cloversUndoing"><span>Clover's Undoing</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(19, this)" style="display: none;" id="structuralService"><span>Structural Service</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(20, this)" style="display: none;" id="statisticalAmplifier"><span>Statistical Amplifier</span></button>
-                    <div style="width: 100%;"><button class="craftingButton" onclick="displayRecipe(21, this)" style="display: none; height: 3vw;" id="oblivionFracturer"><span>O̸̹͑̈́b̸̳̉̓l̵̘͗̐i̴̦̦̍̃v̴̝͒ĭ̶̡̙o̶̲̘̾ǹ̴̛̥ ̸̹̜̈̽F̵̖̔̆r̷͕̬̓ă̴̟͉̽c̴͚̃ț̷̚ṳ̴̐̄r̶̳͇̀ḛ̶̠̑̃r̵̿͜</span></button></div>
+                    <button class="craftingButton" onclick="displayRecipe('gear0')" id="oreTracker"><span>Ore Tracker</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear1')" id="realCandilium"><span>Real Candilium</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear2')" id="realVitriol"><span>Real Vitriol</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear7')" id="energySiphoner"><span>Energy Siphoner</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear8')" id="sugarRush"><span>Sugar Rush</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear3')" id="infinityCollector"><span>Infinity Collector</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear4')" id="layerMaterializer"><span>Layer Materializer</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear5')" id="fortuneIIIBook"><span>Fortune III Book</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear6')" id="hasteIIBeacon"><span>Haste II Beacon</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear9')" id="sillyRecipe" style="display: none;"><span>SILLYYYY</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear10')" style="display: none;" id="logicalRandomiser"><span>Logical Randomiser</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear11')" style="display: none;" id=stormSneakers><span>Storm Sneakers</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear12')" style="display: none;" id="artificeAnnihilator"><span>Artifice Annihilator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear13')" style="display: none;" id="repurposedReplicator"><span>Repurposed Replicator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear14')" style="display: none;" id="cavernCapacitator"><span>Cavern Capacitator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear15')" style="display: none;" id="highPoweredVacuum"><span>High Powered Vacuum</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear16')" style="display: none;" id="unlockedSpeedcap"><span>Unlocked Speedcap</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear17')" style="display: none;" id="infinityCollector"><span>Infinity Collector II</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear18')" style="display: none;" id="cloversUndoing"><span>Clover's Undoing</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear19')" style="display: none;" id="structuralService"><span>Structural Service</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear20')" style="display: none;" id="statisticalAmplifier"><span>Statistical Amplifier</span></button>
+                    <div style="width: 100%;"><button class="craftingButton" onclick="displayRecipe('gear21')" style="display: none; height: 3vw;" id="oblivionFracturer"><span>O̸̹͑̈́b̸̳̉̓l̵̘͗̐i̴̦̦̍̃v̴̝͒ĭ̶̡̙o̶̲̘̾ǹ̴̛̥ ̸̹̜̈̽F̵̖̔̆r̷͕̬̓ă̴̟͉̽c̴͚̃ț̷̚ṳ̴̐̄r̶̳͇̀ḛ̶̠̑̃r̵̿͜</span></button></div>
                 </div>
             </div>
             <p id = "craftingRecipeTitle" class="middleTitle" style="display: none;">Recipe</p>
             <div id="displayRecipe"></div>
             <p id = "descriptionTitle" class="middleTitle" style="display: none;">Description</p>
             <div id="craftableDescriptions">
-                <p class="itemDescription" id="pickaxe0Description" style="display: none;">Mines a few blocks in every direction.<br>Has an ability proc rate of 1/30.<br>Has 1.2x luck.</p>
-                <p class="itemDescription" id="pickaxe1Description" style="display: none;">Mines a small square around the player.<br>Has an ability proc rate of 1/35.<br>Has 1.35x luck.</p>
-                <p class="itemDescription" id="pickaxe2Description" style="display: none;">Mines blocks in an X shape around the player.<br>Has an ability proc rate of 1/30.<br>Has 1.8x luck.</p>
-                <p class="itemDescription" id="pickaxe3Description" style="display: none;">Mines a square randomly around the player.<br>Has an ability proc rate of 1/25.<br>Has 2x luck.</p>
-                <p class="itemDescription" id="pickaxe4Description" style="display: none;">Mines a circle randomly around the player.<br>Enables cave spawns in World 1, along with every pickaxe above it.<br>Has an ability proc rate of 1/17.<br>Has 5x luck.</p>
-                <p class="itemDescription" id="pickaxe5Description" style="display: none;">Has 2 abilities.<br>Ability 1 mines a triangle around the player.<br>Ability 2 mines a heart around the player.<br>Ability 1 has a 1/60 proc rate.<br>Ability 2 has a 1/40 proc rate.<br>Both abilities have 10x luck.</p>
-                <p class="itemDescription" id="pickaxe6Description" style="display: none;">Mines a few blocks in every direction. However, each line has a chance to re-activate the ability from the end of said line with a 75% chance and up to 4 times.<br>Has an ability proc rate of 1/50.<br>Has 3x luck.</p>
-                <p class="itemDescription" id="pickaxe7Description" style="display: none;">Mines blocks in an X shape around the player, with each end having a chance to re-activate the ability at that position with a 75% chance and up to 4 times.<br>Has an ability proc rate of 1/50.<br>Has 4x luck.</p>
-                <p class="itemDescription" id="pickaxe8Description" style="display: none;">Mines the shape of a clover around the player.<br>Has an ability proc rate of 1/30.<br>Has 20x luck.<br><i>The pickaxe resonates with a distant entity.. a signal sent from far beyond these lands. Further traces of it are found within the blueprint for a particular craft of a key, one designed to open the lock to a completely new world..</i></p>
-                <p class="itemDescription" id="pickaxe9Description" style="display: none;">Has a 50% chance to mine a 7x7 square in a 49x49 area around the player, with an average of 24 7x7 squares being mined each activation.<br>Has an ability proc rate of 1/50.<br>Has 17.5x luck.</p>
-                <p class="itemDescription" id="pickaxe10Description" style="display: none;">Mines an extremely large spiral around the player.<br>Has an ability proc rate of 1/100.<br>Has 30x luck.</p>
-                <p class="itemDescription" id="pickaxe11Description" style="display: none;">Mines wings around the player.<br>Mines 2 blocks at once when using automine.<br>Has 2x special cave type luck.<br>Has an ability proc rate of 1/150.<br>Has 75x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
-                <p class="itemDescription" id="pickaxe12Description" style="display: none;">The Key to World 2.<br>Requires 77 Leaf Destroyer.<br>Pressing "Teleport!" on this pickaxe will switch the current world.<br>Has the power of pickaxe 0.<br>World 1 gears will NOT work in world 2, except for the ore tracker.<br>Certain World 2 gears will work in World 1, including all luck related gears, Repurposed Replicator, and High Powered Vacuum.</p>
-                <p class="itemDescription" id="pickaxe13Description" style="display: none;">Mines a randomly sized circle around the player.<br>Has an ability proc rate of 1/45.<br>Has 1.05x luck.</p>
-                <p class="itemDescription" id="pickaxe14Description" style="display: none;">Mines a diamond around the player.<br>Has an ability proc rate of 1/75.<br>Has 1.075x luck.</p>
-                <p class="itemDescription" id="pickaxe15Description" style="display: none;">Mines a star around the player.<br>Has an ability proc rate of 1/100.<br>Has 1.3x luck.</p>
-                <p class="itemDescription" id="pickaxe16Description" style="display: none;">Mines a cat around the player :3c.<br>Has an ability proc rate of 1/150.<br>Has 1x luck.</p>
-                <p class="itemDescription" id="pickaxe17Description" style="display: none;">Mines a crescent moon around the player.<br>Has an ability proc rate of 1/150<br>Has 1.5x luck.</p>
-                <p class="itemDescription" id="pickaxe18Description" style="display: none;">Mines a diamond around the player, but is able to keep activating itself.<br>Has an ability proc rate of 1/50.<br>Has 2x luck.</p>
-                <p class="itemDescription" id="pickaxe19Description" style="display: none;">Plays a game of tic tac toe around the player, mining X's and O's around you and fully excavating any winning lines.<br>Has an ability proc rate of 1/75.<br>Has 3x luck.</p>
-                <p class="itemDescription" id="pickaxe20Description" style="display: none;">Mines swirls around the player.<br>Has an ability proc rate of 1/75.<br>Has 1.25x luck.</p>
-                <p class="itemDescription" id="pickaxe21Description" style="display: none;">Mines 20 circles around the player, each having it's radius increased 2 blocks more than the last.<br>Has an ability proc rate of 1/120.<br>Has 3x luck.</p>
-                <p class="itemDescription" id="pickaxe22Description" style="display: none;">Creates 4 points and mines between the top left and bottom right points, and the top right and bottom left points.<br>Has an ability proc rate of 1/75, but takes 2 activations to begin mining. The further apart the points, the more it'll mine.<br>Has 5x luck.<br><i>Disclaimer: I thought it'd be funny to not reset the activation points on reset.</i></p>
-                <p class="itemDescription" id="pickaxe23Description" style="display: none;">You've mined too much, best to turn back now. Be warned.<br>Has an ability proc rate of 1/175.<br>Has 11x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
-                <p class="itemDescription" id="pickaxe24Description" style="display: none;">Slashes through your heart.<br>Has an ability proc rate of 1/300.<br>Has 50x luck.<br><i style="font-size: 75%;">..This is where it ends? The most powerful tool in all the worlds..? No.. it can't end here there must be something more...</i><br><i>Warning: High mine capacities with this pickaxe may lead to game crashes.</i><br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
-                <p class="itemDescription" id="pickaxe25Description" style="display: none;">Y҉òu̷'͠v̡e̷ ̕r͡e̴a͡c̡h͞e͝d͡ ̛t̀h̕e̶ ͟ȩv̕e̴n̴t̛ ͡h̵o͞r͠i̡z̛o͏n̡;̕ ̨h̴èr͞e̵'͘s̕ ͢w̶h͢ér͟e͟ ̷y͟o͠u͡ ̵m͜a̧k̕é ͠t̶h̕e͘ ͜u̶l̷t̶i҉ḿa̵t̢e̵ ̶c̸h͘o̶i̕c͢é.͞.̴ ́i̷s͝ ͞i͞t͢ ͡w̷o͢r͢t͝h́ ͘s̕a̴c͢r̕i͏f͏i͝c͡i͏n̡g͢ ̵e̕v̵e͝r͘y̡t̢h͝i͢ņǵ ͝y̷o̶u͝'͝v̧e͏ ̨w̶o̸r͡k̕e̶d̶ ̴f͜ǫr͠ ̡t̸o̶ ͝t̛h͢e͟ ͝v̧o҉i͡d̛.̵.͡?͡<br><br>Draws from past creations and through corruption, magnifies it fivefold.<br>Has an ability proc rate of 1/150.<br>Has 175x luck.</p>
+                <p class="itemDescription" id="pickaxe1Description" style="display: none;">Mines a few blocks in every direction.<br>Has an ability proc rate of 1/30.<br>Has 1.2x luck.</p>
+                <p class="itemDescription" id="pickaxe2Description" style="display: none;">Mines a small square around the player.<br>Has an ability proc rate of 1/35.<br>Has 1.35x luck.</p>
+                <p class="itemDescription" id="pickaxe3Description" style="display: none;">Mines blocks in an X shape around the player.<br>Has an ability proc rate of 1/30.<br>Has 1.8x luck.</p>
+                <p class="itemDescription" id="pickaxe4Description" style="display: none;">Mines a square randomly around the player.<br>Has an ability proc rate of 1/25.<br>Has 2x luck.</p>
+                <p class="itemDescription" id="pickaxe5Description" style="display: none;">Mines a circle randomly around the player.<br>Enables cave spawns in World 1, along with every pickaxe above it.<br>Has an ability proc rate of 1/17.<br>Has 5x luck.</p>
+                <p class="itemDescription" id="pickaxe6Description" style="display: none;">Has 2 abilities.<br>Ability 1 mines a triangle around the player.<br>Ability 2 mines a heart around the player.<br>Ability 1 has a 1/60 proc rate.<br>Ability 2 has a 1/40 proc rate.<br>Both abilities have 10x luck.</p>
+                <p class="itemDescription" id="pickaxe7Description" style="display: none;">Mines a few blocks in every direction. However, each line has a chance to re-activate the ability from the end of said line with a 75% chance and up to 4 times.<br>Has an ability proc rate of 1/50.<br>Has 3x luck.</p>
+                <p class="itemDescription" id="pickaxe8Description" style="display: none;">Mines blocks in an X shape around the player, with each end having a chance to re-activate the ability at that position with a 75% chance and up to 4 times.<br>Has an ability proc rate of 1/50.<br>Has 4x luck.</p>
+                <p class="itemDescription" id="pickaxe9Description" style="display: none;">Mines the shape of a clover around the player.<br>Has an ability proc rate of 1/30.<br>Has 20x luck.<br><i>The pickaxe resonates with a distant entity.. a signal sent from far beyond these lands. Further traces of it are found within the blueprint for a particular craft of a key, one designed to open the lock to a completely new world..</i></p>
+                <p class="itemDescription" id="pickaxe10Description" style="display: none;">Has a 50% chance to mine a 7x7 square in a 49x49 area around the player, with an average of 24 7x7 squares being mined each activation.<br>Has an ability proc rate of 1/50.<br>Has 17.5x luck.</p>
+                <p class="itemDescription" id="pickaxe11Description" style="display: none;">Mines an extremely large spiral around the player.<br>Has an ability proc rate of 1/100.<br>Has 30x luck.</p>
+                <p class="itemDescription" id="pickaxe12Description" style="display: none;">Mines wings around the player.<br>Mines 2 blocks at once when using automine.<br>Has 2x special cave type luck.<br>Has an ability proc rate of 1/150.<br>Has 75x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
+                <p class="itemDescription" id="pickaxe13Description" style="display: none;">The Key to World 2.<br>Requires 77 Leaf Destroyer.<br>Pressing "Teleport!" on this pickaxe will switch the current world.<br>Has the power of pickaxe 0.<br>World 1 gears will NOT work in world 2, except for the ore tracker.<br>Certain World 2 gears will work in World 1, including all luck related gears, Repurposed Replicator, and High Powered Vacuum.</p>
+                <p class="itemDescription" id="pickaxe14Description" style="display: none;">Mines a randomly sized circle around the player.<br>Has an ability proc rate of 1/45.<br>Has 1.05x luck.</p>
+                <p class="itemDescription" id="pickaxe15Description" style="display: none;">Mines a diamond around the player.<br>Has an ability proc rate of 1/75.<br>Has 1.075x luck.</p>
+                <p class="itemDescription" id="pickaxe16Description" style="display: none;">Mines a star around the player.<br>Has an ability proc rate of 1/100.<br>Has 1.3x luck.</p>
+                <p class="itemDescription" id="pickaxe17Description" style="display: none;">Mines a cat around the player :3c.<br>Has an ability proc rate of 1/150.<br>Has 1x luck.</p>
+                <p class="itemDescription" id="pickaxe18Description" style="display: none;">Mines a crescent moon around the player.<br>Has an ability proc rate of 1/150<br>Has 1.5x luck.</p>
+                <p class="itemDescription" id="pickaxe19Description" style="display: none;">Mines a diamond around the player, but is able to keep activating itself.<br>Has an ability proc rate of 1/50.<br>Has 2x luck.</p>
+                <p class="itemDescription" id="pickaxe20Description" style="display: none;">Plays a game of tic tac toe around the player, mining X's and O's around you and fully excavating any winning lines.<br>Has an ability proc rate of 1/75.<br>Has 3x luck.</p>
+                <p class="itemDescription" id="pickaxe21Description" style="display: none;">Mines swirls around the player.<br>Has an ability proc rate of 1/75.<br>Has 1.25x luck.</p>
+                <p class="itemDescription" id="pickaxe22Description" style="display: none;">Mines 20 circles around the player, each having it's radius increased 2 blocks more than the last.<br>Has an ability proc rate of 1/120.<br>Has 3x luck.</p>
+                <p class="itemDescription" id="pickaxe23Description" style="display: none;">Creates 4 points and mines between the top left and bottom right points, and the top right and bottom left points.<br>Has an ability proc rate of 1/75, but takes 2 activations to begin mining. The further apart the points, the more it'll mine.<br>Has 5x luck.<br><i>Disclaimer: I thought it'd be funny to not reset the activation points on reset.</i></p>
+                <p class="itemDescription" id="pickaxe24Description" style="display: none;">You've mined too much, best to turn back now. Be warned.<br>Has an ability proc rate of 1/175.<br>Has 11x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
+                <p class="itemDescription" id="pickaxe25Description" style="display: none;">Slashes through your heart.<br>Has an ability proc rate of 1/300.<br>Has 50x luck.<br><i style="font-size: 75%;">..This is where it ends? The most powerful tool in all the worlds..? No.. it can't end here there must be something more...</i><br><i>Warning: High mine capacities with this pickaxe may lead to game crashes.</i><br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
+                <p class="itemDescription" id="pickaxe26Description" style="display: none;">Y҉òu̷'͠v̡e̷ ̕r͡e̴a͡c̡h͞e͝d͡ ̛t̀h̕e̶ ͟ȩv̕e̴n̴t̛ ͡h̵o͞r͠i̡z̛o͏n̡;̕ ̨h̴èr͞e̵'͘s̕ ͢w̶h͢ér͟e͟ ̷y͟o͠u͡ ̵m͜a̧k̕é ͠t̶h̕e͘ ͜u̶l̷t̶i҉ḿa̵t̢e̵ ̶c̸h͘o̶i̕c͢é.͞.̴ ́i̷s͝ ͞i͞t͢ ͡w̷o͢r͢t͝h́ ͘s̕a̴c͢r̕i͏f͏i͝c͡i͏n̡g͢ ̵e̕v̵e͝r͘y̡t̢h͝i͢ņǵ ͝y̷o̶u͝'͝v̧e͏ ̨w̶o̸r͡k̕e̶d̶ ̴f͜ǫr͠ ̡t̸o̶ ͝t̛h͢e͟ ͝v̧o҉i͡d̛.̵.͡?͡<br><br>Draws from past creations and through corruption, magnifies it fivefold.<br>Has an ability proc rate of 1/150.<br>Has 175x luck.</p>
                
                 <!--
                     Pickaxes above
@@ -207,6 +215,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <div id="powerupContainer">
                     <p class="powerupText" id="powerupTitle">Name Placeholder</p>
                     <p class="powerupText" id="powerupDescription">Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text</p>
+                    <p class="powerupText" id="powerupExtraInfo">Info Here!</p>
                     <p class="powerupText" id="powerupCooldown">Cooldown: 00:00:00</p>
                     <p class="powerupText" id="powerupActive">Active for: 00:00:00</p>
                 </div>
@@ -235,13 +244,11 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 
                 <!--<button id="secretButton" onclick="toggleCelestials(true)"></button>-->
             </div>
-            
-            <p id="latestSpawns" class="latestDisplay">Latest Spawns Will Appear Here</p>
-                <p id="latestFinds" class="latestDisplay">Latest Finds Will Appear Here</p>
+            <div id="latestSpawns" class="latestDisplay">Latest Spawns Will Appear Here</div>
+                <div id="latestFinds" class="latestDisplay">Latest Finds Will Appear Here</div>
         </div>
         
-        <div class="col-3">
-            
+        <div class="col-3"> 
             <div style="height: 2vw; display: flex; justify-content: center;">
                 <button id="inventoryLeft" onclick="switchInventory(-1)" class="inventoryButtons"><</button>
                 <button id="switchInventory" class="inventoryButtons">Normal Inventory</button>
@@ -253,70 +260,350 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <table id="inventory3" class="inventoryHolder" style="display:none;"></table>
                 <table id="inventory4" class="inventoryHolder" style="display:none;"></table>
             </div>
-            <div>
-                <button id="conversionButton" onclick="toggleVariantConversions()">To Variant Conversions</button>
-                <button id="forgeButton" onclick="toggleOreForge()">To The Forge</button>
-            </div>
             <a href="https://discord.gg/aVXkHB7Y4w" id="discord" target="_blank">
                 <img src="media/discord-logo.png" alt="Discord" style="width: 25%; height: 25%;">
                 <p style="font-size: 1.5vw; font-weight: 750;">Join Our Community!<br><span style="font-size: 0.75vw; font-weight: 100;">Updates, Leaks, and Secrets Included!</span></p>
             </a>
         </div>
-    </div>
-</div>
-</div>
-<div id="conversionContainer" style="display: none;">
-    <p id="conversionTitle">Variant Conversion Machine!</p>
-    <p id="conversionDescription">How to use: Insert emoji into the left container, insert amount to convert next to it, select variant you wish to convert an ore from, and then press convert!<br>
-    Current Rates: One Explosive Ore -> 8 Normal Ores | One Radioactive Ore -> 6 Normal Ores | One Electrified Ore -> 4 Normal Ores.</p>
-    <div id="machineHolder">
-        <form id="machineForm">
-            <input type="text" id="oreInput" maxlength="99" autocomplete="off" >
-            <input type="text" id="amtInput" maxlength="7" autocomplete="off">
-            <select name="variants" id="variantSelect">
-                <option value="Electrified">Electrified</option>
-                <option value="Radioactive">Radioactive</option>
-                <option value="Explosive">Explosive</option>
-            </select>
-        </form>
-        <button id="variantConvert" onclick="convertVariants()">Convert!</button>
-        <button id="leaveConversion" onclick="toggleVariantConversions()">Back To Mine!</button>
-    </div>
-    <p id="machineError"></p>
-</div>
-<div id="forgeContainer" style="display: none;">
-    <p id="forgeTitle">The Silly Caverns Forge</p>
-    <div id="descriptionContainer">
-        <p class="buttonDescriptor" id="leftForge">Here's where you combine worse ores into a better ore.</p>
-        <p class="buttonDescriptor" id="rightForge">Here's where you break a better ore down into worse ores. (NYI)</p>
-    </div>
-    <div id="forgeSelectionContainer">
-        
-        <button class="forgeTypeSelect">Ore Crafts!</button>
-        <button class="forgeTypeSelect" disabled="true">Ore Fissions!</button>
-        <button class="forgeTypeSelect" onclick="toggleOreForge()">Back To Mine!</button>
-    </div>
-    <hr id="forgeSeparator">
-    <div id="craftingSelections">
-        <button class="forgeCraftingButton" onclick="displayOreRecipe('gearCraft')">Craft <span class="forgeOreDisplay">⚙️</span></button>
-        <button class="forgeCraftingButton" onclick="displayOreRecipe('batteryCraft')">Craft <span class="forgeOreDisplay">🔋</span></button>
-        <button class="forgeCraftingButton" onclick="displayOreRecipe('bambooCraft')">Craft <span class="forgeOreDisplay">🎍</span></button>
-    </div>
-    <hr id="forgeSeparator">
-    <div id="forgeRecipeDisplayContainer">
-        <div id="forgeRecipeDisplay" style="display:none;">
-            
+        <div id="menuSelectionContainer">
+            <div class ="menuCategory" id="frame-settings">
+                <p class="menuCategoryTitle">Settings</p>
+                <div id="settingsSelector">
+                    <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                    <button class="settingsTopButton" onclick="switchSettings('game')">Game Settings</button>
+                    <button class="settingsTopButton" onclick="switchSettings('audio')">Audio Settings</button>
+                </div>
+                <br><br>
+                <div id="audioSettings" style="display: none;">
+                    <div id="musicStuff">
+                        <button id="musicButton" onclick="toggleMusic()">Mute Music</button>
+                        <p>Music Volume</p>
+                        <label class="slidecontainer">
+                            <input type="range" min="0" max="100" value="100" onchange="changeMusicVolume(this.value)" id="musicVolume">
+                        </label>
+                    </div>
+                    <div class="inputAndButton2" style="width: 30%; margin-left: 0; margin-bottom: 1%;" id="disguisedChillHolder">
+                        <button class="toggleDisplay fullyRounded" onclick="enableDisguisedChills();" id="disguisedChills" style="background-color: #FF3D3D; float: left;">Disguised Chills</button>
+                        <button class="toggleDisplay fullyRounded" onclick="switchMusicType(this);" id="newMusic" style="background-color: #6BC267; float: right;">Use New Music</button>
+                    </div>
+                    <div id="soundScrollContainer">
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Antique', this)" id="muteAntique">Mute Antiques</button>
+                                <button class="testButton" onclick="testSound('Antique', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Antique')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5A865A 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Mystical', this)"id="muteMystical">Mute Mysticals</button>
+                                <button class="testButton" onclick="testSound('Mystical', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="40" value="20" onchange="changeSpawnVolume(this.value,  'Mystical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #6F40B0 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Divine', this)"id="muteDivine">Mute Divines</button>
+                                <button class="testButton" onclick="testSound('Divine', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Divine')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFFEAB 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Flawless', this)"id="muteFlawless">Mute Flawless</button>
+                                <button class="testButton" onclick="testSound('Flawless', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Flawless')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #31E8FF 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Interstellar', this)"id="muteInterstellar">Mute Interstellars</button>
+                                <button class="testButton" onclick="testSound('Interstellar', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Interstellar')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFA124 50%);">
+                                </label>
+                            </div>
+                            
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Metaversal', this)"id="muteMetaversal">Mute Metaversals</button>
+                                <button class="testButton" onclick="testSound('Metaversal', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Metaversal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #3BD216 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Sacred', this)"id="muteSacred">Mute Sacreds</button>
+                                <button class="testButton" onclick="testSound('Sacred', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Sacred')" class="spawnVolume" style="background-image:linear-gradient(to right, #000000, #FF3C3C  50%);">
+                                </label> 
+                            </div>
+                            
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Ethereal', this)"id="muteEthereal">Mute Ethereals</button>
+                                <button class="testButton" onclick="testSound('Ethereal', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="25" value="10" onchange="changeSpawnVolume(this.value, 'Ethereal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #ac47ff 50%);">
+                                </label>
+                            </div>
+                            
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Celestial', this)"id="muteCelestial">Mute Celestials</button>
+                                <button class="testButton" onclick="testSound('Celestial', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Celestial')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #870000 50%);">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Imaginary', this)"id="muteImaginary" disabled="true">Mute Imaginaries</button>
+                                <button class="testButton" onclick="testSound('Imaginary', this)">Test</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Imaginary')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #41FF6D 50%);" disabled="true">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="gameSettings" style="display: none;">
+                    <div class="inputAndButton">
+                        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="minSpeedInput" placeholder="Default: 0">
+                        <button class="inputButton roundedRight" onclick="changeMinMiningSpeed(document.getElementById('minSpeedInput'))">Set Min Speed</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="mineCapacitySetter" placeholder="Default: 250000">
+                        <button class="inputButton roundedRight" onclick="updateCapacity(document.getElementById('mineCapacitySetter'))">Update Capacity</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="latestSetter" placeholder="1-999">
+                        <button class="inputButton roundedRight" onclick="changeLatestMax(document.getElementById('latestSetter'))">Change Latest Ores Max Length</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="stopOnRareButton roundedLeft" onclick="changeStopOnRare(this)" id="stopOnRare" style="background-color: #6BC267;">Stop On Rare</button>
+                        <button class="stopOnRareSelector roundedRight" onclick="changeMinRarity(this)" id="stopOnRareDisplay">Antique+</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="fullyRounded" onclick="changeSpawnMessageRarity(this)" id="changeSMrarityDisplay" style="background-image: linear-gradient(to right, #5A865A 70%, black); color: white;">Minimum Spawn Message Tier: Antique+</button>
+                      </div>
+                      <div class="inputAndButton">
+                          <button class="invSettingButton fullyRounded" onclick="switchToIndex(this, 0)" id="invIndex">Travel to layer index on inventory click</button>
+                        </div>
+                        <div class="inputAndButton">
+                          <button class="invSettingButton fullyRounded" onclick="switchToIndex(this, 1)" id="craftIndex">Travel to layer index on crafting click</button>
+                        </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="changeCanDisplay(this)" id="blockUpdates">Toggle Block Updates</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" style="background-color: #FF3D3D;" onclick="changeUseNumbers(this)" id="useNumbers">Use Numbers for Pickaxe Names</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="switchFont();" id="switchFont" style="background-color: #FF3D3D;">Use Different Emojis (for improper display)</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="togglePathBlocks();" id="pathBlocks">Invisible Path Blocks</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="toggleCaves();" id="caveToggle">Toggle Caves</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="switchHighRarity(this);" id="highRarity" style="background-color: #FF3D3D;">1/250m+ RNG Logs</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="toggleSpawnEffects(this);" id="spawnEffects" style="background-color: #6BC267;">Spawn Effects Enabled</button>
+                      </div>
+                </div>
+            </div>
+            <div class="menuCategory" id="frame-data">
+                <p class="menuCategoryTitle">Data</p>
+                <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                <br><br>
+                <div class="dataDiv">
+                    <div style="display: inline-flex; justify-content: center; height: 100%;">
+                        <button class="dataButton" onclick="exportData()">Export Data</button>
+                        <input type="text" id="dataText">
+                        <button class="dataButton" onclick="importData(document.getElementById('dataText').value)">Import Data</button>
+                        <button class="dataButton" onclick="saveAllData(true)">Force Cloud Save (Galaxy)</button>
+                    </div>
+                        
+                </div>
+            </div>
+            <div class ="menuCategory" id="frame-logs">
+                <p class="menuCategoryTitle">Ore Logs</p>
+                <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                <br><br>
+                <div style="display: inline-flex; justify-content: center; align-items: center;">
+                    <button onclick="verifiedOres.showLogs()" id="logsButton">Generate Ore Logs</button>
+                    <select name="sortType" id="logSort">
+                        <option value="All">All</option>
+                        <option value="Cave">Cave</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Electrified">Electrified</option>
+                        <option value="Radioactive">Radioactive</option>
+                        <option value="Explosive">Explosive</option>
+                      </select>
+                </div>
+                    
+                    <div id="logHolder"></div>
+            </div>
+            <div class ="menuCategory" id="frame-statistics">
+                <p class="menuCategoryTitle">Player Statistics</p>
+                <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                <br><br>
+                <div style="overflow-y: auto; height: 100%;">
+                    <div id="statisticsTableHolder">
+                        <table id="statsTable">
+                            <tr>
+                                <th class="statsRow">Tier</th>
+                                <th class="statsRow">Total</th>
+                                <th class="statsRow">Normal</th>
+                                <th class="statsRow">Electrified</th>
+                                <th class="statsRow">Radioactive</th>
+                                <th class="statsRow">Explosive</th>
+                                <th class="statsRow">Completion</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="playerStatisticsHolder">
+                        <p class="playerStat" id="statsTotalTime">Total Time</p>
+                        <p class="playerStat" id="statsSessionTime">Session Time</p>
+                        <p class="playerStat" id="statsCavesGenerated">Caves Generated</p>
+                        <p class="playerStat"id="statsBlocksMined">Blocks Mined</p>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class ="menuCategory" id="frame-index">
+                <p class="menuCategoryTitle">Ore Index</p>
+                <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                <br><br>
+                <div id="indexDisplay">
+                        <div id="indexButtonHolder">
+                        <button class="indexDirectionButton" onclick="switchLayerIndex(-1)" style="float: left;"><</button>
+                        <p id="indexSwitchButton">Layer Placeholder</p>
+                        <button class="indexDirectionButton" onclick="switchLayerIndex(1)" style="float: right;">></button>
+                        </div>
+                        </div>
+                
+                <div id="oreCardHolder">
+                    
+                </div>
+            </div>
+            <div class ="menuCategory" id="frame-locations">
+                <p class="menuCategoryTitle">Locations</p>
+                <div id="locationSelector">
+                    <button class="settingsTopButton" onclick="closeMenu()">Back to Game</button>
+                    <button class="settingsTopButton" onclick="showOreForge(true)">Silly Caverns Forge</button>
+                    <button class="settingsTopButton" onclick="showVariantConversion(true)">Variant Conversions</button>
+                </div>
+                <br><br>
+                <div id="conversionContainer">
+                    <p id="conversionTitle">Variant Conversion Machine!</p>
+                    <p id="conversionDescription">How to use: Insert emoji into the left container, insert amount to convert next to it, select variant you wish to convert an ore from, and then press convert!<br>
+                    Current Rates: One Explosive Ore -> 8 Normal Ores | One Radioactive Ore -> 6 Normal Ores | One Electrified Ore -> 4 Normal Ores.</p>
+                    <div id="machineHolder">
+                        <form id="machineForm">
+                            <input type="text" id="oreInput" maxlength="99" autocomplete="off">
+                            <input type="text" id="amtInput" maxlength="7" autocomplete="off">
+                            <div id="variantSelect" onmouseover="toggleVariantList(true)" onmouseleave="toggleVariantList(false)">
+                                <p id="currentSelectedVariant">Electrified</p>
+                                <p class="potentialVariant" onclick="switchCurrentSelectedVariant('Electrified')">Electrified</p>
+                                <p class="potentialVariant" onclick="switchCurrentSelectedVariant('Radioactive')">Radioactive</p>
+                                <p class="potentialVariant" onclick="switchCurrentSelectedVariant('Explosive')">Explosive</p>
+                            </div>
+                        </form>
+                        <button id="variantConvert" onclick="convertVariants()">Convert!</button>
+                    </div>
+                    <p id="machineError"></p>
+                </div>
+                <div id="forgeContainer">
+                    <p id="forgeTitle">The Silly Caverns Forge</p>
+                    <div id="descriptionContainer">
+                        <p class="buttonDescriptor" id="leftForge">Here's where you combine worse ores into a better ore.</p>
+                        <p class="buttonDescriptor" id="rightForge">Here's where you break a better ore down into worse ores.</p>
+                    </div>
+                    <div id="forgeSelectionContainer">
+                        <button class="forgeTypeSelect" onclick="showOreCrafts(true)">Ore Crafts!</button>
+                        <button class="forgeTypeSelect" onclick="showOreFissions(true)">Ore Fissions!</button>
+                    </div>
+                    <hr id="forgeSeparator">
+                    <div class="craftingSelections" id="forgeCraft">
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('gearCraft')">Craft <span class="forgeOreDisplay">⚙️</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('batteryCraft')">Craft <span class="forgeOreDisplay">🔋</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bambooCraft')">Craft <span class="forgeOreDisplay">🎍</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('greenCraft')">Craft <span class="forgeOreDisplay">💚</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blueCraft')">Craft <span class="forgeOreDisplay">💙</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowCraft')">Craft <span class="forgeOreDisplay">💛</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('orangeCraft')">Craft <span class="forgeOreDisplay">🧡</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('redCraft')">Craft <span class="forgeOreDisplay">❤️</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('purpleCraft')">Craft <span class="forgeOreDisplay">💜</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('brownCraft')">Craft <span class="forgeOreDisplay">🤎</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blackCraft')">Craft <span class="forgeOreDisplay">🖤</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteCraft')">Craft <span class="forgeOreDisplay">🤍</span></button>
+                    </div>
+                    <div class="craftingSelections" id="forgeFission" style="display: none;">
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('idoliumFission')">Fission <span class="forgeOreDisplay">💎</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('cylinderFission')">Fission <span class="forgeOreDisplay">🧵</span></button>
+                    </div>
+                    <hr id="forgeSeparator">
+                    <div id="forgeRecipeDisplayContainer">
+                        <div id="forgeRecipeDisplay" style="display:none;">
+                            
+                        </div>
+                        <div id="forgeSettings" style="display: none;">
+                            <p id="forgeCraftingAmount">1x</p>
+                                <button id="setForgeAmount" onclick="multiplyRecipe(document.getElementById('amountInputText').value)">Set Multiplier</button>
+                                <br>
+                                <form id="amountInput">
+                                    <input type="text" placeholder="Amount" id="amountInputText" autocomplete="off" maxlength="3">
+                                </form>
+                                <button id="craftOreButton" onclick="craftOre(currentOreRecipe)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="forgeSettings" style="display: none;">
-            <p id="forgeCraftingAmount">1x</p>
-                <button id="setForgeAmount" onclick="multiplyRecipe(document.getElementById('amountInputText').value)">Set Multiplier</button>
-                <br>
-                <form id="amountInput">
-                    <input type="text" placeholder="Amount" id="amountInputText" autocomplete="off" maxlength="3">
-                </form>
-                <button id="craftOreButton" onclick="craftOre(currentOreRecipe)"></button>
-        </div>
     </div>
+</div>
 </div>
 <!--
 <div id="celestialContainer" style="display: none;">
@@ -327,226 +614,4 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
     </div>
 </div>
 -->
-<div id="menuContainer" style="display: none;"></div>
-<div id="settingsContainer" style="display: none;">
-    <h1 class="settingsTitle">Settings</h1>
-            <button class="settingsCategorySelector" onclick="hideSettings(); verifiedOres.showLogs()">Return to Game</button>
-            <button class="settingsCategorySelector" onclick="openFrame('index')">Ore Index</button>
-            <button class="settingsCategorySelector" onclick="openFrame('audio')">Audio Settings</button>
-            <button class="settingsCategorySelector" onclick="openFrame('game')">Game Settings</button>
-            <button class="settingsCategorySelector" onclick="openFrame('inventory')">Inventory Settings</button>
-            <button class="settingsCategorySelector" onclick="openFrame('color')">Colour Settings</button>
-            <button class="settingsCategorySelector" onclick="openFrame('stats')">Player Statistics</button>
-            <button class="settingsCategorySelector" onclick="openFrame('data')">Data Settings</button>
-    <div class="frame" id="audio-frame">
-      <h2>Audio Settings</h2>
-      <br>
-      <!--ADD TEST BUTTON-->
-      <div id="musicStuff">
-        <button id="musicButton" onclick="toggleMusic()">Mute Music</button>
-        <p>Music Volume</p>
-        <label class="slidecontainer">
-            <input type="range" min="0" max="100" value="100" onchange="changeMusicVolume(this.value)" id="musicVolume">
-        </label>
-    </div>
-    <hr class="settingsSeparator">
-    <div class="inputAndButton2" style="width: 30%; margin-left: 0; margin-bottom: 1%;">
-        <button class="toggleDisplay fullyRounded" onclick="enableDisguisedChills();" id="disguisedChills" style="background-color: #FF3D3D; float: left;">Disguised Chills</button>
-      </div>
-    
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Antique', this)" id="muteAntique">Mute Antiques</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Antique')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5A865A 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Antique', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Mystical', this)"id="muteMystical">Mute Mysticals</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="40" value="20" onchange="changeSpawnVolume(this.value,  'Mystical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #6F40B0 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Mystical', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Divine', this)"id="muteDivine">Mute Divines</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Divine')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFFEAB 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Divine', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Flawless', this)"id="muteFlawless">Mute Flawless</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Flawless')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #31E8FF 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Flawless', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Interstellar', this)"id="muteInterstellar">Mute Interstellars</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Interstellar')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFA124 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Interstellar', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Metaversal', this)"id="muteMetaversal">Mute Metaversals</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Metaversal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #3BD216 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Metaversal', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Sacred', this)"id="muteSacred">Mute Sacreds</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Sacred')" class="spawnVolume" style="background-image:linear-gradient(to right, #000000, #FF3C3C  50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Sacred', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Ethereal', this)"id="muteEthereal">Mute Ethereals</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="25" value="10" onchange="changeSpawnVolume(this.value, 'Ethereal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #ac47ff 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Ethereal', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Celestial', this)"id="muteCelestial">Mute Celestials</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Celestial')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #870000 50%);">
-        </label>
-        <button class="testButton" onclick="testSound('Celestial', this)"></button>
-    </div>
-    <div class="spawnSoundSettings">
-        <button class="muteButton" onclick="changeCanPlay('Imaginary', this)"id="muteImaginary" disabled="true">Mute Imaginaries (Sound NYI)</button>
-        <label class="spawnSoundContainer">
-            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Imaginary')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #41FF6D 50%);" disabled="true">
-        </label>
-        <button class="testButton" onclick="testSound('Imaginary', this)"></button>
-    </div>
-    </div>
-    <div class="frame" id="inventory-frame">
-      <h2>Inventory Settings</h2>
-      <div class="inputAndButton">
-        <button class="invSettingButton fullyRounded" onclick="switchToIndex(this, 0)" id="invIndex">Travel to layer index on inventory click</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="invSettingButton fullyRounded" onclick="switchToIndex(this, 1)" id="craftIndex">Travel to layer index on crafting click</button>
-      </div>
-      <h3></h3>
-    </div>
-
-    <div class="frame" id="game-frame">
-      <h2>Game Settings</h2>
-      <hr class="settingsSeparator">
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="minSpeedInput" placeholder="Default: 0">
-        <button class="inputButton roundedRight" onclick="changeMinMiningSpeed(document.getElementById('minSpeedInput'))">Set Min Speed</button>
-      </div>
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="mineCapacitySetter" placeholder="Default: 250000">
-        <button class="inputButton roundedRight" onclick="updateCapacity(document.getElementById('mineCapacitySetter'))">Update Capacity</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="stopOnRareButton roundedLeft" onclick="changeStopOnRare(this)" id="stopOnRare" style="background-color: #6BC267;">Stop On Rare</button>
-        <button class="stopOnRareSelector roundedRight" onclick="changeMinRarity(this)" id="stopOnRareDisplay">Antique+</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="fullyRounded" onclick="changeSpawnMessageRarity(this)" id="changeSMrarityDisplay" style="background-image: linear-gradient(to right, #5A865A 70%, black); color: white;">Minimum Spawn Message Tier: Antique+</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="changeCanDisplay(this)" id="blockUpdates">Toggle Block Updates</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" style="background-color: #FF3D3D;" onclick="changeUseNumbers(this)" id="useNumbers">Use Numbers for Pickaxe Names</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="switchFont();" id="switchFont" style="background-color: #FF3D3D;">Use Different Emojis (for improper display)</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="togglePathBlocks();" id="pathBlocks">Invisible Path Blocks</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="toggleCaves();" id="caveToggle">Toggle Caves</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="switchHighRarity(this);" id="highRarity" style="background-color: #FF3D3D;">1/250m+ RNG Logs</button>
-      </div>
-      <div class="inputAndButton">
-        <button class="toggleDisplay fullyRounded" onclick="toggleSpawnEffects(this);" id="spawnEffects" style="background-color: #6BC267;">Spawn Effects Enabled</button>
-      </div>
-    </div>
-
-    <div class="frame" id="color-frame">
-      <h2>Colour Settings</h2>
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="textInput roundedLeft" id="colorInput" placeholder="Currently Disabled">
-        <button class="inputButton roundedRight" onclick="changeBackgroundColor()" disabled="true">Change Background</button>
-      </div>
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="displayValueInput roundedLeft" placeholder="Currently Disabled" id="latestColor">
-        <button class="displayColorButton roundedRight"onclick="changeLatestColors(2)"disabled="true">Background</button>
-        <button class="displayColorButton" onclick="changeLatestColors(1)"disabled="true">Border</button>
-        <button class="displayColorButton" onclick="changeLatestColors(0)"disabled="true">Text Colour</button>
-      </div>
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="displayValueInput roundedLeft" placeholder="Currently Disabled" id="inventoryColors">
-        <button class="displayColorButton roundedRight twoButtons" onclick="changeInventoryColors(1)"disabled="true">Background</button>
-        <button class="displayColorButton twoButtons" onclick="changeInventoryColors(0)"disabled="true">Border</button>
-      </div>
-      <div class="inputAndButton">
-        <input autocomplete ="off" type="text" class="displayValueInput roundedLeft" placeholder="Currently Disabled" id="craftingColors">
-        <button class="displayColorButton roundedRight twoButtons" onclick="changeCraftingColors(1)" disabled="true">Background</button>
-        <button class="displayColorButton twoButtons" onclick="changeCraftingColors(0)"disabled="true">Border</button>
-      </div>
-    </div>
-    <div class="frame" id="stats-frame">
-        <p id="statsTitle">Current Player Stats</p><br>
-        <p class="oreStats">Flawless Stats</p><br>
-        <p class="oreStats">Flawless Stats 2</p><br>
-        <p class="oreStats">Interstellar Stats</p><br>
-        <p class="oreStats">Interstellar Stats 2</p><br>
-        <p class="oreStats">Metaversal Stats</p><br>
-        <p class="oreStats">Metaversal Stats 2</p><br>
-        <p class="oreStats">Sacred Stats</p><br>
-        <p class="oreStats">Sacred Stats 2</p><br>
-        <p class="oreStats">Ethereal Stats</p><br>
-        <p class="oreStats">Ethereal Stats 2</p><br>
-        <p class="oreStats">Celestial Stats</p><br>
-        <p class="oreStats">Celestial Stats 2</p><br>
-        <p class="oreStats">Imaginary Stats</p><br>
-        <p class="oreStats">Imaginary Stats 2</p><br>
-    </div>
-    <div class="frame" id="data-frame">
-    <h2>Data Settings</h2>
-    <br>
-    <div class="dataDiv">
-    <div style="display: inline-flex; justify-content: center; height: 100%;">
-        <input type="text" id="dataText">
-        <button class="dataButton" onclick="exportData()">Export Data</button>
-        <button class="dataButton" onclick="importData(document.getElementById('dataText').value)">Import Data</button>
-        <button class="dataButton" onclick="saveAllData(true)">Force Cloud Save (Galaxy)</button>
-    </div>
-        <br>
-        <button onclick="verifiedOres.showLogs()" class="dataButton">Generate Ore Logs</button>
-        <div id="logHolder"></div>
-    </div>
-    </div>
-    <div class="frame" id="index-frame">
-        
-        <div id="indexDisplay">
-            <h2>Ore Index</h2>
-            <hr>
-                    <div id="indexButtonHolder">
-                    <button class="indexDirectionButton" onclick="switchLayerIndex(-1)" style="float: left;"><</button>
-                     <p id="indexSwitchButton">Layer Placeholder</p>
-                    <button class="indexDirectionButton" onclick="switchLayerIndex(1)" style="float: right;">></button>
-                    </div>
-                    </div>
-        
-        <div id="oreCardHolder">
-            
-        </div>
-    </div>
-  </div>
 </body>

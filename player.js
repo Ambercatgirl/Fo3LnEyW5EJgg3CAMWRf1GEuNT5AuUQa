@@ -23,6 +23,13 @@ class playerTemplate {
             "gear19": false,
             "gear20": false,
             "gear21": false,
+            "gear22": false,
+            "gear23": false,
+            "gear24": false,
+            "gear25": false,
+            "gear26": false,
+            "gear27": false,
+            "gear28": false,
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -83,6 +90,8 @@ class playerTemplate {
             minRarityNum: 0,
             highRarityLogs: false,
             doSpawnEffects: true,
+            latestLength: 10,
+            useNewMusic: true,
         },
         this.stats = {
             currentPickaxe: 0,
@@ -103,6 +112,8 @@ class playerTemplate {
             commonsAffected : {state: false, removeAt: Date.now()},
             currentPowerupDisplayed : "powerup1",
             fakeEquipped: {originalState: undefined, item: "", removeAt: Date.now()},
+            nextAuto: Date.now(),
+            autoNum: 1,
         },
         this.oreTracker = {
             existingOres : [],
@@ -110,7 +121,7 @@ class playerTemplate {
             locationX : 0,
             locationY : 0
         },
-        this.currentEffect = ""
+        this.currentEffect = "";
     }
 }
 let player = new playerTemplate();
@@ -157,7 +168,8 @@ const powerupList = {
         },
         requirement: "(player.stats.timePlayed >= 10800000)",
         condition1: "msToTime(player.stats.timePlayed)",
-        condition2: "/3 Hours Played."
+        condition2: "/3 Hours Played.",
+        oreAffected: "",
     },
     "powerup4" : {
         title: "Re-repurposed Replicator",
@@ -206,13 +218,15 @@ function switchPowerupDisplay(num) {
     document.getElementById("powerupScrollUp").style.color = powerup.colors.buttonUp.text;
     document.getElementById("powerupScrollDown").style.backgroundColor = powerup.colors.buttonDown.background;
     document.getElementById("powerupScrollDown").style.color = powerup.colors.buttonDown.text;
+    document.getElementById("powerupExtraInfo").style.color = powerup.colors.text;
     let parent = document.getElementById("powerupContainer");
     parent.style.backgroundImage = powerup.colors.background;
     let children = parent.children;
-    if (children.length > 4) document.getElementById("powerupContainer").removeChild(children[children.length - 1]);
+    if (children.length > 5) document.getElementById("powerupContainer").removeChild(children[children.length - 1]);
     let child = document.getElementById(`${player.powerupVariables.currentPowerupDisplayed}`).cloneNode(true);
     child.style.display = "flex";
     document.getElementById("powerupContainer").appendChild(child);
+    document.getElementById("powerupExtraInfo").innerText = "";
     updatePowerupCooldowns();
     checkPowerupCooldowns();
     if (player.powerupCooldowns[player.powerupVariables.currentPowerupDisplayed].unlocked || eval(powerup.requirement)) {
@@ -250,6 +264,11 @@ function updatePowerupCooldowns() {
             document.getElementById("powerupRequirement").innerText = `${eval(powerupList[player.powerupVariables.currentPowerupDisplayed].condition1).toLocaleString()}${powerupList[player.powerupVariables.currentPowerupDisplayed].condition2}`
         }
     }
+    if (player.powerupVariables.currentPowerupDisplayed === "powerup3") {
+        const element = document.getElementById("powerupExtraInfo");
+        if (player.powerupVariables.currentChosenOre.ore !== undefined) {element.innerText = `1.5x to ${player.powerupVariables.currentChosenOre.ore}`; element.style.display = "block";}
+        else {element.style.display = "none"; element.innerText = ""}
+    }
 }
 function checkPowerupCooldowns() {
     for (let propertyName in player.powerupCooldowns) {
@@ -262,7 +281,18 @@ function checkPowerupCooldowns() {
 }
 function toggleSpecificPowerup(num) {
     const current = Number(player.powerupVariables.currentPowerupDisplayed.substring(7));
-    switchPowerupDisplay(num - current)
+    if (document.getElementById("menuSelectionContainer").style.display !== "block") switchPowerupDisplay(num - current)
+}
+function autoPowerups() {
+    if (Date.now() >= player.powerupVariables.nextAuto) {
+        toggleSpecificPowerup(player.powerupVariables.autoNum);
+        if (player.powerupCooldowns[`powerup${player.powerupVariables.autoNum}`].unlocked)
+            document.getElementById(`${player.powerupVariables.currentPowerupDisplayed}`).click();
+        player.powerupVariables.autoNum++;
+        if (player.powerupCooldowns[`powerup${player.powerupVariables.autoNum}`] === undefined) player.powerupVariables.autoNum = 1;
+        player.powerupVariables.nextAuto += 15000;
+    }
+    
 }
 function countFlawlessOres() {
     const ores = oreInformation.getOresByTier("Flawless");
@@ -404,84 +434,67 @@ function loadNewData(data) {
                 let text = document.getElementById(`mute${propertyName}`).innerText;
                 text = text.substring(text.indexOf(" ") + 1);
                 if (!(player.settings.audioSettings[propertyName].canPlay)) document.getElementById(`mute${propertyName}`).innerText = `Unmute ${text}`;
-                let element = document.getElementById(`mute${propertyName}`).parentElement.children[1].children[0];
-                element.value = player.settings.audioSettings[propertyName].volume;
-                changeSpawnVolume(element.value, propertyName);
+                let elements = document.getElementsByClassName("spawnVolume");
+                for (let i = 0; i < elements.length; i++) {
+                    if (String(elements[i].onchange).indexOf(propertyName) > -1) {
+                        elements[i].value = player.settings.audioSettings[propertyName].volume;
+                        changeSpawnVolume(elements[i].value, propertyName);
+                    }
+                }
+            }
+        }
+        //base mine capacity
+        data.settings.baseMineCapacity ??= 250000;
+        player.settings.baseMineCapacity = data.settings.baseMineCapacity;
+        document.getElementById("mineResetProgress").innerText = `0/${player.settings.baseMineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
+        //block updates
+        data.settings.canDisplay ??= true;
+        if (!data.settings.canDisplay) changeCanDisplay(document.getElementById("blockUpdates"));
+        //cave toggle
+        data.settings.cavesEnabled ??= true;
+        if (!data.settings.cavesEnabled) toggleCaves(document.getElementById("caveToggle"));
+        data.settings.inventorySettings ??= {invToIndex: true, craftingToIndex: true};
+        if (!data.settings.inventorySettings.invToIndex) switchToIndex(document.getElementById("invIndex"), 0);
+        if (!data.settings.inventorySettings.craftingToIndex) switchToIndex(document.getElementById("craftIndex"), 1);
+        //minimum rarity for spawn messages
+        data.settings.minRarityNum ??= 0;
+        player.settings.minRarityNum = (data.settings.minRarityNum) - 1;
+        changeSpawnMessageRarity(document.getElementById("changeSMrarityDisplay"));
+        //minimum mining speed
+        data.settings.minSpeed ??= 0;
+        player.settings.minSpeed = data.settings.minSpeed;
+        //use new music
+        data.settings.useNewMusic ??= true;
+        if (!data.settings.useNewMusic) switchMusicType();
+        data.settings.musicSettings ??= {active: true, volume: 100};
+        console.log(player.settings.useNewMusic);
+        //music settings
+        if (!data.settings.musicSettings.active) document.getElementById("musicButton").click();
+        player.settings.musicSettings.volume = data.settings.musicSettings.volume;
+        document.getElementById("musicVolume").value = data.settings.musicSettings.volume;
 
-            }
-        }
-        if (data.settings.baseMineCapacity !== undefined) {
-            player.settings.baseMineCapacity = data.settings.baseMineCapacity;
-            document.getElementById("mineResetProgress").innerText = `0/${player.settings.baseMineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
-        }
-        if (data.settings.canDisplay !== undefined) {
-            if (!data.settings.canDisplay) changeCanDisplay(document.getElementById("blockUpdates"));
-        }
-        if (data.settings.cavesEnabled !== undefined) {
-            if (!data.settings.cavesEnabled) toggleCaves(document.getElementById("caveToggle"));
-        }
-        if (data.settings.inventorySettings !== undefined) {
-            if (!data.settings.inventorySettings.invToIndex) switchToIndex(document.getElementById("invIndex"), 0);
-            if (!data.settings.inventorySettings.craftingToIndex) switchToIndex(document.getElementById("craftIndex"), 1);
-        }
-        if (data.settings.minRarityNum !== undefined) {
-            player.settings.minRarityNum = (data.settings.minRarityNum) - 1;
-            changeSpawnMessageRarity(document.getElementById("changeSMrarityDisplay"));
-        }
-        if (data.settings.minSpeed !== undefined) {
-            player.settings.minSpeed = data.settings.minSpeed;
-        }
-        if (data.settings.musicSettings !== undefined) {
-            player.settings.musicSettings.active = data.settings.musicSettings.active;
-            player.settings.musicSettings.volume = data.settings.musicSettings.volume;
-            document.getElementById("musicVolume").value = data.settings.musicSettings.volume;
-            changeMusicVolume(player.settings.musicSettings.volume);
-            if (!player.settings.musicSettings.active) {
-                player.settings.musicSettings.active = true;
-                document.getElementById("musicButton").click();
-            }
-        }
-        if (data.settings.stopOnRare !== undefined) {
-            player.settings.stopOnRare.minimum = oreInformation.getPreviousTier(data.settings.stopOnRare.minimum);
-            player.settings.stopOnRare.active = data.settings.stopOnRare.active;
-            if (!player.settings.stopOnRare.active) document.getElementById("stopOnRare").style.backgroundColor = "#FF3D3D";
-            changeMinRarity(document.getElementById("stopOnRareDisplay"));
-        }
-        if (data.settings.useDisguisedChills !== undefined) {
-            if (data.settings.useDisguisedChills) {
-                player.settings.useDisguisedChills = false;
-                enableDisguisedChills();
-            }
-        }
-        if (data.settings.useNumbers !== undefined) {
-            if (data.settings.useNumbers) {
-                player.settings.useNumbers = false;
-                changeUseNumbers(document.getElementById("useNumbers"));
-            }
-        }
-        if (data.settings.usePathBlocks !== undefined) {
-            if (!data.settings.usePathBlocks) {
-                player.settings.usePathBlocks = true;
-                togglePathBlocks();
-            }
-        }
-        if (data.settings.usingNewEmojis !== undefined) {
-            if (data.settings.usingNewEmojis) {
-                player.settings.usingNewEmojis = false;
-                switchFont();
-            }
-        }
-        if (data.settings.highRarityLogs !== undefined) {
-            if (data.settings.highRarityLogs) {
-                player.settings.highRarityLogs = false;
-                switchHighRarity(document.getElementById("highRarity"));
-            }
-        }
-        if (data.settings.doSpawnEffects !== undefined) {
-            if (!data.settings.doSpawnEffects) {
-                toggleSpawnEffects(document.getElementById("spawnEffects"));
-            }
-        }
+        if (player.settings.useNewMusic) {changeNewMusicVolume(player.settings.musicSettings.volume); selectSong();}
+        else {changeMusicVolume(player.settings.musicSettings.volume); keepRunning();}
+
+        data.settings.stopOnRare ??= {active: true, minimum: "Antique"}
+        player.settings.stopOnRare.minimum = oreInformation.getPreviousTier(data.settings.stopOnRare.minimum);
+        player.settings.stopOnRare.active = data.settings.stopOnRare.active;
+        if (!player.settings.stopOnRare.active) document.getElementById("stopOnRare").style.backgroundColor = "#FF3D3D";
+        changeMinRarity(document.getElementById("stopOnRareDisplay"));
+        data.settings.useDisguisedChills ??= false;
+        if (data.settings.useDisguisedChills) enableDisguisedChills();
+        data.settings.useNumbers ??= false;
+        if (data.settings.useNumbers) changeUseNumbers(document.getElementById("useNumbers"));
+        data.settings.usePathBlocks ??= true;
+        if (!data.settings.usePathBlocks) togglePathBlocks();
+        data.settings.usingNewEmojis ??= false;
+        if (data.settings.usingNewEmojis) switchFont();
+        data.settings.highRarityLogs ??= false;
+        if (data.settings.highRarityLogs) switchHighRarity(document.getElementById("highRarity"));
+        data.settings.doSpawnEffects ??= true;
+        if (!data.settings.doSpawnEffects) toggleSpawnEffects(document.getElementById("spawnEffects"));
+        data.settings.latestLength ??= 10;
+        player.settings.latestLength = data.settings.latestLength;
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
                 if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
