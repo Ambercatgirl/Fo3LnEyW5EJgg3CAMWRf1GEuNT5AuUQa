@@ -58,19 +58,27 @@ function checkAllAround(x, y) {
 //MINING
 
 function mineBlock(x, y, cause) {
-    let ore = mine[y][x];
+    let ore;
+    let variant;
+    if (mine[y][x].ore !== undefined) {
+        ore = mine[y][x].ore;
+        variant = mine[y][x].variant
+    } else {
+        ore = mine[y][x];
+        variant = undefined;
+    }
     if (ore === "⚪") return;
     checkAllAround(x, y);
     player.stats.blocksMined++;
     if (oreList[ore]["isBreakable"]) {
         if (oreList[ore]["numRarity"] >= 750000) {
             if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
-                giveBlock(ore, x, y, false, true, checkFromCave({"X":x, "Y":y})["multi"]);
+                giveBlock({type: ore, x:x, y:y, fromReset:false, fromCave:true, caveMulti:checkFromCave({"X":x, "Y":y})["multi"], variant:variant});
                 mine[y][x] = "⚪";
                 return;
             }
         }
-        giveBlock(ore, x, y, (cause === "reset"));
+        giveBlock({type: ore, x:x, y:y, fromReset: cause === "reset", fromCave:undefined, caveMulti:undefined, variant:variant});
         mine[y][x] = "⚪";
         cause !== "ability" ? rollAbilities() : undefined;
     }
@@ -80,13 +88,21 @@ function mineBlock(x, y, cause) {
 
 let multis = [1, 50, 250, 500];
 let inv;
-function giveBlock(type, x, y, fromReset, fromCave, caveMulti) {
-    if (type === "⚪") return;
+//{type: x, x:x, y:y, fromReset:x, fromCave:x, caveMulti:x, variant:x}
+function giveBlock(obj) {
+    if (obj.type === "⚪") return;
     //CREATE VARIABLES
-    let oreRarity = oreList[type]["numRarity"];
+    let oreRarity = oreList[obj.type]["numRarity"];
     //SELECT VARIANT
-    let inv = rollVariant();
-    if (player.gears["gear26"] && inv === 1) inv = rollVariant();
+    let inv;
+    if (obj.variant === undefined) {
+        let inv = rollVariant();
+        if (player.gears["gear26"] && inv === 1) inv = rollVariant();
+       
+    } else {
+        inv = obj.variant;
+    }
+    
     //PROC & LOGS
     let gear4Proc = currentWorld < 2 && player.gears["gear4"];
     let gear13Proc = player.gears["gear13"] && oreRarity < 750000 && oreRarity > 1 && Math.random < 0.75;
@@ -97,33 +113,33 @@ function giveBlock(type, x, y, fromReset, fromCave, caveMulti) {
         oreList[layerMaterial]["normalAmt"]++;
     }
     if (gear13Proc) {
-        oreList[type]["normalAmt"]++;
+        oreList[obj.type]["normalAmt"]++;
     }
     
-    if (fromCave) {oreRarity *= caveMulti;}
+    if (obj.fromCave) {oreRarity *= obj.caveMulti;}
     if (oreRarity >= 750000) {
         let gear22Proc = player.gears["gear22"] && Math.random() < 1/10;
-        if (gear22Proc) oreList[type]["normalAmt"]++;
+        if (gear22Proc) oreList[obj.type]["normalAmt"]++;
         if (currentWorld < 2 && player.gears["gear7"]) {gearAbility1();}
-        let rareTier = oreInformation.tierGrOrEqTo({"tier1" : oreList[type]["oreTier"], "tier2" : minTier});
+        let rareTier = oreInformation.tierGrOrEqTo({"tier1" : oreList[obj.type]["oreTier"], "tier2" : minTier});
         if (rareTier) {
-            logFind(type, x, y, namesemojis[inv - 1], player.stats.blocksMined, fromReset); 
+            logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset); 
         }
     } else {
         if (oreRarity === 1) {
             let gear15Proc = player.gears["gear15"] && Math.random() < 0.5;
             let gear27Proc = player.gears["gear27"] && Math.random() < 1/20;
-            if (gear15Proc) oreList[type]["normalAmt"] += 2;
+            if (gear15Proc) oreList[obj.type]["normalAmt"] += 2;
             if (gear27Proc) oreList[layerMaterial]["normalAmt"] += 30;
         }
     }
     
-    if (oreList[type]["hasLog"] || oreRarity >= 160000000) {
-        verifiedOres.verifyFind(mine[y][x], y, x, names[inv - 1]);
+    if (oreList[obj.type]["hasLog"] || oreRarity >= 160000000) {
+        verifiedOres.verifyFind(mine[obj.y][obj.x], obj.y, obj.x, names[inv - 1]);
     }
 
-    oreList[type][variantInvNames[inv - 1]]++;
-    inventoryObj[type] = 0;
+    oreList[obj.type][variantInvNames[inv - 1]]++;
+    inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
     let rng = Math.round(Math.random() * 499 + 1);
@@ -167,13 +183,16 @@ function generateBlock(location) {
             blockToGive = checkSpecials(blockToGive);
             mine[location["Y"]][location["X"]] = blockToGive;
         }
+        let variant = rollVariant();
+        if (player.gears["gear26"] && variant === 1) variant = rollVariant();
+        mine[location["Y"]][location["X"]] = {ore: blockToGive, variant: variant};
         const tier = oreList[blockToGive]["oreTier"];
         if (oreList[blockToGive]["hasLog"]) {
-            verifiedOres.createLog(location["Y"],location["X"],blockToGive, new Error());
+            verifiedOres.createLog(location["Y"],location["X"],{ore: blockToGive, variant: variant}, new Error());
             verifiedOres.verifyLog(location["Y"], location["X"]);
         }
         playSound(oreList[blockToGive]["oreTier"]);
-        if (oreInformation.tierGrOrEqTo({"tier1" : tier, "tier2" : minTier})) spawnMessage(blockToGive, location);
+        if (oreInformation.tierGrOrEqTo({"tier1" : tier, "tier2" : minTier})) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant});
         if ((((currentWorld < 2 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) && tier !== "Celestial") || player.gears["gear28"]) mineBlock(location["X"], location["Y"], "ability");
         if (player.settings.stopOnRare.active && oreInformation.tierGrOrEqTo({"tier1": tier, "tier2": player.settings.stopOnRare.minimum}))
             stopMining();

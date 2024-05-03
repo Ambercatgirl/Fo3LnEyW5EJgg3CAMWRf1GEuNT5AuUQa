@@ -199,7 +199,9 @@ function movePlayer(dir, reps) {
                 } else if (dir.x < 0 && !(curX > 0)) {
                     return;
                 }
-                if (oreList[mine[curY + dir.y][curX + dir.x]]["isBreakable"]) { 
+                let block = mine[curY + dir.y][curX + dir.x];
+                block = block.ore === undefined ? block : block.ore;
+                if (oreList[block]["isBreakable"]) { 
                     mine[curY][curX] = "⚪";
                     curY += dir.y;
                     curX += dir.x;
@@ -216,7 +218,10 @@ function movePlayer(dir, reps) {
                             if (dir.y !== 0) setLayer(curY)
                             mine[curY][curX] = "⛏️";
                             lastDirection = dir.key;
-                            spawnMessage("⛏️", {"X" : curX, "Y" : curY})
+                            let variant = rollVariant();
+                            if (player.gears["gear26"] && variant === 1) variant = rollVariant();
+        
+                            spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant})
                             giveBlock("⛏️", curX, curY, false);
                             checkAllAround(curX, curY);
                         }
@@ -382,9 +387,9 @@ function displayArea() {
             for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
                 if (mine[r][c]) {
                     if (player.settings.usePathBlocks)
-                        output += mine[r][c];
+                        output += mine[r][c].ore !== undefined ? mine[r][c].ore : mine[r][c];
                     else
-                        output += mine[r][c] === "⚪" ? invisibleBlock : mine[r][c];   
+                        output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? mine[r][c].ore : mine[r][c]);   
                 } else {
                     output += r === grass ? "🟩" : "⬛";
                 }
@@ -546,7 +551,12 @@ function disappear(element){
 //SPAWNS AND FINDS
 
 let spawnOre = null;
-function spawnMessage(block, location, caveInfo) {
+//{block: block, location: location, caveInfo: caveInfo}
+function spawnMessage(obj) {
+    let block = obj.block;
+    let location = obj.location;
+    let caveInfo = obj.caveInfo;
+    let variant = namesemojis[obj.variant - 1];
     //ADD TO MINE CAPACITY IF NEAR RESET
     player.oreTracker.existingOres.push({block: block, posX : location["X"], posY : location["Y"]});
     if ((currentWorld < 2 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
@@ -560,8 +570,8 @@ function spawnMessage(block, location, caveInfo) {
     let element = document.createElement("p");
     element.setAttribute("title", oreList[block]["oreName"]);
     element.classList = "latestFind";
-    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">` + block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
-    else output += `<span title="${oreList[block]["oreName"]}">` + block + "</span> 1/" + oreRarity.toLocaleString();
+    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">` + variant + block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
+    else output += `<span title="${oreList[block]["oreName"]}">` + variant + block + "</span> 1/" + oreRarity.toLocaleString();
     let colors = oreInformation.getColors(oreList[block]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
@@ -627,7 +637,6 @@ function logFind(type, x, y, variant, atMined, fromReset) {
         spawnElement.appendChild(element)
     }
     if (spawnElement.children.length > player.settings.latestLength) spawnElement.removeChild(spawnElement.lastChild);
-    if (spawnElement.children.length > document.getElementById("latestSpawns").children.length) console.log("something seems off")
 }
 
 function getAngleBetweenPoints(obj) {

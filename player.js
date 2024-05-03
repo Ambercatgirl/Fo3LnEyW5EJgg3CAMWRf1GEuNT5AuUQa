@@ -290,9 +290,8 @@ function autoPowerups() {
             document.getElementById(`${player.powerupVariables.currentPowerupDisplayed}`).click();
         player.powerupVariables.autoNum++;
         if (player.powerupCooldowns[`powerup${player.powerupVariables.autoNum}`] === undefined) player.powerupVariables.autoNum = 1;
-        player.powerupVariables.nextAuto += 15000;
+        player.powerupVariables.nextAuto = Date.now() + 15000;
     }
-    
 }
 function countFlawlessOres() {
     const ores = oreInformation.getOresByTier("Flawless");
@@ -467,7 +466,6 @@ function loadNewData(data) {
         data.settings.useNewMusic ??= true;
         if (!data.settings.useNewMusic) switchMusicType();
         data.settings.musicSettings ??= {active: true, volume: 100};
-        console.log(player.settings.useNewMusic);
         //music settings
         if (!data.settings.musicSettings.active) document.getElementById("musicButton").click();
         player.settings.musicSettings.volume = data.settings.musicSettings.volume;

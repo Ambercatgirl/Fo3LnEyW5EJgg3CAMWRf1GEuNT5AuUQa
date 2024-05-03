@@ -204,9 +204,9 @@ function powerup2(x, y) {
 
 //make a random layer ore more common for a short period
 function powerup3() {
-    if (Date.now() >= player.powerupCooldowns["powerup3"].cooldown) {
+    if (Date.now() >= player.powerupCooldowns["powerup3"].cooldown ) {
         let chosenOre = currentLayer[Math.round(Math.random() * (currentLayer.length - 1))];
-        while (oreInformation.isCommon(oreList[chosenOre]["oreTier"]) && oreList[chosenOre]["oreTier"] !== "Antique") chosenOre = currentLayer[Math.round(Math.random() * (currentLayer.length - 1))];
+        while (oreInformation.isCommon(oreList[chosenOre]["oreTier"]) || oreList[chosenOre]["oreTier"] === "Antique") chosenOre = currentLayer[Math.round(Math.random() * (currentLayer.length - 1))];
         player.powerupVariables.currentChosenOre.ore = chosenOre, 
         player.powerupVariables.currentChosenOre.removeAt = Date.now() + 600000;
         applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());

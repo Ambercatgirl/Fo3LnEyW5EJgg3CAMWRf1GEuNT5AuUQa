@@ -44,6 +44,7 @@ function toggleMusic() {
             } else selectSong();
         } else {
             keepRunningAudio.play();
+            keepRunningAudio.loop = true;
         }
         document.getElementById("musicButton").innerHTML = "Mute Music";
         player.settings.musicSettings.active = true;
@@ -55,6 +56,7 @@ function toggleMusic() {
             }
         } else {
             keepRunningAudio.pause();
+            keepRunningAudio.loop = false;
         }
         document.getElementById("musicButton").innerHTML = "Unmute Music";
         player.settings.musicSettings.active = false;
@@ -70,6 +72,7 @@ function switchMusicType() {
         if (player.settings.musicSettings.active) keepRunningAudio.play();
         changeMusicVolume(player.settings.musicSettings.volume);
         document.getElementById("newMusic").style.backgroundColor = "#FF3D3D";
+        keepRunningAudio.loop = true;
     } else {
         player.settings.useNewMusic = true;
         keepRunningAudio.pause();
@@ -81,6 +84,7 @@ function switchMusicType() {
         }
         changeMusicVolume(player.settings.musicSettings.volume);
         document.getElementById("newMusic").style.backgroundColor = "#6BC267";
+        keepRunningAudio.loop = false;
     }
 }
 

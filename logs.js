@@ -23,6 +23,8 @@ class secureLogs {
         this.#logsTimer = null;
     }
     createLog(r, c, intended, obj, fromCave) {
+        const ore = intended.ore === undefined ? intended : intended.ore;
+        const variant = intended.variant === undefined ? undefined : intended.variant;
         fromCave = fromCave === undefined ? [false, 1, "none"] : fromCave;
         let luckModifier = (this.#maxLuck[player.stats.currentPickaxe] + (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0)) * ((player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1)) * (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1) * 10;
         luckModifier *= 1.5;
@@ -36,10 +38,10 @@ class secureLogs {
                 luck = 1;
             }
         } else {
-            luck = oreList[intended]["numRarity"] * oreList[intended]["decimalRarity"];
+            luck = oreList[ore]["numRarity"] * oreList[ore]["decimalRarity"];
         }
         if (((obj.stack.includes("mine.js") || obj.stack.includes("caves.js")) && luck <= maxLuck) || debug) {
-            this.#spawnLogs.push({x: c, y: r, block: intended, luck: luck, caveInfo: fromCave})
+            this.#spawnLogs.push({x: c, y: r, block: ore, luck: luck, caveInfo: fromCave, variant: variant})
         } else {
             console.log("failed to create, ", obj.stack, luck, maxLuck);
         }
@@ -47,11 +49,15 @@ class secureLogs {
     verifyLog(r, c) {
         for (let i = 0; i < this.#spawnLogs.length; i++) {
             if (this.#spawnLogs[i].y === r && this.#spawnLogs[i].x === c) {
-                if (mine[r][c] === this.#spawnLogs[i].block) {
+                const block = mine[r][c].ore === undefined ? mine[r][c] : mine[r][c].ore;
+                if (block === this.#spawnLogs[i].block) {
                     let rng;
                     if (this.#spawnLogs[i].caveInfo[0]) rng = 1/oreList[this.#spawnLogs[i].block]["numRarity"];
                     else rng = oreList[this.#spawnLogs[i].block]["decimalRarity"];
-                    this.#verifiedLogs["All"].push({block: this.#spawnLogs[i].block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: "Normal", luck: this.#spawnLogs[i].luck, caveInfo: this.#spawnLogs[i].caveInfo, rarity: rng})
+                    let variant = this.#spawnLogs[i].variant === undefined ? "Normal" : this.#spawnLogs[i].variant;
+                    rng /= multis[variant - 1];
+                    variant = names[variant - 1];
+                    this.#verifiedLogs["All"].push({block: this.#spawnLogs[i].block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: variant, luck: this.#spawnLogs[i].luck, caveInfo: this.#spawnLogs[i].caveInfo, rarity: rng})
                     this.#spawnLogs.splice(i, 1);
                     break;
                 } else {
@@ -61,6 +67,7 @@ class secureLogs {
         }
     }
     verifyFind(block, r, c, variant) {
+        block = block.ore === undefined ? block : block.ore;
         let verified = false;
         for (let i = this.#verifiedLogs["All"].length - 1; i >= 0; i--) {
             if (this.#verifiedLogs["All"][i].y === r && this.#verifiedLogs["All"][i].x === c) {
@@ -68,7 +75,7 @@ class secureLogs {
                     const log = this.#verifiedLogs["All"][i];
                     if (log.mined != true) {
                         log.mined = true;
-                        log.variant = variant;
+                        if (log.variant === undefined) log.variant = variant;
                         if (log.caveInfo[1] > 1) {
                             let something;
                             if (oolProbabilities[log.block] !== undefined && log.caveInfo[2] !== "type5Ores") something = oolProbabilities[log.block];
@@ -91,7 +98,7 @@ class secureLogs {
                         break;
                     }
                 } else {
-                    console.log("failed to verify find", block, this.#verifiedLogs[i][0]);
+                    console.log("failed to verify find", block, this.#verifiedLogs["All"][i].luck);
                 }
             }
         }

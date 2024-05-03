@@ -260,7 +260,6 @@ function displayRecipe(recipe) {
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
         description.style.display = "block";
-        console.log(description)
         parentElement.appendChild(description)
         currentRecipe = recipe;
     } else {
@@ -319,7 +318,6 @@ function updateActiveRecipe() {
                 else button.innerText = "Owned!" 
             }
         } else {
-            if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) console.log("why?")
             let percent = 100 * (currentRarity/totalRarity);
             percent = Math.round(percent * 100) / 100;
             if (count < totalCount && percent === 100) percent = 99.99; 
