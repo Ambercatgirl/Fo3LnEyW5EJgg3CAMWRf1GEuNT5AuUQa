@@ -413,15 +413,47 @@ const layerList = {
 "grassLayer" : ["🌹", "🟩"],
 "testLayer" : ["🌹", "🟩"]
 }
+const createdLayers = {
+
+}
 let worldOneLayers = ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer", "paperLayer"];
 let worldTwoLayers = ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer"];
 let subRealmOneLayers = ["testLayer"];
-let specialLayers = ["sillyLayer", "fluteLayer", "dirtLayer2", "barrierLayer", "borderLayer", "grassLayer"];
+let specialLayers = ["sillyLayer", "fluteLayer", "grassLayer", "dirtLayer2", "barrierLayer", "borderLayer"]
 let allLayers = ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer", "paperLayer"];
 
 //SETTING LAYERS
+const layerDictionary = {
+    //{layer : [], num : 0}
+}
+const repeatingLayers = {
 
-let lastLayerChange = 6000;
+}
+const layerIndex = {
+    worldOne : {
+        0 : "dirtLayer",
+        1 : "brickLayer",
+        2 : "foggyLayer",
+        3 : "waterLayer",
+        4 : "rockLayer",
+        5 : "radioactiveLayer",
+        6 : "cactusLayer",
+        7 : "paperLayer",
+        4000 : "fluteLayer",
+        7777 : "sillyLayer",
+        1337 : "unknownLayer"
+    },
+    worldTwo : {
+        0 : "cloudLayer",
+        1 : "tvLayer",
+        2 : "doorLayer",
+        3 : "globeLayer",
+        4 : "chessLayer",
+        5 : "borderLayer",
+        6 : "barrierLayer"
+    }
+}
+let lastRepeatedLayer;
 let currentLayer;
 function setLayer(y) {
     if (currentWorld === 1) {
@@ -431,12 +463,13 @@ function setLayer(y) {
             if (tempNum !== currentLayerNum) {
                 a88();
                 currentLayerNum = tempNum;
-                currentLayer = createLayer([layerList[allLayers[tempNum]], layerList["worldOneCommons"]]);
+                currentLayer = allLayers[tempNum];
             }
         } else {
-            if (tempNum > (lastLayerChange + 10000)) {
+            const repeatingLayerNum = Math.floor((y - 16000) / 10000);
+            if (repeatingLayerNum !== lastRepeatedLayer && repeatingLayers[repeatingLayerNum] === undefined) {
                 a88();
-                lastLayerChange += 10000;
+                let force = false;
                 if (Math.random() < 1/1337) {
                     currentLayerNum = 1337;
                     let tier = "Uncommon";
@@ -448,96 +481,129 @@ function setLayer(y) {
                         tier = oreInformation.getNextTier(tier);
                     }
                     arr.splice(tier.indexOf("✴️"), 1);
-                    currentLayer = createLayer([arr, ["🥇", "🟩"]]);
+                    layerDictionary["unknownLayer"] ??= {layer : createLayer([arr, ["🥇", "🟩"]])};
+                    updateAllLayers();
+                    currentLayer = "unknownLayer";
+                    specialLayerLocations["unknownLayer"] ??= tempNum;
                 } else if (Math.random() < 1/77) {
                     currentLayerNum = 7777;
-                    a87(7777)
-                    currentLayer = layerList[specialLayers[0]];
+                    force = a87(7777)
+                    currentLayer = "sillyLayer";
+                    specialLayerLocations["sillyLayer"] ??= tempNum;
                 } else if (Math.random() < 1/40) {
                     currentLayerNum = 4000;
-                    currentLayer = layerList[specialLayers[1]];
+                    currentLayer = "fluteLayer";
+                    specialLayerLocations["fluteLayer"] ??= tempNum;
                 } else {
                     let num = Math.floor(Math.random() * 8)
                     currentLayerNum = num;
-                    a87(num);
-                    currentLayer = createLayer([layerList[allLayers[num]], layerList["worldOneCommons"]]);
+                    force = a87(num);
+                    currentLayer = allLayers[num];
+                }
+                repeatingLayers[repeatingLayerNum] ??= {layer: currentLayerNum, force: force};
+                lastRepeatedLayer = repeatingLayerNum;
+            } else {
+                if (lastRepeatedLayer !== repeatingLayerNum) {
+                    lastRepeatedLayer = repeatingLayerNum;
+                    a88();
+                    currentLayerNum = repeatingLayers[repeatingLayerNum].layer;
+                    currentLayer = layerIndex.worldOne[currentLayerNum]
+                    if (repeatingLayers[repeatingLayerNum].force) a87(currentLayerNum, true)
                 }
             }
         }
     } else if (currentWorld === 1.1) {
         let tempNum = Math.floor(y / 2000)
         tempNum = tempNum > allLayers.length - 1 ? allLayers.length - 1 : tempNum;
-        currentLayer = createLayer([layerList[allLayers[tempNum]]])
+        currentLayer = createLayer([layerList[allLayers[tempNum]]]);
     } else {
         let tempNum = y;
         if (tempNum < 10000) {
             tempNum = Math.floor(tempNum / 2000);
             if (tempNum !== currentLayerNum) {
                 currentLayerNum = tempNum;
-                currentLayer = createLayer([layerList[allLayers[tempNum]], layerList["worldTwoCommons"]]);
+                currentLayer = allLayers[tempNum];
             }
         } else {
             if (currentLayer != layerList["borderLayer"]) {
-                currentLayer = layerList["borderLayer"];
-                applyLuckToLayer(layerList["borderLayer"], verifiedOres.getCurrentLuck());
+                currentLayer = "borderLayer";
                 currentLayerNum = 5;
             }
         }
     }
 }
-function a87(num) {
+function getLayer(y) {
+    if (currentWorld === 1) {
+        if (y < 16000) {
+            return layerDictionary[layerIndex.worldOne[Math.floor(y / 2000)]];
+        } else {
+            const num = Math.floor((y - 16000) / 10000);
+            if (repeatingLayers[num] === undefined) setLayer(y);
+            return layerDictionary[layerIndex.worldOne[repeatingLayers[num].layer]];
+        }
+    } else if (currentWorld === 2) {
+        if (y < 10000) {
+            return layerDictionary[layerIndex.worldTwo[Math.floor(y / 2000)]];
+        } else {
+            if (y === 10000) return layerDictionary["barrierLayer"];
+            else return layerDictionary["borderLayer"];
+        }
+    }
+}
+function a87(num, force) {
+    force ??= false;
     let added = false;
     switch (num) {
         case 0:
-            if (Math.random() < 1/29) {
+            if (Math.random() < 1/29 || force) {
                 insertIntoLayers({"ore":"🐞", "layers":["dirtLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 1:
-            if (Math.random() < 1/25) {
+            if (Math.random() < 1/25 || force) {
                 insertIntoLayers({"ore":"🥈", "layers":["brickLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 2:
-            if (Math.random() < 1/17) {
+            if (Math.random() < 1/17 || force) {
                 insertIntoLayers({"ore":"🚬", "layers":["foggyLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 3:
-            if (Math.random() < 1/40) {
+            if (Math.random() < 1/40 || force) {
                 insertIntoLayers({"ore":"🪸", "layers":["waterLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 4:
-            if (Math.random() < 1/15) {
+            if (Math.random() < 1/15 || force) {
                 insertIntoLayers({"ore":"🪦", "layers":["rockLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 5:
-            if (Math.random() < 1/27) {
+            if (Math.random() < 1/27 || force) {
                 insertIntoLayers({"ore":"🚨", "layers":["radioactiveLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 6:
-            if (Math.random() < 1/19) {
+            if (Math.random() < 1/19 || force) {
                 insertIntoLayers({"ore":"🍖", "layers":["cactusLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 7:
-            if (Math.random() < 1/35) {
+            if (Math.random() < 1/35 || force) {
                 insertIntoLayers({"ore":"📜", "layers":["paperLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 7777:
-            if (Math.random() < 1/13) {
+            if (Math.random() < 1/13 || force) {
                 insertIntoLayers({"ore":"🐸", "layers":["sillyLayer"], "useLuck":true});
                 added = true;
             }
@@ -548,6 +614,7 @@ function a87(num) {
         eventSpawn.currentTime = 0;
         eventSpawn.play();
     }
+    return added;
 }
 function a88() {
     const toRemove = ["🐞","🥈","🚬","🪸","🪦","🚨","🍖","📜","🐸"]
@@ -564,6 +631,30 @@ function createLayer(layers) {
     }
     output = applyLuckToLayer(output, verifiedOres.getCurrentLuck());
     return output;
+}
+function createAllLayers() {
+    for (let i = 0; i < worldOneLayers.length; i++) layerDictionary[worldOneLayers[i]] = {layer: createLayer([layerList[worldOneLayers[i]], layerList["worldOneCommons"]]), probabilities: []};
+    for (let i = 0; i < worldTwoLayers.length; i++) layerDictionary[worldTwoLayers[i]] = {layer: createLayer([layerList[worldTwoLayers[i]], layerList["worldTwoCommons"]]), probabilities: []};
+    for (let i = 0; i < specialLayers.length; i++) layerDictionary[specialLayers[i]] = {layer: layerList[specialLayers[i]], probabilities: []};
+    layerDictionary["dirtLayer2"] = {layer: createLayer([layerList["dirtLayer2"], layerList["worldOneCommons"]]), probabilities: []};
+    createGenerationProbabilities();
+    //for (let i = 0; i < worldOneLayers.length; i++) layerDictionary[worldOneLayers[i]] = createLayer([layerList[worldOneLayers[i]], layerList["worldOneCommons"]]);
+}
+function updateAllLayers() {
+    for (let layer in layerDictionary) layerDictionary[layer].layer = applyLuckToLayer(layerDictionary[layer].layer, verifiedOres.getCurrentLuck())
+    createGenerationProbabilities();
+}
+function createGenerationProbabilities() {
+    for (let layer in layerDictionary) {
+        let temp = 0;
+        let tempArr = [];
+        let tempLayer = layerDictionary[layer].layer;
+        for (let i = 0; i < tempLayer.length; i++) {
+            temp += oreList[tempLayer[i]]["decimalRarity"];
+            tempArr[i] = temp;
+        }
+        layerDictionary[layer].probabilities = tempArr;
+    }
 }
 function sortLayerRarities(arr) {
     for (let i = 0; i < arr.length; i++) {
@@ -590,8 +681,6 @@ function applyLuckToLayer(layer, luck) {
             if (player.powerupVariables.commonsAffected.state) oreList[layer[i]]["decimalRarity"] = 1/(oreList[layer[i]]["numRarity"] / (layerluck >= 3.5 ? 3.5 : layerluck));
         }
     }
-    if (layer != layerList["dirtLayer2"])
-        updateSpecialLayers();
     layer = sortLayerRarities(layer);
     return layer;
 }
@@ -610,13 +699,13 @@ function insertIntoLayers(obj) {
     let useLuck = obj["useLuck"];
     if (layers === undefined) layers = allLayers;
     for (let i = 0; i < layers.length; i++) {
-        if (!(layerList[layers[i]].includes(ore))) {
+        if (!(layerDictionary[layers[i]].layer.includes(ore))) {
             if (useLuck) oreList[ore]["decimalRarity"] = 1/(oreList[ore]["numRarity"] / verifiedOres.getCurrentLuck());
-            let layer = applyLuckToLayer(layerList[layers[i]], verifiedOres.getCurrentLuck());
+            let layer = layerDictionary[layers[i]].layer;
             for (let j = 0; j < layer.length; j++) {
                 if (oreList[layer[j]]["decimalRarity"] > oreList[ore]["decimalRarity"]) {
                     layer.splice(j, 0, ore);
-                    if (currentLayerNum === allLayers.indexOf(layers[i])) currentLayer = createLayer([layerList[layers[i]], (currentWorld === 1 ? layerList["worldOneCommons"] : layerList["worldTwoCommons"])]);
+                    updateAllLayers();
                     break;
                 }
             }
@@ -629,19 +718,11 @@ function removeFromLayers(obj) {
     let layers = obj["layers"];
     if (layers === undefined) layers = allLayers;
     for (let i = 0; i < layers.length; i++) {
-        if (layerList[layers[i]].includes(ore)) {
-            layerList[layers[i]].splice(layerList[layers[i]].indexOf(ore), 1);
-            if (currentLayerNum === allLayers.indexOf(layers[i])) currentLayer = createLayer([layerList[layers[i]], (currentWorld === 1 ? layerList["worldOneCommons"] : layerList["worldTwoCommons"])]);
+        if (layerDictionary[layers[i]].layer.includes(ore)) {
+            layerDictionary[layers[i]].layer.splice(layerDictionary[layers[i]].layer.indexOf(ore), 1);
+            updateAllLayers();
         }
     }
-}
-
-let lettuceLayerProbabilities;
-function createSpecialLayers() {
-    layerList["dirtLayer2"] = createLayer([layerList["dirtLayer2"], layerList["worldOneCommons"]]);
-}
-function updateSpecialLayers() {
-    applyLuckToLayer(layerList["dirtLayer2"], verifiedOres.getCurrentLuck());
 }
 
 const limitedOres = {

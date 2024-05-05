@@ -96,19 +96,18 @@ function giveBlock(obj) {
     //SELECT VARIANT
     let inv;
     if (obj.variant === undefined) {
-        let inv = rollVariant();
+        inv = rollVariant();
         if (player.gears["gear26"] && inv === 1) inv = rollVariant();
        
     } else {
         inv = obj.variant;
     }
-    
     //PROC & LOGS
     let gear4Proc = currentWorld < 2 && player.gears["gear4"];
     let gear13Proc = player.gears["gear13"] && oreRarity < 750000 && oreRarity > 1 && Math.random < 0.75;
     
     
-    const layerMaterial = currentLayer.slice(-1);
+    const layerMaterial = layerDictionary[currentLayer].layer.slice(-1);
     if (gear4Proc) {
         oreList[layerMaterial]["normalAmt"]++;
     }
@@ -155,27 +154,32 @@ let probabilityTable;
 const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸";
 function generateBlock(location) {
     blocksRevealedThisReset++;
-    probabilityTable = currentLayer;
+    probabilityTable = getLayer(location["Y"]);
     if (location["Y"] === 1 && currentWorld === 1) {
-        probabilityTable = layerList[specialLayers[2]];
+        probabilityTable = layerDictionary["dirtLayer2"];
     }
     if (currentWorld === 2) {
         if (location["Y"] === 10000 && currentWorld === 2)
-            probabilityTable = layerList[specialLayers[3]];
+            probabilityTable = layerDictionary["borderLayer"];
     }
     if ((location["Y"] === 0 && currentWorld === 1) || (location["Y"] === 2000 && currentWorld === 2)) {
-        probabilityTable = layerList[specialLayers[5]]
+        probabilityTable = layerDictionary["grassLayer"];
     }
+    let generationProbabilities = probabilityTable.probabilities;
+    let arr = probabilityTable.layer;
     let blockToGive = "";
     let chosenValue = Math.random();
-    let summedProbability = 0;
-    for (let i = 0; i < probabilityTable.length; i++) {
-        summedProbability += oreList[probabilityTable[i]]["decimalRarity"];
-        if (chosenValue < summedProbability) {
-            blockToGive = probabilityTable[i];
-            break;
+    let low = 0;
+    let high = arr.length;
+    while (low < high) {
+        const mid = (low + high) >> 1; // Use bitwise shift for integer division
+        if (chosenValue >= generationProbabilities[mid]) {
+            low = mid + 1;
+        } else {
+            high = mid;
         }
     }
+    blockToGive = arr[low];
     let oreRarity = oreList[blockToGive]["numRarity"];
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
@@ -277,17 +281,40 @@ for (let i = 0; i < 100000; i++) {
 }
 */
 //TELEPORTING
+const specialLayerLocations = {
 
+}
+let specialLayerDistance;
 let distanceMulti = 1;
 let y = 1000;
+function distanceHelper(layer) {
+    if (specialLayerDistance !== undefined) {
+        if (layer === "fluteLayer") return false;
+        if (layer === "sillyLayer" && specialLayerDistance === "fluteLayer") return true;
+        else if (layer === "unknownLayer" && specialLayerDistance !== "unknownLayer") return true;
+    } else {
+        return true;
+    }
+}
 function switchDistance() {
         if (y < (allLayers.length - 1) * 2000) {
             y = 2000 * distanceMulti + 1000;
             distanceMulti++;
         } else if (y > (allLayers.length - 1) * 2000) {
             if (currentWorld < 2) {
-                y = 1000;
-                distanceMulti = 1;
+                if (currentWorld === 1) {
+                    if (specialLayerLocations["fluteLayer"] !== undefined && distanceHelper("fluteLayer")) {specialLayerDistance = "fluteLayer"; y = specialLayerLocations["fluteLayer"] + 5000}
+                    else if (specialLayerLocations["sillyLayer"] !== undefined && distanceHelper("sillyLayer")) {specialLayerDistance = "sillyLayer"; y = specialLayerLocations["sillyLayer"] + 5000}
+                    else if (specialLayerLocations["unknownLayer"] !== undefined && distanceHelper("unknownLayer")) {specialLayerDistance = "unknownLayer"; y = specialLayerLocations["unknownLayer"] + 5000}
+                    else {
+                        y = 1000;
+                        distanceMulti = 1;
+                        specialLayerDistance = undefined;
+                    }
+                } else {
+                    y = 1000;
+                    distanceMulti = 1;
+                }
             } else {
                 y = 3000;
                 distanceMulti = 2;
@@ -297,7 +324,15 @@ function switchDistance() {
             y = 1000;
             distanceMulti = 1;
         }
-        let layer = layerList[allLayers[Math.floor(y / 2000)]].slice(-1);
+        let layer;
+        if (currentWorld === 1 && y > 16000) {
+            for (let property in specialLayerLocations) if (specialLayerLocations[property] + 5000 === y) {
+                layer = layerDictionary[property].layer.slice(-1)
+            }
+        } else {
+            layer = layerList[allLayers[Math.floor(y / 2000)]].slice(-1);
+        }
+        
         layer = layer[layer.length - 1];   
         document.getElementById("meterDisplay").setAttribute("title", oreList[layer]["oreName"]);
         if (player.settings.usingNewEmojis) {
@@ -329,7 +364,7 @@ function toLocation() {
         if(mine[r] === undefined)
             mine[r] = [];
     }
-    setLayer(y - 50);
+    setLayer(y);
     mine[curY][curX] = "⚪";
     curX = x;
     curY = y;
@@ -406,7 +441,6 @@ function switchWorld(to) {
         allLayers = worldTwoLayers;
         curX = 1000000000;
         curY = 2001; 
-        setLayer(curY);
         createMine();
         if (player.stats.currentPickaxe === 25) {
             if (Math.random() < 1/10000) {
@@ -421,14 +455,13 @@ function switchWorld(to) {
         }
         layerNum = 1;
         switchLayerIndex(0, "tvLayer", 2)
-    } else if (currentWorld < 2){
+    } else if (currentWorld < 2) {
         distanceMulti = 0;
         y = 1000;
         if (currentWorld === 1) allLayers = worldOneLayers;
         else if (currentWorld === 1.1) allLayers = subRealmOneLayers;
         curX = 1000000000;
         curY = 0; 
-        setLayer(curY);
         createMine();
         if (currentWorld === 1) {
             if (player.stats.currentPickaxe === 1) {
@@ -445,8 +478,6 @@ function switchWorld(to) {
         if (currentWorld === 1) switchLayerIndex(0, "dirtLayer", 1);
         else if (currentWorld === 1.1) console.log("make layers still")
     }
-    if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
-    
     switchDistance();
     displayArea();
     switchWorldCraftables();

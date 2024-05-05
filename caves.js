@@ -4,8 +4,23 @@ Unauthorized copying of this file, via any medium is strictly prohibited
 Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
-function generateCave(x, y, rate, reps, type) {
+function checkValidLocation(x, y) {
+    let reps = 0;
+    while (reps < 100) {
+        const lX = x + Math.round(Math.random() * 100) - 50;
+        const lY = y + Math.round(Math.random() * 75) - 45;
+        mine[lY - 1] ??= [];
+        mine[lY + 1] ??= [];
+        mine[lY] ??= [];
+        if (lY > 1) {
+            if (mine[lY][lX] === undefined && mine[lY + 1][lX] === undefined && mine[lY - 1][lX] === undefined && mine[lY][lX - 1] === undefined && mine[lY][lX + 1] === undefined) return {x: lX, y: lY};
+        }
+    }
+    return {x: undefined, y: undefined}
+}
+function generateCave(x, y, type) {
     let caveType;
+    let rate = 1;
     if (type === undefined) {  
         type = getCaveType();
         if (type === undefined) {
@@ -18,32 +33,44 @@ function generateCave(x, y, rate, reps, type) {
                 caveList[type] = createGsCave();
         }
     }
+    if (x === undefined || y === undefined) {
+        const newPoints = checkValidLocation(curX, curY);
+        if (newPoints.x === undefined) return;
+        else {
+            x = newPoints.x;
+            y = newPoints.y;
+        }
+    } else {
+        const newPoints = checkValidLocation(x, y);
+        if (newPoints.x === undefined) return;
+        else {
+            x = newPoints.x;
+            y = newPoints.y;
+        }
+    }
     caveType = type;
-        let distX = Math.round(Math.random() * 10) + 3;
-        let distY = Math.round(Math.random() * 10) + 3;
-        let newOrigins = [];
-            y > 0 ? mine[y] ??= [] : y = 0, mine[y] ??= [];
-            (y + distY) > 0 ? mine[y + distY] ??= [] : distY = 0, mine[y + distY] ??= [];
-            if (!(mine[y][x] === "⚪" && mine[y + distY][x + distX] === "⚪")) {
-            for (let r = y; r < y + distY; r++) {
-                for (let c = x; c < x + distX; c++) {
-                    if (Math.random() < (0.1 - rate))
-                        newOrigins.push([c + (Math.round(Math.random() * 4)) - (5 + reps), r + (Math.round(Math.random() * 4)) - (5 + reps)]);
-                        if (r > 0) {
-                            if (mine[r][c] === undefined) {
-                                generateCaveBlock(r, c, caveType);
-                            }  
-                        }
-                        mineCaveBlock(c, r, caveType);
-                }
+    let points = [{x: x, y: y}];
+    while (points.length > 0) {
+        for (let i = points.length - 1; i >= 0; i--) {
+            let pointX = points[i].x;
+            let pointY = points[i].y;
+            mineCaveBlock(pointX, pointY, type);
+            points.splice(i, 1);
+            let block = mine[pointY][pointX + 1];
+            if (block !== "⚪" && Math.random() < rate) points.push({x: pointX + 1, y: pointY});
+            block = mine[pointY][pointX - 1];
+            if (block !== "⚪" && Math.random() < rate) points.push({x: pointX - 1, y: pointY});
+            if (pointY - 1 > 0) {
+                mine[pointY - 1] ??= [];
+                block = mine[pointY - 1][pointX];
+                if (block !== "⚪" && Math.random() < rate) points.push({x: pointX, y: pointY - 1});
             }
-            let newRate = Math.round(Math.random() * 12) / 375;
-            rate += newRate;
-            reps++;
+            mine[pointY + 1] ??= [];
+            block = mine[pointY + 1][pointX];
+            if (block !== "⚪" && Math.random() < rate) points.push({x: pointX, y: pointY + 1});
         }
-        for (let i = 0; i < newOrigins.length; i++) {
-            generateCave(newOrigins[i][0], newOrigins[i][1], rate, reps, caveType);
-        }
+        rate -= 0.04;
+    }
 }
 
 function mineCaveBlock(c, r, type) {
@@ -167,32 +194,40 @@ function generateCaveBlock(y, x, type) {
     }
     let chosenValue = Math.random();
     if (debug) chosenValue /= caveLuck;
-    let arr = type === "currentLayer" ? currentLayer : caveList[type];
+    let probabilityTable;
+    let arr;
+    if (type === "currentLayer") {
+        probabilityTable = getLayer(y);
+        arr = probabilityTable.layer;
+        probabilityTable = probabilityTable.probabilities;
+    } else {
+        arr = caveList[type];
+    }
     let blockToGive = "";
-        let low = 0;
-        let high = arr.length;
-        if (type !== "type5Ores") {
-            while (low < high) {
-                const mid = (low + high) >> 1; // Use bitwise shift for integer division
-                if (chosenValue >= 1/(oreList[arr[mid]]["numRarity"])) {
-                    low = mid + 1;
-                } else {
-                    high = mid;
-                }
+    let low = 0;
+    let high = arr.length;
+    if (type !== "type5Ores") {
+        while (low < high) {
+            const mid = (low + high) >> 1; // Use bitwise shift for integer division
+            const value = type === "currentLayer" ? probabilityTable[mid] : 1/(oreList[arr[mid]]["numRarity"]);
+            if (chosenValue >= value) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
-            blockToGive = arr[low];
-        } else {
-            while (low < high) {
-                const mid = (low + high) >> 1; // Use bitwise shift for integer division
-                if (chosenValue >= gsProbabilities[mid]) {
-                    low = mid + 1;
-                } else {
-                    high = mid;
-                }
-            }
-            blockToGive = arr[low];
         }
-        
+        blockToGive = arr[low];
+    } else {
+        while (low < high) {
+            const mid = (low + high) >> 1; // Use bitwise shift for integer division
+            if (chosenValue >= gsProbabilities[mid]) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        blockToGive = arr[low];
+    }
     //GETS THE CAVE RARITY TO MULTIPLY ORE RARITY BY FOR ADJUSTED RARITY
     let multi = getCaveMulti(type);
     let adjRarity = oreList[blockToGive]["numRarity"] * multi;

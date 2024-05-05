@@ -144,7 +144,7 @@ const powerupList = {
     },
     "powerup2" : {
         title: "The Spelunker",
-        description: "Generates a few caves around the player. Has a cooldown of 20 minutes.",
+        description: "Generates a few caves around the player. Has a cooldown of 5 minutes.",
         cooldown: 1200000,
         colors: {
             background: "linear-gradient(to bottom, #F5533D, #6B331D, #696969, #0A0DC7)",
@@ -290,7 +290,7 @@ function autoPowerups() {
             document.getElementById(`${player.powerupVariables.currentPowerupDisplayed}`).click();
         player.powerupVariables.autoNum++;
         if (player.powerupCooldowns[`powerup${player.powerupVariables.autoNum}`] === undefined) player.powerupVariables.autoNum = 1;
-        player.powerupVariables.nextAuto = Date.now() + 15000;
+        player.powerupVariables.nextAuto = Date.now() + 20000;
     }
 }
 function countFlawlessOres() {

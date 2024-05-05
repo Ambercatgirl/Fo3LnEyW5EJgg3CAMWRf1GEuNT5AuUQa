@@ -457,7 +457,7 @@ function getButtonByName(item) {
 }
 function utilitySwitchActions() {
     changeLayerOres();
-    applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+    updateAllLayers();
     switchLayerIndex(0);
     updateStats();
 }

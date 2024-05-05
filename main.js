@@ -46,9 +46,7 @@ function init() {
     locationElement = document.getElementById("location");
     blockElement = document.getElementById("blockDisplay");
     let canContinue = true;
-    createSpecialLayers();
     createInventory();
-    createMine();
     createGearRecipes();
     createPickaxeRecipes();
     switchPowerupDisplay(0)
@@ -60,7 +58,6 @@ function init() {
         if (date.getMonth() === 3 && date.getDate() === 1) {
             document.title = "The Sily Caverns";
         }
-        insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         for (let propertyName in birthdays) {
             if ((date.getMonth() + 1 === Number(propertyName.substring(0, propertyName.indexOf("/")))) && (date.getDate() === Number(propertyName.substring(propertyName.indexOf("/") + 1)))) {
                 document.getElementById("spawnMessage").innerText = "Happy Birthday " + birthdays[propertyName] + "!!!";
@@ -77,8 +74,11 @@ function init() {
     if (canContinue) {
         repeatDataSave();
         cat = verifiedOres.getCurrentLuck();
+        switchPowerupDisplay(0);
+        createAllLayers();
+        createMine();
         utilitySwitchActions();
-        switchPowerupDisplay(0)
+        insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         console.log("meow");
     }
 }
@@ -532,7 +532,6 @@ function updateInventory() {
         let tempDirection = curDirection;
         stopMining();
         goDirection(tempDirection);
-        applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
     }
     checkPowerupCooldowns();
     updatePowerupCooldowns();
