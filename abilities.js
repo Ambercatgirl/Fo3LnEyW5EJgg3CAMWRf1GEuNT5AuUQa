@@ -174,7 +174,7 @@ async function rollAbilities() {
 
 //generates a large cube around the player
 function powerup1(x, y) {
-    if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown) {
+    if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown * 0) {
         for (let r = y - 50; r < y + 50; r++) {
             for (let c = x - 50; c < x + 50; c++) {
                 pickaxeAbilityMineBlock(c, r);

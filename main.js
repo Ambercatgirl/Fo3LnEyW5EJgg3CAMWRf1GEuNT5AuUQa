@@ -509,11 +509,11 @@ function updateInventory() {
     updateActiveRecipe();
         if (player.powerupVariables.currentChosenOre.ore !== undefined && Date.now() >= player.powerupVariables.currentChosenOre.removeAt) {
             player.powerupVariables.currentChosenOre.ore = undefined;
-            applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+            updateAllLayers();
         }
     if (player.powerupVariables.commonsAffected.state && Date.now() >= player.powerupVariables.commonsAffected.removeAt) {
         player.powerupVariables.commonsAffected.state = false;
-        applyLuckToLayer(currentLayer, verifiedOres.getCurrentLuck());
+        updateAllLayers();
     }
     if (player.powerupVariables.fakeEquipped.item !== "" && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
         if (player.gears[player.powerupVariables.fakeEquipped.item] !== undefined) {
