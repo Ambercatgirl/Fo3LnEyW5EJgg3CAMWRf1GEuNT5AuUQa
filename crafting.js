@@ -438,7 +438,8 @@ function craftPickaxe(item) {
             oreList[ore]["normalAmt"] -= amtNeeded;
             inventoryObj[ore] = 0;
         }
-        
+        if (type === "pickaxes") player.pickaxes[item] = true;
+        else player.gears[item] = true;
     }
     if (type === "pickaxe") player.stats.currentPickaxe = Number(item.substring(type.length));
     if (currentWorld === 1 && item === "gear9")
