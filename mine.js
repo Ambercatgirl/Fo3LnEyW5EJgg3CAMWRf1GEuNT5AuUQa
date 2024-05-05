@@ -158,10 +158,6 @@ function generateBlock(location) {
     if (location["Y"] === 1 && currentWorld === 1) {
         probabilityTable = layerDictionary["dirtLayer2"];
     }
-    if (currentWorld === 2) {
-        if (location["Y"] === 10000 && currentWorld === 2)
-            probabilityTable = layerDictionary["borderLayer"];
-    }
     if ((location["Y"] === 0 && currentWorld === 1) || (location["Y"] === 2000 && currentWorld === 2)) {
         probabilityTable = layerDictionary["grassLayer"];
     }
