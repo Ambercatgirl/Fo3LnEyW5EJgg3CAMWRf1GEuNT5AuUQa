@@ -837,7 +837,7 @@ function craftUpgrade(id) {
         let recipeElement = currentUpgrade[i];
         oreList[recipeElement.ore]["normalAmt"] -= recipeElement.amt;
     }
-    //player.upgrades[id].level++;
+    player.upgrades[id].level++;
     player.upgrades[id].bought++;
     updateDisplayedUpgrade();
 }
