@@ -91,7 +91,6 @@ function mineBlock(x, y, cause) {
 //ORE GENERATION AND OBTAINING
 
 let multis = [1, 50, 250, 500];
-let inv;
 //{type: x, x:x, y:y, fromReset:x, fromCave:x, caveMulti:x, variant:x}
 function giveBlock(obj) {
     if (obj.type === "⚪") return;
