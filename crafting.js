@@ -829,13 +829,15 @@ function craftUpgrade(id) {
     if (player.upgrades[id].level >= player.upgrades[id].maxLevel) return;
     const currentUpgrade = upgradeRecipes[id][`upgrade${player.upgrades[id].level}`].recipe;
     if (currentUpgrade === undefined) return;
-    currentUpgrade.forEach(recipeElement => {
+    for (let i = 0; i < currentUpgrade.length; i++) {
+        let recipeElement = currentUpgrade[i];
         if (oreList[recipeElement.ore]["normalAmt"] < recipeElement.amt) return;
-    });
-    currentUpgrade.forEach(recipeElement => {
+    }
+    for (let i = 0; i < currentUpgrade.length; i++) {
+        let recipeElement = currentUpgrade[i];
         oreList[recipeElement.ore]["normalAmt"] -= recipeElement.amt;
-    });
-    player.upgrades[id].level++;
+    }
+    //player.upgrades[id].level++;
     player.upgrades[id].bought++;
     updateDisplayedUpgrade();
 }
