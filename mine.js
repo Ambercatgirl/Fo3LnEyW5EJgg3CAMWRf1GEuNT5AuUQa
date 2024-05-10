@@ -68,16 +68,20 @@ function mineBlock(x, y, cause) {
         variant = undefined;
     }
     if (ore === "⚪") return;
-    checkAllAround(x, y);
-    player.stats.blocksMined++;
+    
     if (oreList[ore]["isBreakable"]) {
+        checkAllAround(x, y);
         if (oreList[ore]["numRarity"] >= 750000) {
             if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
                 giveBlock({type: ore, x:x, y:y, fromReset:false, fromCave:true, caveMulti:checkFromCave({"X":x, "Y":y})["multi"], variant:variant});
                 mine[y][x] = "⚪";
+                checkAllAround(x, y);
+                player.stats.blocksMined++;
                 return;
             }
+            if (cause === "ability" && player.settings.automineProtection && oreInformation.tierGrOrEqTo({"tier1": oreList[ore]["oreTier"], "tier2": minTier})) return;
         }
+        player.stats.blocksMined++;
         giveBlock({type: ore, x:x, y:y, fromReset: cause === "reset", fromCave:undefined, caveMulti:undefined, variant:variant});
         mine[y][x] = "⚪";
         cause !== "ability" ? rollAbilities() : undefined;
@@ -114,7 +118,6 @@ function giveBlock(obj) {
     if (gear13Proc) {
         oreList[obj.type]["normalAmt"]++;
     }
-    
     if (obj.fromCave) {oreRarity *= obj.caveMulti;}
     if (oreRarity >= 750000) {
         let gear22Proc = player.gears["gear22"] && Math.random() < 1/10;
@@ -123,6 +126,13 @@ function giveBlock(obj) {
         let rareTier = oreInformation.tierGrOrEqTo({"tier1" : oreList[obj.type]["oreTier"], "tier2" : minTier});
         if (rareTier) {
             logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset); 
+        }
+        if (oreList[obj.type]["oreTier"] === "Flawless") {
+            if (!player.sr1Unlocked) {
+                player.sr1Unlocked = true;
+                document.getElementById("sr1Lock").style.display = "none";
+                document.getElementById("sr1Teleporter").style.display = "block";
+            }
         }
     } else {
         if (oreRarity === 1) {
@@ -155,12 +165,6 @@ const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯�
 function generateBlock(location) {
     blocksRevealedThisReset++;
     probabilityTable = getLayer(location["Y"]);
-    if (location["Y"] === 1 && currentWorld === 1) {
-        probabilityTable = layerDictionary["dirtLayer2"];
-    }
-    if ((location["Y"] === 0 && currentWorld === 1) || (location["Y"] === 2000 && currentWorld === 2)) {
-        probabilityTable = layerDictionary["grassLayer"];
-    }
     let generationProbabilities = probabilityTable.probabilities;
     let arr = probabilityTable.layer;
     let blockToGive = "";
@@ -331,7 +335,7 @@ function switchDistance() {
         
         layer = layer[layer.length - 1];   
         document.getElementById("meterDisplay").setAttribute("title", oreList[layer]["oreName"]);
-        if (player.settings.usingNewEmojis) {
+        if (player.settings.usingNewEmojis || currentWorld === 1.1) {
             layer = "<span style=\"font-family:'Noto Color Emoji'\">" + layer + "</span>";
         }
         let sub = currentWorld === 2 ? 2000 : 0;
@@ -450,7 +454,8 @@ function switchWorld(to) {
             mine[curY + 1][curX] = "📺";
         }
         layerNum = 1;
-        switchLayerIndex(0, "tvLayer", 2)
+        switchLayerIndex(0, "tvLayer", 2);
+        sr1Helper(false);
     } else if (currentWorld < 2) {
         distanceMulti = 0;
         y = 1000;
@@ -472,7 +477,9 @@ function switchWorld(to) {
         }
         layerNum = 0;
         if (currentWorld === 1) switchLayerIndex(0, "dirtLayer", 1);
-        else if (currentWorld === 1.1) console.log("make layers still")
+        else if (currentWorld === 1.1) switchLayerIndex(0, "scLayer", 1);
+        if (currentWorld === 1.1) sr1Helper(true);
+        else sr1Helper(false);
     }
     switchDistance();
     displayArea();
@@ -493,6 +500,23 @@ function stopMining() {
     curDirection = "";
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
+}
+function sr1Helper(state) {
+    if (state) {
+        if (!player.settings.usingNewEmojis) {
+            document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");
+            document.getElementById("switchFont").disabled = true;
+        }
+        player.wasUsing = player.stats.currentPickaxe;
+        player.stats.currentPickaxe = 27;
+    } else {
+        if (!player.settings.usingNewEmojis) {
+            document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
+            document.getElementById("switchFont").disabled = false;
+        }
+        player.stats.currentPickaxe = player.wasUsing;
+        player.wasUsing = undefined;
+    }
 }
 
 

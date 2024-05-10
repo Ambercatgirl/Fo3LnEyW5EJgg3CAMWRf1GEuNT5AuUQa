@@ -60,12 +60,12 @@ const recipes = {
     },
     "pickaxe11" : {
         name : "",
-        recipe : [{ore:"🌊", amt:200000000},{ore:"🟥", amt:9000000},{ore:"🟢", amt:7000000},{ore:"🟡", amt:5000000},{ore:"🔴", amt:4750000},{ore:"⛵", amt:500},{ore:"🎣", amt:500},{ore:"🤿", amt:500},{ore:"🫧", amt:500},{ore:"🐟", amt:250},{ore:"👑", amt:100},{ore:"🔱", amt:100},{ore:"🌀", amt:10},{ore:"👿", amt:10},{ore:"🪩", amt:5},{ore:"💫", amt:1}],
+        recipe : [{ore:"🌊", amt:100000000},{ore:"🟥", amt:9000000},{ore:"🟢", amt:7000000},{ore:"🟡", amt:5000000},{ore:"🔴", amt:4750000},{ore:"⛵", amt:500},{ore:"🎣", amt:500},{ore:"🤿", amt:500},{ore:"🫧", amt:500},{ore:"🐟", amt:250},{ore:"👑", amt:100},{ore:"🔱", amt:100},{ore:"🌀", amt:10},{ore:"👿", amt:10},{ore:"🪩", amt:5},{ore:"💫", amt:1}],
         upgrades : {},
     },
     "pickaxe12" : {
         name : "",
-        recipe : [{ore:"🧱", amt:150000000},{ore:"🪨", amt:150000000},{ore:"🌫️", amt:150000000},{ore:"🟤", amt:6400000},{ore:"⚫", amt:5000000},{ore:"💚", amt:1500},{ore:"🤍", amt:750},{ore:"🧵", amt:50},{ore:"❄️", amt:40},{ore:"🥉", amt:30},{ore:"🧊", amt:30},{ore:"💸", amt:15},{ore:"👁️", amt:3},{ore:"🌈", amt:2},{ore:"🌇", amt:1}],
+        recipe : [{ore:"🧱", amt:75000000},{ore:"🪨", amt:75000000},{ore:"🌫️", amt:75000000},{ore:"🟤", amt:6400000},{ore:"⚫", amt:5000000},{ore:"💚", amt:1500},{ore:"🤍", amt:750},{ore:"🧵", amt:50},{ore:"❄️", amt:40},{ore:"🥉", amt:30},{ore:"🧊", amt:30},{ore:"💸", amt:15},{ore:"👁️", amt:3},{ore:"🌈", amt:2},{ore:"🌇", amt:1}],
         upgrades : {},
     },
     "pickaxe13" : {
@@ -90,52 +90,57 @@ const recipes = {
     },
     "pickaxe17" : {
         name : "",
-        recipe : [{ore:"♟️", amt:6000000},{ore:"🔂", amt:28000},{ore:"⏺️", amt:75},{ore:"⏏️", amt:25},{ore:"📗", amt:5},{ore:"📘", amt:3},{ore:"✏️", amt:1},],
+        recipe : [{ore:"♟️", amt:3000000},{ore:"🔂", amt:28000},{ore:"⏺️", amt:75},{ore:"⏏️", amt:25},{ore:"📗", amt:5},{ore:"📘", amt:3},{ore:"✏️", amt:1},],
         upgrades : {}
     },
     "pickaxe18" : {
         name : "",
-        recipe : [{ore:"☁️", amt:15000000},{ore:"⬅️", amt:12800},{ore:"↖️", amt:2500},{ore:"➡️", amt:2250},{ore:"📙", amt:6},{ore:"🌧️", amt:2},{ore:"🌤️", amt:1},],
+        recipe : [{ore:"☁️", amt:7500000},{ore:"⬅️", amt:12800},{ore:"↖️", amt:2500},{ore:"➡️", amt:2250},{ore:"📙", amt:6},{ore:"🌧️", amt:2},{ore:"🌤️", amt:1},],
         upgrades : {}
     },
     "pickaxe19" : {
         name : "",
-        recipe : [{ore:"♟️", amt:25000000},{ore:"⬆️", amt:19000},{ore:"◀️", amt:2400},{ore:"⏯️", amt:275},{ore:"⏸️", amt:240},{ore:"📗", amt:15},{ore:"🧠", amt:2},{ore:"📐", amt:1},],
+        recipe : [{ore:"♟️", amt:12500000},{ore:"⬆️", amt:19000},{ore:"◀️", amt:2400},{ore:"⏯️", amt:275},{ore:"⏸️", amt:240},{ore:"📗", amt:15},{ore:"🧠", amt:2},{ore:"📐", amt:1},],
         upgrades : {}
     },
     "pickaxe20" : {
         name : "",
-        recipe : [{ore:"❌", amt:2000000},{ore:"📺", amt:70000000},{ore:"🔼", amt:6700},{ore:"⏪", amt:1950},{ore:"✴️", amt:3},{ore:"📙", amt:20},{ore:"🛡️", amt:20},{ore:"🪃", amt:10},{ore:"🪓", amt:3},],
+        recipe : [{ore:"❌", amt:2000000},{ore:"📺", amt:35000000},{ore:"🔼", amt:6700},{ore:"⏪", amt:1950},{ore:"✴️", amt:3},{ore:"📙", amt:20},{ore:"🛡️", amt:20},{ore:"🪃", amt:10},{ore:"🪓", amt:3},],
         upgrades : {}
     },
     "pickaxe21" : {
         name : "",
-        recipe : [{ore:"☁️", amt:75000000},{ore:"🚪", amt:75000000},{ore:"🔃", amt:2670000},{ore:"⏏️", amt:850},{ore:"📘", amt:50},{ore:"🔑", amt:20},{ore:"🌨️", amt:10},{ore:"🖇️", amt:10},{ore:"⛈️", amt:3},],
+        recipe : [{ore:"☁️", amt:37500000},{ore:"🚪", amt:37500000},{ore:"🔃", amt:2670000},{ore:"⏏️", amt:850},{ore:"📘", amt:50},{ore:"🔑", amt:20},{ore:"🌨️", amt:10},{ore:"🖇️", amt:10},{ore:"⛈️", amt:3},],
         upgrades : {}
     },
     "pickaxe22" : {
         name : "",
-        recipe : [{ore:"❌", amt:150000000},{ore:"📺", amt:200000000},{ore:"🔄", amt:2675000},{ore:"↪️", amt:310000},{ore:"⏬", amt:9000},{ore:"⏯️", amt:2400},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:1},],
+        recipe : [{ore:"❌", amt:75000000},{ore:"📺", amt:100000000},{ore:"🔄", amt:2675000},{ore:"↪️", amt:310000},{ore:"⏬", amt:9000},{ore:"⏯️", amt:2400},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:1},],
         upgrades : {}
     },
     "pickaxe23" : {
         name : "",
-        recipe : [{ore:"🚪", amt:400000000},{ore:"↘️", amt:175000},{ore:"➡️", amt:85000},{ore:"🔽", amt:57000},{ore:"🔒", amt:125},{ore:"🔑", amt:100},{ore:"🖇️", amt:35},{ore:"🔏", amt:5},{ore:"⛓️", amt:4},],
+        recipe : [{ore:"🚪", amt:200000000},{ore:"↘️", amt:175000},{ore:"➡️", amt:85000},{ore:"🔽", amt:57000},{ore:"🔒", amt:125},{ore:"🔑", amt:100},{ore:"🖇️", amt:35},{ore:"🔏", amt:5},{ore:"⛓️", amt:4},],
         upgrades : {}
     },
     "pickaxe24" : {
         name : "",
-        recipe : [{ore:"☁️", amt:1250000000},{ore:"🔃", amt:18500000},{ore:"⤵️", amt:2800000},{ore:"⏬", amt:33000},{ore:"⏺️", amt:21000},{ore:"📙", amt:7500},{ore:"📘", amt:6000},{ore:"🌨️", amt:300},{ore:"🪁", amt:200},{ore:"⛈️", amt:120},{ore:"🌩️", amt:45},{ore:"🪶", amt:4},],
+        recipe : [{ore:"☁️", amt:625000000},{ore:"🔃", amt:18500000},{ore:"⤵️", amt:2800000},{ore:"⏬", amt:33000},{ore:"⏺️", amt:21000},{ore:"📙", amt:7500},{ore:"📘", amt:6000},{ore:"🌨️", amt:300},{ore:"🪁", amt:200},{ore:"⛈️", amt:120},{ore:"🌩️", amt:45},{ore:"🪶", amt:4},],
         upgrades : {}
     },
     "pickaxe25" : {
         name : "",
-        recipe : [{ore:"🌐", amt:3000000000},{ore:"🔂", amt:30000000},{ore:"⬇️", amt:1700000},{ore:"◀️", amt:250000},{ore:"⏫", amt:200000},{ore:"🖱️", amt:2300},{ore:"💔", amt:200},{ore:"🔪", amt:50},{ore:"🧂", amt:20},{ore:"📽️", amt:10},{ore:"💘", amt:1},],
+        recipe : [{ore:"🌐", amt:1500000000},{ore:"🔂", amt:30000000},{ore:"⬇️", amt:1700000},{ore:"◀️", amt:250000},{ore:"⏫", amt:200000},{ore:"🖱️", amt:2300},{ore:"💔", amt:200},{ore:"🔪", amt:50},{ore:"🧂", amt:20},{ore:"📽️", amt:10},{ore:"💘", amt:1},],
         upgrades : {}
     },
     "pickaxe26" : {
         name : "",
         recipe : [{ore:"❌", amt:44444444444},{ore:"🕳️", amt:260000},{ore:"✴️", amt:260},{ore:"⚙️", amt:1750000},{ore:"💠", amt:1460000},{ore:"🫧", amt:1000000},{ore:"💍", amt:584000},{ore:"🎍", amt:240000},{ore:"👑", amt:14000},{ore:"💎", amt:51500},{ore:"🌟", amt:34000},{ore:"💥", amt:23360},{ore:"🌀", amt:14175},{ore:"🪐", amt:12350},{ore:"🥗", amt:10950},{ore:"🪩", amt:8750},{ore:"📌", amt:275},{ore:"🚧", amt:320},{ore:"💫", amt:4350},{ore:"⛏️", amt:1},{ore:"☯️", amt:1},{ore:"🌳", amt:30},{ore:"🏰", amt:30},{ore:"🚿", amt:30},{ore:"🏔️", amt:30},{ore:"⚠️", amt:30},{ore:"🐪", amt:30},{ore:"🐋", amt:1095},{ore:"💵", amt:30},{ore:"🍃", amt:25},{ore:"👾", amt:15},{ore:"🪡", amt:15},{ore:"🚽", amt:15},{ore:"🎓", amt:15},{ore:"⚡", amt:15},{ore:"💘", amt:30},{ore:"💢", amt:50},{ore:"🪽", amt:2},{ore:"🗝️", amt:2},{ore:"🚫", amt:2},{ore:"♨️", amt:1},]        ,
+        upgrades : {}
+    },
+    "pickaxe27" : {
+        name: "",
+        recipe : [],
         upgrades : {}
     },
     "gear0" : {
@@ -190,27 +195,27 @@ const recipes = {
     },
     "gear10" : {
         name : "",
-        recipe : [{ore:"🌐", amt:5000000},{ore:"🔄", amt:28000},{ore:"🔀", amt:10000},{ore:"💻", amt:1},],
+        recipe : [{ore:"🌐", amt:2500000},{ore:"🔄", amt:28000},{ore:"🔀", amt:10000},{ore:"💻", amt:1},],
         upgrades : {}
     },
     "gear11" : {
         name : "",
-        recipe : [{ore:"☁️", amt:15000000},{ore:"📗", amt:15},{ore:"📘", amt:10},{ore:"🌧️", amt:4},{ore:"🌨️", amt:1},],
+        recipe : [{ore:"☁️", amt:7500000},{ore:"📗", amt:15},{ore:"📘", amt:10},{ore:"🌧️", amt:4},{ore:"🌨️", amt:1},],
         upgrades : {}
     },
     "gear12" : {
         name : "",
-        recipe : [{ore:"🚪", amt:17500000},{ore:"⏪", amt:625},{ore:"⏏️", amt:125},{ore:"🔒", amt:8},{ore:"🔑", amt:5},{ore:"🖇️", amt:2},],
+        recipe : [{ore:"🚪", amt:8750000},{ore:"⏪", amt:625},{ore:"⏏️", amt:125},{ore:"🔒", amt:8},{ore:"🔑", amt:5},{ore:"🖇️", amt:2},],
         upgrades : {}
     },
     "gear13" : {
         name : "",
-        recipe : [{ore:"🌐", amt:30000000},{ore:"🔃", amt:675000},{ore:"⤴️", amt:67500},{ore:"➡️", amt:6750},{ore:"⏺️", amt:675},{ore:"💻", amt:15},{ore:"🖱️", amt:5},],
+        recipe : [{ore:"🌐", amt:15000000},{ore:"🔃", amt:675000},{ore:"⤴️", amt:67500},{ore:"➡️", amt:6750},{ore:"⏺️", amt:675},{ore:"💻", amt:15},{ore:"🖱️", amt:5},],
         upgrades : {}
     },
     "gear14" : {
         name : "",
-        recipe : [{ore:"♟️", amt:45000000},{ore:"🔂", amt:450000},{ore:"↩️", amt:90000},{ore:"▶️", amt:450},{ore:"✏️", amt:15},{ore:"🧠", amt:6},{ore:"📖", amt:5},{ore:"📐", amt:4},{ore:"📚", amt:2},],
+        recipe : [{ore:"♟️", amt:22500000},{ore:"🔂", amt:450000},{ore:"↩️", amt:90000},{ore:"▶️", amt:450},{ore:"✏️", amt:15},{ore:"🧠", amt:6},{ore:"📖", amt:5},{ore:"📐", amt:4},{ore:"📚", amt:2},],
         upgrades : {}
     },
     "gear15" : {
@@ -220,27 +225,27 @@ const recipes = {
     },
     "gear16" : {
         name : "",
-        recipe : [{ore:"🌐", amt:90000000},{ore:"➡️", amt:27500},{ore:"⏩", amt:5000},{ore:"⏭️", amt:3800},{ore:"▶️", amt:920},{ore:"🖱️", amt:30},{ore:"🍆", amt:3},{ore:"💔", amt:1},],
+        recipe : [{ore:"🌐", amt:45000000},{ore:"➡️", amt:27500},{ore:"⏩", amt:5000},{ore:"⏭️", amt:3800},{ore:"▶️", amt:920},{ore:"🖱️", amt:30},{ore:"🍆", amt:3},{ore:"💔", amt:1},],
         upgrades : {}
     },
     "gear17" : {
         name : "",
-        recipe : [{ore:"♟️", amt:175000000},{ore:"🔼", amt:30000},{ore:"✏️", amt:50},{ore:"🧠", amt:35},{ore:"📖", amt:30},{ore:"📐", amt:15},{ore:"📚", amt:10},{ore:"🖊️", amt:3},],
+        recipe : [{ore:"♟️", amt:87500000},{ore:"🔼", amt:30000},{ore:"✏️", amt:50},{ore:"🧠", amt:35},{ore:"📖", amt:30},{ore:"📐", amt:15},{ore:"📚", amt:10},{ore:"🖊️", amt:3},],
         upgrades : {}
     },
     "gear18" : {
         name : "",
-        recipe : [{ore:"📺", amt:500000000},{ore:"🔀", amt:2000000},{ore:"⬅️", amt:580000},{ore:"⏩", amt:9500},{ore:"⏮️", amt:13500},{ore:"⏸️", amt:5000},{ore:"🛡️", amt:250},{ore:"🪃", amt:200},{ore:"🪓", amt:30},{ore:"🔨", amt:5},{ore:"💣", amt:3},],
+        recipe : [{ore:"📺", amt:250000000},{ore:"🔀", amt:2000000},{ore:"⬅️", amt:580000},{ore:"⏩", amt:9500},{ore:"⏮️", amt:13500},{ore:"⏸️", amt:5000},{ore:"🛡️", amt:250},{ore:"🪃", amt:200},{ore:"🪓", amt:30},{ore:"🔨", amt:5},{ore:"💣", amt:3},],
         upgrades : {}
     },
     "gear19" : {
         name : "",
-        recipe : [{ore:"🚪", amt:3500000000},{ore:"⤴️", amt:2700000},{ore:"↪️", amt:1850000},{ore:"⏪", amt:45000},{ore:"⏯️", amt:15000},{ore:"🔒", amt:4200},{ore:"🖇️", amt:1300},{ore:"⛓️", amt:100},{ore:"🚧", amt:30},{ore:"🛎️", amt:5},],
+        recipe : [{ore:"🚪", amt:1750000000},{ore:"⤴️", amt:2700000},{ore:"↪️", amt:1850000},{ore:"⏪", amt:45000},{ore:"⏯️", amt:15000},{ore:"🔒", amt:4200},{ore:"🖇️", amt:1300},{ore:"⛓️", amt:100},{ore:"🚧", amt:30},{ore:"🛎️", amt:5},],
         upgrades : {}
     },
     "gear20" : {
         name : "",
-        recipe : [{ore:"♟️", amt:9000000000},{ore:"↩️", amt:4500000},{ore:"⬆️", amt:2300000},{ore:"↖️", amt:640000},{ore:"⏭️", amt:60000},{ore:"✏️", amt:10000},{ore:"📐", amt:3000},{ore:"🔎", amt:150},{ore:"📌", amt:75},{ore:"📍", amt:15},{ore:"🎓", amt:9},],
+        recipe : [{ore:"♟️", amt:4500000000},{ore:"↩️", amt:4500000},{ore:"⬆️", amt:2300000},{ore:"↖️", amt:640000},{ore:"⏭️", amt:60000},{ore:"✏️", amt:10000},{ore:"📐", amt:3000},{ore:"🔎", amt:150},{ore:"📌", amt:75},{ore:"📍", amt:15},{ore:"🎓", amt:9},],
         upgrades : {}
     },
     "gear21" : {
@@ -248,6 +253,16 @@ const recipes = {
         recipe : [{ore:"🦠", amt:70000000},{ore:"☣️", amt:40000000},{ore:"🎵", amt:20000000},{ore:"❓", amt:15000000},{ore:"🪇", amt:1},{ore:"🧬", amt:1},{ore:"🔭", amt:1},{ore:"🕸️", amt:1},],
         upgrades : {}
     },
+    "gear22" : {
+        name : "",
+        recipe : [{ore:"🇿🇦", amt:2}, {ore:"🇹🇿", amt:2}, {ore:"🇨🇩", amt:1}],
+        upgrades: {}
+    },
+    "gear23" : {
+        name : "",
+        recipe : [ {ore:"🇵🇰", amt:2}, {ore:"🇯🇵", amt:3}, {ore:"🇧🇩", amt:3}],
+        upgrades: {}
+    }
 }
 recipeElements = {};
 let currentRecipe = undefined;
@@ -255,12 +270,15 @@ function displayRecipe(recipe) {
     const parentElement = document.getElementById("displayRecipe");
     while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
     if (currentRecipe === undefined || currentRecipe !== recipe) {
-        document.getElementById("craftingRecipeTitle").style.display = "block";
+        if (recipe !== "pickaxe27") document.getElementById("craftingRecipeTitle").style.display = "block";
         recipeElements[recipe].style.display = "block";
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
         description.style.display = "block";
-        parentElement.appendChild(description)
+        let title = document.getElementById("descriptionTitle").cloneNode(true);
+        title.style.display = "block";
+        parentElement.appendChild(title);
+        parentElement.appendChild(description);
         currentRecipe = recipe;
     } else {
         document.getElementById("craftingRecipeTitle").style.display = "none";
@@ -274,6 +292,7 @@ let lastCount = -1;
 function updateActiveRecipe() {
     let totalCount = 0;
     let count = 0;
+    if (currentRecipe === "pickaxe27") return;
     if (currentRecipe !== undefined) {
         const recipe = recipes[currentRecipe].recipe;
         const elements = recipeElements[currentRecipe].children;
@@ -332,38 +351,43 @@ function createPickaxeRecipes() {
     for (let property in recipes) {
         let recipe = recipes[property].recipe;
         const tempElement = document.createElement('div');
-        tempElement.classList = 'craftingAmountsDisplay'
-        tempElement.id = property;
-        for (let i = 0; i < recipe.length; i++) {
-            const ore = recipe[i].ore;
-            const amtNeeded = recipe[i].amt;
-            const amtHave = oreList[ore]["normalAmt"];
-            const recipeElement = document.createElement('p');
-            recipeElement.id = `${property}Display`;
-            recipeElement.classList = `recipeOreDisplay`;
-            recipeElement.innerText = `${ore} ${amtHave.toLocaleString()}/${amtNeeded.toLocaleString()}`
-            recipeElement.setAttribute("onclick", `randomFunction("${ore}", "crafting")`);
-            const colors = oreInformation.getColors(oreList[ore]["oreTier"]);
-            recipeElement.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
-            if (amtHave >= amtNeeded) recipeElement.style.color = "#6BC267";
-            else recipeElement.style.color = "#FF3D3D";
-            tempElement.appendChild(recipeElement);
-        }
-        let tempButton = document.createElement('button');
-        if (property === "pickaxe13") {
-            tempButton.innerText = "Teleport!";
-            tempButton.setAttribute("onclick", "attemptSwitchWorld(2)");
-            tempButton.style.width = "50%";
+        if (property === "pickaxe27") {
+            recipeElements[property] = tempElement;
+        } else {
+            tempElement.classList = 'craftingAmountsDisplay'
+            tempElement.id = property;
+            for (let i = 0; i < recipe.length; i++) {
+                const ore = recipe[i].ore;
+                const amtNeeded = recipe[i].amt;
+                const amtHave = oreList[ore]["normalAmt"];
+                const recipeElement = document.createElement('p');
+                recipeElement.id = `${property}Display`;
+                recipeElement.classList = `recipeOreDisplay`;
+                recipeElement.innerText = `${ore} ${amtHave.toLocaleString()}/${amtNeeded.toLocaleString()}`
+                recipeElement.setAttribute("onclick", `randomFunction("${ore}", "crafting")`);
+                const colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+                recipeElement.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
+                if (amtHave >= amtNeeded) recipeElement.style.color = "#6BC267";
+                else recipeElement.style.color = "#FF3D3D";
+                tempElement.appendChild(recipeElement);
+            }
+            let tempButton = document.createElement('button');
+            if (property === "pickaxe13") {
+                tempButton.innerText = "Teleport!";
+                tempButton.setAttribute("onclick", "attemptSwitchWorld(2)");
+                tempButton.style.width = "50%";
+                tempButton.classList = "craftPickaxeButton";
+                tempElement.appendChild(tempButton);
+                tempButton = document.createElement('button');
+            }
+            tempButton.id=`${property}Craft`;
             tempButton.classList = "craftPickaxeButton";
+            tempButton.setAttribute("onclick", `craftPickaxe("${property}")`);
+            tempButton.style.width = property === "pickaxe13" ? "50%" : "100%";
             tempElement.appendChild(tempButton);
-            tempButton = document.createElement('button');
+            recipeElements[property] = tempElement;
         }
-        tempButton.id=`${property}Craft`;
-        tempButton.classList = "craftPickaxeButton";
-        tempButton.setAttribute("onclick", `craftPickaxe("${property}")`);
-        tempButton.style.width = property === "pickaxe13" ? "50%" : "100%";
-        tempElement.appendChild(tempButton);
-        recipeElements[property] = tempElement;
+        
     }
 }
 function createGearRecipes() {
@@ -396,6 +420,7 @@ const buttonGradients = {
     "pickaxe24Craft" : {"gradient" : "linear-gradient(to right, #F6FF58 7%, #0030F1, #676767, #57FDFF, #FC5EFF 93%","applied" : false},
     "pickaxe25Craft" : {"gradient" : "linear-gradient(to right, #FF2454, #600018, #FF8DCC, #121212, #FF8DCC, #600018, #FF2454","applied" : false},
     "pickaxe26Craft" : {"gradient" : "linear-gradient(to right, #000000, #5D0000, #734600, #807A00, #074D00, #006564, #021652 , #3B0076, #460038, #5D0000, #000000)","applied" : false},
+    "pickaxe27Craft" : {"gradient" : "linear-gradient()","applied" : false},
     
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
     "gear1Craft" : {"gradient" : "linear-gradient(to right, #FFF1C0, #FF9E40","applied" : false},
@@ -419,7 +444,8 @@ const buttonGradients = {
     "gear19Craft" : {"gradient" : "linear-gradient(to right, #CDCDCD 5%, #F55D2F, #474747, #EFD754, #474747, #F55D2F, #CDCDCD 95%","applied" : false},
     "gear20Craft" : {"gradient" : "linear-gradient(to right, #000000 5%, #FF3636, #E94585, #000ACE, #FFFFFF 95%","applied" : false},
     "gear21Craft" : {"gradient" : "linear-gradient(to right, #44533D, #37085A, #76734E, #116666, #58340B, #04370A, #3B0505, #740A32, #451676, #236B4B)","applied" : false},
-
+    "gear22Craft" : {"gradient" : "linear-gradient(to right,#FF0B0B, #FFEB00, #7AFF1F)","applied" : false},
+    "gear23Craft" : {"gradient" : "linear-gradient()","applied" : false},
     
 }
 function craftPickaxe(item) {
@@ -438,7 +464,7 @@ function craftPickaxe(item) {
             oreList[ore]["normalAmt"] -= amtNeeded;
             inventoryObj[ore] = 0;
         }
-        if (type === "pickaxes") player.pickaxes[item] = true;
+        if (type === "pickaxe") player.pickaxes[item] = true;
         else player.gears[item] = true;
     }
     if (type === "pickaxe") player.stats.currentPickaxe = Number(item.substring(type.length));
@@ -469,8 +495,8 @@ const showOrders = {
     worldTwoPickaxes : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
     worldOneGears : ["gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9"],
     worldTwoGears : ["gear10", "gear11", "gear12", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
-    srOnePickaxes : ["pickaxe1"],
-    srOneGears : ["gear0"],
+    srOnePickaxes : ["pickaxe27"],
+    srOneGears : ["gear22", "gear23"],
 }
 function showPickaxes() {
     appear(document.getElementById("pickaxeCrafts"));
@@ -497,7 +523,7 @@ function showGears() {
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
         let children = document.getElementById("pickaxeCrafts").children;
-        const list = currentWorld === 1 ? showOrders.worldOnePickaxes : showOrders.worldTwoPickaxes;
+        const list = currentWorld === 1 ? showOrders.worldOnePickaxes : (currentWorld === 1.1 ? showOrders.srOnePickaxes : showOrders.worldTwoPickaxes);
         for (let i = 0; i < list.length; i++) {
             getButtonByName(list[i]).style.display = "block";
         }
@@ -723,4 +749,115 @@ function craftOre(id) {
         }
     }
         
+}
+const upgradeRecipes = {
+    "pickaxe27" : {
+        "upgrade0" : 
+        {
+            recipe : [
+                {ore: "🇩🇿", amt: 15},
+                {ore: "🇸🇩", amt: 15},
+                {ore: "🇺🇬", amt: 2},
+                {ore: "🇰🇪", amt: 2},
+            ],
+            descriptions : [
+                "Luck:<br>1 -> 3",
+                "Ability Size:<br>num -> num"
+            ]
+        },
+    }
+}
+let currentDisplayedUpgrade;
+function displayUpgrade(id, location) {
+    currentDisplayedUpgrade = {id: id, location: location};
+    const holder = document.getElementById("upgradeRecipeHolder");
+    while (holder.firstChild) holder.removeChild(holder.firstChild);
+    location = location.parentElement;
+    holder.style.top = `${location.getBoundingClientRect().bottom}px`;
+    holder.style.left = `${location.offsetLeft}px`;
+    holder.style.display = "block";
+    if (player.upgrades[id].level >= player.upgrades[id].maxLevel) {
+        const maxElement = document.createElement('p');
+        maxElement.innerText = "Max Level Reached!";
+        maxElement.classList = "upgradeMaxLevel";
+        document.getElementById("upgradeRecipeHolder").appendChild(maxElement);
+        return;
+    }
+    const currentUpgrade = upgradeRecipes[id][`upgrade${player.upgrades[id].level}`].recipe;
+    if (currentUpgrade === undefined) return;
+    let element = document.createElement('p');
+    element.classList = 'upgradeRecipeElement';
+    let colors;
+    let amt;
+    let needed;
+    let ore;
+    let totalNeed = 0;
+    let totalHave = 0;
+    let count = 0;
+    let totalCount = 0;
+    currentUpgrade.forEach(recipeElement => {
+        ore = recipeElement.ore;
+        needed = recipeElement.amt;
+        amt = oreList[ore]["normalAmt"];
+        totalNeed += oreList[ore]["numRarity"] * needed;
+        totalHave += amt >= needed ? (oreList[ore]["numRarity"] * needed) : (oreList[ore]["numRarity"] * amt);
+        totalCount++;
+        count += amt >= needed ? 1 : 0;
+        element.innerText = `${ore} ${amt}/${needed}`;
+        element.style.color = amt >= needed ? "#6BC267" : "#FF3D3D";
+        colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+        element.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
+        element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
+        holder.appendChild(element.cloneNode(true));
+    });
+    const progressElement = document.createElement('p');
+    progressElement.classList = "upgradeRecipeProgress";
+    let percent = 100 * (totalHave/totalNeed);
+    percent = Math.round(percent * 100) / 100
+    if (count < totalCount && percent === 100) percent = 99.99; 
+    progressElement.style.backgroundImage = `linear-gradient(to right, #6BC267 ${percent}%, #FF3D3D ${(percent + 5)}%)`;
+    if (percent < 100) progressElement.innerText = percent + "%";
+    else progressElement.innerText = "Can Upgrade!";
+    holder.appendChild(progressElement);
+} 
+function updateDisplayedUpgrade() {
+    updateUpgradeDisplay();
+    if (document.getElementById("workshopContainer").style.display === "none" || currentDisplayedUpgrade === undefined) return;
+    displayUpgrade(currentDisplayedUpgrade.id, currentDisplayedUpgrade.location);
+}
+function craftUpgrade(id) {
+    if (player.upgrades[id].level >= player.upgrades[id].maxLevel) return;
+    const currentUpgrade = upgradeRecipes[id][`upgrade${player.upgrades[id].level}`].recipe;
+    if (currentUpgrade === undefined) return;
+    currentUpgrade.forEach(recipeElement => {
+        if (oreList[recipeElement.ore]["normalAmt"] < recipeElement.amt) return;
+    });
+    currentUpgrade.forEach(recipeElement => {
+        oreList[recipeElement.ore]["normalAmt"] -= recipeElement.amt;
+    });
+    player.upgrades[id].level++;
+    player.upgrades[id].bought++;
+    updateDisplayedUpgrade();
+}
+function hideUpgrade() {
+    document.getElementById("upgradeRecipeHolder").style.display = "none";
+    currentDisplayedUpgrade = undefined;
+}
+function keepDisplayingUpgrade() {
+    document.getElementById("upgradeRecipeHolder").style.display = "block";
+}
+function updateUpgradeDisplay() {
+    let toEdit = document.getElementsByClassName("workshopInformationLevel");
+    toEdit[0].innerText = `Level ${player.upgrades["pickaxe27"].level}/${player.upgrades["pickaxe27"].maxLevel}`;
+    toEdit = document.getElementsByClassName("workshopInformationLevelDescriptor");
+    let descriptions = upgradeRecipes["pickaxe27"]["upgrade0"].descriptions;
+    let output = "";
+    if (player.upgrades["pickaxe27"].level >= player.upgrades["pickaxe27"].maxLevel) {
+        output = ""
+    } else {
+        for (let i = 0; i < descriptions.length; i++) {
+            output += `${descriptions[i]}<br>`;
+        }
+    }
+    toEdit[0].innerHTML = output;
 }

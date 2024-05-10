@@ -45,6 +45,9 @@ function init() {
     revealedElement = document.getElementById("mineResetProgress");
     locationElement = document.getElementById("location");
     blockElement = document.getElementById("blockDisplay");
+    document.getElementById("menuSelectionContainer").addEventListener('click', (event) => {
+        if (event.target.parentElement.classList.contains("menuCategory")) closeMenu();
+    }, false);
     let canContinue = true;
     createInventory();
     createGearRecipes();
@@ -71,6 +74,12 @@ function init() {
         .catch(error => {
             failedFetch();
         });
+        fetch("abilityNums.json")
+        .then((response) => response.json())
+        .then((json) => assignPickaxeNums(json))
+        .catch(error => {
+            failedFetch();
+        });
     if (canContinue) {
         repeatDataSave();
         cat = verifiedOres.getCurrentLuck();
@@ -81,6 +90,10 @@ function init() {
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         console.log("meow");
     }
+}
+function assignPickaxeNums(json) {
+    pickaxe24Nums = json.pickaxeNums24;
+    pickaxe25Nums = json.pickaxeNums25;
 }
 function failedFetch() {
     for (let ore in oreList) oreList[ore]["oreName"] = "FAILED TO FETCH NAMES";
@@ -162,7 +175,7 @@ function loadContent() {
     magnificent = new Audio("audios/magnificent.mp3");
     ethereal = new Audio("audios/ethereal sound by elysia.mp3");
     celestial = new Audio("audios/celestial.mp3");
-    imaginary = new Audio("audios/ethereal sound by elysia.mp3");
+    imaginary = new Audio("audios/imaginary.mp3");
     allAudios["Antique"] = chill;
     allAudios["Mystical"] = mystical;
     allAudios["Divine"] = divine;
@@ -193,7 +206,7 @@ function loadContent() {
 function movePlayer(dir, reps) {
     for (let i = 0; i < reps; i++) {
         if (canMine) {
-            if (currentWorld < 2 || player.stats.currentPickaxe > 12) {
+            if (currentWorld === 1 || (currentWorld === 2 && player.stats.currentPickaxe > 12) || (currentWorld === 1.1 && player.stats.currentPickaxe === 27)) {
                 if (dir.y < 0 && !(curY > 0)) {
                     return;
                 } else if (dir.x < 0 && !(curX > 0)) {
@@ -304,7 +317,6 @@ document.addEventListener('keydown', (event) => {
         energySiphonerDirection = "";
     }
 }, false);
-
 let loopTimer = null;
 let curDirection = "";
 let baseSpeed = 25;;
@@ -346,6 +358,7 @@ function goDirection(direction, speed) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
+        if (currentWorld === 1.1) miningSpeed = 10;
         loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
@@ -387,9 +400,9 @@ function displayArea() {
             for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
                 if (mine[r][c]) {
                     if (player.settings.usePathBlocks)
-                        output += mine[r][c].ore !== undefined ? mine[r][c].ore : mine[r][c];
+                        output += mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : mine[r][c];
                     else
-                        output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? mine[r][c].ore : mine[r][c]);   
+                        output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : mine[r][c]);   
                 } else {
                     output += r === grass ? "🟩" : "⬛";
                 }
@@ -404,6 +417,22 @@ function displayArea() {
     locationElement.innerText = "X: " + (curX - 1000000000).toLocaleString() + " | Y: " + (-(curY - sub)).toLocaleString();
     if (player.oreTracker.tracking) {
         getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
+    }
+}
+function checkDisplayVariant(location) {
+    if (location.variant > 1) {
+        //linear-gradient(to bottom right, #c91800, #ff722b, #383838) explosive
+        //linear-gradient(to bottom right, #062404, #c9fc3a, #062404) radioactive
+        //linear-gradient(to bottom right, #f7f368, #ffc629, #e365fc) electrified
+        if (location.variant === 2) {
+            return `<span class="electrifiedBlock">${location.ore}</span>`
+        } else if (location.variant === 3) {
+            return `<span class="radioactiveBlock">${location.ore}</span>`
+        } else if (location.variant === 4) {
+            return `<span class="explosiveBlock">${location.ore}</span>`
+        }
+    } else {
+        return location.ore;
     }
 }
 
@@ -535,6 +564,7 @@ function updateInventory() {
     }
     checkPowerupCooldowns();
     updatePowerupCooldowns();
+    updateDisplayedUpgrade();
     if (player.gears["gear24"]) autoPowerups();
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
@@ -548,8 +578,8 @@ function disappear(element){
 }
 
 //SPAWNS AND FINDS
-
 let spawnOre = null;
+let currentSpawnTier = "";
 //{block: block, location: location, caveInfo: caveInfo}
 function spawnMessage(obj) {
     let block = obj.block;
@@ -584,24 +614,26 @@ function spawnMessage(obj) {
         spawnElement.appendChild(element)
     }
     if (spawnElement.children.length > player.settings.latestLength) spawnElement.removeChild(spawnElement.lastChild);
-        let createSpawnMessage = false;
-        if (spawnOre === null) 
-            createSpawnMessage = true;
-        else if (document.getElementById("spawnMessage").innerText.indexOf(" Has Spawned!") > -1) 
-            createSpawnMessage = true;
-        else if (oreList[block]["spawnMessage"].indexOf(" Has Spawned!") < 0)
-            createSpawnMessage = true;
-        if (createSpawnMessage || oreInformation.tierGrOrEqTo({"tier1":oreList[block]["oreTier"], "tier2":"Flawless"})) {
+    let createSpawnMessage = false;
+    let curTier = oreList[block]["oreTier"];
+    if (oreInformation.tierGrOrEqTo({"tier1": curTier, "tier2":currentSpawnTier}) || spawnOre === null || currentSpawnTier === "") createSpawnMessage = true;
+    if (createSpawnMessage) {
+        currentSpawnTier = curTier;
+        if (currentWorld === 1.1) {
+            document.getElementById("spawnMessage").innerHTML = oreInformation.getTierMessage(curTier);
+        } else {
             let spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreList[block]["spawnMessage"] + "</span></i><br>";
             if (caveInfo != undefined) {
                 document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();
             } else {
                 document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString();
             }
-            clearTimeout(spawnOre);
-            spawnOre = setTimeout(() => {
+        }
+        clearTimeout(spawnOre);
+        spawnOre = setTimeout(() => {
             document.getElementById("spawnMessage").innerHTML = "Spawn Messages Appear Here!";
             spawnOre = null;
+            currentSpawnTier = "";
         }, 30000);
         }
         
@@ -653,18 +685,24 @@ function checkExistingOres() {
     for (let i = 0; i < player.oreTracker.existingOres.length; i++) {
         let num = Math.abs(curX - player.oreTracker.existingOres[i].posX) + Math.abs(curY - player.oreTracker.existingOres[i].posY);
         mine[player.oreTracker.existingOres[i].posY] ??= [];
-        if (num < closestLocation && (mine[player.oreTracker.existingOres[i].posY][player.oreTracker.existingOres[i].posX] === player.oreTracker.existingOres[i].block)) {
+        let block = mine[player.oreTracker.existingOres[i].posY][player.oreTracker.existingOres[i].posX];
+        block = block.ore === undefined ? block : block.ore;
+        if (num < closestLocation && (block === player.oreTracker.existingOres[i].block)) {
             closestIndex = i;
             closestLocation = num;
         }
     }
     if (closestIndex > -1) {
         mine[player.oreTracker.existingOres[closestIndex].posY] ??= [];
-        if (mine[player.oreTracker.existingOres[closestIndex].posY][player.oreTracker.existingOres[closestIndex].posX] === player.oreTracker.existingOres[closestIndex].block) {
+        let blockAtIndex = mine[player.oreTracker.existingOres[closestIndex].posY][player.oreTracker.existingOres[closestIndex].posX];
+        let variantAtIndex = "";
+        if (blockAtIndex.variant !== undefined) variantAtIndex = namesemojis[blockAtIndex.variant - 1];
+        if (blockAtIndex.ore !== undefined) blockAtIndex = blockAtIndex.ore;
+        if (blockAtIndex === player.oreTracker.existingOres[closestIndex].block) {
             player.oreTracker.tracking = true;
             player.oreTracker.locationX = player.oreTracker.existingOres[closestIndex].posX;
             player.oreTracker.locationY = player.oreTracker.existingOres[closestIndex].posY;
-            document.getElementById("trackerOre").innerText = `Ore: ${player.oreTracker.existingOres[closestIndex].block}`
+            document.getElementById("trackerOre").innerText = `Ore: ${variantAtIndex}${player.oreTracker.existingOres[closestIndex].block}`
             document.getElementById("trackerX").innerText = `X: ${(player.oreTracker.locationX - 1000000000).toLocaleString()}`
             document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld < 2 ? 0 : 2000))).toLocaleString()}`
             getAngleBetweenPoints({x:player.oreTracker.locationX, y:player.oreTracker.locationY});
@@ -742,7 +780,9 @@ function toggleCelestials(state) {
 //TY @marbelynrye FOR MAKING THESE IMAGE DATA GATHERERS UR SO COOL FOR THAT
 //IT WORKS SO WELL!!!!
 let pickaxe24Nums = [];
-const az = new Image()
+let pickaxe25Nums = [];
+/*
+const az = new Image();
 az.src = "ability1.jpg"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
@@ -752,16 +792,6 @@ az.src = "ability1.jpg"
             for (let i = 0; i < data.length; i+=4) {
                 data[i]>125?null:pickaxe24Nums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
             }
-    }
-let pickaxe25Nums = [];
-const ay = new Image();
-ay.src = "coronalheart.png"
-ay.onload = () => {
-    const c = new OffscreenCanvas(ay.width,ay.height)
-    const cc = c.getContext("2d")
-    cc.drawImage(ay,0,0)
-    const data = cc.getImageData(0,0,c.width,c.height).data
-    for (let i = 0; i < data.length; i+=4) {
-        data[i]>125?null:pickaxe25Nums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
-    }
 }
+*/
+

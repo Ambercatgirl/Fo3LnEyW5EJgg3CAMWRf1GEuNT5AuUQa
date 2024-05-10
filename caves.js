@@ -15,6 +15,7 @@ function checkValidLocation(x, y) {
         if (lY > 1) {
             if (mine[lY][lX] === undefined && mine[lY + 1][lX] === undefined && mine[lY - 1][lX] === undefined && mine[lY][lX - 1] === undefined && mine[lY][lX + 1] === undefined) return {x: lX, y: lY};
         }
+        reps++;
     }
     return {x: undefined, y: undefined}
 }

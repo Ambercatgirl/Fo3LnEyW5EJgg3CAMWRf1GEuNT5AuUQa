@@ -320,6 +320,7 @@ function updateCapacity(element) {
 const indexOrder = {
     "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
     "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
+    "subrealmOne" : ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"]
 }
 let layerNum = 0;
 function switchLayerIndex(num, overrideLayer, world) {
@@ -329,9 +330,9 @@ function switchLayerIndex(num, overrideLayer, world) {
     let layerToIndex;
     let worldLayer;
     if (world === undefined) {
-        worldLayer = currentWorld === 1 ? indexOrder["worldOne"] : indexOrder["worldTwo"];
+        worldLayer = currentWorld === 1 ? indexOrder["worldOne"] : (world === 2 ? indexOrder["worldTwo"] : indexOrder["subrealmOne"]);
     } else {
-        worldLayer = world === 1 ? indexOrder["worldOne"] : indexOrder["worldTwo"];
+        worldLayer = world === 1 ? indexOrder["worldOne"] : (world === 2 ? indexOrder["worldTwo"] : indexOrder["subrealmOne"]);
     }
     if (overrideLayer === undefined) {
         layerNum += num;
@@ -380,6 +381,7 @@ function switchLayerIndex(num, overrideLayer, world) {
 let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕🎉🧌♾️💅😁🪢";
 let noLuck = "✴️🌹";
 function createIndexCards(layer) {
+        const oldLayer = layer; 
         let toReturn = [];
         let isCave = false;
         let caveMulti;
@@ -400,7 +402,7 @@ function createIndexCards(layer) {
         }
         for (let i = 0; i < layer.length; i++) {
         let property = layer[i];
-        if ((oreList[property]["numRarity"] >= minIndexRarity || property === "✴️") && oreList[property]["oreTier"] !== "Celestial") {
+        if ((oreList[property]["numRarity"] >= minIndexRarity || property === "✴️" || (oreList[property]["numRarity"] > 1 && subRealmOneLayers.includes(oldLayer))) && oreList[property]["oreTier"] !== "Celestial") {
             if (oreInformation.isCommon(oreList[property]["oreTier"])) affectedByLuck = false;
             if (noLuck.indexOf(property) > -1) affectedByLuck = false;
             let parentObject = document.createElement("div");
@@ -473,6 +475,15 @@ function randomFunction(ore, cause) {
                     if (layerList[worldTwoLayers[i]].includes(ore)) {
                         layer = worldTwoLayers[i];
                         world = 2;
+                        break;
+                    }
+                }
+            }
+            if (layer === undefined) {
+                for (let i = 0; i < subRealmOneLayers.length; i++) {
+                    if (layerList[subRealmOneLayers[i]].includes(ore)) {
+                        layer = subRealmOneLayers[i];
+                        world = 1.1;
                         break;
                     }
                 }
@@ -707,6 +718,12 @@ function showOreFissions(state) {
     if (state) showOreCrafts(false);
     document.getElementById("forgeFission").style.display = state ? "inline-flex" : "none";
 }
+function showWorkshop(state) {
+    if (state) {showVariantConversion(false); showOreForge(false);}
+    document.getElementById("workshopContainer").style.display = state ? "block" : "none";
+    currentDisplayedUpgrade = undefined;
+    updateDisplayedUpgrade();
+}
 function convertVariants() {
     let ore = document.getElementById("oreInput").value;
     ore = ore.replaceAll(" ", "");
@@ -772,6 +789,15 @@ function toggleSpawnEffects(button) {
     } else {
         button.style.backgroundColor = "#6BC267";
         player.settings.doSpawnEffects = true;
+    }
+}
+function toggleAutomineProtection(button) {
+    if (player.settings.automineProtection) {
+        button.style.backgroundColor = "#FF3D3D";
+        player.settings.automineProtection = false;
+    } else {
+        button.style.backgroundColor = "#6BC267";
+        player.settings.automineProtection = true;
     }
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})

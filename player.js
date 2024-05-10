@@ -92,6 +92,7 @@ class playerTemplate {
             doSpawnEffects: true,
             latestLength: 10,
             useNewMusic: true,
+            automineProtection: false,
         },
         this.stats = {
             currentPickaxe: 0,
@@ -122,6 +123,16 @@ class playerTemplate {
             locationY : 0
         },
         this.currentEffect = "";
+        this.upgrades = {
+            "pickaxe27" : {
+                level: 0,
+                maxLevel: 1,
+                bought: 0,
+                levelLuck: [1, 3]
+            }
+        },
+        this.wasUsing = undefined;
+        this.sr1Unlocked = false;
     }
 }
 let player = new playerTemplate();
@@ -296,7 +307,7 @@ function autoPowerups() {
 function countFlawlessOres() {
     const ores = oreInformation.getOresByTier("Flawless");
     let count = 0;
-    for (let i = 0; i < ores.length; i++) count += oreList[ores[i]]["normalAmt"];
+    for (let i = 0; i < ores.length; i++) count += oreList[ores[i]]["normalAmt"], count += oreList[ores[i]]["electrifiedAmt"], count += oreList[ores[i]]["radioactiveAmt"], count += oreList[ores[i]]["explosiveAmt"];
     return count;
 }
 
@@ -407,6 +418,9 @@ function loadNewData(data) {
             }
         }
         data = data.player;
+        if (data.wasUsing !== undefined) {
+            data.stats.currentPickaxe = data.wasUsing;
+        }
         if (data.powerupVariables !== undefined && data.powerupVariables.fakeEquipped !== undefined && data.powerupVariables.fakeEquipped.item !== "") {
             let item = data.powerupVariables.fakeEquipped.item;
             if (player.gears[item] !== undefined) data.gears[item] = false;
@@ -493,6 +507,8 @@ function loadNewData(data) {
         if (!data.settings.doSpawnEffects) toggleSpawnEffects(document.getElementById("spawnEffects"));
         data.settings.latestLength ??= 10;
         player.settings.latestLength = data.settings.latestLength;
+        data.settings.automineProtection ??= false;
+        if (data.settings.automineProtection) toggleAutomineProtection(document.getElementById("automineProtection"));
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
                 if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
@@ -503,6 +519,13 @@ function loadNewData(data) {
                 }
             }
         }
+        if (data.upgrades !== undefined) {
+            if (data.upgrades["pickaxe27"] !== undefined) {player.upgrades["pickaxe27"].level = data.upgrades["pickaxe27"].level; player.upgrades["pickaxe27"].bought = data.upgrades["pickaxe27"].bought}
+            
+        }
+        data.sr1Unlocked ??= false;
+        player.sr1Unlocked = data.sr1Unlocked;
+        if (player.sr1Unlocked) {document.getElementById("sr1Lock").style.display = "none"; document.getElementById("sr1Teleporter").style.display = "block";}
         //unlock locked features
         if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";

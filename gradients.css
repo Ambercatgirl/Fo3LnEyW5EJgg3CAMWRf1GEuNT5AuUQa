@@ -247,6 +247,11 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#replicatorPrototype span{
+    background: linear-gradient(to right,#FF0B0B, #FFEB00, #7AFF1F);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #text span{
     background: linear-gradient(to right,);
     background-clip: text;
