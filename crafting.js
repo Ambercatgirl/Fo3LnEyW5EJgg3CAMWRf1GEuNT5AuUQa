@@ -486,7 +486,6 @@ function utilitySwitchActions() {
     changeLayerOres();
     updateAllLayers();
     switchLayerIndex(0);
-    updateStats();
 }
 let m87 = 0;
 let m88 = 0;

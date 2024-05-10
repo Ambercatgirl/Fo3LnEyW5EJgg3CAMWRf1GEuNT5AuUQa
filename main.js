@@ -380,12 +380,6 @@ function moveOne(dir, button) {
     energySiphonerDirection = "";
 }
 
-function updateStats() {
-    let pickaxeLevel1 = currentWorld === 1 ? 9 : 23;
-    let pickaxeLevel2 = currentWorld === 1 ? 6 : 20;
-    minRarity = (player.stats.currentPickaxe > pickaxeLevel1 ? 20000000 : (player.stats.currentPickaxe > pickaxeLevel2 ? 2000000 : 750000));
-}
-
 //DISPLAY
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 function displayArea() {

@@ -367,6 +367,7 @@ function switchLayerIndex(num, overrideLayer, world) {
             return;
         }
     }
+    let layerMaterial;
     if (layerList[layerToIndex] != undefined) layerMaterial = layerList[layerToIndex].slice(-1);
     if (caveList[layerToIndex] != undefined) layerMaterial = caveList[layerToIndex].slice(-1);
     document.getElementById("indexSwitchButton").innerHTML = `<span title="${oreList[layerMaterial]["oreName"]}">${layerMaterial}</span>`;

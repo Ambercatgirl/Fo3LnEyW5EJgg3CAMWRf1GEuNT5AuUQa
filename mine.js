@@ -151,19 +151,16 @@ function giveBlock(obj) {
 }
 function rollVariant() {
     let rng = Math.round(Math.random() * 499 + 1);
-    let inv = 1;
-    if (rng === 1) {inv = 4;} // 1:500
-    else if (rng <= 3) {inv = 3;} // 1:250
-    else if (rng <= 10) {inv = 2;} // 1:50
-    return inv;
+    if (rng === 1) {return 4;} // 1:500
+    else if (rng <= 3) {return 3;} // 1:250
+    else if (rng <= 10) {return 2;} // 1:50
+    return 1;
 }
-let minRarity = 750000;
 let cat = 1;
-let probabilityTable;
 const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸";
 function generateBlock(location) {
     blocksRevealedThisReset++;
-    probabilityTable = getLayer(location["Y"]);
+    let probabilityTable = getLayer(location["Y"]);
     let generationProbabilities = probabilityTable.probabilities;
     let arr = probabilityTable.layer;
     let blockToGive = "";
@@ -285,7 +282,7 @@ const specialLayerLocations = {
 }
 let specialLayerDistance;
 let distanceMulti = 1;
-let y = 1000;
+let layerDistanceY = 1000;
 function distanceHelper(layer) {
     if (specialLayerDistance !== undefined) {
         if (layer === "fluteLayer") return false;
@@ -296,49 +293,48 @@ function distanceHelper(layer) {
     }
 }
 function switchDistance() {
-        if (y < (allLayers.length - 1) * 2000) {
-            y = 2000 * distanceMulti + 1000;
+        if (layerDistanceY < (allLayers.length - 1) * 2000) {
+            layerDistanceY = 2000 * distanceMulti + 1000;
             distanceMulti++;
-        } else if (y > (allLayers.length - 1) * 2000) {
+        } else if (layerDistanceY > (allLayers.length - 1) * 2000) {
             if (currentWorld < 2) {
                 if (currentWorld === 1) {
-                    if (specialLayerLocations["fluteLayer"] !== undefined && distanceHelper("fluteLayer")) {specialLayerDistance = "fluteLayer"; y = specialLayerLocations["fluteLayer"] + 5000}
-                    else if (specialLayerLocations["sillyLayer"] !== undefined && distanceHelper("sillyLayer")) {specialLayerDistance = "sillyLayer"; y = specialLayerLocations["sillyLayer"] + 5000}
-                    else if (specialLayerLocations["unknownLayer"] !== undefined && distanceHelper("unknownLayer")) {specialLayerDistance = "unknownLayer"; y = specialLayerLocations["unknownLayer"] + 5000}
+                    if (specialLayerLocations["fluteLayer"] !== undefined && distanceHelper("fluteLayer")) {specialLayerDistance = "fluteLayer"; layerDistanceY = specialLayerLocations["fluteLayer"] + 5000}
+                    else if (specialLayerLocations["sillyLayer"] !== undefined && distanceHelper("sillyLayer")) {specialLayerDistance = "sillyLayer"; layerDistanceY = specialLayerLocations["sillyLayer"] + 5000}
+                    else if (specialLayerLocations["unknownLayer"] !== undefined && distanceHelper("unknownLayer")) {specialLayerDistance = "unknownLayer"; layerDistanceY = specialLayerLocations["unknownLayer"] + 5000}
                     else {
-                        y = 1000;
+                        layerDistanceY = 1000;
                         distanceMulti = 1;
                         specialLayerDistance = undefined;
                     }
                 } else {
-                    y = 1000;
+                    layerDistanceY = 1000;
                     distanceMulti = 1;
                 }
             } else {
-                y = 3000;
+                layerDistanceY = 3000;
                 distanceMulti = 2;
             }
            
         } else {
-            y = 1000;
+            layerDistanceY = 1000;
             distanceMulti = 1;
         }
         let layer;
-        if (currentWorld === 1 && y > 16000) {
-            for (let property in specialLayerLocations) if (specialLayerLocations[property] + 5000 === y) {
+        if (currentWorld === 1 && layerDistanceY > 16000) {
+            for (let property in specialLayerLocations) if (specialLayerLocations[property] + 5000 === layerDistanceY) {
                 layer = layerDictionary[property].layer.slice(-1)
             }
         } else {
-            layer = layerList[allLayers[Math.floor(y / 2000)]].slice(-1);
+            layer = layerList[allLayers[Math.floor(layerDistanceY / 2000)]].slice(-1);
         }
-        
         layer = layer[layer.length - 1];   
         document.getElementById("meterDisplay").setAttribute("title", oreList[layer]["oreName"]);
         if (player.settings.usingNewEmojis || currentWorld === 1.1) {
             layer = "<span style=\"font-family:'Noto Color Emoji'\">" + layer + "</span>";
         }
         let sub = currentWorld === 2 ? 2000 : 0;
-        document.getElementById("meterDisplay").innerHTML = layer + " " + (y - sub).toLocaleString() + "m";
+        document.getElementById("meterDisplay").innerHTML = layer + " " + (layerDistanceY - sub).toLocaleString() + "m";
         
 }
 
@@ -359,14 +355,14 @@ async function teleport() {
 function toLocation() {
     return new Promise((resolve) => {
     let x = curX;
-    for (let r = y - 101; r < y + 101; r++) {
+    for (let r = layerDistanceY - 101; r < layerDistanceY + 101; r++) {
         if(mine[r] === undefined)
             mine[r] = [];
     }
-    setLayer(y);
+    setLayer(layerDistanceY);
     mine[curY][curX] = "⚪";
     curX = x;
-    curY = y;
+    curY = layerDistanceY;
     checkAllAround(curX, curY, 1);
     mine[curY][curX] = "⛏️";
     setTimeout(() => {
@@ -501,6 +497,12 @@ function stopMining() {
     clearInterval(loopTimer);
 }
 function sr1Helper(state) {
+    if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
+        player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
+        player.powerupVariables.fakeEquipped.item = "";
+        player.powerupVariables.fakeEquipped.originalState = undefined;
+        player.powerupVariables.fakeEquipped.removeAt = Date.now();
+    }
     if (state) {
         if (!player.settings.usingNewEmojis) {
             document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");

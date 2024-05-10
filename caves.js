@@ -254,6 +254,8 @@ function generateCaveBlock(y, x, type) {
         }
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {
+            let variant = rollVariant();
+            if (player.gears["gear26"] && variant === 1) variant = rollVariant();
             mine[y][x] = {ore: blockToGive, variant: variant};
             playSound(oreList[blockToGive]["oreTier"]);
             if (oreList[blockToGive]["hasLog"]) {

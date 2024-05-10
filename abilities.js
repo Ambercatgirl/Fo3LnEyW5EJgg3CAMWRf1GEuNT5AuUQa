@@ -174,7 +174,7 @@ async function rollAbilities() {
 
 //generates a large cube around the player
 function powerup1(x, y) {
-    if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown * 0) {
+    if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown) {
         for (let r = y - 50; r < y + 50; r++) {
             for (let c = x - 50; c < x + 50; c++) {
                 pickaxeAbilityMineBlock(c, r);
@@ -272,8 +272,8 @@ function gearAbility1() {
         ability1Timeout = setTimeout(() => {
             baseSpeed += baseSpeed <= 22 ? 3 : 0;
             clearInterval(loopTimer);
-            curDirection = "";
-            if (energySiphonerDirection != "") {
+            if (energySiphonerDirection !== "" && curDirection !== "") {
+                curDirection = "";
                 goDirection(energySiphonerDirection);
             }
             ability1Active = false;
