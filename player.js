@@ -62,20 +62,20 @@ class playerTemplate {
         }
         this.settings = {
             audioSettings: {
-                "Antique": {canPlay: true, volume: 100},
-                "Mystical": {canPlay: true, volume: 100},
-                "Divine": {canPlay: true, volume: 100},
-                "Flawless": {canPlay: true, volume: 100},
-                "Interstellar": {canPlay: true, volume: 100},
-                "Metaversal": {canPlay: true, volume: 100},
-                "Sacred": {canPlay: true, volume: 100},
-                "Ethereal": {canPlay: true, volume: 100},
-                "Celestial": {canPlay: true, volume: 100},
-                "Imaginary": {canPlay: true, volume: 100},
+                "Antique": {canPlay: true, volume: 50},
+                "Mystical": {canPlay: true, volume: 50},
+                "Divine": {canPlay: true, volume: 50},
+                "Flawless": {canPlay: true, volume: 50},
+                "Interstellar": {canPlay: true, volume: 50},
+                "Metaversal": {canPlay: true, volume: 50},
+                "Sacred": {canPlay: true, volume: 50},
+                "Ethereal": {canPlay: true, volume: 15},
+                "Celestial": {canPlay: true, volume: 50},
+                "Imaginary": {canPlay: true, volume: 50},
             },
             musicSettings: {
                 active: true,
-                volume: 100
+                volume: 50
             },
             baseMineCapacity: 250000,
             minSpeed: 0,
@@ -156,7 +156,7 @@ const powerupList = {
     "powerup2" : {
         title: "The Spelunker",
         description: "Generates a few caves around the player. Has a cooldown of 5 minutes.",
-        cooldown: 1200000,
+        cooldown: 300000,
         colors: {
             background: "linear-gradient(to bottom, #F5533D, #6B331D, #696969, #0A0DC7)",
             text: "white",
@@ -184,8 +184,8 @@ const powerupList = {
     },
     "powerup4" : {
         title: "Re-repurposed Replicator",
-        description: "Makes commons affected by up to 3.5x luck for a short duration. Has a cooldown of 45 minutes.",
-        cooldown: 2700000,
+        description: "Makes commons affected by up to 3.5x luck for a short duration. Has a cooldown of 20 minutes.",
+        cooldown: 1200000,
         colors: {
             background: "linear-gradient(to bottom, #FF0B0B, #FFEB00, #7AFF1F)",
             text: "black",

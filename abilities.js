@@ -223,7 +223,7 @@ function powerup4() {
     if (Date.now() >= player.powerupCooldowns["powerup4"].cooldown) {
         player.powerupVariables.commonsAffected.state = true;
         player.powerupVariables.commonsAffected.removeAt = Date.now() + 300000;
-        player.powerupCooldowns["powerup4"].cooldown = Date.now() + 2700000;
+        player.powerupCooldowns["powerup4"].cooldown = Date.now() + 1200000;
         updateAllLayers()
         document.getElementById("powerup4").style.backgroundColor = "#FF3D3D";
     }
@@ -1187,7 +1187,19 @@ function pickaxeAbility26(x, y) {
         }
     }
 }
-
+const treeLevels = {
+    0: [],
+    1: []
+}
+function pickaxeAbility27(x, y) {
+    //x + num to center
+    //y + num to center
+    const arrToIndex = treeLevels[player.upgrades["pickaxe27"]].level;
+    for (let i = 0; i < arrToIndex.length; i++) {
+        pickaxeAbilityMineBlock(arrToIndex[i]["x"] + x, arrToIndex[i]["y"] + y)
+    }
+    displayArea();
+}
 
 function pickaxeAbilityMineBlock(x, y) {
     if (y > 0) {

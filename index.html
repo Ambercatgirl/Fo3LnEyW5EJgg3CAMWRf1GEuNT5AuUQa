@@ -43,7 +43,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
     </noscript>
     <div id="pressPlay">
         <p class="credits"><b>UI by @catlover/@ZayedLovesCats on Discord! 😼</b><br><b>Game made by @thecatofalltime on Discord! 😺</b></p>
-        <p class="credits">Background music made by @x2corp on Discord!<br>Spawn sounds made by @monocrexy on Discord!<br>Thank you to all the spreadsheet editors!</p>
+        <p class="credits">Background music made by the community! (ty<3)<br>Spawn sounds made by @monocrexy on Discord!<br>Thank you to all the spreadsheet editors!</p>
         <p class="credits">Some sounds made by @tevv_  & @etherealelysia on Discord!<br>Many ideas by @viridescentluna on Discord!</p>
         <p class="play-button" onclick="loadContent()">Play!</p>
     </div>
@@ -151,7 +151,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <p class="itemDescription" id="pickaxe10Description" style="display: none;">Has a 50% chance to mine a 7x7 square in a 49x49 area around the player, with an average of 24 7x7 squares being mined each activation.<br>Has an ability proc rate of 1/50.<br>Has 17.5x luck.</p>
                 <p class="itemDescription" id="pickaxe11Description" style="display: none;">Mines an extremely large spiral around the player.<br>Has an ability proc rate of 1/100.<br>Has 30x luck.</p>
                 <p class="itemDescription" id="pickaxe12Description" style="display: none;">Mines wings around the player.<br>Mines 2 blocks at once when using automine.<br>Has 2x special cave type luck.<br>Has an ability proc rate of 1/150.<br>Has 75x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
-                <p class="itemDescription" id="pickaxe13Description" style="display: none;">The Key to World 2.<br>Requires 77 Leaf Destroyer.<br>Pressing "Teleport!" on this pickaxe will switch the current world.<br>Has the power of pickaxe 0.<br>World 1 gears will NOT work in world 2, except for the ore tracker.<br>Certain World 2 gears will work in World 1, including all luck related gears, Repurposed Replicator, and High Powered Vacuum.</p>
+                <p class="itemDescription" id="pickaxe13Description" style="display: none;">The Key to World 2.<br>Requires 77 Leaf Destroyer.<br>Pressing "Teleport!" on this pickaxe will switch the current world.<br>Has the power of pickaxe 0.<br>World 1 gears will NOT work in world 2, except for the ore tracker.<br>All World 2 gears will work in World 1 (The speed gears require all to be owned).</p>
                 <p class="itemDescription" id="pickaxe14Description" style="display: none;">Mines a randomly sized circle around the player.<br>Has an ability proc rate of 1/45.<br>Has 1.05x luck.</p>
                 <p class="itemDescription" id="pickaxe15Description" style="display: none;">Mines a diamond around the player.<br>Has an ability proc rate of 1/75.<br>Has 1.075x luck.</p>
                 <p class="itemDescription" id="pickaxe16Description" style="display: none;">Mines a star around the player.<br>Has an ability proc rate of 1/100.<br>Has 1.3x luck.</p>
@@ -307,7 +307,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Antique')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5A865A 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Antique')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5A865A 50%);">
                                 </label>
                             </div>
                         </div>
@@ -318,7 +318,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="40" value="20" onchange="changeSpawnVolume(this.value,  'Mystical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #6F40B0 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value,  'Mystical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #6F40B0 50%);">
                                 </label>
                             </div>
                         </div>
@@ -329,7 +329,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Divine')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFFEAB 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Divine')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFFEAB 50%);">
                                 </label>
                             </div>
                         </div>
@@ -340,7 +340,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Flawless')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #31E8FF 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Flawless')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #31E8FF 50%);">
                                 </label>
                             </div>
                         </div>
@@ -351,7 +351,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Interstellar')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFA124 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Interstellar')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #FFA124 50%);">
                                 </label>
                             </div>
                             
@@ -363,7 +363,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Metaversal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #3BD216 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Metaversal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #3BD216 50%);">
                                 </label>
                             </div>
                         </div>
@@ -374,7 +374,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Sacred')" class="spawnVolume" style="background-image:linear-gradient(to right, #000000, #FF3C3C  50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Sacred')" class="spawnVolume" style="background-image:linear-gradient(to right, #000000, #FF3C3C  50%);">
                                 </label> 
                             </div>
                             
@@ -386,7 +386,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="25" value="10" onchange="changeSpawnVolume(this.value, 'Ethereal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #ac47ff 50%);">
+                                    <input type="range" min="0" max="30" value="15" onchange="changeSpawnVolume(this.value, 'Ethereal')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #ac47ff 50%);">
                                 </label>
                             </div>
                             
@@ -398,7 +398,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
-                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Celestial')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #870000 50%);">
+                                    <input type="range" min="0" max="100" value="50" onchange="changeSpawnVolume(this.value, 'Celestial')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #870000 50%);">
                                 </label>
                             </div>
                         </div>

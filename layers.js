@@ -1009,6 +1009,8 @@ class ores {
     }
     tierGrOrEqTo(tiers) {
         if (tiers["tier1"] === tiers["tier2"]) return true;
+        if (tiers["tier1"] === "") return false;
+        if (tiers["tier2"] === "") return true;
         for (let propertyName in this.oreTiers) {
             if (propertyName === tiers["tier1"]) return false;
             if (propertyName === tiers["tier2"]) return true;

@@ -252,16 +252,16 @@ document.addEventListener('keydown', (event) => {
     name = name.toLowerCase();
     switch(name) {
         case "w":
-            validInput = true;
+            if (!buttonClicked) validInput = true;
             break;
         case "a":
-            validInput = true;
+            if (!buttonClicked) validInput = true;
             break;
         case "s":
-            validInput = true;
+            if (!buttonClicked) validInput = true;
             break;
         case "d":
-            validInput = true;
+            if (!buttonClicked) validInput = true;
             break;
         case "arrowup":
             event.preventDefault();
@@ -364,9 +364,10 @@ function goDirection(direction, speed) {
         energySiphonerDirection = direction;
     }
 }
-
+let buttonClicked = false;
 function moveOne(dir, button) {
     button.disabled = true;
+    buttonClicked = true;
     clearInterval(loopTimer);
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     let movements = {x:0, y:0, key:dir};
@@ -376,6 +377,7 @@ function moveOne(dir, button) {
     curDirection = "";
     setTimeout(() => {
         button.disabled = false;
+        buttonClicked = false;
     }, 50);
     energySiphonerDirection = "";
 }

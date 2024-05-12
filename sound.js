@@ -111,21 +111,23 @@ function playSound(type) {
             allAudios[type].currentTime = 0;;
             allAudios[type].play();
         } 
-        if (player.settings.doSpawnEffects && oreInformation.tierGrOrEqTo({"tier1":type, "tier2": "Interstellar"}) && ( player.currentEffect === "" ? true : oreInformation.tierGrOrEqTo({"tier1":type, "tier2": (player.currentEffect)}))) {
-            let timeoutAmt = 0;
-            if (document.getElementById("blockContainer").style.animation !== "") {
-                document.getElementById("blockContainer").style.animation = "";
-                timeoutAmt = 10;
-            }
-            if (document.getElementById("blockDisplay").style.animation !== "")
-                document.getElementById("blockDisplay").style.animation = "";
-            type = oldType;
-            setTimeout(() => {
-                document.getElementById("blockContainer").style.animation = oreInformation.getEffectByTier(type);  
-                document.getElementById("blockDisplay").style.animation = "shake 0.5s linear 4";
-                player.currentEffect = type;
-            }, timeoutAmt);
+    }
+    
+    if (player.settings.doSpawnEffects && oreInformation.tierGrOrEqTo({"tier1":type, "tier2": "Interstellar"}) && (player.currentEffect === '' ? true : (oreInformation.tierGrOrEqTo({"tier1":type, "tier2":player.currentEffect})))) {
+        console.log(type, player.currentEffect, oreInformation.tierGrOrEqTo({"tier1":type, "tier2":player.currentEffect}))
+        let timeoutAmt = 0;
+        if (document.getElementById("blockContainer").style.animation !== "") {
+            document.getElementById("blockContainer").style.animation = "";
+            //timeoutAmt = 10;
         }
+        if (document.getElementById("blockDisplay").style.animation !== "")
+            document.getElementById("blockDisplay").style.animation = "";
+        type = oldType;
+        setTimeout(() => {
+            document.getElementById("blockContainer").style.animation = oreInformation.getEffectByTier(type);  
+            document.getElementById("blockDisplay").style.animation = "shake 0.5s linear 4";
+            player.currentEffect = type;
+        }, timeoutAmt);
     }
  }
 addEventListener("animationend", (event) => {

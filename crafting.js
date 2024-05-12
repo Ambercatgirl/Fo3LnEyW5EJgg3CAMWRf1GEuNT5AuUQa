@@ -839,6 +839,7 @@ function craftUpgrade(id) {
     player.upgrades[id].level++;
     player.upgrades[id].bought++;
     updateDisplayedUpgrade();
+    utilitySwitchActions();
 }
 function hideUpgrade() {
     document.getElementById("upgradeRecipeHolder").style.display = "none";

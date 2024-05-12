@@ -30,8 +30,8 @@ class secureLogs {
         luckModifier *= 1.5;
         const maxLuck = luckModifier;
         let luck;
-        if (fromCave[0]) {
-            if (caveLuck > 2) {
+        if (fromCave[1] > 1) {
+            if (caveLuck > 2 && !debug) {
                 console.log("failed to create, ", obj.stack, caveLuck);
                 return;
             } else {
@@ -52,7 +52,7 @@ class secureLogs {
                 const block = mine[r][c].ore === undefined ? mine[r][c] : mine[r][c].ore;
                 if (block === this.#spawnLogs[i].block) {
                     let rng;
-                    if (this.#spawnLogs[i].caveInfo[0]) rng = 1/oreList[this.#spawnLogs[i].block]["numRarity"];
+                    if (this.#spawnLogs[i].caveInfo[1] > 1) rng = 1/oreList[this.#spawnLogs[i].block]["numRarity"];
                     else rng = oreList[this.#spawnLogs[i].block]["decimalRarity"];
                     let variant = this.#spawnLogs[i].variant === undefined ? "Normal" : this.#spawnLogs[i].variant;
                     rng /= multis[variant - 1];
@@ -79,12 +79,13 @@ class secureLogs {
                         if (log.caveInfo[1] > 1) {
                             let something;
                             if (oolProbabilities[log.block] !== undefined && log.caveInfo[2] !== "type5Ores") something = oolProbabilities[log.block];
+                            else if (log.caveInfo[2] === "type5Ores") something = gsProbabilities[caveList["type5Ores"].indexOf(log.block)]
                             else something = 1/oreList[log.block]["numRarity"];
                             something /= log.caveInfo[1];
                             log.rarity = something;
                         }
-                        log.rarity /= multis[names.indexOf(variant)];
-                        //const webhookString = `has found ${this.#verifiedLogs["All"][i].variant} ${this.#verifiedLogs["All"][i].block} with a rarity of 1/${Math.round(1/this.#verifiedLogs["All"][i].rarity).toLocaleString()} ${this.#verifiedLogs["All"][i].caveInfo[0] ? (this.#verifiedLogs["All"][i].caveInfo[1] > 1 ? "(" + caveList[this.#verifiedLogs["All"][i].caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(this.#verifiedLogs["All"][i].x - 1000000000).toLocaleString()}, Y: ${(-1 *this.#verifiedLogs["All"][i].y).toLocaleString()}`
+                        const webhookString = `Cat has found ${this.#verifiedLogs["All"][i].variant} ${this.#verifiedLogs["All"][i].block} with a rarity of 1/${Math.round(1/this.#verifiedLogs["All"][i].rarity).toLocaleString()} ${this.#verifiedLogs["All"][i].caveInfo[0] ? (this.#verifiedLogs["All"][i].caveInfo[1] > 1 ? "(" + caveList[this.#verifiedLogs["All"][i].caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(this.#verifiedLogs["All"][i].x - 1000000000).toLocaleString()}, Y: ${(-1 *this.#verifiedLogs["All"][i].y).toLocaleString()}`
+                        log.output = webhookString;
                         if (player.settings.highRarityLogs && log.rarity > 1/250000000) {
                             this.#verifiedLogs["All"].splice(i, 1);
                         } else {
@@ -117,12 +118,15 @@ class secureLogs {
                 let output = "";
                 const list = this.#verifiedLogs[document.getElementById("logSort").value];
                 for (let i = 0; i < list.length; i++) {
+                    if (list[i].output === undefined) {
+                        output += `Cat has NOT found ${list[i].variant} ${list[i].block} (Voided). Verification: `
+                    } else {
+                        output += `${list[i].output}. Verification: `;
+                    }
                     let times;
-                    if (list[i - 1] !== undefined) times =list[i].time - list[i - 1].time;
+                    if (list[i - 1] !== undefined) times = list[i].time - list[i - 1].time;
                     else times = list[i].time;
-                    output += `${list[i].block}, ${list[i].time}, ${times}, ${list[i].mined}, ${list[i].variant}, `;
-                    output += `${list[i].caveInfo[0] === true ? "Cave, " : ""} ${list[i].y}, `
-                    output += `${Math.round(1/(list[i].rarity)).toLocaleString()}, `;
+                    output += `${list[i].time}, ${times}, `;
                     output += (Math.log10(list[i].luck * (list[i].y + 1))) * 2 + "<br>";
                 }
                 this.#logsTimer = setInterval(this.#reloadLogs, 500, output!==""?output:"none");

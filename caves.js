@@ -259,7 +259,7 @@ function generateCaveBlock(y, x, type) {
             mine[y][x] = {ore: blockToGive, variant: variant};
             playSound(oreList[blockToGive]["oreTier"]);
             if (oreList[blockToGive]["hasLog"]) {
-                verifiedOres.createLog(y, x, blockToGive, new Error(), [true, 1]);
+                verifiedOres.createLog(y, x, {ore: blockToGive, variant: variant}, new Error(), [true, 1]);
                 verifiedOres.verifyLog(y, x);
             }
             if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: undefined, variant: variant});
