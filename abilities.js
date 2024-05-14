@@ -209,7 +209,6 @@ function powerup2(x, y) {
         player.powerupCooldowns["powerup2"].cooldown = Date.now() + 300000;
         document.getElementById("powerup2").style.backgroundColor = "#FF3D3D";
     }
-    
 }
 
 //make a random layer ore more common for a short period
@@ -295,7 +294,7 @@ function gearAbility2() {
             reps++;
             if (repeatingLayers[reps] === undefined && Math.random() < 1/77) chosenDistance = reps;
         }
-        repeatingLayers[reps]= {layer: 7777, force: false};
+        repeatingLayers[reps] = {layer: 7777, force: false};
         specialLayerLocations["sillyLayer"] ??= 16000 + (10000 * reps);
     }
 }

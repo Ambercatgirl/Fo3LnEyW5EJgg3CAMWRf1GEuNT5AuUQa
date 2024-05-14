@@ -601,6 +601,7 @@ function setLayer(y) {
                 }
                 repeatingLayers[repeatingLayerNum] ??= {layer: currentLayerNum, force: force};
                 lastRepeatedLayer = repeatingLayerNum;
+                specialLayerLocations["lastLayer"] = {y: tempNum, num: repeatingLayerNum};
             } else {
                 if (lastRepeatedLayer !== repeatingLayerNum) {
                     lastRepeatedLayer = repeatingLayerNum;

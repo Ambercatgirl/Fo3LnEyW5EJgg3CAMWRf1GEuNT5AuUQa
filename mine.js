@@ -288,6 +288,8 @@ function distanceHelper(layer) {
         if (layer === "fluteLayer") return false;
         if (layer === "sillyLayer" && specialLayerDistance === "fluteLayer") return true;
         else if (layer === "unknownLayer" && specialLayerDistance !== "unknownLayer") return true;
+        else if (layer === "lastLayer" && specialLayerDistance !== "lastLayer") return true;
+        else return false;
     } else {
         return true;
     }
@@ -302,6 +304,7 @@ function switchDistance() {
                     if (specialLayerLocations["fluteLayer"] !== undefined && distanceHelper("fluteLayer")) {specialLayerDistance = "fluteLayer"; layerDistanceY = specialLayerLocations["fluteLayer"] + 5000}
                     else if (specialLayerLocations["sillyLayer"] !== undefined && distanceHelper("sillyLayer")) {specialLayerDistance = "sillyLayer"; layerDistanceY = specialLayerLocations["sillyLayer"] + 5000}
                     else if (specialLayerLocations["unknownLayer"] !== undefined && distanceHelper("unknownLayer")) {specialLayerDistance = "unknownLayer"; layerDistanceY = specialLayerLocations["unknownLayer"] + 5000}
+                    else if (specialLayerLocations["lastLayer"] !== undefined && distanceHelper("lastLayer")) {specialLayerDistance = "lastLayer"; layerDistanceY = specialLayerLocations["lastLayer"].y + 5000}
                     else {
                         layerDistanceY = 1000;
                         distanceMulti = 1;
@@ -315,15 +318,18 @@ function switchDistance() {
                 layerDistanceY = 3000;
                 distanceMulti = 2;
             }
-           
         } else {
             layerDistanceY = 1000;
             distanceMulti = 1;
         }
         let layer;
         if (currentWorld === 1 && layerDistanceY > 16000) {
-            for (let property in specialLayerLocations) if (specialLayerLocations[property] + 5000 === layerDistanceY) {
-                layer = layerDictionary[property].layer.slice(-1)
+            for (let property in specialLayerLocations) if (specialLayerLocations[property] + 5000 === layerDistanceY || specialLayerLocations[property].y + 5000 === layerDistanceY) {
+                if (specialLayerDistance === "lastLayer") {
+                    layer = layerDictionary[layerIndex.worldOne[repeatingLayers[specialLayerLocations["lastLayer"].num].layer]].layer.slice(-1);
+                } else if (property !== "lastLayer") {
+                    layer = layerDictionary[property].layer.slice(-1);
+                }
             }
         } else {
             layer = layerList[allLayers[Math.floor(layerDistanceY / 2000)]].slice(-1);
@@ -354,6 +360,11 @@ async function teleport() {
 
 function toLocation() {
     return new Promise((resolve) => {
+    pa1 = [];
+    pa2 = [];
+    pa3 = [];
+    pa4 = [];
+    pickaxeAbility23Num = 0;
     let x = curX;
     for (let r = layerDistanceY - 101; r < layerDistanceY + 101; r++) {
         if(mine[r] === undefined)
@@ -486,6 +497,7 @@ function switchWorld(to) {
     a13 = false;
     document.getElementById("teleportButton").disabled = false;
     canMine = true;
+    if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
 }
 function stopMining() {
     ability1Active = false;
