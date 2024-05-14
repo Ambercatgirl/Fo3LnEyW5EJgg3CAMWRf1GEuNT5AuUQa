@@ -1811,12 +1811,15 @@ button {
   height: 10vw;
   width: 100%;
 }
-#workshopImage {
+.workshopImage {
   width: 10vw;
   margin: auto;
   height: 90%;
-  border: 1px solid white;
   color: white;
+}
+#treeOfLifeThumbnail {
+  width: 100%;
+  height: 100%;
 }
 #workshopInformationHolder {
   width: 100%;
@@ -1909,7 +1912,7 @@ button {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 7.5vw;
+  width: 8.5vw;
   height: 2vw;
 }
 .sr1Button {
@@ -1931,6 +1934,8 @@ button {
   display: none;
   background: none;
   border: 0.2vw solid #333;
+  width: 100%;
+  font-size: 0.75vw;
 }
 @keyframes flashGreen {
   0% {background-color:white;}
