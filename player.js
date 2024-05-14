@@ -93,6 +93,7 @@ class playerTemplate {
             latestLength: 10,
             useNewMusic: true,
             automineProtection: false,
+            useNyerd: false
         },
         this.stats = {
             currentPickaxe: 0,
@@ -508,6 +509,8 @@ function loadNewData(data) {
         data.settings.latestLength ??= 10;
         player.settings.latestLength = data.settings.latestLength;
         data.settings.automineProtection ??= false;
+        data.settings.useNyerd ??= false;
+        if (data.settings.useNyerd) toggleNyerd(document.getElementById("toggleNyerd"));
         if (data.settings.automineProtection) toggleAutomineProtection(document.getElementById("automineProtection"));
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {

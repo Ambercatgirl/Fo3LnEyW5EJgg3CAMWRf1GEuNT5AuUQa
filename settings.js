@@ -379,7 +379,7 @@ function switchLayerIndex(num, overrideLayer, world) {
     }
     return 0;
 }
-let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕🎉🧌♾️💅😁🪢";
+let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕🎉🧌♾️💅😁🪢🫶🇧🇷🇨🇴🇦🇷🇵🇪🇻🇪🇨🇱🇪🇨🇧🇴🇵🇾🇺🇾🇦🇺🇵🇬🇳🇿🇫🇯🇸🇧🇫🇲🇻🇺🇵🇫🇳🇨🇼🇸🏳️‍⚧️";
 let noLuck = "✴️🌹";
 function createIndexCards(layer) {
         const oldLayer = layer; 
@@ -799,6 +799,25 @@ function toggleAutomineProtection(button) {
     } else {
         button.style.backgroundColor = "#6BC267";
         player.settings.automineProtection = true;
+    }
+}
+function toggleNyerd(button) {
+    if (player.settings.useNyerd) {
+        button.style.backgroundColor = "#FF3D3D";
+        player.settings.useNyerd = false;
+        document.getElementById("nyerd").style.display = "none";
+        document.getElementById("trackerArrow").style.display = "block";
+        if (player.oreTracker.tracking) {
+            getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
+        }
+    } else {
+        button.style.backgroundColor = "#6BC267";
+        player.settings.useNyerd = true;
+        document.getElementById("trackerArrow").style.display = "none";
+        document.getElementById("nyerd").style.display = "block";
+        if (player.oreTracker.tracking) {
+            getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
+        }
     }
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})

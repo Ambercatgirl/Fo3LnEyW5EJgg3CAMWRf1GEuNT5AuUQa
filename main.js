@@ -94,6 +94,8 @@ function init() {
 function assignPickaxeNums(json) {
     pickaxe24Nums = json.pickaxeNums24;
     pickaxe25Nums = json.pickaxeNums25;
+    treeLevels[0] = json.pickaxeNums27A;
+    treeLevels[1] = json.pickaxeNums27B;
 }
 function failedFetch() {
     for (let ore in oreList) oreList[ore]["oreName"] = "FAILED TO FETCH NAMES";
@@ -233,7 +235,6 @@ function movePlayer(dir, reps) {
                             lastDirection = dir.key;
                             let variant = rollVariant();
                             if (player.gears["gear26"] && variant === 1) variant = rollVariant();
-        
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant})
                             giveBlock("⛏️", curX, curY, false);
                             checkAllAround(curX, curY);
@@ -334,7 +335,6 @@ function goDirection(direction, speed) {
         let miningSpeed;
         clearInterval(loopTimer);
         removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]});
-        
         if (speed === undefined) {
         if (currentWorld < 2 && player.gears["gear2"])
             miningSpeed = baseSpeed - 10;
@@ -358,7 +358,7 @@ function goDirection(direction, speed) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
-        if (currentWorld === 1.1) miningSpeed = 10;
+        if (currentWorld === 1.1) {miningSpeed = 10; reps = 1;}
         loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
@@ -386,7 +386,7 @@ function moveOne(dir, button) {
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 function displayArea() {
     if (player.settings.canDisplay) {
-        let output ="";
+        let output = "";
         let constraints = getParams(9, 9);
         let grass = 0;
         if (currentWorld === 2)
@@ -620,10 +620,11 @@ function spawnMessage(obj) {
         } else {
             let spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreList[block]["spawnMessage"] + "</span></i><br>";
             if (caveInfo != undefined) {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + (caveInfo["adjRarity"]).toLocaleString();
+                spawnText += "1/" + (caveInfo["adjRarity"]).toLocaleString();
             } else {
-                document.getElementById("spawnMessage").innerHTML = spawnText + "1/" + oreRarity.toLocaleString();
+                spawnText += "1/" + oreRarity.toLocaleString();
             }
+            typeWriter(spawnText)
         }
         clearTimeout(spawnOre);
         spawnOre = setTimeout(() => {
@@ -633,6 +634,41 @@ function spawnMessage(obj) {
         }, 30000);
         }
         
+}
+let typeCallNum = 0;
+function typeWriter(string) {
+    let char;
+    let hex;
+    let emoji
+    let multiply;
+    let output = "";
+    let ignoreUntil = 0;
+    typeCallNum++;
+    const thisTypeNum = typeCallNum;
+    const element = document.getElementById('spawnMessage');
+    for (let i = 0; i < string.length; i++) {
+    setTimeout(() => {
+        char = string.substring(i, i + 1);
+        hex = char.codePointAt(0).toString(16);
+        emoji = String.fromCodePoint("0x"+hex);
+        if (emoji === "<") {
+            let htmlOutput = "";
+            for (let j = i; j < string.length; j++) {
+                let htmlChar = string.substring(j, j + 1);
+                htmlOutput += htmlChar;
+                if (htmlChar === ">") break;
+            }
+            ignoreUntil = i + htmlOutput.length;
+            output += htmlOutput;
+        } else {
+            if (!(ignoreUntil > i)) {
+                output += emoji;
+            }
+        }
+        if (thisTypeNum === typeCallNum) element.innerHTML = output;
+        multiply = (!(ignoreUntil > i) ? i : 0);
+    }, 10 * i);
+    }
 }
 
 let loggedFinds = [];
@@ -672,7 +708,9 @@ function getAngleBetweenPoints(obj) {
     let angle = Math.atan2(y, x);
     if(angle < 0) angle += Math.PI * 2;
     angle *= (180 / Math.PI);
-    document.getElementById("trackerArrow").style.transform = `rotate(${angle}deg)`;
+    let element = (player.settings.useNyerd ? document.getElementById("nyerd") : document.getElementById("trackerArrow"));
+    let rotate = (player.settings.useNyerd ? `rotate(${angle - 90}deg)` : `rotate(${angle}deg)`);
+    element.style.transform = rotate;
     return angle;
 }
 function checkExistingOres() {
@@ -777,16 +815,17 @@ function toggleCelestials(state) {
 //IT WORKS SO WELL!!!!
 let pickaxe24Nums = [];
 let pickaxe25Nums = [];
+let testNums = [];
 /*
 const az = new Image();
-az.src = "ability1.jpg"
+az.src = "media/Artboard 2.png"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")
             cc.drawImage(az,0,0)
             const data = cc.getImageData(0,0,c.width,c.height).data
             for (let i = 0; i < data.length; i+=4) {
-                data[i]>125?null:pickaxe24Nums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
+                data[i]>125?null:testNums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
             }
 }
 */

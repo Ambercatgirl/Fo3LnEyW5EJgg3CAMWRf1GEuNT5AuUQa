@@ -106,7 +106,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe24`)" id="stormseersSupersparkSceptre" style="display: none;"><span>Stormseer's Superspark Sceptre</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe25`)" id="coronaryCatastrophe" style="display: none;"><span>Coronary Catastrophe</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe26`)" id="nullChroma" style="display: none;"><span>N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(`pickaxe27`)" id="treeOfLife" style="display: none;"><span></span>The Tree of Life</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe27`)" id="treeOfLife" style="display: none;"><span>The Tree of Life</span></button>
                 </div>
                 <div id="gearCrafts" class="hidden">
                     <button class="craftingButton" onclick="displayRecipe('gear0')" id="oreTracker"><span>Ore Tracker</span></button>
@@ -232,7 +232,9 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <button style="display: none;" class="powerupActivateButton" id="powerup3" onclick="powerup3()">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup4" onclick="powerup4()">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup5" onclick="powerup5()">Activate!</button>
-                <p id="blockDisplay"></p>
+                <p id="blockDisplay">
+                    
+                </p>
                 <p id="displayDisabled">Display is Disabled.</p>
                 <div id="trackerLock">
                     <img src="media/featureLock.png" id="lockImage">
@@ -244,7 +246,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <p id="trackerX">X: N/A</p>
                     <p id="trackerY">Y: N/A</p>
                     <div id="arrowHolder">
-                        <img src="media/trackerArrow.png" id="trackerArrow">
+                        <img src="media/trackerArrow.png" id="trackerArrow" style="display: block;">
+                        <img src="media/NYERD.webp" id="nyerd" style="display: none;">
                     </div>
                 </div>
                 <div id="sr1Holder">
@@ -465,6 +468,9 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                       </div>
                       <div class="inputAndButton">
                         <button class="toggleDisplay fullyRounded" onclick="toggleAutomineProtection(this);" id="automineProtection" style="background-color: #FF3D3D;">Automine Protection</button>
+                      </div>
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="toggleNyerd(this);" id="toggleNyerd" style="background-color: #FF3D3D;">Nyerd</button>
                       </div>
                 </div>
             </div>
