@@ -515,7 +515,7 @@ function sr1Helper(state) {
             document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
             document.getElementById("switchFont").disabled = false;
         }
-        player.stats.currentPickaxe = player.wasUsing === undefined ? player.stats.currentPickaxe : player.stats.wasUsing;
+        if (player.wasUsing !== undefined) player.stats.currentPickaxe = player.wasUsing;
         player.wasUsing = undefined;
         document.getElementById("theWorkshop").style.display = "none";
     }
