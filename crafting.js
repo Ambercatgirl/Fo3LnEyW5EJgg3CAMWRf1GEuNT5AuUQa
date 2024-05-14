@@ -662,7 +662,7 @@ function displayOreRecipe(id) {
             let element = document.createElement("p");
             let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
             element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
-            element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"]}/${amt}</span>`;
+            element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"].toLocaleString()}/${amt.toLocaleString()}</span>`;
             element.classList = "recipeOreDisplay";
             if (oreList[ore]["normalAmt"] >= amt)
                 element.style.color = "#6BC267";
@@ -679,7 +679,7 @@ function displayOreRecipe(id) {
             element.style.color = colors["textColor"];
             if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
             else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
-            element.innerText = `${ore} x${oreRecipes[id]["result"][i]["amt"] * oreRecipes[id]["multiplier"]}`;
+            element.innerText = `${ore} x${(oreRecipes[id]["result"][i]["amt"] * oreRecipes[id]["multiplier"]).toLocaleString()}`;
             element.classList = "recipeOreDisplay";
             parent.appendChild(element);
         }
@@ -690,7 +690,7 @@ function multiplyRecipe(amt) {
     if (isNaN(amt)) return;
     if (amt < 1) amt = 1;
     amt = Math.floor(amt);
-    document.getElementById("forgeCraftingAmount").innerText = `${amt}x`;
+    document.getElementById("forgeCraftingAmount").innerText = `${amt.toLocaleString()}x`;
     document.getElementById('amountInputText').value = "";
     let recipe = getRecipeById(currentOreRecipe);
     recipe["multiplier"] = amt;
@@ -702,7 +702,7 @@ function multiplyRecipe(amt) {
         let element = document.createElement("p");
         let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
         element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
-        element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"]}/${amt}</span>`;
+        element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${oreList[ore]["normalAmt"].toLocaleString()}/${amt.toLocaleString()}</span>`;
         element.classList = "recipeOreDisplay";
         if (oreList[ore]["normalAmt"] >= amt)
             element.style.color = "#6BC267";
@@ -719,7 +719,7 @@ function multiplyRecipe(amt) {
         element.style.color = colors["textColor"];
         if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
         else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
-        element.innerText = `${ore} x${recipe["result"][i]["amt"] * recipe["multiplier"]}`;
+        element.innerText = `${ore} x${(recipe["result"][i]["amt"] * recipe["multiplier"]).toLocaleString()}`;
         element.classList = "recipeOreDisplay";
         parent.appendChild(element);
     }
