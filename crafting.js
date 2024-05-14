@@ -255,12 +255,12 @@ const recipes = {
     },
     "gear22" : {
         name : "",
-        recipe : [{ore:"🇿🇦", amt:50}, {ore:"🇹🇿", amt:50}, {ore:"🇨🇩", amt:30}],
+        recipe : [{ore:"🇿🇦", amt:500}, {ore:"🇨🇩", amt:450}, {ore:"🇹🇿", amt:350}],
         upgrades: {}
     },
     "gear23" : {
         name : "",
-        recipe : [ {ore:"🇵🇰", amt:25}, {ore:"🇯🇵", amt:15}, {ore:"🇧🇩", amt:15}],
+        recipe : [ {ore:"🇵🇰", amt:100}, {ore:"🇯🇵", amt:150}, {ore:"🇧🇩", amt:150}],
         upgrades: {}
     }
 }
@@ -420,7 +420,7 @@ const buttonGradients = {
     "pickaxe24Craft" : {"gradient" : "linear-gradient(to right, #F6FF58 7%, #0030F1, #676767, #57FDFF, #FC5EFF 93%","applied" : false},
     "pickaxe25Craft" : {"gradient" : "linear-gradient(to right, #FF2454, #600018, #FF8DCC, #121212, #FF8DCC, #600018, #FF2454","applied" : false},
     "pickaxe26Craft" : {"gradient" : "linear-gradient(to right, #000000, #5D0000, #734600, #807A00, #074D00, #006564, #021652 , #3B0076, #460038, #5D0000, #000000)","applied" : false},
-    "pickaxe27Craft" : {"gradient" : "linear-gradient()","applied" : false},
+    "pickaxe27Craft" : {"gradient" : "linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B)","applied" : false},
     
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
     "gear1Craft" : {"gradient" : "linear-gradient(to right, #FFF1C0, #FF9E40","applied" : false},
@@ -445,8 +445,8 @@ const buttonGradients = {
     "gear20Craft" : {"gradient" : "linear-gradient(to right, #000000 5%, #FF3636, #E94585, #000ACE, #FFFFFF 95%","applied" : false},
     "gear21Craft" : {"gradient" : "linear-gradient(to right, #44533D, #37085A, #76734E, #116666, #58340B, #04370A, #3B0505, #740A32, #451676, #236B4B)","applied" : false},
     "gear22Craft" : {"gradient" : "linear-gradient(to right,#FF0B0B, #FFEB00, #7AFF1F)","applied" : false},
-    "gear23Craft" : {"gradient" : "linear-gradient()","applied" : false},
-    
+    "gear23Craft" : {"gradient" : "linear-gradient(to right, #00dfff, #3a00f9, #15fd00, #3a00f9, #00dfff)","applied" : false},
+    //
 }
 function craftPickaxe(item) {
     const recipe = recipes[item].recipe;
@@ -483,6 +483,7 @@ function getButtonByName(item) {
     return false;
 }
 function utilitySwitchActions() {
+    adminChangeLuck(verifiedOres.getCurrentLuck());
     changeLayerOres();
     updateAllLayers();
     switchLayerIndex(0);
@@ -761,7 +762,7 @@ const upgradeRecipes = {
             ],
             descriptions : [
                 "Luck:<br>1 -> 3",
-                "Ability Size:<br>14,231 -> 33,243"
+                "Ability Size:<br>5,396 -> 19,930"
             ]
         },
     }
@@ -840,6 +841,7 @@ function craftUpgrade(id) {
     player.upgrades[id].bought++;
     updateDisplayedUpgrade();
     utilitySwitchActions();
+    updateTolLuck();
 }
 function hideUpgrade() {
     document.getElementById("upgradeRecipeHolder").style.display = "none";
@@ -862,4 +864,7 @@ function updateUpgradeDisplay() {
         }
     }
     toEdit[0].innerHTML = output;
+}
+function updateTolLuck() {
+    document.getElementById("treeOfLifeLuck").innerText = `Has ${player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level]}x Luck.`
 }

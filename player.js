@@ -437,6 +437,7 @@ function loadNewData(data) {
             for (let propertyName in data.pickaxes) if (player.pickaxes[propertyName] !== undefined) player.pickaxes[propertyName] = data.pickaxes[propertyName];
         }
         if (data.stats.currentPickaxe !== undefined) player.stats.currentPickaxe = data.stats.currentPickaxe;
+        if (player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
         if (data.stats.blocksMined !== undefined) player.stats.blocksMined = data.stats.blocksMined;
         if (data.stats.cavesGenerated !== undefined) player.stats.cavesGenerated = data.stats.cavesGenerated;
         if (data.stats.timePlayed !== undefined) player.stats.timePlayed = data.stats.timePlayed;

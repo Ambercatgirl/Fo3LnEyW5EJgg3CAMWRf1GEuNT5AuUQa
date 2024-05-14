@@ -558,6 +558,8 @@ function updateInventory() {
         stopMining();
         goDirection(tempDirection);
     }
+    if (currentWorld === 1.1 && player.stats.currentPickaxe !== 27) player.stats.currentPickaxe = 27;
+    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
     checkPowerupCooldowns();
     updatePowerupCooldowns();
     updateDisplayedUpgrade();
@@ -816,7 +818,7 @@ let pickaxe25Nums = [];
 let testNums = [];
 /*
 const az = new Image();
-az.src = "media/Artboard 2.png"
+az.src = "media/Untitled-1Artboard 3.jpg"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")

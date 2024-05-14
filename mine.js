@@ -508,6 +508,7 @@ function stopMining() {
     clearInterval(loopTimer);
 }
 function sr1Helper(state) {
+    updateTolLuck();
     if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
         player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
         player.powerupVariables.fakeEquipped.item = "";
