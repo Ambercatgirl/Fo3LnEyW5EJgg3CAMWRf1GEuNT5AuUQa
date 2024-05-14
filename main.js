@@ -246,23 +246,23 @@ function movePlayer(dir, reps) {
         displayArea();
         }
 }
-
+let keyCooldown = Date.now();
 document.addEventListener('keydown', (event) => {
     let name = event.key;
     let validInput = false;
     name = name.toLowerCase();
     switch(name) {
         case "w":
-            if (!buttonClicked) validInput = true;
+            if (!buttonClicked && Date.now() >= keyCooldown) {validInput = true; keyCooldown = Date.now() + 15;}
             break;
         case "a":
-            if (!buttonClicked) validInput = true;
+            if (!buttonClicked && Date.now() >= keyCooldown) {validInput = true; keyCooldown = Date.now() + 15;}
             break;
         case "s":
-            if (!buttonClicked) validInput = true;
+            if (!buttonClicked && Date.now() >= keyCooldown) {validInput = true; keyCooldown = Date.now() + 15;}
             break;
         case "d":
-            if (!buttonClicked) validInput = true;
+            if (!buttonClicked && Date.now() >= keyCooldown) {validInput = true; keyCooldown = Date.now() + 15;}
             break;
         case "arrowup":
             event.preventDefault();
@@ -640,7 +640,6 @@ function typeWriter(string) {
     let char;
     let hex;
     let emoji
-    let multiply;
     let output = "";
     let ignoreUntil = 0;
     typeCallNum++;
@@ -666,7 +665,6 @@ function typeWriter(string) {
             }
         }
         if (thisTypeNum === typeCallNum) element.innerHTML = output;
-        multiply = (!(ignoreUntil > i) ? i : 0);
     }, 10 * i);
     }
 }
