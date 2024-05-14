@@ -6,7 +6,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
 
 //MINE CREATION
-const debug = (document.location.href.includes("testing")) || (document.location.href.includes('http://127.0.0.1:500/'));
+const debug = (document.location.href.includes("testing")) || (document.location.href.includes('http://127.0.0.1:5500/'));
 function createMine() {
     for (let r = curY - 101; r < curY + 101; r++) {
         if (r > -1)
@@ -418,7 +418,7 @@ function getParams(distanceX, distanceY, x, y) {
 }
 function attemptSwitchWorld(to) {
     if (to === 2 && player.pickaxes["pickaxe13"] || to === 2 && currentWorld === 2) {switchWorld(currentWorld === 1 ? 2 : 1); return;}
-    if (to === 1.1) {switchWorld(currentWorld === 1 ? 1.1 : 1); return;}
+    if (to === 1.1) {switchWorld(currentWorld === 1.1 ? 1 : 1.1); return;}
 }
 function switchWorld(to) {
     canMine = false;
@@ -450,7 +450,6 @@ function switchWorld(to) {
         }
         layerNum = 1;
         switchLayerIndex(0, "tvLayer", 2);
-        sr1Helper(false);
     } else if (currentWorld < 2) {
         distanceMulti = 0;
         y = 1000;
@@ -515,7 +514,7 @@ function sr1Helper(state) {
             document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
             document.getElementById("switchFont").disabled = false;
         }
-        player.stats.currentPickaxe = player.wasUsing;
+        player.stats.currentPickaxe = player.wasUsing === undefined ? player.stats.currentPickaxe : player.stats.wasUsing;
         player.wasUsing = undefined;
     }
 }
