@@ -169,6 +169,12 @@ async function rollAbilities() {
             if (Math.random() < 1/150 * m) {
                 pickaxeAbility26(curX, curY);
             }
+            break;
+        case 27:
+        if (Math.random() < 1/1000 * m) {
+            pickaxeAbility27(curX, curY);
+        }
+        break;
     }
 }
 
@@ -1192,9 +1198,9 @@ const treeLevels = {
     1: []
 }
 function pickaxeAbility27(x, y) {
-    //x + num to center
-    //y + num to center
-    const arrToIndex = treeLevels[player.upgrades["pickaxe27"]].level;
+    x -= 50;
+    y -= 600;
+    const arrToIndex = treeLevels[player.upgrades["pickaxe27"].level];
     for (let i = 0; i < arrToIndex.length; i++) {
         pickaxeAbilityMineBlock(arrToIndex[i]["x"] + x, arrToIndex[i]["y"] + y)
     }

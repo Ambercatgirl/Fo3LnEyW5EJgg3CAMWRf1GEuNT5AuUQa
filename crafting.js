@@ -761,7 +761,7 @@ const upgradeRecipes = {
             ],
             descriptions : [
                 "Luck:<br>1 -> 3",
-                "Ability Size:<br>num -> num"
+                "Ability Size:<br>14,231 -> 33,243"
             ]
         },
     }

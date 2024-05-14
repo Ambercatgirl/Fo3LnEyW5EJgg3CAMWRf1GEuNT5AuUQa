@@ -145,10 +145,11 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   display: inline-flex;
 }
 #generatedLogs {
-  width: 100%;
+  width: 80%;
   height: 5vw;
   font-size: 1vw;
-  text-align: center;
+  text-align: left;
+  float: right;
 }
 #logHolder {
   width: 100%;
@@ -546,6 +547,7 @@ img.roundcat {
   height: 100%;
   text-wrap: nowrap;
   vertical-align: middle;
+  text-align: center;
 }
 #blockContainer {
   margin-top: 1%;
@@ -555,8 +557,7 @@ img.roundcat {
   line-height: 1.4vw;
   font-size: 1.5vw;
   user-select: none;
-  text-wrap: nowrap;
-  text-align: center;
+  white-space: nowrap;
   letter-spacing: -0.4vw;
   position: relative;
   display: inline-flex;
@@ -755,6 +756,12 @@ img.roundcat {
   height: 1vw;
   filter: drop-shadow(0 0 1px white);
 }
+#nyerd {
+  position: relative;
+  width: 4.5vw;
+  height: 4.5vw;
+  filter: drop-shadow(0 0 3px white);
+}
 #trackerOre {
   position: inherit;
   width: 100%;
@@ -780,7 +787,7 @@ img.roundcat {
 #trackerY {
   position: inherit;
   width: 100%;
-  height: 6vw;
+  height: 2vw;
   font-size: 1vw;
   top:6vw;
   text-align: left;
@@ -800,7 +807,9 @@ img.roundcat {
   border-radius: 50%;
   background:none;
   box-shadow: 0px 0px 5px white;
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #trackerLock {
   position: absolute;
