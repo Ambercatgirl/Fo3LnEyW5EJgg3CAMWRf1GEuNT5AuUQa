@@ -427,7 +427,7 @@ function loadNewData(data) {
             if (player.gears[item] !== undefined) data.gears[item] = false;
             if (player.pickaxes[item] !== undefined) {
                 data.pickaxes[item] = false;
-                data.stats.currentPickaxe = data.powerupVariables.fakeEquipped.originalState;
+                if (data.wasUsing === undefined) data.stats.currentPickaxe = data.powerupVariables.fakeEquipped.originalState;
             }
         }
         if (data.gears !== undefined && player.gears !== undefined) {
