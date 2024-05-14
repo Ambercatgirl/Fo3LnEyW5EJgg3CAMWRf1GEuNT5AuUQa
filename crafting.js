@@ -255,12 +255,12 @@ const recipes = {
     },
     "gear22" : {
         name : "",
-        recipe : [{ore:"🇿🇦", amt:500}, {ore:"🇨🇩", amt:450}, {ore:"🇹🇿", amt:350}],
+        recipe : [{ore:"🇿🇦", amt:250}, {ore:"🇹🇿", amt:200}, {ore:"🇨🇩", amt:175}],
         upgrades: {}
     },
     "gear23" : {
         name : "",
-        recipe : [ {ore:"🇵🇰", amt:100}, {ore:"🇯🇵", amt:150}, {ore:"🇧🇩", amt:150}],
+        recipe : [{ore:"🇯🇵", amt:75}, {ore:"🇧🇩", amt:75}, {ore:"🇵🇰", amt:50}],
         upgrades: {}
     }
 }
@@ -755,10 +755,10 @@ const upgradeRecipes = {
         "upgrade0" : 
         {
             recipe : [
-                {ore: "🇩🇿", amt: 15},
-                {ore: "🇸🇩", amt: 15},
-                {ore: "🇺🇬", amt: 2},
-                {ore: "🇰🇪", amt: 2},
+                {ore: "🇩🇿", amt: 500},
+                {ore: "🇸🇩", amt: 500},
+                {ore: "🇺🇬", amt: 75},
+                {ore: "🇰🇪", amt: 50},
             ],
             descriptions : [
                 "Luck:<br>1 -> 3",
@@ -770,17 +770,17 @@ const upgradeRecipes = {
 let currentDisplayedUpgrade;
 function displayUpgrade(id, location) {
     currentDisplayedUpgrade = {id: id, location: location};
-    const holder = document.getElementById("upgradeRecipeHolder");
+    let holder = document.getElementById("upgradeRecipeHolder");
     while (holder.firstChild) holder.removeChild(holder.firstChild);
     location = location.parentElement;
-    holder.style.top = `${location.getBoundingClientRect().bottom}px`;
-    holder.style.left = `${location.offsetLeft}px`;
-    holder.style.display = "block";
     if (player.upgrades[id].level >= player.upgrades[id].maxLevel) {
+        if (location.lastChild.classList !== undefined) {
+            if (location.lastChild.classList.contains("upgradeMaxLevel")) location.removeChild(location.lastChild);
+        }
         const maxElement = document.createElement('p');
         maxElement.innerText = "Max Level Reached!";
         maxElement.classList = "upgradeMaxLevel";
-        document.getElementById("upgradeRecipeHolder").appendChild(maxElement);
+        location.appendChild(maxElement);
         return;
     }
     const currentUpgrade = upgradeRecipes[id][`upgrade${player.upgrades[id].level}`].recipe;
@@ -808,6 +808,7 @@ function displayUpgrade(id, location) {
         colors = oreInformation.getColors(oreList[ore]["oreTier"]);
         element.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
         element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
+        element.setAttribute("onclick", `randomFunction("${ore}", "crafting")`);
         holder.appendChild(element.cloneNode(true));
     });
     const progressElement = document.createElement('p');
@@ -819,6 +820,10 @@ function displayUpgrade(id, location) {
     if (percent < 100) progressElement.innerText = percent + "%";
     else progressElement.innerText = "Can Upgrade!";
     holder.appendChild(progressElement);
+    if (location.lastChild.id === "upgradeRecipeHolder") location.removeChild(location.lastChild);
+    holder = holder.cloneNode(true);
+    location.appendChild(holder);
+    holder.style.display = "block";
 } 
 function updateDisplayedUpgrade() {
     updateUpgradeDisplay();
@@ -844,7 +849,7 @@ function craftUpgrade(id) {
     updateTolLuck();
 }
 function hideUpgrade() {
-    document.getElementById("upgradeRecipeHolder").style.display = "none";
+    currentDisplayedUpgrade.location.parentElement.removeChild(currentDisplayedUpgrade.location.parentElement.lastChild);
     currentDisplayedUpgrade = undefined;
 }
 function keepDisplayingUpgrade() {
