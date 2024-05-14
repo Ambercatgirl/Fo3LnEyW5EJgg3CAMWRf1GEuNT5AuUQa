@@ -255,12 +255,12 @@ const recipes = {
     },
     "gear22" : {
         name : "",
-        recipe : [{ore:"🇿🇦", amt:2}, {ore:"🇹🇿", amt:2}, {ore:"🇨🇩", amt:1}],
+        recipe : [{ore:"🇿🇦", amt:50}, {ore:"🇹🇿", amt:50}, {ore:"🇨🇩", amt:30}],
         upgrades: {}
     },
     "gear23" : {
         name : "",
-        recipe : [ {ore:"🇵🇰", amt:2}, {ore:"🇯🇵", amt:3}, {ore:"🇧🇩", amt:3}],
+        recipe : [ {ore:"🇵🇰", amt:25}, {ore:"🇯🇵", amt:15}, {ore:"🇧🇩", amt:15}],
         upgrades: {}
     }
 }
