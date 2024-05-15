@@ -592,13 +592,12 @@ function spawnMessage(obj) {
         mineCapacity += 10000;
     let oreRarity = oreList[block]["numRarity"];
     let spawnElement = document.getElementById("latestSpawns");
-    let sub = currentWorld === 1 ? 0 : 2000;
     let output = "";
     let element = document.createElement("p");
     element.setAttribute("title", oreList[block]["oreName"]);
     element.classList = "latestFind";
-    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">` + variant + block + " 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
-    else output += `<span title="${oreList[block]["oreName"]}">` + variant + block + "</span> 1/" + oreRarity.toLocaleString();
+    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">${variant} ${block}` + "</span> 1/" + caveInfo["adjRarity"].toLocaleString() + " Adjusted.";
+    else output += `<span title="${oreList[block]["oreName"]}">${variant} ${block}` + "</span> 1/" + oreRarity.toLocaleString();
     let colors = oreInformation.getColors(oreList[block]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];

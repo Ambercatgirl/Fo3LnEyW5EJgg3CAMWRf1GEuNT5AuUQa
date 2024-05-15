@@ -114,7 +114,6 @@ function playSound(type) {
     }
     
     if (player.settings.doSpawnEffects && oreInformation.tierGrOrEqTo({"tier1":type, "tier2": "Interstellar"}) && (player.currentEffect === '' ? true : (oreInformation.tierGrOrEqTo({"tier1":type, "tier2":player.currentEffect})))) {
-        console.log(type, player.currentEffect, oreInformation.tierGrOrEqTo({"tier1":type, "tier2":player.currentEffect}))
         let timeoutAmt = 0;
         if (document.getElementById("blockContainer").style.animation !== "") {
             document.getElementById("blockContainer").style.animation = "";

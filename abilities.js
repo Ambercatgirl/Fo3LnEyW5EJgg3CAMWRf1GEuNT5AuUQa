@@ -234,7 +234,7 @@ function powerup4() {
     }
 }
 function powerup5() {
-    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && currentWorld !== 1.1) {
+    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown * 0 && currentWorld !== 1.1) {
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
             if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
@@ -1198,7 +1198,6 @@ const treeLevels = {
 }
 function pickaxeAbility27(x, y) {
     x -= 37;
-    y -= 65;
     const level = player.upgrades["pickaxe27"].level;
     switch (level) {
         case 0:

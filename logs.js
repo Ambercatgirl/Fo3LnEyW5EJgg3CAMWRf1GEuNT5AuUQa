@@ -26,12 +26,20 @@ class secureLogs {
         const ore = intended.ore === undefined ? intended : intended.ore;
         const variant = intended.variant === undefined ? undefined : intended.variant;
         fromCave = fromCave === undefined ? [false, 1, "none"] : fromCave;
-        let luckModifier = (this.#maxLuck[player.stats.currentPickaxe] + (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0)) * ((player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1)) * (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1) * 10;
+        let luckModifier;
+        if (player.stats.currentPickaxe === 27 || currentWorld === 1.1) {
+            const pickaxe = player.upgrades["pickaxe27"];
+            luckModifier = pickaxe.levelLuck[pickaxe.level];
+            if (player.gears["gear20"]) luckModifier *= ((pickaxe.levelLuck[pickaxe.level] * 0.05) + 1);
+            if (isNaN(luckModifier)) luckModifier = 1;
+        } else {
+            luckModifier = (this.#maxLuck[player.stats.currentPickaxe] + (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0)) * ((player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1)) * (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1) * 10;
+        }
         luckModifier *= 1.5;
         const maxLuck = luckModifier;
         let luck;
         if (fromCave[1] > 1) {
-            if (caveLuck > 2 && !debug) {
+            if (caveLuck > 5) {
                 console.log("failed to create, ", obj.stack, caveLuck);
                 return;
             } else {
@@ -84,7 +92,10 @@ class secureLogs {
                             something /= log.caveInfo[1];
                             log.rarity = something;
                         }
-                        const webhookString = `Cat has found ${this.#verifiedLogs["All"][i].variant} ${this.#verifiedLogs["All"][i].block} with a rarity of 1/${Math.round(1/this.#verifiedLogs["All"][i].rarity).toLocaleString()} ${this.#verifiedLogs["All"][i].caveInfo[0] ? (this.#verifiedLogs["All"][i].caveInfo[1] > 1 ? "(" + caveList[this.#verifiedLogs["All"][i].caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(this.#verifiedLogs["All"][i].x - 1000000000).toLocaleString()}, Y: ${(-1 *this.#verifiedLogs["All"][i].y).toLocaleString()}`
+                        let logName = "Cat";
+                        if (player.webHook.active) logName = player.webHook.name;
+                        const webhookString = `${logName} has found ${this.#verifiedLogs["All"][i].variant} ${this.#verifiedLogs["All"][i].block} with a rarity of 1/${Math.round(1/this.#verifiedLogs["All"][i].rarity).toLocaleString()} ${this.#verifiedLogs["All"][i].caveInfo[0] ? (this.#verifiedLogs["All"][i].caveInfo[1] > 1 ? "(" + caveList[this.#verifiedLogs["All"][i].caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(this.#verifiedLogs["All"][i].x - 1000000000).toLocaleString()}, Y: ${(-1 *this.#verifiedLogs["All"][i].y).toLocaleString()}`
+                        if (player.webHook.active) webHook(log, webhookString);
                         log.output = webhookString;
                         if (player.settings.highRarityLogs && log.rarity > 1/250000000) {
                             this.#verifiedLogs["All"].splice(i, 1);
@@ -151,18 +162,44 @@ class secureLogs {
         if (player.stats.currentPickaxe === 27 || currentWorld === 1.1) {
             const pickaxe = player.upgrades["pickaxe27"];
             let luck = pickaxe.levelLuck[pickaxe.level];
-            if (player.gears["gear20"]) return luck * ((pickaxe.levelLuck[pickaxe.level] * 0.05) + 1);
+            if (player.gears["gear20"]) luck *= ((pickaxe.levelLuck[pickaxe.level] * 0.05) + 1);
+            if (isNaN(luck)) return 1;
             else return luck;
         }
+        if (player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
         let luck = this.#maxLuck[player.stats.currentPickaxe];
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         if (currentWorld < 2)
             luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1);
-        return luck;
+        if (isNaN(luck)) return 1;
+        else return luck;
     }
     getStartTime() {
         return this.#startTime;
     }
 }
 let verifiedOres = new secureLogs();
+function webHook(log, string) {
+    let webhookContent;
+    if (player.webHook.useString) webhookContent = string;
+    else if (player.webHook.customString !== "") webhookContent = eval(player.webHook.customString);
+    else webhookContent = `${player.webHook.name} has found ${log.variant} ${log.block} with a rarity of 1/${(Math.floor(1/log.rarity)).toLocaleString()} at ${(player.stats.blocksMined).toLocaleString()} Blocks Mined at X: ${log.x - 1000000000} Y: ${log.y * -1}`
+    if ((Math.floor(1/log.rarity)) > player.webHook.limit) {
+        fetch(player.webHook.link, {
+        body: JSON.stringify({
+        content: webhookContent,
+             }),
+             headers: {
+                 "Content-Type": "application/json",
+             },
+             method: "POST",
+         })
+             .then(function (res) {
+                 
+             })
+             .catch(function (res) {
+                 console.log(res);
+             });
+     }
+}

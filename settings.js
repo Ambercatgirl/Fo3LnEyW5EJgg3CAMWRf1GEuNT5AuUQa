@@ -21,6 +21,8 @@ function keepShowingMenu() {
 }
 function showMenuScreen(type) {
     document.getElementById("menuSelectionContainer").style.display = "block";
+    const allFrames = document.getElementById("menuSelectionContainer").children;
+    for (let i = 0; i < allFrames.length; i++) allFrames[i].style.display = "none";
     document.getElementById(`frame-${type}`).style.display = "block";
     if (type === 'settings') switchSettings('game');
     if (type === 'statistics') createStats();
@@ -594,14 +596,14 @@ function switchFont() {
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
         document.getElementById("switchFont").style.backgroundColor = "#FF3D3D";
         distanceMulti--;
-        y -= 2000;
+        layerDistanceY -= 2000;
         switchDistance();
     } else {
         player.settings.usingNewEmojis = true;
         document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");
         document.getElementById("switchFont").style.backgroundColor = "#6BC267";
         distanceMulti--;
-        y -= 2000;
+        layerDistanceY -= 2000;
         switchDistance();
     }
 }

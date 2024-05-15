@@ -483,10 +483,10 @@ function getButtonByName(item) {
     return false;
 }
 function utilitySwitchActions() {
-    adminChangeLuck(verifiedOres.getCurrentLuck());
     changeLayerOres();
     updateAllLayers();
     switchLayerIndex(0);
+    if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
 }
 let m87 = 0;
 let m88 = 0;
@@ -512,7 +512,6 @@ function showPickaxes() {
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
             document.getElementById("nullChroma").style.display = "block";
         } else m88 = 0;
-        
     }
     document.getElementById("oblivionFracturer").style.display = "none";
 }
@@ -548,7 +547,8 @@ function switchWorldCraftables() {
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "block";
     document.getElementById("nullChroma").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
-    if (indexHasOre("🎂")) document.getElementById("sillyRecipe").style.display = "none";
+    if (indexHasOre("🎂")) document.getElementById("sillyRecipe").style.display = "block";
+    else document.getElementById("sillyRecipe").style.display = "none";
 }
 function toggleOreForge() {
     let element = document.getElementById("forgeContainer")
@@ -755,10 +755,10 @@ const upgradeRecipes = {
         "upgrade0" : 
         {
             recipe : [
-                {ore: "🇩🇿", amt: 500},
-                {ore: "🇸🇩", amt: 500},
-                {ore: "🇺🇬", amt: 75},
-                {ore: "🇰🇪", amt: 50},
+                {ore: "🇩🇿", amt: 25},
+                {ore: "🇸🇩", amt: 25},
+                {ore: "🇺🇬", amt: 5},
+                {ore: "🇰🇪", amt: 3},
             ],
             descriptions : [
                 "Luck:<br>1 -> 3",
