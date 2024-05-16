@@ -765,6 +765,22 @@ const upgradeRecipes = {
                 "Ability Size:<br>5,396 -> 19,930"
             ]
         },
+        "upgrade1" : 
+        {
+            recipe : [
+                {ore: "🇪🇬", amt: 250},
+                {ore: "🇪🇹", amt: 240},
+                {ore: "🇳🇬", amt: 225},
+                {ore: "🇹🇷", amt: 200},
+                {ore: "🇮🇷", amt: 175},
+                {ore: "🇻🇳", amt: 150},
+                {ore: "🇵🇭", amt: 130},
+            ],
+            descriptions : [
+                "Luck:<br>3 -> 10",
+                "Ability Size:<br>19,930 -> 30,396"
+            ]
+        },
     }
 }
 let currentDisplayedUpgrade;
@@ -773,6 +789,7 @@ function displayUpgrade(id, location) {
     let holder = document.getElementById("upgradeRecipeHolder");
     while (holder.firstChild) holder.removeChild(holder.firstChild);
     location = location.parentElement;
+    window.onmousemove = workshopMouse;
     if (player.upgrades[id].level >= player.upgrades[id].maxLevel) {
         if (location.lastChild.classList !== undefined) {
             if (location.lastChild.classList.contains("upgradeMaxLevel")) location.removeChild(location.lastChild);
@@ -848,22 +865,36 @@ function craftUpgrade(id) {
     utilitySwitchActions();
     updateTolLuck();
 }
-function hideUpgrade() {
-    currentDisplayedUpgrade.location.parentElement.removeChild(currentDisplayedUpgrade.location.parentElement.lastChild);
-    currentDisplayedUpgrade = undefined;
+let keepShowingUpgrade = false;
+let lastShownUpgrade;
+let overUpgrade = false;
+function workshopMouse(event) {
+    let parent = currentDisplayedUpgrade.location.parentElement
+    let parentNums = parent.getBoundingClientRect();
+    let bottomCheck = parentNums.bottom + 1;
+    let leftCheck = parentNums.left;
+    let rightCheck = parentNums.right;
+    let topCheck = currentDisplayedUpgrade.location.getBoundingClientRect().top - 1;
+    let heightToAdd = document.getElementById("upgradeRecipeHolder").getBoundingClientRect().height;
+    overUpgrade = (event.clientY >= topCheck && event.clientY <= bottomCheck + heightToAdd && event.clientX >= leftCheck && event.clientX <= rightCheck);
+    if (!overUpgrade) hideUpgrade()
 }
-function keepDisplayingUpgrade() {
-    document.getElementById("upgradeRecipeHolder").style.display = "block";
+function hideUpgrade() {
+    lastShownUpgrade = currentDisplayedUpgrade.location;
+    currentDisplayedUpgrade.location.parentElement.removeChild(currentDisplayedUpgrade.location.parentElement.lastChild);
+    currentDisplayedUpgrade = undefined;   
+    window.onmousemove = "";
 }
 function updateUpgradeDisplay() {
     let toEdit = document.getElementsByClassName("workshopInformationLevel");
     toEdit[0].innerText = `Level ${player.upgrades["pickaxe27"].level}/${player.upgrades["pickaxe27"].maxLevel}`;
     toEdit = document.getElementsByClassName("workshopInformationLevelDescriptor");
-    let descriptions = upgradeRecipes["pickaxe27"]["upgrade0"].descriptions;
+    
     let output = "";
     if (player.upgrades["pickaxe27"].level >= player.upgrades["pickaxe27"].maxLevel) {
         output = ""
     } else {
+        let descriptions = upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].descriptions;
         for (let i = 0; i < descriptions.length; i++) {
             output += `${descriptions[i]}<br>`;
         }

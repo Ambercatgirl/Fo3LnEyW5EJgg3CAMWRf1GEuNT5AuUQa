@@ -234,7 +234,7 @@ function powerup4() {
     }
 }
 function powerup5() {
-    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown * 0 && currentWorld !== 1.1) {
+    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && currentWorld !== 1.1) {
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
             if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
@@ -1194,26 +1194,33 @@ function pickaxeAbility26(x, y) {
 }
 const treeLevels = {
     0: [],
-    1: []
+    1: [],
+    cherryBranch: [],
 }
 function pickaxeAbility27(x, y) {
-    x -= 37;
+    let eX = x;
+    eX -= 37;
+    let eY = y;
     const level = player.upgrades["pickaxe27"].level;
-    switch (level) {
-        case 0:
-            y -= 65;
-            break;
-        case 1:
-            y -= 100;
-            break;
-    }
-    const arrToIndex = treeLevels[player.upgrades["pickaxe27"].level];
+    let arrToIndex;
+    if (level === 0) {arrToIndex = treeLevels[0]; eY -= 65;}
+    else if (level > 0) {arrToIndex = treeLevels[1]; eY -= 200;}
     for (let i = 0; i < arrToIndex.length; i++) {
-        pickaxeAbilityMineBlock(arrToIndex[i]["x"] + x, arrToIndex[i]["y"] + y)
+        pickaxeAbilityMineBlock(arrToIndex[i]["x"] + eX, arrToIndex[i]["y"] + eY)
+    }
+    if (level > 1) {
+        arrToIndex = treeLevels.cherryBranch;
+        eX = x - 345;
+        eY = y + 50;
+        pickaxeArrayLoop(arrToIndex, eX, eY)
     }
     displayArea();
 }
-
+function pickaxeArrayLoop(array, x, y) {
+    for (let i = 0; i < array.length; i++) {
+        pickaxeAbilityMineBlock(array[i]["x"] + x, array[i]["y"] + y)
+    }
+}
 function pickaxeAbilityMineBlock(x, y) {
     if (y > 0) {
         mine[y] ??= [];
