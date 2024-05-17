@@ -9,8 +9,8 @@ async function rollAbilities() {
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m = 1.2;
     if (player.gears["gear23"]) m += 0.15;
-    if (!resetting && ((currentWorld < 2 && player.stats.currentPickaxe >= 5)||(currentWorld === 2 && player.gears["gear14"]))) {
-        if (Math.random() < 1/500 && player.settings.cavesEnabled) {
+    if (Math.random() < 1/500 && !resetting && ((currentWorld < 2 && player.stats.currentPickaxe >= 5)||(currentWorld === 2 && player.gears["gear14"]))) {
+        if (player.settings.cavesEnabled) {
             player.stats.cavesGenerated++;
             generateCave();
             displayArea();
@@ -187,7 +187,7 @@ function powerup1(x, y) {
             }
         }
         displayArea();
-        player.powerupCooldowns["powerup1"].cooldown = Date.now() + 900000;
+        player.powerupCooldowns["powerup1"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
         document.getElementById("powerup1").style.backgroundColor = "#FF3D3D";
     }
     
@@ -206,7 +206,7 @@ function powerup2(x, y) {
         generateCave(x + 100, y - 100);
         player.stats.cavesGenerated += 8;
         displayArea();
-        player.powerupCooldowns["powerup2"].cooldown = Date.now() + 300000;
+        player.powerupCooldowns["powerup2"].cooldown = Date.now() + (player.gears["gear24"] ? 300000 * 0.75 : 300000);
         document.getElementById("powerup2").style.backgroundColor = "#FF3D3D";
     }
 }
@@ -218,17 +218,17 @@ function powerup3() {
         let chosenOre = layer[Math.round(Math.random() * (layer.length - 1))];
         while (oreInformation.isCommon(oreList[chosenOre]["oreTier"]) || oreList[chosenOre]["oreTier"] === "Antique") chosenOre = layer[Math.round(Math.random() * (layer.length - 1))];
         player.powerupVariables.currentChosenOre.ore = chosenOre, 
-        player.powerupVariables.currentChosenOre.removeAt = Date.now() + 600000;
+        player.powerupVariables.currentChosenOre.removeAt = Date.now() + (player.gears["gear24"] ? 600000 * 1.5 : 600000);;
         updateAllLayers();
-        player.powerupCooldowns["powerup3"].cooldown = Date.now() + 3000000;
+        player.powerupCooldowns["powerup3"].cooldown = Date.now() + (player.gears["gear24"] ? 3000000 * 0.75 : 3000000);
         document.getElementById("powerup3").style.backgroundColor = "#FF3D3D";
     }
 }
 function powerup4() {
     if (Date.now() >= player.powerupCooldowns["powerup4"].cooldown) {
         player.powerupVariables.commonsAffected.state = true;
-        player.powerupVariables.commonsAffected.removeAt = Date.now() + 300000;
-        player.powerupCooldowns["powerup4"].cooldown = Date.now() + 1200000;
+        player.powerupVariables.commonsAffected.removeAt = Date.now() + (player.gears["gear24"] ? 300000 * 1.5 : 300000);;
+        player.powerupCooldowns["powerup4"].cooldown = Date.now() + (player.gears["gear24"] ? 1200000 * 0.75 : 1200000);
         updateAllLayers()
         document.getElementById("powerup4").style.backgroundColor = "#FF3D3D";
     }
@@ -256,8 +256,8 @@ function powerup5() {
             let tempDirection = curDirection;
             stopMining();
             goDirection(tempDirection);
-            player.powerupVariables.fakeEquipped.removeAt = Date.now() + 60000;
-            player.powerupCooldowns["powerup5"].cooldown = Date.now() + 3600000;
+            player.powerupVariables.fakeEquipped.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);;
+            player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
             utilitySwitchActions();
         }
     }

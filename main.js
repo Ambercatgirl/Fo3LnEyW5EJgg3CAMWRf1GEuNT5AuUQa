@@ -244,8 +244,8 @@ function movePlayer(dir, reps) {
                 }
             }
         }
-        displayArea();
-        }
+    }
+    displayArea();
 }
 let keyCooldown = Date.now();
 document.addEventListener('keydown', (event) => {
