@@ -45,6 +45,7 @@ function init() {
     revealedElement = document.getElementById("mineResetProgress");
     locationElement = document.getElementById("location");
     blockElement = document.getElementById("blockDisplay");
+    displayRows = document.getElementsByClassName("blockDisplayRow");
     document.getElementById("menuSelectionContainer").addEventListener('click', (event) => {
         if (event.target.parentElement.classList.contains("menuCategory")) closeMenu();
     }, false);
@@ -97,6 +98,7 @@ function assignPickaxeNums(json) {
     treeLevels[0] = json.pickaxeNums27A;
     treeLevels[1] = json.pickaxeNums27B;
     treeLevels.cherryBranch = json.cherryBranch;
+    treeLevels.autumnBranch = json.autumnBranch;
 }
 function failedFetch() {
     for (let ore in oreList) oreList[ore]["oreName"] = "FAILED TO FETCH NAMES";
@@ -227,7 +229,7 @@ function movePlayer(dir, reps) {
                     lastDirection = dir.key;
                 } else {
                     if (mine[curY + dir.y][curX + dir.x] === "✖️") {
-                        if (Math.random() < 1/10000000) {
+                        if (Math.random() < 1/20) {
                             mine[curY][curX] = "⚪";
                             curY += dir.y;
                             curX += dir.x;
@@ -237,13 +239,17 @@ function movePlayer(dir, reps) {
                             let variant = rollVariant();
                             if (player.gears["gear26"] && variant === 1) variant = rollVariant();
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant})
-                            giveBlock("⛏️", curX, curY, false);
+                            giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant});
                             checkAllAround(curX, curY);
                         }
                     }
                 }
             }
         }
+    }
+    if (blocksRevealedThisReset >= mineCapacity) {
+        blocksRevealedThisReset = 0;
+        mineReset();
     }
     displayArea();
 }
@@ -327,10 +333,6 @@ function goDirection(direction, speed) {
         clearInterval(loopTimer);
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         curDirection = "";
-        if (ability1Active) {
-            clearTimeout(ability1Timeout);
-            ability1Active = false;
-        }
     } else {
         let reps = 1;
         let miningSpeed;
@@ -341,8 +343,8 @@ function goDirection(direction, speed) {
             miningSpeed = baseSpeed - 10;
         if (currentWorld < 2 && player.gears["gear6"])
             miningSpeed = baseSpeed - 15;
-        if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear13"] && player.gears["gear19"]))
-            miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear13"] ? 5 : 0) - (player.gears["gear19"] ? 13 : 0);
+        if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear16"] && player.gears["gear19"]))
+            miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear16"] ? 5 : 0) - (player.gears["gear19"] ? 13 : 0);
         } else {
             miningSpeed = speed;
         }
@@ -384,17 +386,20 @@ function moveOne(dir, button) {
 }
 
 //DISPLAY
+let displayRows;
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 function displayArea() {
     if (player.settings.canDisplay) {
-        let output = "";
+        let output;
         let constraints = getParams(9, 9);
         let grass = 0;
         if (currentWorld === 2)
             grass = 2000;
-        for (let r = curY - constraints[1]; r <= curY + 9 + (9-constraints[1]); r++) {
-            mine[r] ??= [];
-            for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
+        let i = 0;
+        for (let r = curY - constraints[1]; r <= curY + 9 + (9-constraints[1]); r++) mine[r] ??= [];
+        for (let c = curX - constraints[0]; c <= curX + 9 + (9-constraints[0]); c++) {
+            output = "";
+            for (let r = curY - constraints[1]; r <= curY + 9 + (9-constraints[1]); r++) {
                 if (mine[r][c]) {
                     if (player.settings.usePathBlocks)
                         output += mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : mine[r][c];
@@ -404,32 +409,44 @@ function displayArea() {
                     output += r === grass ? "🟩" : "⬛";
                 }
             }  
-            output += "<br>";
+            displayRows[i].innerHTML = output;
+            i++;
         }
-        blockElement.innerHTML = (output.substring(0, output.length - 4));
     }
-    revealedElement.innerText = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
-    minedElement.innerText = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
+    revealedElement.textContent = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
+    minedElement.textContent = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
     let sub = currentWorld === 2 ? 2000 : 0;
-    locationElement.innerText = "X: " + (curX - 1000000000).toLocaleString() + " | Y: " + (-(curY - sub)).toLocaleString();
+    locationElement.textContent = "X: " + (curX - 1000000000).toLocaleString() + " | Y: " + (-(curY - sub)).toLocaleString();
     if (player.oreTracker.tracking) {
         getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
     }
 }
 function checkDisplayVariant(location) {
+    let oreToAdd;
+    let includeSize;
+    let specialVariant;
+    if (oreList[location.ore]["hasImage"]) {
+        oreToAdd = `<img class="mineImage" src="${oreList[location.ore]["src"]}"></img>`;
+        includeSize = "";
+        specialVariant = "Img";
+    } else {
+        oreToAdd = location.ore;
+        includeSize = "normalRare";
+        specialVariant = "";
+    }
     if (location.variant > 1) {
         //linear-gradient(to bottom right, #c91800, #ff722b, #383838) explosive
         //linear-gradient(to bottom right, #062404, #c9fc3a, #062404) radioactive
         //linear-gradient(to bottom right, #f7f368, #ffc629, #e365fc) electrified
         if (location.variant === 2) {
-            return `<span class="electrifiedBlock">${location.ore}</span>`
+            return `<span class="electrifiedBlock${specialVariant} ${includeSize}">${oreToAdd}</span>`
         } else if (location.variant === 3) {
-            return `<span class="radioactiveBlock">${location.ore}</span>`
+            return `<span class="radioactiveBlock${specialVariant} ${includeSize}">${oreToAdd}</span>`
         } else if (location.variant === 4) {
-            return `<span class="explosiveBlock">${location.ore}</span>`
+            return `<span class="explosiveBlock${specialVariant} ${includeSize}">${oreToAdd}</span>`
         }
     } else {
-        return location.ore;
+        return `<span class="${includeSize}">${oreToAdd}</span>`
     }
 }
 
@@ -477,14 +494,22 @@ function createInventory() {
                 let oreNum = oreList[propertyName][variantInvNames[i - 1]];
                 let tempElement = document.createElement('tr');
                 tempElement.classList = "oreDisplay";
-                tempElement.setAttribute("onclick", "randomFunction(\"" + propertyName + "\", 'inv')");
+                if (i === 1) {
+                    tempElement.setAttribute("onclick", "randomFunction(\"" + propertyName + "\", 'inv')");
+                } else {
+                    tempElement.setAttribute("onclick", `goToConvert("${propertyName}", ${i})`);
+                }
                 let colors = oreInformation.getColors(oreList[propertyName]["oreTier"]);
                 tempElement.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 90%, black)"
                 tempElement.style.color = colors["textColor"];
                 tempElement.style.display = "none";
                 let oreNameBlock = document.createElement("td");
-                oreNameBlock.innerText = propertyName;
-                oreNameBlock.classList = "inventoryElement1";
+                if (oreList[propertyName]["hasImage"]) {
+                    oreNameBlock.innerHTML = `<span class="inventoryImage"><img src="${oreList[propertyName]["src"]}"></img></span>`
+                } else {
+                    oreNameBlock.innerText = propertyName;
+                    oreNameBlock.classList = "inventoryElement1";
+                }
                 let oreRarityBlock = document.createElement("td");
                 let rarity = oreList[propertyName]["numRarity"];
                 if (oreList[propertyName]["caveExclusive"]) {
@@ -567,6 +592,16 @@ function updateInventory() {
     if (player.gears["gear24"]) autoPowerups();
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
+    if (Date.now() >= ability1RemoveTime && energySiphonerActive) removeSiphoner();
+    const bodyCheck = document.body.getBoundingClientRect();
+    if (bodyCheck.height < 400) {
+        document.getElementById("mainSticky").style.position = "relative";
+        document.getElementById("mainTop").style.position = "relative";
+    } 
+    else {
+        document.getElementById("mainSticky").style.position = "sticky";
+        document.getElementById("mainTop").style.position = "sticky";
+    }
 }
 
 function appear(element){
@@ -579,7 +614,6 @@ function disappear(element){
 //SPAWNS AND FINDS
 let spawnOre = null;
 let currentSpawnTier = "";
-//{block: block, location: location, caveInfo: caveInfo}
 function spawnMessage(obj) {
     let block = obj.block;
     let location = obj.location;
@@ -588,18 +622,20 @@ function spawnMessage(obj) {
     let variantMulti = multis[obj.variant - 1];
     //ADD TO MINE CAPACITY IF NEAR RESET
     player.oreTracker.existingOres.push({block: block, posX : location["X"], posY : location["Y"]});
-    if ((currentWorld < 2 && !player.gears["gear3"]) && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
-        mineCapacity += 10000;
-    else if (!player.gears["gear17"] && (blocksRevealedThisReset > mineCapacity - 10000) && mineCapacity < player.settings.baseMineCapacity + 50000)
-        mineCapacity += 10000;
     let oreRarity = oreList[block]["numRarity"];
     let spawnElement = document.getElementById("latestSpawns");
     let output = "";
-    let element = document.createElement("p");
+    const element = document.getElementsByClassName("htmlTemplate")[0].cloneNode(true);
     element.setAttribute("title", oreList[block]["oreName"]);
-    element.classList = "latestFind";
-    if (caveInfo != undefined) output += `<span title="${oreList[block]["oreName"]}">${variant} ${block}` + "</span> 1/" + (caveInfo["adjRarity"] * variantMulti).toLocaleString() + " Adjusted.";
-    else output += `<span title="${oreList[block]["oreName"]}">${variant} ${block}` + "</span> 1/" + (oreRarity * variantMulti).toLocaleString();
+    element.style.display = "block";
+    let blockOutput;
+    if (oreList[block]["hasImage"]) {
+        blockOutput = `<span class="latestImage"><img src="${oreList[block]["src"]}"></img></span>`
+    } else {
+        blockOutput = block;
+    }
+    if (caveInfo != undefined) output += `${variant} ${blockOutput}` + " 1/" + (caveInfo["adjRarity"] * variantMulti).toLocaleString() + " Adjusted.";
+    else output += `${variant} ${blockOutput}` + " 1/" + (oreRarity * variantMulti).toLocaleString();
     let colors = oreInformation.getColors(oreList[block]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
@@ -686,8 +722,9 @@ function logFind(type, x, y, variant, atMined, fromReset) {
     removeExistingOre({x: x, y:y})
     let sub = currentWorld < 2 ? 0 : 2000;
     let spawnElement = document.getElementById("latestFinds");
-    let element = document.createElement("p");
-    element.classList = "latestFind";
+    const element = document.getElementsByClassName("htmlTemplate")[0].cloneNode(true);
+    element.setAttribute("title", oreList[type]["oreName"]);
+    element.style.display = "block";
     let colors = oreInformation.getColors(oreList[type]["oreTier"]);
     element.style.backgroundImage = "linear-gradient(to right, black," + colors["backgroundColor"] + " 20%, 80%, black)";
     element.style.color = colors["textColor"];
@@ -696,8 +733,14 @@ function logFind(type, x, y, variant, atMined, fromReset) {
     element.setAttribute("title", oreList[type]["oreName"]);
     output += `<span onclick='goToOre(\"${type}\", \"${variant}\")'>`;
     output += variant + " ";
-    output += type + " | X: " + (x - 1000000000).toLocaleString() + ", Y: " + (-(y - sub)).toLocaleString();
-    if (fromReset) output += " | FROM RESET<br>";
+    let blockOutput;
+    if (oreList[type]["hasImage"]) {
+        blockOutput = `<span class="latestImage"><img src="${oreList[type]["src"]}"></img></span>`
+    } else {
+        blockOutput = type;
+    }
+    output += blockOutput + " | X: " + (x - 1000000000).toLocaleString() + ", Y: " + (-(y - sub)).toLocaleString();
+    if (fromReset) output += " | Void Prevention.<br>";
     else output += " | At " + atMined.toLocaleString() +  " Mined.<br>";
     output += "</span>";
     element.innerHTML = output;
@@ -744,7 +787,14 @@ function checkExistingOres() {
             player.oreTracker.tracking = true;
             player.oreTracker.locationX = player.oreTracker.existingOres[closestIndex].posX;
             player.oreTracker.locationY = player.oreTracker.existingOres[closestIndex].posY;
-            document.getElementById("trackerOre").innerText = `Ore: ${variantAtIndex}${player.oreTracker.existingOres[closestIndex].block}`
+            let blockOutput;
+            const ore = player.oreTracker.existingOres[closestIndex].block;
+            if (oreList[ore]["hasImage"]) {
+                blockOutput = `<span class="trackerImage"><img src="${oreList[ore]["src"]}"></img></span>`
+            } else {
+                blockOutput = ore;
+            }
+            document.getElementById("trackerOre").innerHTML = `Ore: ${variantAtIndex}${blockOutput}`
             document.getElementById("trackerX").innerText = `X: ${(player.oreTracker.locationX - 1000000000).toLocaleString()}`
             document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld < 2 ? 0 : 2000))).toLocaleString()}`
             getAngleBetweenPoints({x:player.oreTracker.locationX, y:player.oreTracker.locationY});
@@ -826,7 +876,7 @@ let pickaxe25Nums = [];
 let testNums = [];
 /*
 const az = new Image();
-az.src = "media/cherryBranch.png"
+az.src = "media/IMG_6634.png"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")
@@ -834,7 +884,7 @@ az.src = "media/cherryBranch.png"
             const data = cc.getImageData(0,0,c.width,c.height).data
             console.log(data)
             for (let i = 0; i < data.length; i+=4) {
-                data[i + 2]===51?null:testNums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
+                data[i + 3]===0?null:testNums.push({"x":(i / 4) % c.width,"y":Math.floor((i / 4) / c.width)})
             }
 }
 */

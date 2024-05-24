@@ -88,7 +88,8 @@ let allPickaxeNames =
 "Staff of Binding",
 "Stormseer's Superspark Sceptre",
 "Coronary Catastrophe",
-"N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡"
+"N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡",
+"The Tree of Life"
 ];
 function changeUseNumbers(button) {
     if (!player.settings.useNumbers) {
@@ -318,11 +319,12 @@ function updateCapacity(element) {
     } else {
         flashRed(element);
     }        
+    document.getElementById("mineResetProgress").innerText = `${blocksRevealedThisReset}/${mineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
 }
 const indexOrder = {
-    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
-    "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"],
-    "subrealmOne" : ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer", "type4Ores", "type3Ores", "type2Ores", "type1Ores"]
+    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"],
+    "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"],
+    "subrealmOne" : ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer", "ccCave", "moCave", "foCave", "axCave", "ioCave", "ggCave"]
 }
 let layerNum = 0;
 function switchLayerIndex(num, overrideLayer, world) {
@@ -332,7 +334,7 @@ function switchLayerIndex(num, overrideLayer, world) {
     let layerToIndex;
     let worldLayer;
     if (world === undefined) {
-        worldLayer = currentWorld === 1 ? indexOrder["worldOne"] : (world === 2 ? indexOrder["worldTwo"] : indexOrder["subrealmOne"]);
+        worldLayer = currentWorld === 1 ? indexOrder["worldOne"] : (currentWorld === 2 ? indexOrder["worldTwo"] : indexOrder["subrealmOne"]);
     } else {
         worldLayer = world === 1 ? indexOrder["worldOne"] : (world === 2 ? indexOrder["worldTwo"] : indexOrder["subrealmOne"]);
     }
@@ -381,7 +383,9 @@ function switchLayerIndex(num, overrideLayer, world) {
     }
     return 0;
 }
-let ignoreList = "🌳🏰🚿🐋🏔️⚠️💗🐪💵☘️🪽🔫🗝️💰⚖️🌙🍀🍃🚽🎓👾🪝🪡🍓🏯🦚⚓🪤🤖🦴🎩💘💞🐰🐢🌹🦋🔈☯️🦾🐞🥈🚬🪸🪦🚨🍖📜🐸⛔⚡🌱🩸♨️🚫🔈⛔💢🔇🛑⭕🔕🎉🧌♾️💅😁🪢🫶🇧🇷🇨🇴🇦🇷🇵🇪🇻🇪🇨🇱🇪🇨🇧🇴🇵🇾🇺🇾🇦🇺🇵🇬🇳🇿🇫🇯🇸🇧🇫🇲🇻🇺🇵🇫🇳🇨🇼🇸🏳️‍⚧️";
+function shouldIgnore(ore) {
+    return oreInformation.tierGrOrEqTo({"tier1": oreList[ore]["oreTier"], "tier2": "Sacred"});
+}
 let noLuck = "✴️🌹";
 function createIndexCards(layer) {
         const oldLayer = layer; 
@@ -413,8 +417,12 @@ function createIndexCards(layer) {
             parentObject.classList = "oreCard";
             parentWrapper.classList = "indexWrapper";
             let blackOut = false;
-            if (ignoreList.indexOf(property) > -1 && !indexHasOre(property)) blackOut = true;
-            let output = `<span class='indexOre ${(blackOut) ? "indexBlackout" : ""}' title="${oreList[property]["oreName"]}">${property}</span>${blackOut ? "</span>" : ""}`;
+            if (shouldIgnore(property) && !indexHasOre(property)) blackOut = true;
+            let propertyToAdd;
+            if (oreList[property]["hasImage"]) {
+                propertyToAdd = `<img src="${oreList[property]["src"]}" class="indexImage"></img>`
+            } else propertyToAdd = property;
+            let output = `<span class='indexOre ${(blackOut) ? "indexBlackout blackoutImage" : ""}' title="${oreList[property]["oreName"]}">${propertyToAdd}</span>${blackOut ? "</span>" : ""}`;
             output += `<span class='indexVariants indexTextOutline'>${indexVariants(property)}</span>`
             output += `<span class='indexTier indexTextOutline'>${blackOut ? "???" : oreList[property]["oreTier"]}</span>`
             output += "<span class='indexRarity indexTextOutline'>1/";
@@ -465,7 +473,7 @@ function randomFunction(ore, cause) {
             return;
         if (ore === "🕳️")
             return;
-        if (ignoreList.indexOf(ore) === -1 || indexHasOre(ore)) {
+        if (!shouldIgnore(ore) || indexHasOre(ore)) {
             for (let i = 0; i < worldOneLayers.length; i++) {
                 if (layerList[worldOneLayers[i]].includes(ore)) {
                     layer = worldOneLayers[i];
@@ -492,9 +500,9 @@ function randomFunction(ore, cause) {
                 }
             }
             if (layer === undefined) {
-                for (let i = allCaves.length - 1; i >= 0; i--) {
-                    if (caveList[allCaves[i]].includes(ore)) {
-                        layer = allCaves[i];
+                for (let cave in caveTypes) {
+                    if (caveList[cave].includes(ore)) {
+                        layer = cave;
                         break;
                     }
                 }
@@ -528,7 +536,13 @@ function indexHasOre(ore) {
     return (oreList[ore]["normalAmt"] || oreList[ore]["electrifiedAmt"] || oreList[ore]["radioactiveAmt"] || oreList[ore]["explosiveAmt"]);
 }
 function indexVariants(ore) { 
-    return "" + (oreList[ore]["normalAmt"] ? `${ore}` : `<span style='color:transparent; text-shadow:0 0 0 black;'>${ore}</span>`) + (oreList[ore]["electrifiedAmt"] ? "⚡️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>⚡️</span>") + (oreList[ore]["radioactiveAmt"] ? "☢️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>☢️</span>") + (oreList[ore]["explosiveAmt"] ? "💥" : "<span style='color:transparent; text-shadow:0 0 0 black;'>💥</span>")
+    let imageOutput = "";
+    let isImage = false;
+    if (oreList[ore]["hasImage"]) {
+        imageOutput = `<span class="${oreList[ore]["normalAmt"] ? "" : "blackoutImage"}"><img src="${oreList[ore]["src"]}" class="indexImageVariant"></img></span>`
+        isImage = true;
+    }
+    return "" + (isImage ? imageOutput : (oreList[ore]["normalAmt"] ? `${oreList[ore]["hasImage"] ? "<span class='indexImageVariant'" : ""}` : `<span style='color:transparent; text-shadow:0 0 0 black;'>${ore}</span>`)) + (oreList[ore]["electrifiedAmt"] ? "⚡️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>⚡️</span>") + (oreList[ore]["radioactiveAmt"] ? "☢️" : "<span style='color:transparent; text-shadow:0 0 0 black;'>☢️</span>") + (oreList[ore]["explosiveAmt"] ? "💥" : "<span style='color:transparent; text-shadow:0 0 0 black;'>💥</span>")
 }
 function switchToIndex(button, num) {
     if (num === 0) {
@@ -753,9 +767,9 @@ function convertVariants() {
     }
     const obj = {"ore":ore, "variant":variant, "amt":amt};
     let amtToGive = 0;
-    if (obj["variant"] === "Explosive") amtToGive = 8;
-    else if (obj["variant"] === "Radioactive") amtToGive = 6;
-    else if (obj["variant"] === "Electrified") amtToGive = 4;
+    if (obj["variant"] === "Explosive") amtToGive = 30;
+    else if (obj["variant"] === "Radioactive") amtToGive = 10;
+    else if (obj["variant"] === "Electrified") amtToGive = 5;
     let name = variantInvNames[names.indexOf(obj["variant"])];
     if (oreList[obj["ore"]][name] >= obj["amt"]) {
         oreList[obj["ore"]][name] -= obj["amt"];
@@ -821,5 +835,13 @@ function toggleNyerd(button) {
             getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
         }
     }
+}
+function goToConvert(ore, variant) {
+    showMenuScreen("locations");
+    showVariantConversion(true);
+    document.getElementById("oreInput").value = ore;
+    document.getElementById("amtInput").value = oreList[ore][variantInvNames[variant - 1]];
+    document.getElementsByClassName("potentialVariant")[variant - 2].click();
+    console.log(ore);
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})

@@ -96,7 +96,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe14`)" id ="extremeEcholocator" style="display: none;"><span>Extreme Echolocator</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe15`)" id="corundumCaver" style="display: none;"><span>Corundum Caver</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe16`)" id="starborneSlasher" style="display: none;"><span>Starborne Slasher</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(`pickaxe17`)" id="nyabomb" style="display: none;" id="cat"><span>Nyabomb</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe17`)" id="nyabomb" style="display: none;"><span id="cat">Nyabomb</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe18`)" id="lunarLightsabre" style="display: none;"><span>Lunar Lightsabre</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe19`)" id="gemstoneEngraver" style="display: none;"><span>Gemstone Engraver</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe20`)" id="gamblersFallacy" style="display: none;"><span>Gambler's Fallacy</span></button>
@@ -134,6 +134,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button class="craftingButton" onclick="displayRecipe('gear22')" style="display: none;" id="replicatorPrototype"><span>Replicator Prototype</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear23')" style="display: none;" id="hyperdriveAccelerator"><span>Hyperdrive Accelerator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear24')" style="display: none;" id="superenergeticAutomaton"><span>Superenergetic Automaton</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear25')" style="display: none;" id="alterationReiterator"><span>Alteration Reiterator</span></button>
                 </div>
             </div>
             <p id = "craftingRecipeTitle" class="middleTitle" style="display: none;">Recipe</p>
@@ -166,7 +167,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <p class="itemDescription" id="pickaxe24Description" style="display: none;">You've mined too much, best to turn back now. Be warned.<br>Has an ability proc rate of 1/175.<br>Has 11x luck.<br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
                 <p class="itemDescription" id="pickaxe25Description" style="display: none;">Slashes through your heart.<br>Has an ability proc rate of 1/300.<br>Has 50x luck.<br><i style="font-size: 75%;">..This is where it ends? The most powerful tool in all the worlds..? No.. it can't end here there must be something more...</i><br><i>Warning: High mine capacities with this pickaxe may lead to game crashes.</i><br><span style="font-size: 50%;">Ability design created by @etherealelysia.</span></p>
                 <p class="itemDescription" id="pickaxe26Description" style="display: none;">Y҉òu̷'͠v̡e̷ ̕r͡e̴a͡c̡h͞e͝d͡ ̛t̀h̕e̶ ͟ȩv̕e̴n̴t̛ ͡h̵o͞r͠i̡z̛o͏n̡;̕ ̨h̴èr͞e̵'͘s̕ ͢w̶h͢ér͟e͟ ̷y͟o͠u͡ ̵m͜a̧k̕é ͠t̶h̕e͘ ͜u̶l̷t̶i҉ḿa̵t̢e̵ ̶c̸h͘o̶i̕c͢é.͞.̴ ́i̷s͝ ͞i͞t͢ ͡w̷o͢r͢t͝h́ ͘s̕a̴c͢r̕i͏f͏i͝c͡i͏n̡g͢ ̵e̕v̵e͝r͘y̡t̢h͝i͢ņǵ ͝y̷o̶u͝'͝v̧e͏ ̨w̶o̸r͡k̕e̶d̶ ̴f͜ǫr͠ ̡t̸o̶ ͝t̛h͢e͟ ͝v̧o҉i͡d̛.̵.͡?͡<br><br>Draws from past creations and through corruption, magnifies it fivefold.<br>Has an ability proc rate of 1/150.<br>Has 175x luck.</p>
-                <p class="itemDescription" id="pickaxe27Description" style="display: none;">The main pickaxe of Subrealm 1.<br>Can be upgraded in The Workshop.<br>Has an ability proc rate of 1/500.<br><span id="treeOfLifeLuck">Has x luck.</span><br>Speed is locked at 10ms. The only luck gear that works here is Statistical Amplifier.<br>All other gears function normally.</p>
+                <p class="itemDescription" id="pickaxe27Description" style="display: none;">The main pickaxe of Subrealm 1.<br>Can be upgraded in The Workshop.<br>Has an ability proc rate of 1/500.<br><span id="treeOfLifeLuck">Has x luck.</span><br>Speed is locked at 10ms. The only luck gear that works here is Statistical Amplifier.<br>All other gears function normally.<br><span style="font-size: 50%;">Ability design created by @memorysaga.</span></p>
                
                 <!--
                     Pickaxes above
@@ -175,7 +176,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <p class="itemDescription" id="gear0Description" style="display: none;">Allows you to access the ore tracker menu, pointing you towards the nearest rare ore that had a spawn message with it owned.</p>
                 <p class="itemDescription" id="gear1Description" style="display: none;">Boosts ability luck by 1.1x.</p>
                 <p class="itemDescription" id="gear2Description" style="display: none;">Sets mining speed delay to 15ms from 25ms.</p>
-                <p class="itemDescription" id="gear7Description" style="display: none;">Mining speed -3ms for 5 seconds upon mining any Antique+ ore (1/750k+).</p>
+                <p class="itemDescription" id="gear7Description" style="display: none;">Decreases mining speed by 3ms for 10s after activation, and can stack 5 more activations, each adding 5s to the duration. Goes on a 5s cooldown when the time ends. Can be activated by mining any Antique+ (1/750k+).</p>
                 <p class="itemDescription" id="gear3Description" style="display: none;">Instantly mines any rare ore that spawns, excluding celestials.</p>
                 <p class="itemDescription" id="gear8Description" style="display: none;">Increases ability proc rates by 20%.</p>
                 <p class="itemDescription" id="gear4Description" style="display: none;">For every block mined, gives you an additional layer block from the current layer.<br>Can duplicate layer blocks.</p>
@@ -197,11 +198,14 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <p class="itemDescription" id="gear22Description" style="display: none;">Has a 10% chance to duplicate any rare ore mined. (1/750k+)</p>
                 <p class="itemDescription" id="gear23Description" style="display: none;">+15% ability activation rate.</p>
                 <p class="itemDescription" id="gear24Description" style="display: none;">Automatically cycles through powerups and activates them if they are ready. -25% cooldown time, +50% activation time.</p>
+                <p class="itemDescription" id="gear25Description" style="display: none;">Will roll 1 extra time for a variant if an ore is normal.</p>
+           
             </div>
         </div>
         </div>
         </div>
         <div class="col-7">
+            <div id="mainSticky">
             <div class="mobile">
                     <button onclick="goDirection('a')" class="movementButton horizontalArrow" id="leftAutoMine"></button>
                     <button onclick="goDirection('s')" class="movementButton verticalArrow" id="downAutoMine"></button>
@@ -233,9 +237,27 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <button style="display: none;" class="powerupActivateButton" id="powerup3" onclick="powerup3()">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup4" onclick="powerup4()">Activate!</button>
                 <button style="display: none;" class="powerupActivateButton" id="powerup5" onclick="powerup5()">Activate!</button>
-                <p id="blockDisplay">
-                    
-                </p>
+                <div id="blockDisplay">
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                </div>
                 <p id="displayDisabled">Display is Disabled.</p>
                 <div id="trackerLock">
                     <img src="media/featureLock.png" id="lockImage">
@@ -261,8 +283,11 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 
                 <!--<button id="secretButton" onclick="toggleCelestials(true)"></button>-->
             </div>
-            <div id="latestSpawns" class="latestDisplay">Latest Spawns Will Appear Here</div>
+        </div>
+        <div id="latestDisplayBottom"></div>
+                <div id="latestSpawns" class="latestDisplay">Latest Spawns Will Appear Here</div>
                 <div id="latestFinds" class="latestDisplay">Latest Finds Will Appear Here</div>
+            
         </div>
         
         <div class="col-3"> 
@@ -562,7 +587,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <br><br>
                 <div id="conversionContainer">
                     <p id="conversionTitle">Variant Conversion Machine!</p>
-                    <p id="conversionDescription">How to use: Insert emoji into the left container, insert amount to convert next to it, select variant you wish to convert an ore from, and then press convert!<br>
+                    <p id="conversionDescription">How to use: Click on an ore in a variant inventory, or manually input the information!<br>
                     Current Rates: One Explosive Ore -> 30 Normal Ores | One Radioactive Ore -> 10 Normal Ores | One Electrified Ore -> 5 Normal Ores.</p>
                     <div id="machineHolder">
                         <form id="machineForm">
@@ -597,6 +622,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('gearCraft')">Craft <span class="forgeOreDisplay">⚙️</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('batteryCraft')">Craft <span class="forgeOreDisplay">🔋</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('bambooCraft')">Craft <span class="forgeOreDisplay">🎍</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('fishCraft')">Craft <span class="forgeOreDisplay">🐟</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('greenCraft')">Craft <span class="forgeOreDisplay">💚</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('blueCraft')">Craft <span class="forgeOreDisplay">💙</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowCraft')">Craft <span class="forgeOreDisplay">💛</span></button>
@@ -658,13 +684,5 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
     </div>
 </div>
 </div>
-<!--
-<div id="celestialContainer" style="display: none;">
-    <div id="celestialSwitch">
-        <button id ="celestialLeft">Left</button>
-        <p id="celestialText">Info</p>
-        <button id ="celestialLeft">Right</button>
-    </div>
-</div>
--->
+<p class="latestFind htmlTemplate" style="display: none;"></p>
 </body>

@@ -238,7 +238,7 @@ function createGsCave() {
         while (outputArr.indexOf(toRemove[i]) > -1)
             outputArr.splice(outputArr.indexOf(toRemove[i]), 1);
     }
-    outputArr.push("🤍", "🖤", "🤎", "💜", "❤️", "🧡", "💛", "💙", "💚", "📘", "📙", "📕", "📗");
+    outputArr.push("🤍", "🖤", "🤎", "💜", "❤️", "🧡", "💛", "💙", "💚", "📘", "📙", "📕", "📗", "✡️", "🕳️");
     for (let i = 0; i < outputArr.length; i++) {
         for (let j = 0; j < outputArr.length - i - 1; j++) {
             if (oreList[outputArr[j]]["numRarity"] < oreList[outputArr[j + 1]]["numRarity"]) {
@@ -318,7 +318,7 @@ function generateCaveBlock(y, x, type) {
             mine[y][x] = {ore: blockToGive, variant: variant};
             if (oolProbabilities[blockToGive] != undefined && type !== "abysstoneCave")
                 adjRarity = (1/oolProbabilities[blockToGive]) * multi;
-            if (oreList[blockToGive]["numRarity"] >= 25000000 || adjRarity >= 250000000) {
+            if (oreList[blockToGive]["numRarity"] >= 25000000 || adjRarity >= 250000000 || oreList[blockToGive]["hasLog"]) {
                 playSound(oreList[blockToGive]["oreTier"]);
                 verifiedOres.createLog(y,x,{ore: blockToGive, variant: variant}, new Error(), [true, getCaveMulti(type), type, caveLuck]);
                 verifiedOres.verifyLog(y, x);
