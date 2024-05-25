@@ -133,6 +133,7 @@ class playerTemplate {
         },
         this.wasUsing = undefined;
         this.sr1Unlocked = false;
+        this.faqOffered = false;
         this.webHook = {
             active: false,
             ids : {
@@ -558,6 +559,8 @@ function loadNewData(data) {
                 }
             }
         }
+        if (!data.faqOffered) toggleNewPlayer(true);
+        else player.faqOffered = true;
     } catch (err) {
         console.log(err);
         window.alert("DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD");

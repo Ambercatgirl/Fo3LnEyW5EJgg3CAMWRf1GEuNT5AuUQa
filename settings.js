@@ -28,6 +28,23 @@ function showMenuScreen(type) {
     if (type === 'statistics') createStats();
     if (type === 'locations') showOreForge(true);
 }
+function showFaqPage(num) {
+    const elements = document.getElementsByClassName("faqPage");
+    for (let i = 0; i < elements.length; i++) {
+        if (i === num) elements[i].style.display = "block";
+        else elements[i].style.display = "none";
+    }
+}
+function toggleNewPlayer(state) {
+    if (state) document.getElementById("newPlayer").style.display = "block";
+    else {document.getElementById("newPlayer").style.display = "none"; player.faqOffered = true;}
+}
+function doTutorial() {
+    showMenuScreen("faq");
+    showFaqPage(0);
+    toggleNewPlayer(false);
+    player.faqOffered = true;
+}
 const settingsTabs = ["game", "audio"]
 function switchSettings(type) {
     for (let i = 0; i < settingsTabs.length; i++) document.getElementById(`${settingsTabs[i]}Settings`).style.display = "none";
@@ -422,7 +439,7 @@ function createIndexCards(layer) {
             if (oreList[property]["hasImage"]) {
                 propertyToAdd = `<img src="${oreList[property]["src"]}" class="indexImage"></img>`
             } else propertyToAdd = property;
-            let output = `<span class='indexOre ${(blackOut) ? "indexBlackout blackoutImage" : ""}' title="${oreList[property]["oreName"]}">${propertyToAdd}</span>${blackOut ? "</span>" : ""}`;
+            let output = `<span class='indexOre ${(blackOut) ? (oreList[property]["hasImage"] ? "indexBlackout blackoutImage" : "indexBlackout") : ""}' title="${oreList[property]["oreName"]}">${propertyToAdd}</span>${blackOut ? "</span>" : ""}`;
             output += `<span class='indexVariants indexTextOutline'>${indexVariants(property)}</span>`
             output += `<span class='indexTier indexTextOutline'>${blackOut ? "???" : oreList[property]["oreTier"]}</span>`
             output += "<span class='indexRarity indexTextOutline'>1/";

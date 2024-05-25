@@ -361,7 +361,7 @@ function goDirection(direction, speed) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
-        if (currentWorld === 1.1) {miningSpeed = 10; reps = 1;}
+        if (currentWorld === 1.1) {miningSpeed = 10 - player.upgrades["pickaxe27"].level; reps = 1;}
         loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
@@ -876,7 +876,7 @@ let pickaxe25Nums = [];
 let testNums = [];
 /*
 const az = new Image();
-az.src = "media/IMG_6634.png"
+az.src = "media/Removal-920.webp"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")
