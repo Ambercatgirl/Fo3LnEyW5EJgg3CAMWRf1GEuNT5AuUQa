@@ -338,25 +338,11 @@ function goDirection(direction, speed) {
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         curDirection = "";
     } else {
-        let reps = 1;
-        let miningSpeed;
+        const nums = calcSpeed();
+        let reps = nums.reps;
+        let miningSpeed = nums.speed;
         clearInterval(loopTimer);
         removeFromLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"]});
-        if (speed === undefined) {
-        if (currentWorld < 2 && player.gears["gear2"])
-            miningSpeed = baseSpeed - 10;
-        if (currentWorld < 2 && player.gears["gear6"])
-            miningSpeed = baseSpeed - 15;
-        if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear16"] && player.gears["gear19"]))
-            miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear16"] ? 5 : 0) - (player.gears["gear19"] ? 13 : 0);
-        } else {
-            miningSpeed = speed;
-        }
-        if (miningSpeed < player.settings.minSpeed)
-            miningSpeed = player.settings.minSpeed;
-        if (player.stats.currentPickaxe === 12)
-            reps++;
-        reps += player.gears["gear19"] ? 2 : 0;
         if (a13) {
             reps = 1;
             miningSpeed = 35;
@@ -388,7 +374,22 @@ function moveOne(dir, button) {
     }, 50);
     energySiphonerDirection = "";
 }
-
+function calcSpeed() {
+    let miningSpeed = baseSpeed;
+    let reps = 1;
+    if (currentWorld < 2 && player.gears["gear2"])
+        miningSpeed = baseSpeed - 10;
+    if (currentWorld < 2 && player.gears["gear6"])
+        miningSpeed = baseSpeed - 15;
+    if (currentWorld === 2 || (player.gears["gear11"] && player.gears["gear16"] && player.gears["gear19"]))
+        miningSpeed = baseSpeed - (player.gears["gear11"] ? 3 : 0) - (player.gears["gear16"] ? 5 : 0) - (player.gears["gear19"] ? 13 : 0);
+    if (miningSpeed < player.settings.minSpeed)
+        miningSpeed = player.settings.minSpeed;
+    if (player.stats.currentPickaxe === 12)
+        reps++;
+    reps += player.gears["gear19"] ? 2 : 0;
+    return {speed: miningSpeed, reps: reps}
+}
 //DISPLAY
 let displayRows;
 const invisibleBlock = "<span class='invisible'>⚪</span>";
@@ -691,7 +692,7 @@ function spawnMessage(obj) {
         
 }
 let typeCallNum = 0;
-function typeWriter(string, loc) {
+function typeWriter(string, loc, override) {
     let char;
     let hex;
     let emoji
@@ -735,7 +736,7 @@ function typeWriter(string, loc) {
         if (elements[i].h) multi = i - 1;
         setTimeout(() => {
             output += elements[i].t
-            if (thisTypeNum === typeCallNum) loc.innerHTML = output;
+            if (thisTypeNum === typeCallNum || override) loc.innerHTML = output;
         }, 10 * multi);
     }
     
@@ -783,7 +784,6 @@ function formatNumber(num) {
         return num;
     }
     let tenMulti = Math.floor(Math.log10(num) / 3);
-    console.log(tenMulti)
     return Math.floor(num / Math.pow(1000, (tenMulti)) * 10) / 10 + suffixes[tenMulti];
 }
 function getAngleBetweenPoints(obj) {
@@ -989,11 +989,13 @@ const events = {
             if (state) {
                 baseSpeed--;
                 let temp = curDirection;
+                curDirection = "";
                 if (temp !== "") goDirection(temp);
             }
             else {
                 baseSpeed++;
                 let temp = curDirection;
+                curDirection = "";
                 if (temp !== "") goDirection(temp);
             }
         }
@@ -1056,6 +1058,27 @@ const events = {
                 return;
             }
         }
+    },
+    "event10" : {
+        rate: 1/1000000,
+        duration: 9000000,
+        boost: 1,
+        ore: "✈️",
+        message: `<i><span class="rainbowBackground">Lyle! Lyle, wake up! You gotta wake up, please!...</span></i>`,
+        world: 1,
+        specialEffect: function(state) {
+            if (state) {
+                insertIntoLayers({"ore":"✈️", "layers":["sillyLayer"], "useLuck":true});
+                specialOreValues["✈️"] = {
+                    newBaseRarity: 1000000000000,
+                    layerToChange: "sillyLayer"
+                }
+            }
+            else {
+                removeFromLayers({"ore":"✈️", "layers":["sillyLayer"]});
+                delete specialOreValues["✈️"];
+            }
+        }
     }
 }
 function activateEvent(name) {
@@ -1063,7 +1086,7 @@ function activateEvent(name) {
     currentActiveEvent = {name: name, removeAt: Date.now() + events[name].duration}
     events[name].specialEffect(true);
     const text = events[name].message;
-    typeWriter(text, eventElement);
+    typeWriter(text, eventElement, true);
     updateAllLayers();
 }
 function endEvent() {

@@ -5,6 +5,12 @@ Proprietary and confidential
 Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 */
 let batteryEvent = false;
+//const preMined = player.stats.blocksMined;
+//const preRevealed = blocksRevealedThisReset;
+//pickaxeAbility25(curX, curY)
+//console.log(player.stats.blocksMined - preMined, blocksRevealedThisReset - preRevealed);
+const abilityTestNums = []
+let abilityTestAmt = 0;
 async function rollAbilities() {
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
@@ -25,25 +31,25 @@ async function rollAbilities() {
             }
             break;
         case 2:
-            if (Math.random() <= (1/35 * m)) {
-                pickaxeAbility2(curX, curY, 3, 1.35);
+            if (Math.random() <= (1/25 * m)) {
+                pickaxeAbility2(curX, curY, 3);
                 
             }
             break;
         case 3:
-            if (Math.random() <= (1/30 * m)) {
+            if (Math.random() <= (1/25 * m)) {
                 pickaxeAbility3(curX, curY);
                 
             }
             break;
         case 4:
-            if (Math.random() <= (1/25 * m)) {
+            if (Math.random() <= (1/19 * m)) {
                 pickaxeAbility4(curX, curY);
                 
             }
             break;
         case 5:
-            if (Math.random() <= (1/17 * m)) {
+            if (Math.random() <= (1/13 * m)) {
                 pickaxeAbility5(curX, curY);
                 
             }
@@ -51,35 +57,30 @@ async function rollAbilities() {
         case 6:
             if (Math.random() <= (1/60 * m)) {
                 pickaxeAbility6(curX, curY);
-                
             } else if (Math.random() <= (1/40 * m)) {
                 pickaxeAbility7(curX, curY);
-                
             }
-            
             break;
         case 7:
             if (Math.random() <= (1/50 * m)) {
+
                 pickaxeAbility8(curX, curY, 0);
-                
+
             }
             break;
         case 8:
-            if (Math.random() <= (1/50 * m)) {
+            if (Math.random() <= (1/40 * m)) {
                 pickaxeAbility9(curX, curY, 0);
-                
             }
             break;
         case 9:
-            if (Math.random() <= (1/30 * m)) {
+            if (Math.random() <= (1/22 * m)) {
                 pickaxeAbility10(curX, curY);
-                
             }
             break;
         case 10:
             if (Math.random() <= (1/50 * m)) {
                 pickaxeAbility11(curX, curY);
-                
             }
             break;
         case 11:
@@ -97,7 +98,6 @@ async function rollAbilities() {
         case 14:
             if (Math.random() <= 1/45 * m) {
                 pickaxeAbility14(curX, curY);
-                
             }
             break;
         case 15:
@@ -125,21 +125,18 @@ async function rollAbilities() {
             }
             break;
         case 19:
-            if (Math.random() <= 1/50 * m) {
+            if (Math.random() <= 1/60 * m) {
                 pickaxeAbility19(curX, curY, 0);
-                
             }
             break;
         case 20:
             if (Math.random() <= 1/75 * m) {
                 pickaxeAbility20(curX, curY);
-                
             }
             break;
         case 21:
             if (Math.random() <= 1/75 * m) {
                 pickaxeAbility21(curX, curY);
-                
             }
             break;
         case 22:
@@ -151,7 +148,6 @@ async function rollAbilities() {
          case 23:
             if (Math.random() <= 1/75 * m) {
                 pickaxeAbility23(curX, curY);
-                
             }
             break;
         case 24:
@@ -178,7 +174,16 @@ async function rollAbilities() {
         break;
     }
 }
-
+function getTestAvg() {
+    let mined = 0;
+    let revealed = 0;
+    for (let i = 0; i < abilityTestNums.length; i++) {
+        const amts = abilityTestNums[i];
+        mined += amts.mined;
+        revealed += amts.revealed;
+    }
+    return {m: mined/abilityTestAmt, r: revealed/abilityTestAmt};
+}
 //generates a large cube around the player
 function powerup1(x, y) {
     if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown) {

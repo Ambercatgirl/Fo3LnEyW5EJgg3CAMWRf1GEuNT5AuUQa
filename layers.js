@@ -616,7 +616,7 @@ function setLayer(y) {
             if (repeatingLayerNum !== lastRepeatedLayer && repeatingLayers[repeatingLayerNum] === undefined) {
                 a88();
                 let force = false;
-                if (Math.random() < 1/1337) {
+                if (Math.random() < 1/2) {
                     currentLayerNum = 1337;
                     updateAllLayers();
                     currentLayer = "unknownLayer";
@@ -1053,7 +1053,7 @@ class ores {
         let tierNames = Object.keys(this.oreTiers);
         for (let i = 0; i < tierNames.length; i++) {
             if (tierNames[i] === tier) {
-                i = i === 14 ? -1 : i;
+                i = i === 15 ? -1 : i;
                 return tierNames[i + 1];
             }
         }
@@ -1061,12 +1061,12 @@ class ores {
     getTierAt(num) {
         let tierNames = Object.keys(this.oreTiers);
         if (num < 0) return tierNames[0];
-        if (num > 14) return tierNames[14];
+        if (num > 15) return tierNames[15];
         return tierNames[num];
     }
     isCommon(tier) {
         let tierNames = Object.keys(this.oreTiers);
-        if (tierNames.indexOf(tier) > 4) return false;
+        if (tierNames.indexOf(tier) > 5) return false;
         else return true;
     }
     tierGrOrEqTo(tiers) {

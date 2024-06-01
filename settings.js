@@ -132,7 +132,7 @@ function changeUseNumbers(button) {
 
 function changeMinRarity(button) {
     let nextTier = oreInformation.getNextTier(player.settings.stopOnRare.minimum);
-    if (nextTier === "Common") nextTier = "Antique";
+    if (nextTier === "Layer") nextTier = "Antique";
     player.settings.stopOnRare.minimum = nextTier;
     button.innerText = nextTier + "+";
     const colors = oreInformation.getColors(nextTier);
@@ -641,7 +641,7 @@ let minTier = "Antique";
 function changeSpawnMessageRarity(button) {
     player.settings.minRarityNum++;
     if (player.settings.minRarityNum > 9) player.settings.minRarityNum = 0;
-    minTier = oreInformation.getTierAt(player.settings.minRarityNum + 5);
+    minTier = oreInformation.getTierAt(player.settings.minRarityNum + 6);
     button.innerText = "Minimum Spawn Message Tier: " + minTier + "+";
     let colors = oreInformation.getColors(minTier);
     button.style.color = colors["textColor"]
@@ -711,12 +711,16 @@ function longTime(milliseconds) {
     let minutes = Math.floor((milliseconds / 1000 / 60) % 60);
     let hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
     let days = Math.floor((milliseconds / 1000 / 60 / 60 / 24) % 365);
-    return [
-        days.toString().padStart(3, "0"),
+    const finalTime = [
+        days.toString().padStart(10, "0"),
         hours.toString().padStart(2, "0"),
         minutes.toString().padStart(2, "0"),
         seconds.toString().padStart(2, "0")
     ].join(":");
+    for (let i = 0; i < finalTime.indexOf(":") + 1; i++) if (finalTime[i] !== "0") {
+        return (finalTime[i] === ":" ? finalTime.substring(i + 1) : finalTime.substring(i));
+    }
+    return finalTime;
 }
 function switchHighRarity(button) {
     if (player.settings.highRarityLogs) {
@@ -859,5 +863,28 @@ function goToConvert(ore, variant) {
     document.getElementById("amtInput").value = oreList[ore][variantInvNames[variant - 1]];
     document.getElementsByClassName("potentialVariant")[variant - 2].click();
     console.log(ore);
+}
+let inafk = false
+function AFKmode(){
+    if(!inafk){
+        let element = document.createElement("div")
+        element.id = 'afkModeScreen'
+        element.style = 'width:100vw;height:100vh;z-index:2'
+        element.innerHTML = "<h1>AFK</h1></br><p id='blocksMinedafk'></p><br><button onclick='AFKmode()'>bnack</button>"
+        document.body.prepend(element)
+        document.getElementById("inventory1").textContent = ""
+        document.getElementById("inventory2").textContent = ""
+        document.getElementById("inventory3").textContent = ""
+        document.getElementById("inventory4").textContent = ""
+        minedElement = document.getElementById("blocksMinedafk")
+        document.getElementById("mainContent").style.display="none"
+    } else {
+        document.getElementById("afkModeScreen").remove()
+        minedElement = document.getElementById("blocksMined");
+        document.getElementById("mainContent").style.display="block"
+        inventoryObj = {...oreList}
+        createInventory();
+    }
+    inafk = !inafk
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})

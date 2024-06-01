@@ -1002,3 +1002,83 @@ function updateTolLuck() {
     document.getElementById("treeOfLifeLuck").innerText = `Has ${player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level]}x Luck.`;
     document.getElementById("treeOfLifeSpeed").innerText = `${10 - player.upgrades["pickaxe27"].level}ms`;
 }
+const pickaxeStats = {
+    0 : {mined: 1, revealed: 1, luck: 1, rate: 1},
+    1 : {mined: 24, revealed: 68, luck: 1.2, rate: 30},
+    2 : {mined: 47, revealed: 69, luck: 1.5, rate: 25},
+    3 : {mined: 46, revealed: 94, luck: 2.15, rate: 25},
+    4 : {mined: 81, revealed: 113, luck: 3, rate: 19},
+    5 : {mined: 45, revealed: 69, luck: 5, rate: 17},
+    6 : {mined: 57, revealed: 73, luck: 10, rate: 50},
+    7 : {mined: 275, revealed: 740, luck: 4, rate: 50},
+    8 : {mined: 461, revealed: 811, luck: 5.5, rate: 40},
+    9 : {mined: 188, revealed: 252, luck: 20, rate: 22},
+    10 : {mined: 973, revealed: 1195, luck: 17.5, rate: 50},
+    11 : {mined: 1018, revealed: 2993, luck: 30, rate: 100},
+    12 : {mined: 1541, revealed: 1861, luck: 75, rate: 150},
+    13 : {mined: 1, revealed: 1, luck: 1, rate: 1},
+    14 : {mined: 40, revealed: 51, luck: 1.05, rate: 45},
+    15 : {mined: 112, revealed: 140, luck: 1.075, rate: 75},
+    16 : {mined: 218, revealed: 292, luck: 1.3, rate: 100},
+    17 : {mined: 826, revealed: 936, luck: 1, rate: 150},
+    18 : {mined: 1005, revealed: 1160, luck: 1.5, rate: 150},
+    19 : {mined: 656, revealed: 754, luck: 2, rate: 60},
+    20 : {mined: 1082, revealed: 1343, luck: 3, rate: 75},
+    21 : {mined: 1946, revealed: 4489, luck: 1.5, rate: 75},
+    22 : {mined: 2498, revealed: 5632, luck: 4, rate: 120},
+    23 : {mined: 4518, revealed: 6325, luck: 8.25, rate: 150},
+    24 : {mined: 7964, revealed: 9800, luck: 12.5, rate: 175},
+    25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300},
+}
+function ct() {
+    const nums = calcSpeed();
+    nums.speed = nums.speed < 1 ? 0 : nums.speed;
+    const speed = (1000 / nums.speed) * nums.reps;
+    const pickaxeUsing = player.stats.currentPickaxe;
+    const abilityMined = pickaxeStats[pickaxeUsing].mined;
+    const abilityRevealed = pickaxeStats[pickaxeUsing].revealed;
+    const abilityRate = pickaxeStats[pickaxeUsing].rate;
+    const recipe = recipes[currentRecipe].recipe;
+    const recipeLayers = {
+    }
+    for (let i = 0; i < recipe.length; i++) {
+        const ore = recipe[i].ore;
+        let currentOreLayer;
+        if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"]) {
+            recipeLayers.commons ??= {highestRarity : 0}
+            currentOreLayer = "commons";
+        } else {
+            for (let layer in layerDictionary) {
+                if (layerDictionary[layer].layer.includes(ore)) {
+                    recipeLayers[layer] ??= {highestRarity : 0}
+                    currentOreLayer = layer;
+                    break;
+                }
+            }
+        }
+        const needed = recipe[i].amt;
+        let have = oreList[ore]["normalAmt"];
+        have = have >= needed ? needed : have;
+        const rarity = 1/oreList[ore]["decimalRarity"];
+        const totalOreRarity = ((rarity * needed) - (rarity * have));
+        if (totalOreRarity > recipeLayers[currentOreLayer].highestRarity) recipeLayers[currentOreLayer].highestRarity = totalOreRarity;
+    }
+    let rarityNeeded = 0;
+    let usingCommons = false;
+    if (recipeLayers.commons !== undefined) {
+        for (let layer in recipeLayers) if (recipeLayers.commons.highestRarity >= recipeLayers[layer].highestRarity) usingCommons = true;
+        if (Object.keys(recipeLayers).length === 1) usingCommons = true;
+    }
+    let procsNeeded;
+    if (usingCommons) {
+        for (let layer in recipeLayers) recipeLayers[layer].highestRarity = recipeLayers.commons.highestRarity;
+        rarityNeeded = recipeLayers.commons.highestRarity * Object.keys(recipeLayers).length;
+        procsNeeded = rarityNeeded / abilityMined;
+    } else {
+        for (let layer in recipeLayers) if (layer !== "commons") rarityNeeded += recipeLayers[layer].highestRarity;
+        procsNeeded = rarityNeeded / abilityRevealed;
+    }
+    const timeForProcs = (procsNeeded * abilityRate) / speed;
+    if (player.stats.currentPickaxe === 12) timeForProcs /= 2;
+    return longTime(timeForProcs * 1000);
+}
