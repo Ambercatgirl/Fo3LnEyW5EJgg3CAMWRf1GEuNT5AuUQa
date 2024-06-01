@@ -1037,31 +1037,36 @@ function ct() {
     const pickaxeUsing = player.stats.currentPickaxe;
     const abilityMined = pickaxeStats[pickaxeUsing].mined;
     const abilityRevealed = pickaxeStats[pickaxeUsing].revealed;
-    const abilityRate = pickaxeStats[pickaxeUsing].rate;
+    let m = 1;
+    if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
+    if (player.gears["gear23"]) m += 0.15;
+    const abilityRate = pickaxeStats[pickaxeUsing].rate/m;
     const recipe = recipes[currentRecipe].recipe;
     const recipeLayers = {
     }
     for (let i = 0; i < recipe.length; i++) {
         const ore = recipe[i].ore;
-        let currentOreLayer;
-        if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"]) {
-            recipeLayers.commons ??= {highestRarity : 0}
-            currentOreLayer = "commons";
-        } else {
-            for (let layer in layerDictionary) {
-                if (layerDictionary[layer].layer.includes(ore)) {
-                    recipeLayers[layer] ??= {highestRarity : 0}
-                    currentOreLayer = layer;
-                    break;
+        if (!oreList[ore]["caveExclusive"] && oreList[ore]["oreTier"] !== "Celestial") {
+            let currentOreLayer;
+            if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"]) {
+                recipeLayers.commons ??= {highestRarity : 0}
+                currentOreLayer = "commons";
+            } else {
+                for (let layer in layerDictionary) {
+                    if (layerDictionary[layer].layer.includes(ore)) {
+                        recipeLayers[layer] ??= {highestRarity : 0}
+                        currentOreLayer = layer;
+                        break;
+                    }
                 }
             }
+            const needed = recipe[i].amt;
+            let have = oreList[ore]["normalAmt"];
+            have = have >= needed ? needed : have;
+            const rarity = 1/oreList[ore]["decimalRarity"];
+            const totalOreRarity = ((rarity * needed) - (rarity * have));
+            if (totalOreRarity > recipeLayers[currentOreLayer].highestRarity) recipeLayers[currentOreLayer].highestRarity = totalOreRarity;
         }
-        const needed = recipe[i].amt;
-        let have = oreList[ore]["normalAmt"];
-        have = have >= needed ? needed : have;
-        const rarity = 1/oreList[ore]["decimalRarity"];
-        const totalOreRarity = ((rarity * needed) - (rarity * have));
-        if (totalOreRarity > recipeLayers[currentOreLayer].highestRarity) recipeLayers[currentOreLayer].highestRarity = totalOreRarity;
     }
     let rarityNeeded = 0;
     let usingCommons = false;
@@ -1080,5 +1085,6 @@ function ct() {
     }
     const timeForProcs = (procsNeeded * abilityRate) / speed;
     if (player.stats.currentPickaxe === 12) timeForProcs /= 2;
+    console.log(timeForProcs*1000)
     return longTime(timeForProcs * 1000);
 }
