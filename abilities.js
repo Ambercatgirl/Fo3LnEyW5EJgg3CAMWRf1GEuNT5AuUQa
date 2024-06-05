@@ -173,7 +173,7 @@ async function rollAbilities() {
             }
             break;
         case 28:
-            if (Math.random() < 1/1 * m) {
+            if (Math.random() < 1/20 * m) {
                 pickaxeAbility28(curX, curY);
             }
             break;
