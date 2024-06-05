@@ -227,7 +227,7 @@ function movePlayer(dir, reps) {
                     mine[curY][curX] = "⚪";
                     curY += dir.y;
                     curX += dir.x;
-                    movementsX += dir.x;
+                    dir.x !== 0 ? movementsX++ : null;
                     if (dir.y !== 0) setLayer(curY);
                     mineBlock(curX, curY, "mining");
                     mine[curY][curX] = "⛏️";
