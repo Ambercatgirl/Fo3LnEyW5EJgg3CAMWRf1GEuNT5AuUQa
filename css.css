@@ -13,7 +13,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 #mainContent {
   display: none;
   position: fixed;
-  font-family:'Fredoka One';
 }
 
 #inventoryDisplay {
@@ -358,7 +357,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 }
 .itemDescription {
   font-size:1.5vw;
-  font-family:'Times New Roman', Times, serif
 }
 #gearCrafts {
   display:flex;
@@ -392,7 +390,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   font-weight: 1000;
   padding-bottom: 10%;
   text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 .craftPickaxeButton:hover {
   background-color: gray;
@@ -461,7 +458,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 .middleTitle {
   height:4vw;
   font-size: 1.7vw;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   margin-bottom: 0%!important;
   display: inline-block;
   vertical-align: middle;
@@ -496,7 +492,6 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   font-size: 2.5vw;
 }
 #pressPlay {
-  font-family: 'Arial', sans-serif;
   overflow-y: hidden;
   background-image:url("media/silly caverns picture.png");
   background-repeat: no-repeat;
@@ -549,6 +544,7 @@ body {
   height: 100vh;
   justify-content: flex-end;
   overflow-x: hidden;
+  font-family:'Fredoka One', Verdana, Geneva, Tahoma, sans-serif;
 }
 img.roundcat {
   position: absolute;
@@ -980,7 +976,6 @@ button, .col-3 > div > button {
   border-width: 1px;
   border-radius: 2px;
   color: white;
-  font-family: 'Arial';
   text-align: center;
 }
 
@@ -1549,7 +1544,6 @@ top:0px;
   text-align: center;
   font-size: 5vw;
   font-weight: 1000;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
 #changeSMrarityDisplay {
   width: 100%;
@@ -1577,12 +1571,10 @@ top:0px;
 #conversionTitle {
   font-size: 2.5vw;
   text-align: center;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
 #conversionDescription {
   font-size: 1vw;
   text-align: center;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
 #machineHolder {
   height: 10vw;
@@ -1724,7 +1716,6 @@ select option:hover {
   width: 100%;
   font-size: 4vw;
   margin-bottom: 3vw;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   text-align: center;
 }
 #forgeSelectionContainer {
@@ -1737,7 +1728,6 @@ select option:hover {
   height: 100%;
   width: 25%;
   font-size: 2.5vw;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   line-height: 100%;
   background: none;
 }
@@ -1753,7 +1743,6 @@ select option:hover {
   font-size: 0.75vw;
   float: left;
   margin-right: 9.5%;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 button {
   outline: none;
@@ -1775,7 +1764,6 @@ button {
   width: 10vw;
   margin: 0;
   font-size: 1.5vw;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   background: none;
 }
 .forgeCraftingButton:hover {
@@ -2031,7 +2019,6 @@ button {
   color: white;
   font-weight: 1000;
   text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   margin: 0;
 }
 .upgradeMaxLevel {
