@@ -493,7 +493,7 @@ function sr1Helper(state) {
     }
     if (state) {
         if (!player.settings.usingNewEmojis) {
-            document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Noto Color Emoji\",\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"");
+            document.body.style.fontFamily = `"Fredoka One", "Noto Color Emoji"`;
             document.getElementById("switchFont").disabled = true;
         }
         player.wasUsing = player.stats.currentPickaxe;
@@ -502,7 +502,7 @@ function sr1Helper(state) {
         document.getElementById("sr1Teleporter").innerText = "Return Home...";
     } else {
         if (!player.settings.usingNewEmojis) {
-            document.querySelector(":root").style.setProperty("--bs-font-sans-serif", "system-ui,-apple-system,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\"")
+            document.body.style.fontFamily = `'Fredoka One', 'Verdana', 'Geneva', 'Tahoma', sans-serif`
             document.getElementById("switchFont").disabled = false;
         }
         if (player.wasUsing !== undefined) player.stats.currentPickaxe = player.wasUsing;
