@@ -103,7 +103,7 @@ function giveBlock(obj) {
         if (player.gears["gear22"] && Math.random() < 1/10) {oreList[obj.type][variantInvNames[inv - 1]]++; duped = true;}
         if (currentWorld < 2 && player.gears["gear7"]) {gearAbility1();}
         if (oreInformation.tierGrOrEqTo({"tier1" : oreList[obj.type]["oreTier"], "tier2" : minTier})) {
-            logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset, duped); 
+            logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset, duped, {cave: obj.fromCave, multi: obj.caveMulti}); 
         }
         if (oreList[obj.type]["oreTier"] === "Flawless") {
             if (!player.sr1Unlocked) {
@@ -270,7 +270,7 @@ function distanceHelper(layer) {
     if (specialLayerDistance !== undefined) {
         if (layer === "fluteLayer") return false;
         if (layer === "sillyLayer" && specialLayerDistance === "fluteLayer") return true;
-        else if (layer === "unknownLayer" && specialLayerDistance !== "unknownLayer") return true;
+        else if (layer === "unknownLayer" && specialLayerDistance !== "unknownLayer" && specialLayerDistance !== "lastLayer") return true;
         else if (layer === "lastLayer" && specialLayerDistance !== "lastLayer") return true;
         else return false;
     } else {

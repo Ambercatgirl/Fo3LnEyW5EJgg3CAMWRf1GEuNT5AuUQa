@@ -701,18 +701,37 @@ function createStats() {
    
 }
 function updateTimes() {
-    document.getElementById("statsTotalTime").innerText = `${longTime(player.stats.timePlayed)} Time Played.`;
-    document.getElementById("statsSessionTime").innerText = `${longTime(Date.now() - verifiedOres.getStartTime())} Session Time.`;
-    document.getElementById("statsCavesGenerated").innerText = `${player.stats.cavesGenerated.toLocaleString()} Caves Generated.`;
-    document.getElementById("statsBlocksMined").innerText = `${player.stats.blocksMined.toLocaleString()} Blocks Mined.`;
+    document.getElementById("statsTotalTime").textContent = `${longTime(player.stats.timePlayed)} Time Played.`;
+    document.getElementById("statsSessionTime").textContent = `${longTime(Date.now() - verifiedOres.getStartTime())} Session Time.`;
+    document.getElementById("statsCavesGenerated").textContent = `${player.stats.cavesGenerated.toLocaleString()} Caves Generated.`;
+    document.getElementById("statsBlocksMined").textContent = `${player.stats.blocksMined.toLocaleString()} Blocks Mined.`;
+    lastX += resetAddX;
+    if (movementsX > lastX) {
+        const timeUsing = Date.now();
+        const totalMoves = 1000 * ((movementsX - lastX) / (timeUsing - lastXCheck));
+        lastXCheck = timeUsing;
+        lastX = movementsX;
+        lastXValues.push(totalMoves);
+        if (lastXValues.length > 10) lastXValues.splice(0, 1);
+        let total = 0;
+        for (let i = 0; i < lastXValues.length; i++) total += lastXValues[i];
+        total /= lastXValues.length;
+        const speeds = calcSpeed();
+        resetAddX = 0;
+        const output = `${Math.floor(total)} Average Speed/${Math.floor(1000/speeds.speed * speeds.reps)} Estimated Speed`
+        document.getElementById("statsSpeed").textContent = output;
+    }
+    
 }
 function longTime(milliseconds) {
     let seconds = Math.floor((milliseconds / 1000) % 60);
     let minutes = Math.floor((milliseconds / 1000 / 60) % 60);
     let hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
     let days = Math.floor((milliseconds / 1000 / 60 / 60 / 24) % 365);
+    let years = Math.floor((milliseconds / 1000 / 60 / 60 / 24 / 365));
     const finalTime = [
-        days.toString().padStart(10, "0"),
+        years.toString().padStart(20, "0"),
+        days.toString().padStart(3, "0"),
         hours.toString().padStart(2, "0"),
         minutes.toString().padStart(2, "0"),
         seconds.toString().padStart(2, "0")

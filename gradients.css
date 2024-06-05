@@ -272,6 +272,11 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#crystallineExcavator span{
+    background: linear-gradient(to right, #c370e1, #8282e6, #ffffcd);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #text span{
     background: linear-gradient(to right,);
     background-clip: text;

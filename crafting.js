@@ -23,6 +23,11 @@ const recipes = {
         recipe : [{ore:"🟫", amt:100000},{ore:"🟢", amt:2200},{ore:"🔵", amt:2000},{ore:"🟡", amt:1800},{ore:"🟠", amt:1700},{ore:"💚", amt:1},{ore:"💙", amt:1}],
         upgrades : {},
     },
+    "pickaxe28" : {
+        name: "",
+        recipe : [{ore:"📰", amt:150000},{ore:"🟢", amt:3000},{ore:"🔵", amt:2800},{ore:"🟡", amt:2600},{ore:"💛", amt:2},{ore:"🤎", amt:1}],
+        upgrades : {}
+    },
     "pickaxe4" : {
         name : "",
         recipe : [{ore:"📰", amt:250000},{ore:"🟢", amt:5500},{ore:"🔵", amt:5000},{ore:"🟡", amt:4600},{ore:"🟠", amt:4200},{ore:"❤️", amt:2},{ore:"🤍", amt:1},{ore:"⚙️", amt:1}],
@@ -431,7 +436,9 @@ const buttonGradients = {
     "pickaxe25Craft" : {"gradient" : "linear-gradient(to right, #FF2454, #600018, #FF8DCC, #121212, #FF8DCC, #600018, #FF2454","applied" : false},
     "pickaxe26Craft" : {"gradient" : "linear-gradient(to right, #000000, #5D0000, #734600, #807A00, #074D00, #006564, #021652 , #3B0076, #460038, #5D0000, #000000)","applied" : false},
     "pickaxe27Craft" : {"gradient" : "linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B)","applied" : false},
+    "pickaxe28Craft" : {"gradient" : "linear-gradient(to right, #c370e1, #8282e6, #ffffcd)","applied" : false},
     
+
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
     "gear1Craft" : {"gradient" : "linear-gradient(to right, #FFF1C0, #FF9E40","applied" : false},
     "gear2Craft" : {"gradient" : "linear-gradient(to right, #F9F9F9, #FFFB48","applied" : false},
@@ -499,11 +506,12 @@ function utilitySwitchActions() {
     updateAllLayers();
     switchLayerIndex(0);
     if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
+    verifiedOres.checkPickaxe();
 }
 let m87 = 0;
 let m88 = 0;
 const showOrders = {
-    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
+    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
     worldTwoPickaxes : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
     worldOneGears : ["gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9"],
     worldTwoGears : ["gear10", "gear11", "gear12", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
@@ -1029,6 +1037,7 @@ const pickaxeStats = {
     23 : {mined: 4518, revealed: 6325, luck: 8.25, rate: 150},
     24 : {mined: 7964, revealed: 9800, luck: 12.5, rate: 175},
     25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300},
+    28 : {mined: 67, revealed: 111, luck: 2.1, rate: 20},
 }
 function ct() {
     const nums = calcSpeed();

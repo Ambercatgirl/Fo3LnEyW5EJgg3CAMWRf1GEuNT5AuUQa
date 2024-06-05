@@ -168,10 +168,15 @@ async function rollAbilities() {
             }
             break;
         case 27:
-        if (Math.random() < 1/500 * m) {
-            pickaxeAbility27(curX, curY);
-        }
-        break;
+            if (Math.random() < 1/500 * m) {
+                pickaxeAbility27(curX, curY);
+            }
+            break;
+        case 28:
+            if (Math.random() < 1/1 * m) {
+                pickaxeAbility28(curX, curY);
+            }
+            break;
     }
 }
 function getTestAvg() {
@@ -1249,6 +1254,13 @@ function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {
         pickaxeAbilityMineBlock(array[i]["x"] + x, array[i]["y"] + y)
     }
+}
+
+let pickaxe28Nums = [];
+function pickaxeAbility28(x, y) {
+    x -= 8;
+    y -= 6;
+    pickaxeArrayLoop(pickaxe28Nums, x, y);
 }
 function pickaxeAbilityMineBlock(x, y) {
     if (y > 0) {
