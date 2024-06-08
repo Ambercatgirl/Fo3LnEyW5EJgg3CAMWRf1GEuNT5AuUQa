@@ -260,22 +260,32 @@ const recipes = {
     },
     "gear22" : {
         name : "",
-        recipe : [{ore:"🇿🇦", amt:225}, {ore:"🇹🇿", amt:200}, {ore:"🇨🇩", amt:150}],
+        recipe : [{ore:"🇿🇦", amt:110}, {ore:"🇹🇿", amt:100}, {ore:"🇨🇩", amt:75}],
         upgrades: {}
     },
     "gear23" : {
         name : "",
-        recipe : [{ore:"🇯🇵", amt:50}, {ore:"🇧🇩", amt:50}, {ore:"🇵🇰", amt:30}],
+        recipe : [{ore:"🇯🇵", amt:25}, {ore:"🇧🇩", amt:25}, {ore:"🇵🇰", amt:15}],
         upgrades: {}
     },
     "gear24" : {
         name : "",
-        recipe : [{ore:"🇨🇺", amt:30}, {ore:"🇭🇹", amt:25}, {ore:"🇬🇹", amt:20}],
+        recipe : [{ore:"🇨🇺", amt:15}, {ore:"🇭🇹", amt:13}, {ore:"🇬🇹", amt:10}],
         upgrades: {}
     },
     "gear25" : {  
         name : "",
-        recipe : [{ore:"🇪🇸", amt:30}, {ore:"🇮🇹", amt:25}, {ore:"🇫🇷", amt:20}],
+        recipe : [{ore:"🇪🇸", amt:15}, {ore:"🇮🇹", amt:13}, {ore:"🇫🇷", amt:10}],
+        upgrades: {}
+    },
+    "gear26" : {  
+        name : "",
+        recipe : [{ore:"🇪🇨", amt:18}, {ore:"🇨🇱", amt:15}, {ore:"🇻🇪", amt:12}],
+        upgrades: {}
+    },
+    "gear27" : {  
+        name : "",
+        recipe : [{ore:"🇻🇺", amt:10}, {ore:"🇫🇲", amt:8}, {ore:"🇸🇧", amt:6}, {ore:"🇰🇾", amt:3}, {ore:"🇨🇰", amt:1}, {ore:"🇫🇰", amt:1}],
         upgrades: {}
     }
 }
@@ -290,6 +300,9 @@ function displayRecipe(recipe) {
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
         description.style.display = "block";
+        let time = get("craftingTimeDisplay").cloneNode(true);
+        time.style.display = "block";
+        parentElement.appendChild(time)
         let title = document.getElementById("descriptionTitle").cloneNode(true);
         title.style.display = "block";
         parentElement.appendChild(title);
@@ -360,6 +373,8 @@ function updateActiveRecipe() {
             else button.innerText = "Craft!"
             buttonGradients[button.id]["applied"] = false;
         }
+        const display = get("craftingTimeDisplay");
+        if (display !== null) display.textContent = `Est. Time: ${ct()}`
     }
 }
 function createPickaxeRecipes() {
@@ -465,6 +480,8 @@ const buttonGradients = {
     "gear23Craft" : {"gradient" : "linear-gradient(to right, #00dfff, #3a00f9, #15fd00, #3a00f9, #00dfff)","applied" : false},
     "gear24Craft" : {"gradient" : "linear-gradient(to right, #FFFF99, #b4dcf0, #dcf0f0, #b4dcf0, #FFFF99)","applied" : false},
     "gear25Craft" : {"gradient" : "linear-gradient(to right, #e365fc, #c9fc3a, #ff4b33)","applied" : false},
+    "gear26Craft" : {"gradient" : "linear-gradient(to right, #a3a09d, #585f2a, #978773, #8a8038, #5b590a)","applied" : false},
+    "gear27Craft" : {"gradient" : "linear-gradient(to right, #DAE34A, #C69908, #EF5522, #C69908, #DAE34A)","applied" : false},
     
 }
 function craftPickaxe(item) {
@@ -507,6 +524,7 @@ function utilitySwitchActions() {
     switchLayerIndex(0);
     if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
     verifiedOres.checkPickaxe();
+    displayArea();
 }
 let m87 = 0;
 let m88 = 0;
@@ -516,7 +534,7 @@ const showOrders = {
     worldOneGears : ["gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9"],
     worldTwoGears : ["gear10", "gear11", "gear12", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
     srOnePickaxes : ["pickaxe27"],
-    srOneGears : ["gear22", "gear23", "gear24", "gear25"],
+    srOneGears : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27"],
 }
 function showPickaxes() {
     appear(document.getElementById("pickaxeCrafts"));
@@ -839,6 +857,13 @@ function craftOre(id) {
     }
         
 }
+/*
+4383 4576
+19928 20978
+30397 33246
+37468 41654
+46650 54781
+*/
 const upgradeRecipes = {
     "pickaxe27" : {
         "upgrade0" : 
@@ -851,41 +876,74 @@ const upgradeRecipes = {
             ],
             descriptions : [
                 "Luck:<br>1 -> 3",
-                "Ability Size:<br>5,396 -> 19,930"
+                "Ability Size:<br>4,383 -> 19,928"
             ]
         },
         "upgrade1" : 
         {
             recipe : [
-                {ore: "🇪🇬", amt: 200},
-                {ore: "🇪🇹", amt: 180},
-                {ore: "🇳🇬", amt: 160},
-                {ore: "🇹🇷", amt: 140},
-                {ore: "🇮🇷", amt: 120},
-                {ore: "🇻🇳", amt: 100},
-                {ore: "🇵🇭", amt: 80},
+                {ore: "🇪🇬", amt: 400},
+                {ore: "🇪🇹", amt: 360},
+                {ore: "🇳🇬", amt: 320},
+                {ore: "🇹🇷", amt: 280},
+                {ore: "🇮🇷", amt: 240},
+                {ore: "🇻🇳", amt: 200},
+                {ore: "🇵🇭", amt: 60},
             ],
             descriptions : [
                 "Luck:<br>3 -> 10",
-                "Ability Size:<br>19,930 -> 30,396"
+                "Ability Size:<br>19,928 -> 30,397"
             ]
         },
         "upgrade2" : 
         { 
             recipe : [   
-                {ore: "🇨🇦", amt: 50},
-                {ore: "🇲🇽", amt: 40},
-                {ore: "🇺🇸", amt: 30},
-                {ore: "🇳🇱", amt: 15},
-                {ore: "🇷🇴", amt: 12},
-                {ore: "🇺🇦", amt: 10},
-                {ore: "🇵🇱", amt: 8},
+                {ore: "🇨🇦", amt: 150},
+                {ore: "🇲🇽", amt: 120},
+                {ore: "🇺🇸", amt: 90},
+                {ore: "🇳🇱", amt: 45},
+                {ore: "🇷🇴", amt: 36},
+                {ore: "🇺🇦", amt: 30},
+                {ore: "🇵🇱", amt: 24},
             ],
             descriptions : [
                 "Luck:<br>10 -> 20",
-                "Ability Size:<br>30,396 -> 37,491"
+                "Ability Size:<br>30,397 -> 37,468"
             ]
         },
+        "upgrade3" : 
+        { 
+            recipe : [   
+                {ore: "🇬🇧", amt: 35},
+                {ore: "🇩🇪", amt: 30},
+                {ore: "🇷🇺", amt: 25},
+                {ore: "🇺🇾", amt: 10},
+                {ore: "🇵🇾", amt: 7},
+                {ore: "🇧🇴", amt: 4},
+            ],
+            descriptions : [
+                "Luck:<br>20 -> 40",
+                "Ability Size:<br>37,491 -> 46,650"
+            ]
+        },
+        "upgrade4" : 
+        { 
+            recipe : [   
+                {ore: "🇵🇪", amt: 15},
+                {ore: "🇦🇷", amt: 12},
+                {ore: "🇨🇴", amt: 10},
+                {ore: "🇧🇷", amt: 8},
+                {ore: "🇼🇸", amt: 5},
+                {ore: "🇳🇨", amt: 3},
+                {ore: "🇵🇫", amt: 1},
+            ],
+            descriptions : [
+                "Luck:<br>40 -> 100",
+                "Ability Size:<br>46,650 -> 54,298"
+            ]
+        },
+        //54298 63893
+        
     }
 }
 let currentDisplayedUpgrade;
@@ -1011,46 +1069,63 @@ function updateTolLuck() {
     document.getElementById("treeOfLifeSpeed").innerText = `${10 - player.upgrades["pickaxe27"].level}ms`;
 }
 const pickaxeStats = {
-    0 : {mined: 1, revealed: 1, luck: 1, rate: 1},
-    1 : {mined: 24, revealed: 68, luck: 1.2, rate: 30},
-    2 : {mined: 47, revealed: 69, luck: 1.5, rate: 25},
-    3 : {mined: 46, revealed: 94, luck: 2.15, rate: 25},
-    4 : {mined: 81, revealed: 113, luck: 3, rate: 19},
-    5 : {mined: 45, revealed: 69, luck: 5, rate: 17},
-    6 : {mined: 57, revealed: 73, luck: 10, rate: 50},
-    7 : {mined: 275, revealed: 740, luck: 4, rate: 50},
-    8 : {mined: 461, revealed: 811, luck: 5.5, rate: 40},
-    9 : {mined: 188, revealed: 252, luck: 20, rate: 22},
-    10 : {mined: 973, revealed: 1195, luck: 17.5, rate: 50},
-    11 : {mined: 1018, revealed: 2993, luck: 30, rate: 100},
-    12 : {mined: 1541, revealed: 1861, luck: 75, rate: 150},
-    13 : {mined: 1, revealed: 1, luck: 1, rate: 1},
-    14 : {mined: 40, revealed: 51, luck: 1.05, rate: 45},
-    15 : {mined: 112, revealed: 140, luck: 1.075, rate: 75},
-    16 : {mined: 218, revealed: 292, luck: 1.3, rate: 100},
-    17 : {mined: 826, revealed: 936, luck: 1, rate: 150},
-    18 : {mined: 1005, revealed: 1160, luck: 1.5, rate: 150},
-    19 : {mined: 656, revealed: 754, luck: 2, rate: 60},
-    20 : {mined: 1082, revealed: 1343, luck: 3, rate: 75},
-    21 : {mined: 1946, revealed: 4489, luck: 1.5, rate: 75},
-    22 : {mined: 2498, revealed: 5632, luck: 4, rate: 120},
-    23 : {mined: 4518, revealed: 6325, luck: 8.25, rate: 150},
-    24 : {mined: 7964, revealed: 9800, luck: 12.5, rate: 175},
-    25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300},
+    0 : {mined: 1, revealed: 1, luck: 1, rate: 1, src: "⛏️"},
+    1 : {mined: 24, revealed: 68, luck: 1.2, rate: 30, src: `<img class="mineImage" src="media/mulchMalletIcon.png"></img>`},
+    2 : {mined: 47, revealed: 69, luck: 1.5, rate: 25, src: "⛏️"},
+    3 : {mined: 46, revealed: 94, luck: 2.15, rate: 25, src: "⛏️"},
+    4 : {mined: 81, revealed: 113, luck: 3, rate: 19, src: "⛏️"},
+    5 : {mined: 45, revealed: 69, luck: 5, rate: 17, src: "⛏️"},
+    6 : {mined: 57, revealed: 85, luck: 10, rate: 24, src: `<img class="mineImage" src="media/earthSoilerIcon.png"></img>`},
+    7 : {mined: 275, revealed: 740, luck: 4, rate: 50, src: "⛏️"},
+    8 : {mined: 461, revealed: 811, luck: 5.5, rate: 40, src: "⛏️"},
+    9 : {mined: 188, revealed: 252, luck: 20, rate: 22, src: "⛏️"},
+    10 : {mined: 973, revealed: 1195, luck: 17.5, rate: 50, src: "⛏️"},
+    11 : {mined: 1018, revealed: 2993, luck: 30, rate: 100, src: "⛏️"},
+    12 : {mined: 1541, revealed: 1861, luck: 75, rate: 150, src: `<img class="mineImage" src="media/wingsOfGloryIcon.png"></img>`},
+    13 : {mined: 1, revealed: 1, luck: 1, rate: 1, src: `<img class="mineImage" src="media/theKeyIcon.png"></img>`},
+    14 : {mined: 40, revealed: 51, luck: 1.05, rate: 45, src: "⛏️"},
+    15 : {mined: 112, revealed: 140, luck: 1.075, rate: 75, src: "⛏️"},
+    16 : {mined: 218, revealed: 292, luck: 1.3, rate: 100, src: "⛏️"},
+    17 : {mined: 826, revealed: 936, luck: 1, rate: 150, src: `<img class="mineImage" src="media/nyabombIcon.png"></img>`},
+    18 : {mined: 1005, revealed: 1160, luck: 1.5, rate: 150, src:  `<img class="mineImage" src="media/lunarLightsabreIcon.png"></img>`},
+    19 : {mined: 656, revealed: 754, luck: 2, rate: 60, src: "⛏️"},
+    20 : {mined: 1082, revealed: 1343, luck: 3, rate: 75, src: "⛏️"},
+    21 : {mined: 1946, revealed: 4489, luck: 1.5, rate: 75, src: "⛏️"},
+    22 : {mined: 2498, revealed: 5632, luck: 4, rate: 120, src: "⛏️"},
+    23 : {mined: 4518, revealed: 6325, luck: 8.25, rate: 150, src: "⛏️"},
+    24 : {mined: 7964, revealed: 9800, luck: 12.5, rate: 175, src: "⛏️"},
+    25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300, src: "⛏️"},
+    26 : {mined: 15131, revealed: 18594, luck: 50, rate: 300, src: "⛏️"},
+    27 : {
+        0 : {mined: 4383, revealed: 4576, luck: 1},
+        1 : {mined: 19928, revealed: 20978, luck: 3},
+        2 : {mined: 30397, revealed: 33246, luck: 10},
+        3 : {mined: 37468, revealed: 41654, luck: 20},
+        4 : {mined: 46650, revealed: 54781, luck: 40},
+        5 : {mined: 54298, revealed: 63893, luck: 100},
+        rate: 500,
+        src : "⛏️",
+    },
     28 : {mined: 67, revealed: 111, luck: 2.1, rate: 20},
 }
+ 
+ 
+ 
+ 
+ 
 function ct() {
     const nums = calcSpeed();
     nums.speed = nums.speed < 1 ? 0 : nums.speed;
     const speed = (1000 / nums.speed) * nums.reps;
     const pickaxeUsing = player.stats.currentPickaxe;
-    const abilityMined = pickaxeStats[pickaxeUsing].mined;
-    const abilityRevealed = pickaxeStats[pickaxeUsing].revealed;
+    const abilityMined = pickaxeUsing !== 27 ? pickaxeStats[pickaxeUsing].mined : pickaxeStats[27][player.upgrades["pickaxe27"].level].mined;
+    const abilityRevealed = pickaxeUsing !== 27 ? pickaxeStats[pickaxeUsing].revealed : pickaxeStats[27][player.upgrades["pickaxe27"].level].revealed;
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
     if (player.gears["gear23"]) m += 0.15;
-    const abilityRate = pickaxeStats[pickaxeUsing].rate/m;
-    const recipe = recipes[currentRecipe].recipe;
+    const abilityRate = pickaxeUsing !== 27 ? pickaxeStats[pickaxeUsing].rate/m : 500/m;
+    const recipe = !overUpgrade ? recipes[currentRecipe].recipe : player.upgrades["pickaxe27"].level === player.upgrades["pickaxe27"].maxLevel ? "RETURN" : upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].recipe;
+    if (recipe === "RETURN") return;
     const recipeLayers = {
     }
     for (let i = 0; i < recipe.length; i++) {
@@ -1077,6 +1152,7 @@ function ct() {
             if (totalOreRarity > recipeLayers[currentOreLayer].highestRarity) recipeLayers[currentOreLayer].highestRarity = totalOreRarity;
         }
     }
+    //console.log(abilityMined, abilityRevealed, recipe, recipeLayers, abilityRate, speed)
     let rarityNeeded = 0;
     let usingCommons = false;
     if (recipeLayers.commons !== undefined) {
@@ -1094,6 +1170,5 @@ function ct() {
     }
     const timeForProcs = (procsNeeded * abilityRate) / speed;
     if (player.stats.currentPickaxe === 12) timeForProcs /= 2;
-    console.log(timeForProcs*1000)
     return longTime(timeForProcs * 1000);
 }
