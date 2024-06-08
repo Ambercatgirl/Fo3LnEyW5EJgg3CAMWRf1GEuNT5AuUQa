@@ -55,17 +55,16 @@ async function rollAbilities() {
             }
             break;
         case 6:
-            if (Math.random() <= (1/60 * m)) {
+            const doubleAbilityProc = Math.random();
+            if (doubleAbilityProc <= (1/60 * m)) {
                 pickaxeAbility6(curX, curY);
-            } else if (Math.random() <= (1/40 * m)) {
+            } else if (doubleAbilityProc <= (1/40 * m)) {
                 pickaxeAbility7(curX, curY);
             }
             break;
         case 7:
             if (Math.random() <= (1/50 * m)) {
-
                 pickaxeAbility8(curX, curY, 0);
-
             }
             break;
         case 8:
@@ -1223,7 +1222,9 @@ const treeLevels = {
     0: [],
     1: [],
     cherryBranch: [],
-    autumnBranch: []
+    autumnBranch: [],
+    winterBranch: [],
+    summerBranch: []
 }
 function pickaxeAbility27(x, y) {
     let eX = x;
@@ -1246,6 +1247,18 @@ function pickaxeAbility27(x, y) {
         arrToIndex = treeLevels.autumnBranch;
         eX = x - 260;
         eY = y - 150;
+        pickaxeArrayLoop(arrToIndex, eX, eY)
+    }
+    if (level > 3) {
+        arrToIndex = treeLevels.winterBranch;
+        eX = x + 20;
+        eY = y + 10;
+        pickaxeArrayLoop(arrToIndex, eX, eY)
+    }
+    if (level > 4) {
+        arrToIndex = treeLevels.summerBranch;
+        eX = x + 20;
+        eY = y - 200;
         pickaxeArrayLoop(arrToIndex, eX, eY)
     }
     displayArea();

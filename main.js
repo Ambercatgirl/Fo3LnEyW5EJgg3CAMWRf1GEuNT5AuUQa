@@ -57,7 +57,8 @@ function init() {
     createInventory();
     createGearRecipes();
     createPickaxeRecipes();
-    switchPowerupDisplay(0)
+    switchPowerupDisplay(0);
+    assignImageNames();
         document.getElementById('dataText').value = "";
         if (Math.random() < 1/1000)
             document.getElementById("cat").innerText = "CatAxe";
@@ -96,6 +97,15 @@ function init() {
         console.log("meow");
     }
 }
+function assignImageNames() {
+    for (let ore in oreList) {
+        if (oreList[ore]["hasImage"]) {
+            for (let i = 0; i < 4; i++) {
+                oreList[ore][names[i]].parentElement.setAttribute("title", oreList[ore]["oreName"])
+            }
+        }
+    }
+}
 function assignPickaxeNums(json) {
     pickaxe24Nums = json.pickaxeNums24;
     pickaxe25Nums = json.pickaxeNums25;
@@ -104,6 +114,8 @@ function assignPickaxeNums(json) {
     treeLevels[1] = json.pickaxeNums27B;
     treeLevels.cherryBranch = json.cherryBranch;
     treeLevels.autumnBranch = json.autumnBranch;
+    treeLevels.winterBranch = json.winterBranch;
+    treeLevels.summerBranch = json.summerBranch;
 }
 function failedFetch() {
     for (let ore in oreList) oreList[ore]["oreName"] = "FAILED TO FETCH NAMES";
@@ -242,7 +254,7 @@ function movePlayer(dir, reps) {
                             mine[curY][curX] = "⛏️";
                             lastDirection = dir.key;
                             let variant = rollVariant();
-                            if (player.gears["gear26"] && variant === 1) variant = rollVariant();
+                            if (player.gears["gear25"] && variant === 1) variant = rollVariant();
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant})
                             giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant});
                             checkAllAround(curX, curY);
@@ -256,7 +268,7 @@ function movePlayer(dir, reps) {
         blocksRevealedThisReset = 0;
         mineReset();
     }
-    displayArea();
+    if (curDirection === "") displayArea();
 }
 let keyCooldown = Date.now();
 document.addEventListener('keydown', (event) => {
@@ -338,6 +350,7 @@ function goDirection(direction, speed) {
         clearInterval(loopTimer);
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         curDirection = "";
+        updateDisplayTimer(false);
     } else {
         const nums = calcSpeed();
         let reps = nums.reps;
@@ -356,6 +369,7 @@ function goDirection(direction, speed) {
         loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
+        updateDisplayTimer(true);
     }
 }
 let buttonClicked = false;
@@ -375,6 +389,10 @@ function moveOne(dir, button) {
     }, 50);
     energySiphonerDirection = "";
 }
+function speedFactorial(num) {
+    if (num === 0) return 1;
+    return num * speedFactorial(num-1);
+}
 function calcSpeed() {
     let miningSpeed = baseSpeed;
     let reps = 1;
@@ -388,7 +406,13 @@ function calcSpeed() {
         miningSpeed = player.settings.minSpeed;
     if (player.stats.currentPickaxe === 12)
         reps++;
-    reps += player.gears["gear19"] ? 25 : 0;
+    reps += player.gears["gear19"] ? 10 : 0;
+    if (currentWorld === 1.1) {
+        const sr1Level = player.upgrades["pickaxe27"].level;
+        if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1}
+        else return {speed: 7, reps: (-2 + sr1Level)}
+    }
+    if (currentWorld === 1.1) return {speed: 10 -player.upgrades["pickaxe27"].level, reps: 1}
     return {speed: miningSpeed, reps: reps}
 }
 //DISPLAY
@@ -409,16 +433,16 @@ function displayArea() {
                 for (let r = curY - constraints[1]; r <= curY + 9 + (9-constraints[1]); r++) {
                     if (mine[r][c]) {
                         if (player.settings.usePathBlocks)
-                            output += mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : mine[r][c];
+                            output += mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : (mine[r][c] === "⛏️" ? addPickaxeIcon() : mine[r][c]);
                         else
-                            output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : mine[r][c]);   
+                            output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : (mine[r][c] === "⛏️" ? addPickaxeIcon() : mine[r][c]));   
                     } else {
                         output += r === grass ? "🟩" : "⬛";
                     }
                 }  
                 displayRows[i].innerHTML = output;
                 i++;
-            }
+            } 
         }
         revealedElement.textContent = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
         let sub = currentWorld === 2 ? 2000 : 0;
@@ -428,6 +452,9 @@ function displayArea() {
         }
     }
     minedElement.textContent = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
+}
+function addPickaxeIcon() {
+    return pickaxeStats[player.stats.currentPickaxe].src;
 }
 function checkDisplayVariant(location) {
     let oreToAdd;
@@ -560,6 +587,7 @@ let movementsX = 0;
 let lastX = 0;
 let lastXCheck = Date.now();
 let resetAddX = 0;
+let displayTimer = null;
 function updateInventory() {
     for (let propertyName in inventoryObj) {
         for (let i = 1; i < 5; i++) {
@@ -606,7 +634,7 @@ function updateInventory() {
     lastTime = Date.now();
     if (Date.now() >= ability1RemoveTime && energySiphonerActive) removeSiphoner();
     const bodyCheck = document.body.getBoundingClientRect();
-    if (bodyCheck.height < 400) {
+    if (bodyCheck.height < 500) {
         document.getElementById("mainSticky").style.position = "relative";
         document.getElementById("mainTop").style.position = "relative";
     } 
@@ -618,6 +646,18 @@ function updateInventory() {
         if (Date.now() >= currentActiveEvent.removeAt) endEvent();
     } else {
         activateEvent(rollEvent());
+    }
+}
+function updateDisplayTimer(state) {
+    if (state) {
+        displayTimer = setInterval(() => {
+        displayArea();
+    }, 25);
+}
+    else {
+        clearInterval(displayTimer); 
+        displayTimer = null;
+        displayArea();
     }
 }
 let lastXValues = [];
@@ -916,7 +956,7 @@ specialOreValues = {
 const events = {
     "event1" : {
         rate: 1/5000,
-        duration: 750000,
+        duration: 1500000,
         boost: 1.5,
         ore: "🌀",
         message: `<i><span style="background-image:linear-gradient(to right, #0007ff, #008eff, #14f0f2, #49c7cd, #70a9b3);" class="eventGradient">The tides in the 🌊 drop out into the ocean, lowering a path into the depth...</span></i>`,
@@ -940,7 +980,7 @@ const events = {
     },
     "event2" : {
         rate: 1/2500,
-        duration: 500000,
+        duration: 3000000,
         boost: 2,
         ore: "⚙️",
         message: `<i>Mechanical whirring draws your attention deeper into the mines...</i>`,
@@ -952,7 +992,7 @@ const events = {
     },
     "event3" : {
         rate: 1/4000,
-        duration: 900000,
+        duration: 1800000,
         boost: 1.375,
         ore: "🌈",
         message: `<i>Every pigment of color swirls up from below, surrounding you in an eternal rainbow...</i>`,
@@ -964,7 +1004,7 @@ const events = {
     },
     "event4" : {
         rate: 1/1250,
-        duration: 1200000,
+        duration: 1800000,
         boost: 1.25,
         ore: "🛎️",
         message: `<i>You hear a bell start dinging in the 🚪 layer...</i>`,
@@ -1001,7 +1041,7 @@ const events = {
     },
     "event6" : {
         rate: 1/10000,
-        duration: 300000,
+        duration: 900000,
         boost: 1.15,
         ore: "⌛",
         message: `<i><span style="background-image:linear-gradient(to right, #c2842d, #edae26, #d45419, #8a1b0c);" class="eventGradient">The passage of time seems to speed up as it's source is unearthed...</span></i>`,
@@ -1024,7 +1064,7 @@ const events = {
     },
     "event7" : {
         rate: 1/15000,
-        duration: 600000,
+        duration: 1200000,
         boost: 1.3,
         ore: "🎓",
         message: `<i><span style="background-image:linear-gradient(to right, #ede6e6, #383434, #7a7878, #ede6e6);" class="eventGradient">All the knowledge of this realm courses through you as a new intelligence forms...</span></i>`,
@@ -1051,7 +1091,7 @@ const events = {
     },
     "event8" : {
         rate: 1/3500,
-        duration: 300000,
+        duration: 3000000,
         boost: 1.75,
         ore: "🥗 ",
         message: `<i><span style="background-image:linear-gradient(to right, #6a9c44, #78db2c, #27d111, #083802, #2f7327);" class="eventGradient">Leafy greens cloud your vision...</span></i>`,
@@ -1067,7 +1107,7 @@ const events = {
     },
     "event9" : {
         rate: 1/5000,
-        duration: 900000,
+        duration: 2700000,
         boost: 1.25,
         ore: "📽️",
         message: `<i>A highlight reel of your journey in the mines is faintly visible in the corner of your eyes...</i>`,
@@ -1100,6 +1140,18 @@ const events = {
                 removeFromLayers({"ore":"✈️", "layers":["sillyLayer"]});
                 delete specialOreValues["✈️"];
             }
+        }
+    },
+    "event11" : {
+        rate: 1/4000,
+        duration: 2700000,
+        boost: 3/4,
+        ore: "💫",
+        message: `<i>The skies begin to glow as a cosmic body enchants the mine...</i>`,
+        world: 1,
+        specialEffect: function(state) {
+            if (state) return;
+            else return;
         }
     }
 }
@@ -1140,6 +1192,9 @@ function rollEvent() {
     }
     return undefined;
 }
+function get(id) {
+    return document.getElementById(`${id}`)
+}
 /*
 function toggleCelestials(state) {
     let element = document.getElementById("celestialContainer");
@@ -1162,7 +1217,7 @@ let pickaxe25Nums = [];
 let testNums = [];
 /*
 const az = new Image();
-az.src = "media/meow.png"
+az.src = "media/Untitled_Artwork2.png"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")
@@ -1174,4 +1229,5 @@ az.src = "media/meow.png"
             }
 }
 */
+
 

@@ -329,7 +329,7 @@ function updateCapacity(element) {
     elementValue = element.value;
     let value = elementValue === "" ? "none" : elementValue;
     value = Number(value);
-    if (!(isNaN(value)) && value > 0) {
+    if (!(isNaN(value)) && value >= 250) {
         player.settings.baseMineCapacity = value;
         mineCapacity = value;
         flashGreen(element);
@@ -780,6 +780,7 @@ function showWorkshop(state) {
     currentDisplayedUpgrade = undefined;
     updateDisplayedUpgrade();
 }
+const conversionRates = [5, 10, 30]
 function convertVariants() {
     let ore = document.getElementById("oreInput").value;
     ore = ore.replaceAll(" ", "");
@@ -806,9 +807,9 @@ function convertVariants() {
     }
     const obj = {"ore":ore, "variant":variant, "amt":amt};
     let amtToGive = 0;
-    if (obj["variant"] === "Explosive") amtToGive = 30;
-    else if (obj["variant"] === "Radioactive") amtToGive = 10;
-    else if (obj["variant"] === "Electrified") amtToGive = 5;
+    if (obj["variant"] === "Explosive") amtToGive = conversionRates[2];
+    else if (obj["variant"] === "Radioactive") amtToGive = conversionRates[1];
+    else if (obj["variant"] === "Electrified") amtToGive = conversionRates[0];
     let name = variantInvNames[names.indexOf(obj["variant"])];
     if (oreList[obj["ore"]][name] >= obj["amt"]) {
         oreList[obj["ore"]][name] -= obj["amt"];
@@ -905,5 +906,26 @@ function AFKmode(){
         createInventory();
     }
     inafk = !inafk
+}
+function convertAllButOne() {
+    let ore = document.getElementById("oreInput").value;
+    ore = ore.replaceAll(" ", "");
+    if (oreList[ore] !== undefined) {
+        const elecAmt = oreList[ore]["electrifiedAmt"] - 1;
+        const radiAmt = oreList[ore]["radioactiveAmt"] - 1;
+        const explAmt = oreList[ore]["explosiveAmt"] - 1;
+        const uses = [false, false, false];
+        const amts = [elecAmt, radiAmt, explAmt]
+        if (elecAmt > 0) uses[0] = true;
+        if (radiAmt > 0) uses[1] = true;
+        if (explAmt > 0) uses[2] = true;
+        for (let i = 1; i < 4; i++) {
+            if (uses[i - 1]) {
+                oreList[ore][variantInvNames[i]] -= amts[i - 1];
+                oreList[ore]["normalAmt"] += (amts[i - 1] * conversionRates[i - 1])
+            }
+        }
+        inventoryObj[ore] = 0;
+    } else return;
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})
