@@ -94,7 +94,8 @@ class playerTemplate {
             latestLength: 10,
             useNewMusic: true,
             automineProtection: false,
-            useNyerd: false
+            useNyerd: false,
+            automineUpdate: 25
         },
         this.stats = {
             currentPickaxe: 0,
@@ -141,6 +142,10 @@ class playerTemplate {
 
             },
             link: "",
+        }
+        this.luna = {
+            layer: Math.round(Math.random() * 100000),
+            lastAddedOn: new Date().getDate()
         }
     }
 }
@@ -495,6 +500,9 @@ function loadNewData(data) {
         data.settings.minRarityNum ??= 0;
         player.settings.minRarityNum = (data.settings.minRarityNum) - 1;
         changeSpawnMessageRarity(document.getElementById("changeSMrarityDisplay"));
+        //automine update time
+        data.settings.automineUpdate ??= 25;
+        player.settings.automineUpdate = data.settings.automineUpdate;
         //minimum mining speed
         data.settings.minSpeed ??= 0;
         player.settings.minSpeed = data.settings.minSpeed;
@@ -562,10 +570,22 @@ function loadNewData(data) {
             }
         }
         data.faqOffered ??= false;
+        data.luna ??= {
+            layer: Math.round(Math.random() * 100000),
+            lastAddedOn: new Date().getDate()
+        }
+        
+        if (new Date().getDate() !== data.luna.lastAddedOn) {
+            player.luna.layer = Math.round(Math.random() * 100000);
+            player.luna.lastAddedOn = new Date().getDate();
+        } else {
+            player.luna.layer = data.luna.layer;
+            player.luna.lastAddedOn = data.luna.lastAddedOn;
+        }
         if (!data.faqOffered) toggleNewPlayer(true);
         else player.faqOffered = true;
     } catch (err) {
-        window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}`);
+        window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}, ${console.log(err)}`);
     }
 }
 

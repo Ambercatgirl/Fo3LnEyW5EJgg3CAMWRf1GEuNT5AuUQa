@@ -245,7 +245,7 @@ const recipes = {
     },
     "gear19" : {
         name : "",
-        recipe : [{ore:"🚪", amt:1750000000},{ore:"⤴️", amt:2700000},{ore:"↪️", amt:1850000},{ore:"⏪", amt:45000},{ore:"⏯️", amt:15000},{ore:"🔒", amt:4200},{ore:"🖇️", amt:1300},{ore:"⛓️", amt:100},{ore:"🚧", amt:30},{ore:"🛎️", amt:5},],
+        recipe : [{ore:"🚪", amt:1500000000},{ore:"⤴️", amt:2700000},{ore:"↪️", amt:1850000},{ore:"⏪", amt:45000},{ore:"⏯️", amt:15000},{ore:"🔒", amt:4200},{ore:"🖇️", amt:1300},{ore:"⛓️", amt:100},{ore:"🚧", amt:30},{ore:"🛎️", amt:5},],
         upgrades : {}
     },
     "gear20" : {
@@ -293,16 +293,21 @@ recipeElements = {};
 let currentRecipe = undefined;
 function displayRecipe(recipe) {
     const parentElement = document.getElementById("displayRecipe");
+    document.getElementById("craftingRecipeTitle").style.display = "none";
     while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
     if (currentRecipe === undefined || currentRecipe !== recipe) {
-        if (recipe !== "pickaxe27") document.getElementById("craftingRecipeTitle").style.display = "block";
+        if (recipe !== "pickaxe27") {
+            document.getElementById("craftingRecipeTitle").style.display = "block";
+        }
         recipeElements[recipe].style.display = "block";
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
         description.style.display = "block";
-        let time = get("craftingTimeDisplay").cloneNode(true);
-        time.style.display = "block";
-        parentElement.appendChild(time)
+        if (recipe !== "pickaxe27") {
+            let time = get("craftingTimeDisplay").cloneNode(true);
+            time.style.display = "block";
+            parentElement.appendChild(time);
+        }
         let title = document.getElementById("descriptionTitle").cloneNode(true);
         title.style.display = "block";
         parentElement.appendChild(title);
@@ -882,13 +887,13 @@ const upgradeRecipes = {
         "upgrade1" : 
         {
             recipe : [
-                {ore: "🇪🇬", amt: 400},
-                {ore: "🇪🇹", amt: 360},
-                {ore: "🇳🇬", amt: 320},
-                {ore: "🇹🇷", amt: 280},
-                {ore: "🇮🇷", amt: 240},
-                {ore: "🇻🇳", amt: 200},
-                {ore: "🇵🇭", amt: 60},
+                {ore: "🇪🇬", amt: 200},
+                {ore: "🇪🇹", amt: 180},
+                {ore: "🇳🇬", amt: 160},
+                {ore: "🇹🇷", amt: 140},
+                {ore: "🇮🇷", amt: 120},
+                {ore: "🇻🇳", amt: 100},
+                {ore: "🇵🇭", amt: 30},
             ],
             descriptions : [
                 "Luck:<br>3 -> 10",
@@ -898,13 +903,13 @@ const upgradeRecipes = {
         "upgrade2" : 
         { 
             recipe : [   
-                {ore: "🇨🇦", amt: 150},
-                {ore: "🇲🇽", amt: 120},
-                {ore: "🇺🇸", amt: 90},
-                {ore: "🇳🇱", amt: 45},
-                {ore: "🇷🇴", amt: 36},
-                {ore: "🇺🇦", amt: 30},
-                {ore: "🇵🇱", amt: 24},
+                {ore: "🇨🇦", amt: 50},
+                {ore: "🇲🇽", amt: 40},
+                {ore: "🇺🇸", amt: 30},
+                {ore: "🇳🇱", amt: 15},
+                {ore: "🇷🇴", amt: 12},
+                {ore: "🇺🇦", amt: 10},
+                {ore: "🇵🇱", amt: 8},
             ],
             descriptions : [
                 "Luck:<br>10 -> 20",
@@ -1106,7 +1111,7 @@ const pickaxeStats = {
         rate: 500,
         src : "⛏️",
     },
-    28 : {mined: 67, revealed: 111, luck: 2.1, rate: 20},
+    28 : {mined: 67, revealed: 111, luck: 2.1, rate: 20, src: "⛏️"},
 }
  
  
@@ -1123,6 +1128,7 @@ function ct() {
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
     if (player.gears["gear23"]) m += 0.15;
+    if (batteryEvent) m += 0.1;
     const abilityRate = pickaxeUsing !== 27 ? pickaxeStats[pickaxeUsing].rate/m : 500/m;
     const recipe = !overUpgrade ? recipes[currentRecipe].recipe : player.upgrades["pickaxe27"].level === player.upgrades["pickaxe27"].maxLevel ? "RETURN" : upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].recipe;
     if (recipe === "RETURN") return;
@@ -1132,7 +1138,7 @@ function ct() {
         const ore = recipe[i].ore;
         if (!oreList[ore]["caveExclusive"] && oreList[ore]["oreTier"] !== "Celestial") {
             let currentOreLayer;
-            if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"]) {
+            if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"] !== "Layer") {
                 recipeLayers.commons ??= {highestRarity : 0}
                 currentOreLayer = "commons";
             } else {
@@ -1144,31 +1150,32 @@ function ct() {
                     }
                 }
             }
-            const needed = recipe[i].amt;
+            let needed = recipe[i].amt;
             let have = oreList[ore]["normalAmt"];
             have = have >= needed ? needed : have;
+            needed -= have;
             const rarity = 1/oreList[ore]["decimalRarity"];
-            const totalOreRarity = ((rarity * needed) - (rarity * have));
+            const totalOreRarity = (rarity * needed);
             if (totalOreRarity > recipeLayers[currentOreLayer].highestRarity) recipeLayers[currentOreLayer].highestRarity = totalOreRarity;
         }
     }
-    //console.log(abilityMined, abilityRevealed, recipe, recipeLayers, abilityRate, speed)
     let rarityNeeded = 0;
-    let usingCommons = false;
-    if (recipeLayers.commons !== undefined) {
-        for (let layer in recipeLayers) if (recipeLayers.commons.highestRarity >= recipeLayers[layer].highestRarity) usingCommons = true;
-        if (Object.keys(recipeLayers).length === 1) usingCommons = true;
-    }
     let procsNeeded;
-    if (usingCommons) {
-        for (let layer in recipeLayers) recipeLayers[layer].highestRarity = recipeLayers.commons.highestRarity;
-        rarityNeeded = recipeLayers.commons.highestRarity * Object.keys(recipeLayers).length;
-        procsNeeded = rarityNeeded / abilityMined;
-    } else {
-        for (let layer in recipeLayers) if (layer !== "commons") rarityNeeded += recipeLayers[layer].highestRarity;
-        procsNeeded = rarityNeeded / abilityRevealed;
-    }
-    const timeForProcs = (procsNeeded * abilityRate) / speed;
+    for (let layer in recipeLayers) rarityNeeded += recipeLayers[layer].highestRarity;
+    procsNeeded = rarityNeeded / abilityRevealed;
+    let timeForProcs = (procsNeeded * abilityRate) / speed;
     if (player.stats.currentPickaxe === 12) timeForProcs /= 2;
     return longTime(timeForProcs * 1000);
+}
+function createPolygon(element) {
+    console.log(element)
+    const elementsToRemove = document.getElementsByClassName("hologramTriangle");
+    for (let i = 0; i < elementsToRemove.length; i++) element.removeChild(elementsToRemove[i]);
+    const canvas = document.createElement('div');
+    canvas.classList = "hologramTriangle"
+    canvas.style.width = "30vw";
+    canvas.style.height = "40vw";
+    canvas.style.backgroundColor = "rgba(77, 255, 77, 0.25)";
+    canvas.style.clipPath = "polygon(100% 0%, 0% 38vw, 0% 100%, 100% 70%)"
+    element.appendChild(canvas);
 }

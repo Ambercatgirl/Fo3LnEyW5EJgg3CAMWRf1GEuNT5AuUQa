@@ -83,6 +83,7 @@ let allPickaxeNames =
 ["Mulch Mallet", 
 "Mud Sickle", 
 "Dirt Ravager", 
+"Crystalline Excavator",
 "Void Crusher", 
 "Geode Staff", 
 "Earth Soiler", 
@@ -337,6 +338,16 @@ function updateCapacity(element) {
         flashRed(element);
     }        
     document.getElementById("mineResetProgress").innerText = `${blocksRevealedThisReset}/${mineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
+}
+function updateAutomineUpdateSpeed(element) {
+    let speed = element.value;
+    speed ??= "na";
+    if (!isNaN(speed) && speed > 0) {
+        player.settings.automineUpdate = speed;
+        flashGreen(element);
+    } else {
+        flashRed(element);
+    }
 }
 const indexOrder = {
     "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"],
@@ -623,18 +634,16 @@ function enableDisguisedChills() {
 function switchFont() {
     if (player.settings.usingNewEmojis) {
         player.settings.usingNewEmojis = false;
-        document.body.style.fontFamily = `'Fredoka One', 'Verdana', 'Geneva', 'Tahoma', sans-serif`
+        document.body.style.fontFamily = "";
         document.getElementById("switchFont").style.backgroundColor = "#FF3D3D";
         distanceMulti--;
         layerDistanceY -= 2000;
-        switchDistance();
     } else {
         player.settings.usingNewEmojis = true;
-        document.body.style.fontFamily = `"Fredoka One", "Noto Color Emoji"`;
+        document.body.style.fontFamily = `system-ui, Noto Color Emoji`;
         document.getElementById("switchFont").style.backgroundColor = "#6BC267";
         distanceMulti--;
         layerDistanceY -= 2000;
-        switchDistance();
     }
 }
 let minTier = "Antique";
@@ -780,7 +789,8 @@ function showWorkshop(state) {
     currentDisplayedUpgrade = undefined;
     updateDisplayedUpgrade();
 }
-const conversionRates = [5, 10, 30]
+const conversionRates = [5, 10, 30];
+let hasConverted = false;
 function convertVariants() {
     let ore = document.getElementById("oreInput").value;
     ore = ore.replaceAll(" ", "");
@@ -811,6 +821,12 @@ function convertVariants() {
     else if (obj["variant"] === "Radioactive") amtToGive = conversionRates[1];
     else if (obj["variant"] === "Electrified") amtToGive = conversionRates[0];
     let name = variantInvNames[names.indexOf(obj["variant"])];
+    if (obj["ore"] === "🧱" && obj["variant"] === "Electrified" && obj["amt"] === 1337) {
+        typeWriter("<i>The ground shakes beneath you as something makes its presence known...</i>", get("spawnMessage"), true);
+        eventSpawn.currentTime = 0;
+        eventSpawn.play();
+        hasConverted = true;
+    }
     if (oreList[obj["ore"]][name] >= obj["amt"]) {
         oreList[obj["ore"]][name] -= obj["amt"];
         oreList[obj["ore"]]["normalAmt"] += (obj["amt"] * amtToGive);
@@ -882,7 +898,6 @@ function goToConvert(ore, variant) {
     document.getElementById("oreInput").value = ore;
     document.getElementById("amtInput").value = oreList[ore][variantInvNames[variant - 1]];
     document.getElementsByClassName("potentialVariant")[variant - 2].click();
-    console.log(ore);
 }
 let inafk = false
 function AFKmode(){

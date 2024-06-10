@@ -96,6 +96,7 @@ function init() {
         insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
         console.log("meow");
     }
+    window.addEventListener("beforeunload", removeParadoxical());
 }
 function assignImageNames() {
     for (let ore in oreList) {
@@ -365,7 +366,6 @@ function goDirection(direction, speed) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
-        if (currentWorld === 1.1) {miningSpeed = 10 - player.upgrades["pickaxe27"].level; reps = 1;}
         loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
         curDirection = direction;
         energySiphonerDirection = direction;
@@ -412,7 +412,6 @@ function calcSpeed() {
         if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1}
         else return {speed: 7, reps: (-2 + sr1Level)}
     }
-    if (currentWorld === 1.1) return {speed: 10 -player.upgrades["pickaxe27"].level, reps: 1}
     return {speed: miningSpeed, reps: reps}
 }
 //DISPLAY
@@ -435,7 +434,7 @@ function displayArea() {
                         if (player.settings.usePathBlocks)
                             output += mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : (mine[r][c] === "⛏️" ? addPickaxeIcon() : mine[r][c]);
                         else
-                            output += mine[r][c] === "⚪" ? invisibleBlock : (mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : (mine[r][c] === "⛏️" ? addPickaxeIcon() : mine[r][c]));   
+                            output += mine[r][c] === "⚪" ? "⠀" : (mine[r][c].ore !== undefined ? checkDisplayVariant(mine[r][c]) : (mine[r][c] === "⛏️" ? addPickaxeIcon() : mine[r][c]));   
                     } else {
                         output += r === grass ? "🟩" : "⬛";
                     }
@@ -607,22 +606,7 @@ function updateInventory() {
         updateAllLayers();
     }
     if (player.powerupVariables.fakeEquipped.item !== "" && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
-        if (player.gears[player.powerupVariables.fakeEquipped.item] !== undefined) {
-            if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
-            if (player.powerupVariables.fakeEquipped.item === "gear9") document.getElementById("sillyRecipe").style.display = "none";
-            player.gears[player.powerupVariables.fakeEquipped.item] = false;
-            player.powerupVariables.fakeEquipped.item = "";
-        }
-        if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
-            player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
-            player.stats.currentPickaxe = player.powerupVariables.fakeEquipped.originalState;
-            player.powerupVariables.fakeEquipped.item = "";
-            player.powerupVariables.fakeEquipped.originalState = undefined;
-            utilitySwitchActions();
-        }
-        let tempDirection = curDirection;
-        stopMining();
-        goDirection(tempDirection);
+        removeParadoxical();
     }
     if (currentWorld === 1.1 && player.stats.currentPickaxe !== 27) player.stats.currentPickaxe = 27;
     else if (currentWorld !== 1.1 && player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
@@ -650,9 +634,11 @@ function updateInventory() {
 }
 function updateDisplayTimer(state) {
     if (state) {
+        clearInterval(displayTimer);
+        displayTimer = null;
         displayTimer = setInterval(() => {
         displayArea();
-    }, 25);
+    }, player.settings.automineUpdate);
 }
     else {
         clearInterval(displayTimer); 

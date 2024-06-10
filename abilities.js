@@ -245,6 +245,7 @@ function powerup4() {
 }
 function powerup5() {
     if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && currentWorld !== 1.1) {
+        removeParadoxical();
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
             if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
@@ -311,7 +312,8 @@ function gearAbility2() {
             reps++;
             if (repeatingLayers[reps] === undefined && Math.random() < 1/77) chosenDistance = reps;
         }
-        repeatingLayers[reps] = {layer: 7777, force: false};
+        const forceKorone = Math.random() < 1/563 ? "KORONE" : false;
+        repeatingLayers[reps] = {layer: 7777, force: forceKorone};
         specialLayerLocations["sillyLayer"] ??= 16000 + (10000 * reps);
     }
 }
@@ -338,7 +340,6 @@ function pickaxeAbility1(x, y) {
         y--;
         pickaxeAbilityMineBlock(x, y);
     }
-    displayArea();
 }
 
 function pickaxeAbility2(x, y, size) {
@@ -348,7 +349,6 @@ function pickaxeAbility2(x, y, size) {
             pickaxeAbilityMineBlock(c, r);
         }
     }
-    displayArea();
 }
 
 function pickaxeAbility3(x, y) {
@@ -386,7 +386,6 @@ function pickaxeAbility3(x, y) {
         y--;
         pickaxeAbilityMineBlock(x, y);
     }
-    displayArea();
 }
 
 
@@ -395,7 +394,6 @@ function pickaxeAbility4(x, y) {
     const area1 = Math.round((Math.random() * (-(constraints[0]) - 7)) + 7);
     const area2 = Math.round((Math.random() * (-(constraints[1]) - 7)) + 7);
     pickaxeAbility2((x + area1), (y + area2), 4, 1);
-    displayArea();
 }
 
 function pickaxeAbility5(x, y) {
@@ -416,7 +414,6 @@ function pickaxeAbility5(x, y) {
     for (let i = c; i < c + 5; i++) {
         pickaxeAbilityMineBlock(i, r);
     }
-    displayArea();
 }
 
 function pickaxeAbility6(x, y) {
@@ -430,7 +427,6 @@ function pickaxeAbility6(x, y) {
         }
         dist--;
     }
-    displayArea();
 }
 
 function pickaxeAbility7(x, y) {
@@ -454,7 +450,6 @@ function pickaxeAbility7(x, y) {
         }
         dist--;
     }
-    displayArea();
 }
 function mineLines(loc) {
     let x = loc.x;
@@ -614,7 +609,6 @@ function pickaxeAbility10(x, y) {
         i = 0;
         reps++;
     }
-    displayArea();
 }
 
 function pickaxeAbility11(x, y) {
@@ -629,7 +623,6 @@ function pickaxeAbility11(x, y) {
             }
         }
     }
-    displayArea();
 }
 
 function pickaxeAbility12(x, y) {
@@ -672,7 +665,6 @@ function pickaxeAbility12(x, y) {
             dirNum = 0;
     }
     
-    displayArea();
 }
 
 function pickaxeAbility13(x, y) {
@@ -701,7 +693,6 @@ function pickaxeAbility13(x, y) {
         }
         i++;
     }
-    displayArea();
 }
 function pickaxeAbility14(translatex, translatey) {
     let r = Math.round((Math.random() * 5) + 1)
@@ -719,7 +710,6 @@ function pickaxeAbility14(translatex, translatey) {
             pickaxeAbilityMineBlock(translatex - i, r);
         }
     }
-    displayArea();
 }
 //pickaxeAbility14(curX, curY, 5, 1);
 function pickaxeAbility15(x, y) {
@@ -732,7 +722,6 @@ function pickaxeAbility15(x, y) {
         }
         dist--;
     }
-    displayArea();
 }
 function pickaxeAbility16(x, y) {
     let startNums = [0, 0, 1, 1, 1, 2, 2, 2, 9, 11, 10, 8, 7, 6, 5, 5, 5, 5, 6, 6, 6, 7, 7];
@@ -748,7 +737,6 @@ function pickaxeAbility16(x, y) {
         }
         i++;
     }
-    displayArea();
 }
 function pickaxeAbility17(x, y) {
     let startNums = [17, 16, 15, 14, 13, 12, 12, 11, 11, 11, 12, 12, 12, 12, 12, 12];
@@ -764,7 +752,6 @@ function pickaxeAbility17(x, y) {
         }
         i++;
     }
-    displayArea();
 }
 function pickaxeAbility18(x, y) {
         let startNums = [-13, -17, -20, -22, -24, -26, -28, -30, -31, -32, -22, -18, -15, -12, -10, -8, -6, -5, -3, -2, -1, 0, 1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14];
@@ -777,7 +764,6 @@ function pickaxeAbility18(x, y) {
                 }
             i++;
         }
-    displayArea();
 }
 function pickaxeAbility19(x, y, reps) {
     if (reps > 7)
@@ -878,7 +864,6 @@ function pickaxeAbility20(x, y) {
             
         }
     }
-    displayArea();
 }
 
 function pickaxeAbility21(x, y) {
@@ -941,7 +926,6 @@ function pickaxeAbility21(x, y) {
     reps = 0;
     increaseNum++;
     }
-    displayArea();
 }
 
 function pickaxeAbility22(translatex, translatey) {
@@ -973,7 +957,6 @@ function pickaxeAbility22(translatex, translatey) {
         r += 2;
     }
     
-    displayArea();
 }
 //IN ARRAY, ORDER IS X, Y
 let pa1 = [];
@@ -1071,7 +1054,6 @@ function pickaxeAbility23(x, y) {
             startNumX += xIncrease;
         }
     }
-    displayArea();
 }
 function pickaxeAbility24(x, y) {
     x = x - 60;
@@ -1079,7 +1061,6 @@ function pickaxeAbility24(x, y) {
     for (let i = 0; i < pickaxe24Nums.length; i++) {
         pickaxeAbilityMineBlock(pickaxe24Nums[i]["x"] + x, pickaxe24Nums[i]["y"] + y)
     }
-    displayArea();
 }
 function pickaxeAbility25(x, y) {
     x = x - 130;
@@ -1087,7 +1068,6 @@ function pickaxeAbility25(x, y) {
     for (let i = 0; i < pickaxe25Nums.length; i++) {
         pickaxeAbilityMineBlock(pickaxe25Nums[i]["x"] + x, pickaxe25Nums[i]["y"] + y)
     }
-    displayArea();
 }
 const abilityTable = {
     " 22" : 1/78,
@@ -1261,7 +1241,6 @@ function pickaxeAbility27(x, y) {
         eY = y - 200;
         pickaxeArrayLoop(arrToIndex, eX, eY)
     }
-    displayArea();
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {
