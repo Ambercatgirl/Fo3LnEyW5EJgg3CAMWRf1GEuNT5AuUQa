@@ -251,7 +251,7 @@ function powerup5() {
         removeParadoxical();
         let toChooseFrom = Object.keys(player.pickaxes).concat(Object.keys(player.gears));
         for (let i = toChooseFrom.length - 1; i >= 0; i--) {
-            if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13)) toChooseFrom.splice(i, 1);
+            if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (currentWorld === 2 && (toChooseFrom[i].includes("pickaxe")) && Number(toChooseFrom[i].substring(7)) < 13) || toChooseFrom[i] === "pickaxe28") toChooseFrom.splice(i, 1);
         }
         if (toChooseFrom.length > 0) {
             let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];

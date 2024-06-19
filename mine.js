@@ -108,6 +108,8 @@ function giveBlock(obj) {
         if (oreList[obj.type]["oreTier"] === "Flawless") {
             if (!player.sr1Unlocked) {
                 player.sr1Unlocked = true;
+                displayMessage("sr1Unlocked");
+                stopMining();
             }
         }
         if (oreList[obj.type]["hasLog"] || oreRarity >= 160000000) {
@@ -422,8 +424,8 @@ function getParams(distanceX, distanceY, x, y) {
     return [displayLeft, displayUp];
 }
 function attemptSwitchWorld(to) {
-    if (to === 2 && player.pickaxes["pickaxe13"] || to === 2 && currentWorld === 2) {switchWorld(currentWorld === 1 ? 2 : 1); return;}
-    if (to === 1.1) {switchWorld(currentWorld === 1.1 ? 1 : 1.1); return;}
+    if (to === 2 && player.pickaxes["pickaxe13"] && currentWorld !== 2){switchWorld(2); return;}
+    if (to === 1.1 && player.sr1Unlocked && currentWorld !== 1.1) {switchWorld(1.1); return;}
     if (to === 1) {switchWorld(1); return;}
 }
 function switchWorld(to) {
@@ -537,7 +539,7 @@ function removeParadoxical() {
         if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
             player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
             player.stats.currentPickaxe = player.powerupVariables.fakeEquipped.originalState;
-            player.powerupVariables.fakeEquipped.item = "";
+            player.powerupVariables.fakeEquipped.item = undefined;
             player.powerupVariables.fakeEquipped.originalState = undefined;
             utilitySwitchActions();
         }

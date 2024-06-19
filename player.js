@@ -638,6 +638,9 @@ const dailyMessages = {
     },
     "portalUpdate" : {
         showUntil : "June 25, 2024",
+    },
+    "sr1Unlocked" : {
+        showUntil : "June 25, 0000",
     }
 }
 function checkMessages(message) {
@@ -663,7 +666,6 @@ function showNextInQueue() {
     else {displayMessage(currentDisplayedMessage.id); canMine = false;}
 }
 function displayMessage(id) {
-    console.log(id)
     const elementsToRemove = document.getElementsByClassName("dailyMessage");
     for (let i = 0; i < elementsToRemove.length; i++) elementsToRemove[i].style.display = "none";
     get("dailyMessages").style.display = "block";
