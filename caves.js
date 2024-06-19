@@ -323,9 +323,9 @@ function generateCaveBlock(y, x, type) {
                 verifiedOres.createLog(y,x,{ore: blockToGive, variant: variant}, new Error(), [true, getCaveMulti(type), type, caveLuck]);
                 verifiedOres.verifyLog(y, x);
             }
-            if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: {"adjRarity" : adjRarity, "caveType" : type}, variant: variant});
+            if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: {"adjRarity" : adjRarity, "caveType" : type}, variant: variant});
             if ((currentWorld < 2 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
-            if (player.settings.stopOnRare.active && oreInformation.tierGrOrEqTo({"tier1": oreList[blockToGive]["oreTier"], "tier2": player.settings.stopOnRare.minimum})) stopMining();
+            if (player.settings.stopOnRare.active && stopIncluded(oreList[blockToGive]["oreTier"])) stopMining();
         }
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {
@@ -337,7 +337,7 @@ function generateCaveBlock(y, x, type) {
                 verifiedOres.createLog(y, x, {ore: blockToGive, variant: variant}, new Error(), [true, 1]);
                 verifiedOres.verifyLog(y, x);
             }
-            if (oreInformation.tierGrOrEqTo({"tier1" : oreList[blockToGive]["oreTier"], "tier2" : minTier})) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: undefined, variant: variant});
+            if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: undefined, variant: variant});
             if ((currentWorld < 2 && player.gears["gear3"]) || currentWorld === 2 && player.gears["gear17"]) mineCaveBlock(x, y, type);
             if (player.settings.stopOnRare.active && oreInformation.tierGrOrEqTo({"tier1": oreList[blockToGive]["oreTier"], "tier2": player.settings.stopOnRare.minimum})) stopMining();
         }
@@ -374,7 +374,7 @@ let caveList = {
 "ioCave" : ['🇻🇮', '🇹🇰', '🇲🇵', '🇯🇪', '🇨🇽', '🇻🇬', '🇮🇴'],
 "moCave" : ['🇹🇨', '🇵🇳', '🇲🇶', '🇬🇵', '🇨🇰', '🇦🇸', '🇲🇴'],
 "ccCave" : ['🇼🇫', '🇷🇪', '🇾🇹', '🇬🇺', '🇨🇼', '🇦🇮', '🇨🇨'],
-"ggCave" : ['🇧🇱', '🇳🇨', '🇲🇸', '🇮🇪', '🇦🇼', '🇬🇬'],
+"ggCave" : ['🇧🇱', '🇲🇸', '🇮🇪', '🇦🇼', '🇬🇬'],
 "axCave" : ['🇧🇶', '🇸🇭', '🇳🇺', '🇬🇮', '🇬🇫', '🇧🇲', '🇦🇽'],
 "foCave" : ['🇭🇰', '🇮🇲', '🇵🇲', '🇬🇸', '🇳🇫', '🇫🇰', '🇰🇾', '🇫🇴']
 }
