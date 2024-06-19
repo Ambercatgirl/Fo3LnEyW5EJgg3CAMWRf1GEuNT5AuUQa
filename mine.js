@@ -64,7 +64,7 @@ function mineBlock(x, y, cause) {
                 player.stats.blocksMined++;
                 return;
             }
-            if (cause === "ability" && player.settings.automineProtection && oreInformation.tierGrOrEqTo({"tier1": oreList[mineBlockOre]["oreTier"], "tier2": minTier})) return;
+            if (cause === "ability" && player.settings.automineProtection && messageIncluded(oreList[mineBlockOre]["oreTier"])) return;
         }
         player.stats.blocksMined++;
         giveBlock({type: mineBlockOre, x:x, y:y, fromReset: cause === "reset", fromCave:undefined, caveMulti:undefined, variant:mineBlockVariant});
@@ -90,7 +90,7 @@ function giveBlock(obj) {
         inv = obj.variant;
     }
     //PROC & LOGS
-    const layerMaterial = layerDictionary[currentLayer].layer.slice(-1);
+    const layerMaterial = getLayer(obj.y).layer.slice(-1);
     if (currentWorld < 2 && player.gears["gear4"]) {
         oreList[layerMaterial]["normalAmt"]++;
     }
@@ -102,14 +102,12 @@ function giveBlock(obj) {
         if (obj.fromCave) {oreRarity *= obj.caveMulti;}
         if (player.gears["gear22"] && Math.random() < 1/10) {oreList[obj.type][variantInvNames[inv - 1]]++; duped = true;}
         if (currentWorld < 2 && player.gears["gear7"]) {gearAbility1();}
-        if (oreInformation.tierGrOrEqTo({"tier1" : oreList[obj.type]["oreTier"], "tier2" : minTier})) {
+        if (messageIncluded(oreList[obj.type]["oreTier"])) {
             logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset, duped, {cave: obj.fromCave, multi: obj.caveMulti}); 
         }
         if (oreList[obj.type]["oreTier"] === "Flawless") {
             if (!player.sr1Unlocked) {
                 player.sr1Unlocked = true;
-                document.getElementById("sr1Lock").style.display = "none";
-                document.getElementById("sr1Teleporter").style.display = "block";
             }
         }
         if (oreList[obj.type]["hasLog"] || oreRarity >= 160000000) {
@@ -139,7 +137,7 @@ let cat = 1;
 let mainProbabilityTable;
 let mainGenerationTable;
 let lunaY = 1;
-const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮";
+const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠";
 function generateBlock(location) {
     blocksRevealedThisReset++;
     mainProbabilityTable = getLayer(location["Y"]);
@@ -161,7 +159,12 @@ function generateBlock(location) {
     let oreRarity = oreList[blockToGive]["numRarity"];
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
-        if (blockToGive === "sillyMiner") {mine[location["Y"]][location["X"]] = layerDictionary[currentLayer].layer[layerDictionary[currentLayer].layer.indexOf("sillyMiner") + 1]; return;}
+        if (blockToGive === "sillyMiner") {
+            const nextOre = layerDictionary[currentLayer].layer[layerDictionary[currentLayer].layer.indexOf("sillyMiner") + 1];
+            mine[location["Y"]][location["X"]] = nextOre; 
+            if (Math.floor(1/oreList[nextOre]["decimalRarity"] < 750000)) return;
+            else blockToGive = nextOre;
+        }
         if (specialCases.indexOf(blockToGive) > -1) {
             blockToGive = checkSpecials(blockToGive);
             mine[location["Y"]][location["X"]] = blockToGive;
@@ -175,10 +178,10 @@ function generateBlock(location) {
             verifiedOres.verifyLog(location["Y"], location["X"]);
         }
         playSound(oreList[blockToGive]["oreTier"]);
-        if (oreInformation.tierGrOrEqTo({"tier1" : tier, "tier2" : minTier})) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant});
+        if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant});
         if (((currentWorld < 2 && (player.gears["gear3"] || player.gears["gear28"])) || player.gears["gear17"]) && tier !== "Celestial") mineBlock(location["X"], location["Y"], "ability");
         if (blocksRevealedThisReset / mineCapacity >= 0.9) mineBlock(location["X"], location["Y"], "reset");
-        if (player.settings.stopOnRare.active && oreInformation.tierGrOrEqTo({"tier1": tier, "tier2": player.settings.stopOnRare.minimum})) stopMining();
+        if (player.settings.stopOnRare.active && stopIncluded(oreList[blockToGive]["oreTier"])) stopMining();
         if (currentActiveEvent !== undefined) {
             if (getCurrentEventOre() === blockToGive) endEvent();
         } 
@@ -267,10 +270,13 @@ const checkSpecials = function(block) {
             case "🔮" :
             if (Math.random() < 1/10 && curDirection === "") {
                 block = "jellyfish";
-                break;
             }
+            break;
             case "💎" :
             block = "watermelonDiamond";
+            break;
+            case "💠" :
+            if (player.stats.currentPickaxe === 4) block = "pixel";
             break;
         }
     }
@@ -330,6 +336,7 @@ function switchDistance(num) {
     } else {
         layerDistanceY = 1000 + (2000 * distanceMulti);
     }
+    if (isNaN(layerDistanceY)) {layerDistanceY = 1000; distanceMulti = 0;}
     const teleportLayer = getLayer(layerDistanceY).layer.slice(-1)
     get("meterDisplay").textContent = `${teleportLayer} ${(currentWorld === 2 ? layerDistanceY - 2000 : layerDistanceY).toLocaleString()}m`
 }
@@ -343,6 +350,9 @@ async function teleport() {
     pa3 = [];
     pa4 = [];
     pickaxeAbility23Num = 0;
+    lastX = 0;
+    movementsX = 0;
+    lastXValues = [];
     toLocation();
     displayArea();
 }
@@ -414,8 +424,10 @@ function getParams(distanceX, distanceY, x, y) {
 function attemptSwitchWorld(to) {
     if (to === 2 && player.pickaxes["pickaxe13"] || to === 2 && currentWorld === 2) {switchWorld(currentWorld === 1 ? 2 : 1); return;}
     if (to === 1.1) {switchWorld(currentWorld === 1.1 ? 1 : 1.1); return;}
+    if (to === 1) {switchWorld(1); return;}
 }
 function switchWorld(to) {
+    closeMenu();
     canMine = false;
     endEvent();
     stopMining();
@@ -426,6 +438,9 @@ function switchWorld(to) {
     m88 = 0;
     currentLayerNum = -1;
     currentWorld = to;
+    lastX = 0;
+    movementsX = 0;
+    lastXValues = [];
     if (currentWorld === 2) {
         distanceMulti = 1;
         y = 1000;
@@ -496,13 +511,12 @@ function sr1Helper(state) {
     removeParadoxical();
     if (state) {
         if (!player.settings.usingNewEmojis) {
-            document.body.style.fontFamily = `system-ui, Noto Color Emoji`;
+            document.body.style.fontFamily = `system-ui, Tahoma, Verdana, sans-serif, Noto Color Emoji`;
             document.getElementById("switchFont").disabled = true;
         }
         player.wasUsing = player.stats.currentPickaxe;
         player.stats.currentPickaxe = 27;
         document.getElementById("theWorkshop").style.display = "block";
-        document.getElementById("sr1Teleporter").innerText = "Return Home...";
     } else {
         if (!player.settings.usingNewEmojis) {
             document.body.style.fontFamily = "";
@@ -511,7 +525,6 @@ function sr1Helper(state) {
         if (player.wasUsing !== undefined) player.stats.currentPickaxe = player.wasUsing;
         player.wasUsing = undefined;
         document.getElementById("theWorkshop").style.display = "none";
-        document.getElementById("sr1Teleporter").innerText = "Travel to New Lands";
     }
 }
 function removeParadoxical() {
@@ -519,7 +532,7 @@ function removeParadoxical() {
             if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
             if (player.powerupVariables.fakeEquipped.item === "gear9") document.getElementById("sillyRecipe").style.display = "none";
             player.gears[player.powerupVariables.fakeEquipped.item] = false;
-            player.powerupVariables.fakeEquipped.item = "";
+            player.powerupVariables.fakeEquipped.item = undefined;
         }
         if (player.pickaxes[player.powerupVariables.fakeEquipped.item] !== undefined) {
             player.pickaxes[player.powerupVariables.fakeEquipped.item] = false;
@@ -528,6 +541,7 @@ function removeParadoxical() {
             player.powerupVariables.fakeEquipped.originalState = undefined;
             utilitySwitchActions();
         }
+        player.powerupVariables.fakeEquipped.removeAt = 0;
         let tempDirection = curDirection;
         stopMining();
         goDirection(tempDirection);

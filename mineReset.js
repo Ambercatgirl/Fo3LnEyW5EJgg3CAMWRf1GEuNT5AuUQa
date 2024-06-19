@@ -7,6 +7,9 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 let a12 = 0;
 let a13 = false;
 function toSurface() {
+    lastX = 0;
+    movementsX = 0;
+    lastXValues = [];
     pa1 = [];
     pa2 = [];
     pa3 = [];
@@ -37,13 +40,16 @@ function toSurface() {
     mine[curY][curX] = "⛏️";
     checkAllAround(curX, curY, 1);
     displayArea();
-    document.getElementById("mineResetProgress").innerHTML = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
+    document.getElementById("resetNumber").innerHTML = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
 }
 let resetting = false;
 function mineReset() {
-    resetAddX = lastX;
+    player.stats.minesReset++;
     lastX = 0;
     a12 = 0;
+    if (curX > player.stats.furthestPosX) player.stats.furthestPosX = curX;
+    if (curX < player.stats.furthestNegX) player.stats.furthestNegX = curX;
+    if (curY > player.stats.furthestY) player.stats.furthestY = curY;
     caveOreLocations = [];
     mineCapacity = player.settings.baseMineCapacity;
     player.oreTracker.existingOres = [];

@@ -15,6 +15,11 @@ function closeMenu() {
     if (document.getElementById("logHolder").children.length > 0) document.getElementById("logHolder").removeChild(document.getElementById("logHolder").firstChild);
     clearInterval(timeUpdater);
     verifiedOres.showLogs();
+    if (get("stopOnRareList").style.display !== "none") toggleStopRareList();
+    if (get("spawnTierList").style.display !== "none") toggleSpawnMessageList();
+    get("portal").style.animation = "";
+    get("rightPortal").style.animation = "";
+    get("leftPortal").style.animation = "";
 }
 function keepShowingMenu() {
     document.getElementById("menuHolder").style.display = "block";
@@ -26,7 +31,13 @@ function showMenuScreen(type) {
     document.getElementById(`frame-${type}`).style.display = "block";
     if (type === 'settings') switchSettings('game');
     if (type === 'statistics') createStats();
-    if (type === 'locations') showOreForge(true);
+    if (type === 'locations') {
+        get("portal").style.animation = "rotatePortal 60s linear infinite";
+        get("rightPortal").style.animation = "rotatePortal 180s linear infinite";
+        get("leftPortal").style.animation = "rotatePortal 180s linear infinite";
+        getNextPortalPosition(0);
+        showPortalRoom(true);
+    }
 }
 function showFaqPage(num) {
     const elements = document.getElementsByClassName("faqPage");
@@ -35,15 +46,11 @@ function showFaqPage(num) {
         else elements[i].style.display = "none";
     }
 }
-function toggleNewPlayer(state) {
-    if (state) document.getElementById("newPlayer").style.display = "block";
-    else {document.getElementById("newPlayer").style.display = "none"; player.faqOffered = true;}
-}
 function doTutorial() {
     showMenuScreen("faq");
     showFaqPage(0);
-    toggleNewPlayer(false);
     player.faqOffered = true;
+    showNextInQueue();
 }
 const settingsTabs = ["game", "audio"]
 function switchSettings(type) {
@@ -131,15 +138,6 @@ function changeUseNumbers(button) {
     }
 }
 
-function changeMinRarity(button) {
-    let nextTier = oreInformation.getNextTier(player.settings.stopOnRare.minimum);
-    if (nextTier === "Layer") nextTier = "Antique";
-    player.settings.stopOnRare.minimum = nextTier;
-    button.innerText = nextTier + "+";
-    const colors = oreInformation.getColors(nextTier);
-    button.style.color = colors["textColor"]
-    button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
-}
 function changeLatestMax(button) {
     amt = Number(button.value);
     if (!isNaN(amt) && amt > 0 && amt < 1000) {
@@ -337,7 +335,7 @@ function updateCapacity(element) {
     } else {
         flashRed(element);
     }        
-    document.getElementById("mineResetProgress").innerText = `${blocksRevealedThisReset}/${mineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
+    document.getElementById("resetNumber").innerText = `${blocksRevealedThisReset}/${mineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
 }
 function updateAutomineUpdateSpeed(element) {
     let speed = element.value;
@@ -426,8 +424,8 @@ function createIndexCards(layer) {
         if (layer === "worldOneCommons" || layer === "worldTwoCommons") {
             layer = layerList[layer];
             spawnMessage = false;
-        } else if (layerList[layer] != undefined) {
-            layer = layerList[layer];
+        } else if (layerDictionary[layer] !== undefined) {
+            layer = layerDictionary[layer].layer;
             minIndexRarity = 5000000;
         }
         else if (caveList[layer] != undefined) {
@@ -636,14 +634,10 @@ function switchFont() {
         player.settings.usingNewEmojis = false;
         document.body.style.fontFamily = "";
         document.getElementById("switchFont").style.backgroundColor = "#FF3D3D";
-        distanceMulti--;
-        layerDistanceY -= 2000;
     } else {
         player.settings.usingNewEmojis = true;
-        document.body.style.fontFamily = `system-ui, Noto Color Emoji`;
+        document.body.style.fontFamily = `system-ui, Tahoma, Verdana, sans-serif, Noto Color Emoji`;
         document.getElementById("switchFont").style.backgroundColor = "#6BC267";
-        distanceMulti--;
-        layerDistanceY -= 2000;
     }
 }
 let minTier = "Antique";
@@ -714,23 +708,29 @@ function updateTimes() {
     document.getElementById("statsSessionTime").textContent = `${longTime(Date.now() - verifiedOres.getStartTime())} Session Time.`;
     document.getElementById("statsCavesGenerated").textContent = `${player.stats.cavesGenerated.toLocaleString()} Caves Generated.`;
     document.getElementById("statsBlocksMined").textContent = `${player.stats.blocksMined.toLocaleString()} Blocks Mined.`;
-    lastX += resetAddX;
-    if (movementsX > lastX) {
+    get("statsSessionReset").textContent = `${(player.stats.minesReset - player.startingResets).toLocaleString()} Session Resets.`
+    get("statsReset").textContent = `${player.stats.minesReset.toLocaleString()} Total Resets.`
+    get("furthestPosX").textContent = `${player.stats.furthestPosX - 1000000000} Furthest X.`
+    get("furthestNegX").textContent = `${player.stats.furthestNegX - 1000000000} Furthest -X.`
+    get("furthestY").textContent = `-${player.stats.furthestY} Furthest Y.`
+    const total = player.avgSpeed;
+    const speeds = calcSpeed();
+    const output = `${Math.floor(total)} Average Speed/${Math.floor(1000/speeds.speed * speeds.reps)} Estimated Speed`;
+    document.getElementById("statsSpeed").textContent = output;
+}
+function calcAverageSpeed() {
+    if (movementsX > 0) {
         const timeUsing = Date.now();
-        const totalMoves = 1000 * ((movementsX - lastX) / (timeUsing - lastXCheck));
+        const totalMoves = 1000 * (movementsX / (timeUsing - lastXCheck));
+        movementsX = 0;
         lastXCheck = timeUsing;
-        lastX = movementsX;
         lastXValues.push(totalMoves);
         if (lastXValues.length > 10) lastXValues.splice(0, 1);
         let total = 0;
         for (let i = 0; i < lastXValues.length; i++) total += lastXValues[i];
         total /= lastXValues.length;
-        const speeds = calcSpeed();
-        resetAddX = 0;
-        const output = `${Math.floor(total)} Average Speed/${Math.floor(1000/speeds.speed * speeds.reps)} Estimated Speed`
-        document.getElementById("statsSpeed").textContent = output;
+        return total;
     }
-    
 }
 function longTime(milliseconds) {
     let seconds = Math.floor((milliseconds / 1000) % 60);
@@ -767,12 +767,16 @@ function switchCurrentSelectedVariant(type) {
     document.getElementById("currentSelectedVariant").innerText = type;
     toggleVariantList(false)
 }
+function showPortalRoom(state) {
+    if (state) closeAllLocations();
+    get("portalRoom").style.display = state ? "block" : "none";
+}
 function showVariantConversion(state) {
-    if (state) {showWorkshop(false); showOreForge(false);}
+    if (state) closeAllLocations();
     document.getElementById("conversionContainer").style.display = state ? "block" : "none";
 }
 function showOreForge(state) {
-    if (state) {showVariantConversion(false); showWorkshop(false);}
+    if (state) closeAllLocations();
     document.getElementById("forgeContainer").style.display = state ? "block" : "none";
 }
 function showOreCrafts(state) {
@@ -784,10 +788,16 @@ function showOreFissions(state) {
     document.getElementById("forgeFission").style.display = state ? "inline-flex" : "none";
 }
 function showWorkshop(state) {
-    if (state) {showVariantConversion(false); showOreForge(false);}
+    if (state) closeAllLocations();
     document.getElementById("workshopContainer").style.display = state ? "block" : "none";
     currentDisplayedUpgrade = undefined;
     updateDisplayedUpgrade();
+}
+function closeAllLocations() {
+    showVariantConversion(false);
+    showPortalRoom(false);
+    showOreForge(false);
+    showWorkshop(false)
 }
 const conversionRates = [5, 10, 30];
 let hasConverted = false;
@@ -942,5 +952,97 @@ function convertAllButOne() {
         }
         inventoryObj[ore] = 0;
     } else return;
+}
+function toggleStopRareList() {
+const element = get("stopOnRareList");
+const editingButton = get("stopOnRareDisplay")
+if (element.style.display === "none") {
+    element.style.display = "inline-flex"; 
+    editingButton.textContent = "Hide Tiers"; 
+    editingButton.style.borderTopRightRadius = '0px'
+    editingButton.style.borderBottomRightRadius = '0px'
+}
+  else {
+    element.style.display = "none"; 
+    editingButton.textContent = "Show Tiers"; 
+        editingButton.style.borderTopRightRadius = '20px'
+    editingButton.style.borderBottomRightRadius = '20px'
+  }
+}
+function allowList(tier) {
+    const currentList = player.settings.stopOnRare.allowList;
+    let removing = false;
+    for (let i = 0; i < currentList.length; i++) if (currentList[i] === tier) {removing = true; break;}
+    if (removing) player.settings.stopOnRare.allowList.splice(currentList.indexOf(tier), 1);
+    else (player.settings.stopOnRare.allowList.push(tier));
+    const elementsToSearch = document.getElementsByClassName("stopOnRareTier");
+    for (let i = 0; i < elementsToSearch.length; i++) if (elementsToSearch[i].textContent === tier) elementsToSearch[i].style.color = (removing ? "#FF3D3D" : "#6BC267");
+}
+function toggleSpawnMessageList() {
+    const element = get("spawnTierList");
+    const editingButton = get("changeSMrarityDisplay")
+    if (element.style.display === "none") {
+        element.style.display = "inline-flex"; 
+        editingButton.textContent = "Hide Spawn Message Tiers"; 
+    }
+      else {
+        element.style.display = "none"; 
+        editingButton.textContent = "Show Spawn Message Tiers"; 
+            editingButton.style.borderTopRightRadius = '20px'
+        editingButton.style.borderBottomRightRadius = '20px'
+      }
+    }
+function allowMessage(tier) {
+    const currentList = player.settings.spawnMessageTiers;
+    let removing = false;
+    for (let i = 0; i < currentList.length; i++) if (currentList[i] === tier) {removing = true; break;}
+    if (removing) player.settings.spawnMessageTiers.splice(currentList.indexOf(tier), 1);
+    else (player.settings.spawnMessageTiers.push(tier));
+    const elementsToSearch = document.getElementsByClassName("spawnMessageTier");
+    for (let i = 0; i < elementsToSearch.length; i++) if (elementsToSearch[i].textContent === tier) elementsToSearch[i].style.color = (removing ? "#FF3D3D" : "#6BC267");
+}
+const portalLocations = {
+    "worldOne" : {position: 0, name: "World One", goesTo: 1, hue: "0deg"},
+    "worldTwo" : {position: 1, name: "World Two", goesTo: 2, hue: "-40deg"},
+    "trophyRoom" : {position: 2, name: "Trophy Room (Coming Soon)", goesTo: 0, hue: "150deg"},
+    "subrealmOne" : {position: 3, name: "Subrealm One", goesTo: 1.1, hue: "40deg"}
+}
+let currentPortalShown = 0;
+function getNextPortalPosition(num) {
+    currentPortalShown += num;
+    const portals = Object.keys(portalLocations);
+    if (currentPortalShown > portals.length - 1) currentPortalShown = 0;
+    else if (currentPortalShown < 0) currentPortalShown = portals.length - 1;
+    const portalAtLocation = portalLocations[getPortalByNum(currentPortalShown)];
+    get("portal").setAttribute("onclick", `attemptSwitchWorld(${portalAtLocation.goesTo})`);
+    get("portal").style.filter = isUnlocked(portalAtLocation) ? `hue-rotate(${portalAtLocation.hue})` : "grayscale(1)";
+    if (!isUnlocked(portalAtLocation)) {
+        get("portalLockReason").style.display = "flex";
+        get ("portalLockText").textContent = getWorldRequirements(portalAtLocation.goesTo);
+    } else get("portalLockReason").style.display = "none";
+    get("portalName").textContent = portalAtLocation.name;
+    const leftPortal = portalLocations[getPortalByNum(currentPortalShown-1)];
+    get("leftPortalName").textContent = leftPortal.name;
+    get("leftPortal").style.filter = isUnlocked(leftPortal) ? `hue-rotate(${leftPortal.hue})` : "grayscale(1)";
+    const rightPortal = portalLocations[getPortalByNum(currentPortalShown+1)];
+    get("rightPortalName").textContent = rightPortal.name;
+    get("rightPortal").style.filter = isUnlocked(rightPortal) ? `hue-rotate(${rightPortal.hue})` : "grayscale(1)";
+}
+function getPortalByNum(num) {
+    const list = Object.keys(portalLocations);
+    if (num < 0) num = list.length-1;
+    if (num > list.length-1) num = 0;
+    for (let portal in portalLocations) if (portalLocations[portal].position === num) return portal;
+}
+function isUnlocked(portal) {
+    if (portal.goesTo === 1) return true;
+    if (portal.goesTo === 1.1 && player.sr1Unlocked) return true;
+    if (portal.goesTo === 2 && player.pickaxes["pickaxe13"]) return true;
+    if (portal.goesTo === 0) return true;
+    return false;
+}
+function getWorldRequirements(world) {
+    if (world === 2) return "Craft 'The Key' to Unlock!";
+    if (world === 1.1) return "Mine 1 Flawless to Unlock!";
 }
 //convertVariants({"ore":"", "variant":"Explosive", "amt":1})
