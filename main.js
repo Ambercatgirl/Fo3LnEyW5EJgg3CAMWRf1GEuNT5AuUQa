@@ -31,7 +31,7 @@ const birthdays = {
     "12/23" : "Amber",
     "8/8" : "Korone",
     "4/8" : "REEKY",
-    "4/27" : "B4SH (if you changed your name i am Not changing it here)"
+    "4/27" : "Tetra (if you changed your name i am Not changing it here)"
 }
 //IMPORTANT
 const date = new Date();
@@ -639,6 +639,7 @@ function updateInventory() {
     }
     let speed = calcAverageSpeed();
     if (speed !== undefined) player.avgSpeed = speed;
+    verifiedOres.getBenchmark();
 }
 function updateDisplayTimer(state) {
     if (state) {
