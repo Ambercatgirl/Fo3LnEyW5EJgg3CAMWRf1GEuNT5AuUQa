@@ -96,7 +96,8 @@ class playerTemplate {
             automineProtection: false,
             useNyerd: false,
             automineUpdate: 25,
-            spawnMessageTiers: ["Antique","Mystical","Divine","Flawless","Interstellar","Metaversal","Sacred","Celestial","Ethereal","Imaginary"]
+            spawnMessageTiers: ["Antique","Mystical","Divine","Flawless","Interstellar","Metaversal","Sacred","Celestial","Ethereal","Imaginary"],
+            lastWorld: 1
         },
         this.stats = {
             currentPickaxe: 0,
@@ -286,7 +287,7 @@ function updatePowerupCooldowns() {
     document.getElementById("powerupCooldown").innerText = `Cooldown: ${msToTime(num)}`;
     if (player.powerupVariables.currentPowerupDisplayed === "powerup3" && player.powerupVariables.currentChosenOre.ore !== undefined) document.getElementById("powerupActive").innerText = `Active for: ${msToTime(player.powerupVariables.currentChosenOre.removeAt - Date.now())}`;
     else if (player.powerupVariables.currentPowerupDisplayed === "powerup4" && player.powerupVariables.commonsAffected.state) document.getElementById("powerupActive").innerText = `Active for: ${msToTime(player.powerupVariables.commonsAffected.removeAt - Date.now())}`;
-    else if (player.powerupVariables.currentPowerupDisplayed === "powerup5" && player.powerupVariables.fakeEquipped.item !== "") document.getElementById("powerupActive").innerText = `Active for: ${msToTime(player.powerupVariables.fakeEquipped.removeAt - Date.now())}`;
+    else if (player.powerupVariables.currentPowerupDisplayed === "powerup5" && player.powerupVariables.fakeEquipped.item !== undefined) document.getElementById("powerupActive").innerText = `Active for: ${msToTime(player.powerupVariables.fakeEquipped.removeAt - Date.now())}`;
     else document.getElementById("powerupActive").innerText = `Active for: 00:00:00`;
     if (!player.powerupCooldowns[player.powerupVariables.currentPowerupDisplayed].unlocked) {
         if (eval(powerupList[player.powerupVariables.currentPowerupDisplayed].requirement)) {
@@ -453,7 +454,7 @@ function loadNewData(data) {
         if (data.wasUsing !== undefined) {
             data.stats.currentPickaxe = data.wasUsing;
         }
-        if (data.powerupVariables !== undefined && data.powerupVariables.fakeEquipped !== undefined && data.powerupVariables.fakeEquipped.item !== "") {
+        if (data.powerupVariables !== undefined && data.powerupVariables.fakeEquipped !== undefined && data.powerupVariables.fakeEquipped.item !== undefined) {
             let item = data.powerupVariables.fakeEquipped.item;
             if (player.gears[item] !== undefined) data.gears[item] = false;
             if (player.pickaxes[item] !== undefined) {
@@ -548,6 +549,8 @@ function loadNewData(data) {
         data.settings.useNyerd ??= false;
         if (data.settings.useNyerd) toggleNyerd(document.getElementById("toggleNyerd"));
         if (data.settings.automineProtection) toggleAutomineProtection(document.getElementById("automineProtection"));
+        data.settings.lastWorld ??= 1;
+        player.settings.lastWorld = data.settings.lastWorld;
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
                 if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
@@ -590,12 +593,13 @@ function loadNewData(data) {
             player.luna.layer = data.luna.layer;
             player.luna.lastAddedOn = data.luna.lastAddedOn;
         }
+        switchWorld(player.settings.lastWorld, true)
         data.name ??= "Cat";
         player.name = data.name;
         data.viewedMessages ??= {};
         player.viewedMessages = data.viewedMessages;
         if (data.faqOffered) player.faqOffered = true;
-        for (let message in dailyMessages) checkMessages(message)
+        for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
     } catch (err) {
         window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}, ${console.log(err)}`);

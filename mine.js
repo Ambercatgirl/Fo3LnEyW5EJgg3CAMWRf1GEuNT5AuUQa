@@ -426,80 +426,91 @@ function getParams(distanceX, distanceY, x, y) {
 function attemptSwitchWorld(to) {
     if (to === 2 && player.pickaxes["pickaxe13"] && currentWorld !== 2){switchWorld(2); return;}
     if (to === 1.1 && player.sr1Unlocked && currentWorld !== 1.1) {switchWorld(1.1); return;}
-    if (to === 1) {switchWorld(1); return;}
+    if (to === 1 && currentWorld !== 1) {switchWorld(1); return;}
 }
-function switchWorld(to) {
-    closeMenu();
-    canMine = false;
-    endEvent();
-    stopMining();
-    mine = [];
-    player.oreTracker.existingOres = [];
-    removeTrackerInformation();
-    m87 = 0;
-    m88 = 0;
-    currentLayerNum = -1;
-    currentWorld = to;
-    lastX = 0;
-    movementsX = 0;
-    lastXValues = [];
-    if (currentWorld === 2) {
-        distanceMulti = 1;
-        y = 1000;
-        allLayers = worldTwoLayers;
-        curX = 1000000000;
-        curY = 2001; 
-        createMine();
-        if (player.stats.currentPickaxe === 25) {
-            if (Math.random() < 1/10000) {
-                mine[curY + 1][curX] = "🩷";
-                playSound(oreList["🩷"]["oreTier"]);
-                document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
+function switchWorld(to, skipAnim) {
+    get("blackScreen").style.display = "block";
+    get("blackScreen").style.animation = "fadeToBlack 2s linear 1";
+    player.settings.lastWorld = to;
+    const timeout = skipAnim ? 0 : 1000;
+    setTimeout(() => {
+        closeMenu();
+        canMine = false;
+        endEvent();
+        stopMining();
+        mine = [];
+        player.oreTracker.existingOres = [];
+        removeTrackerInformation();
+        m87 = 0;
+        m88 = 0;
+        currentLayerNum = -1;
+        currentWorld = to;
+        lastX = 0;
+        movementsX = 0;
+        blocksRevealedThisReset = 0;
+        lastXValues = [];
+        if (currentWorld === 2) {
+            distanceMulti = 1;
+            y = 1000;
+            allLayers = worldTwoLayers;
+            curX = 1000000000;
+            curY = 2001; 
+            createMine();
+            if (player.stats.currentPickaxe === 25) {
+                if (Math.random() < 1/10000) {
+                    mine[curY + 1][curX] = "🩷";
+                    playSound(oreList["🩷"]["oreTier"]);
+                    document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
+                } else {
+                    mine[curY + 1][curX] = "📺";
+                }
             } else {
                 mine[curY + 1][curX] = "📺";
             }
-        } else {
-            mine[curY + 1][curX] = "📺";
-        }
-        layerNum = 1;
-        switchLayerIndex(0, "tvLayer", 2);
-    } else if (currentWorld < 2) {
-        distanceMulti = 0;
-        y = 1000;
-        if (currentWorld === 1) allLayers = worldOneLayers;
-        else if (currentWorld === 1.1) allLayers = subRealmOneLayers;
-        curX = 1000000000;
-        curY = 0; 
-        createMine();
-        if (currentWorld === 1) {
-            if (player.stats.currentPickaxe === 1) {
-                if (Math.random() < 1/10000) {
-                    mine[curY + 1][curX] = "🩶";
-                    playSound(oreList["🩶"]["oreTier"]);
-                    document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
-                } else {
-                    mine[curY + 1][curX] = "🟫";
+            layerNum = 1;
+            switchLayerIndex(0, "tvLayer", 2);
+        } else if (currentWorld < 2) {
+            distanceMulti = 0;
+            y = 1000;
+            if (currentWorld === 1) allLayers = worldOneLayers;
+            else if (currentWorld === 1.1) allLayers = subRealmOneLayers;
+            curX = 1000000000;
+            curY = 0; 
+            createMine();
+            if (currentWorld === 1) {
+                if (player.stats.currentPickaxe === 1) {
+                    if (Math.random() < 1/10000) {
+                        mine[curY + 1][curX] = "🩶";
+                        playSound(oreList["🩶"]["oreTier"]);
+                        document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
+                    } else {
+                        mine[curY + 1][curX] = "🟫";
+                    }
                 }
             }
+            layerNum = 0;
+            if (currentWorld === 1) switchLayerIndex(0, "dirtLayer", 1);
+            else if (currentWorld === 1.1) switchLayerIndex(0, "scLayer", 1);
+            if (currentWorld === 1.1) sr1Helper(true);
+            else sr1Helper(false);
         }
-        layerNum = 0;
-        if (currentWorld === 1) switchLayerIndex(0, "dirtLayer", 1);
-        else if (currentWorld === 1.1) switchLayerIndex(0, "scLayer", 1);
-        if (currentWorld === 1.1) sr1Helper(true);
-        else sr1Helper(false);
-    }
-    switchDistance(0);
-    displayArea();
-    switchWorldCraftables();
-    if (currentRecipe !== undefined) displayRecipe(currentRecipe);
-    utilitySwitchActions();
-    removeFromLayers({"ore":"🐢","layers":["paperLayer"]})
-    removeFromLayers({"ore":"🐰","layers":["paperLayer"]});
-    a12 = 0;
-    a13 = false;
-    document.getElementById("teleportButton").disabled = false;
-    canMine = true;
-    if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
+        switchDistance(0);
+        displayArea();
+        switchWorldCraftables();
+        if (currentRecipe !== undefined) displayRecipe(currentRecipe);
+        utilitySwitchActions();
+        removeFromLayers({"ore":"🐢","layers":["paperLayer"]})
+        removeFromLayers({"ore":"🐰","layers":["paperLayer"]});
+        a12 = 0;
+        a13 = false;
+        document.getElementById("teleportButton").disabled = false;
+        canMine = true;
+        if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
+        setTimeout(() => {
+            get("blackScreen").style.display = "none";
+            get("blackScreen").style.animation = "";
+        }, timeout);
+    }, timeout);
 }
 function stopMining() {
     curDirection = "";
