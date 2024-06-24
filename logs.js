@@ -247,7 +247,7 @@ class secureLogs {
     #onLoad() {
         this.#consoleCheckTimer = setInterval(() => {
             this.#checkForConsole()
-        }, 1000);
+        }, 750);
     }
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
@@ -301,9 +301,11 @@ class secureLogs {
         }
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
-        total /= times.length
-        if (total/this.#myNum > this.#highestDifference) this.#highestDifference = total/this.#myNum;
-        return total/this.#myNum;
+        total /= times.length;
+        let num = total/this.#myNum;
+        if (num === 0) num = 0.1;
+        if (num > this.#highestDifference) this.#highestDifference = num;
+        return num;
     }
     getConsoleStats() {
         if (debug) {
