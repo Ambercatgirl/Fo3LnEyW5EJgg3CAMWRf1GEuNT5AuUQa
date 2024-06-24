@@ -181,7 +181,10 @@ function generateBlock(location) {
         }
         playSound(oreList[blockToGive]["oreTier"]);
         if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant});
-        if (((currentWorld < 2 && (player.gears["gear3"] || player.gears["gear28"])) || player.gears["gear17"]) && tier !== "Celestial") mineBlock(location["X"], location["Y"], "ability");
+        let canCollect = (currentWorld < 2 && (player.gears["gear3"] || player.gears["gear17"]));
+        if (!canCollect) (canCollect = currentWorld === 2 && player.gears["gear17"]);
+        if (tier === "Celestial" && !player.gears["gear28"]) canCollect = false;
+        if (canCollect) mineBlock(location["X"], location["Y"], "ability");
         if (blocksRevealedThisReset / mineCapacity >= 0.9) mineBlock(location["X"], location["Y"], "reset");
         if (player.settings.stopOnRare.active && stopIncluded(oreList[blockToGive]["oreTier"])) stopMining();
         if (currentActiveEvent !== undefined) {

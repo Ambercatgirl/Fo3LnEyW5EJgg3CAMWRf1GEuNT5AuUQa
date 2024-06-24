@@ -287,6 +287,11 @@ const recipes = {
         name : "",
         recipe : [{ore:"🇻🇺", amt:6}, {ore:"🇫🇲", amt:5}, {ore:"🇸🇧", amt:4}, {ore:"🇰🇾", amt:3}, {ore:"🇨🇰", amt:1}, {ore:"🇫🇰", amt:1}],
         upgrades: {}
+    },
+    "gear28" : {  
+        name : "",
+        recipe : [{ore:"🇸🇩", amt:740000},{ore:"🇳🇬", amt:37500},{ore:"🇨🇳", amt:6600},{ore:"🇭🇳", amt:1800},{ore:"🇺🇸", amt:600},{ore:"🇷🇺", amt:180},{ore:"🇧🇷", amt:18},{ore:"🇫🇯", amt:1},{ore:"🇳🇿", amt:1},],
+        upgrades: {}
     }
 }
 recipeElements = {};
@@ -333,11 +338,11 @@ function updateActiveRecipe() {
     let totalCount = 0;
     let count = 0;
     if (currentRecipe !== undefined) {
+        let totalRarity = 0;
+        let currentRarity = 0;
         if (currentRecipe !== "pickaxe27") {
             const recipe = recipes[currentRecipe].recipe;
             const elements = recipeElements[currentRecipe].children;
-            let totalRarity = 0;
-            let currentRarity = 0;
             for (let i = 0; i < recipe.length; i++) {
                 let ore = recipe[i].ore;
                 const toChange = elements[i];
@@ -362,7 +367,8 @@ function updateActiveRecipe() {
         let button = recipeElements[currentRecipe].lastChild;
         const type = (currentRecipe.indexOf('pickaxe') > -1) ? "pickaxe" : "gear";
         const num = Number(currentRecipe.substring(type.length));
-        if (currentRecipe === "pickaxe27" && currentWorld !== 1.1) {
+        if (currentRecipe === "pickaxe27") {
+            if (currentWorld === 1.1) return;
             button = get("pickaxe27TempCraft");
             if (!(buttonGradients["pickaxe27Craft"]["applied"])) {
                 button.style.backgroundImage = buttonGradients["pickaxe27Craft"]["gradient"];
@@ -370,7 +376,9 @@ function updateActiveRecipe() {
             }
             if (player.stats.currentPickaxe === 27) button.textContent = "Equipped!";
             else button.textContent = "Equip!";
-        } else if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) {
+            return;
+        } 
+        if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) {
             if (!(buttonGradients[button.id]["applied"])) {
                 button.style.backgroundImage = buttonGradients[button.id]["gradient"];
                 buttonGradients[button.id]["applied"] = true;
@@ -495,6 +503,7 @@ const buttonGradients = {
     "gear25Craft" : {"gradient" : "linear-gradient(to right, #e365fc, #c9fc3a, #ff4b33)","applied" : false},
     "gear26Craft" : {"gradient" : "linear-gradient(to right, #a3a09d, #585f2a, #978773, #8a8038, #5b590a)","applied" : false},
     "gear27Craft" : {"gradient" : "linear-gradient(to right, #DAE34A, #C69908, #EF5522, #C69908, #DAE34A)","applied" : false},
+    "gear28Craft" : {"gradient" : "linear-gradient(to right, #5A1700, #8C2806, #AB3C16, #BC4E28, #DB5B2F, #F5541D, #FF4100)","applied" : false},
     
 }
 function craftPickaxe(item) {
@@ -554,7 +563,7 @@ const showOrders = {
     worldOneGears : ["gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9"],
     worldTwoGears : ["gear10", "gear11", "gear12", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
     srOnePickaxes : ["pickaxe27"],
-    srOneGears : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27"],
+    srOneGears : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],
 }
 function showPickaxes() {
     appear(document.getElementById("pickaxeCrafts"));

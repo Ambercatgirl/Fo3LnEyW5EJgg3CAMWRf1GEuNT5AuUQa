@@ -1,7 +1,6 @@
 const achievementList = {
     "worldOneCompletion" : {
         name : "World One Completionist",
-        trophyId : "htmlId",
         requirement: function(get) {
             const blocksMinedNow = player.stats.blocksMined;
             if (player.trophyProgress["worldOneCompletion"].lastPickaxeUsed === 12 && player.stats.currentPickaxe === 12) {
@@ -20,7 +19,6 @@ const achievementList = {
     },
     "worldTwoCompletion" : {
         name : "World Two Completionist",
-        trophyId : "htmlId",
         requirement: function(get) {
             const blocksMinedNow = player.stats.blocksMined;
             if (player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed === 25 && player.stats.currentPickaxe === 25 && currentWorld === 2) {
@@ -29,7 +27,7 @@ const achievementList = {
             }
             player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
             player.trophyProgress["worldTwoCompletion"].worldTwoCompletion = player.stats.blocksMined;
-            if (get) return `${player.trophyProgress["worldTwoCompletion"].blocksWithCoronary.toLocaleString()}/25,000,000,000 blocks mined with Coronary Catastrophe.<br>Oblivion Fracturer: ${player.gears["21"] ? "Owned." : "Unowned."}`
+            if (get) return `${player.trophyProgress["worldTwoCompletion"].blocksWithCoronary.toLocaleString()}/25,000,000,000 blocks mined with Coronary Catastrophe in World 2.<br>Oblivion Fracturer: ${player.gears["gear21"] ? "Obtained." : "Required."}`
             if (player.trophyProgress["worldTwoCompletion"].blocksWithCoronary > 25000000000 && player.gears["21"]) {
                 return true;
             }
@@ -39,14 +37,13 @@ const achievementList = {
     },
     "subrealmOneCompletion" : {
         name : "Subrealm One Completion",
-        trophyId : "htmlId",
         requirement: function(get) {
             if (get) return `${indexHasOre("🏳️‍⚧️")}/1 🏳️‍⚧️ found.`
             if (indexHasOre("🏳️‍⚧️") > 0) {
                 return true;
             }
         },
-        reward: {type: "luck", do: "multiply", amt: 1.15},
+        reward: {type: "allow", do: "usage", amt: "pickaxe27"},
         icon: "<span class='trophyIcon'>Trophy made by @hulfe</span>"
     },
 }
@@ -105,6 +102,10 @@ function formatReward(reward) {
     if (reward.type === "luck") {
         if (reward.do === "add") output += "Adds " + reward.amt + " to base luck.";
         else if (reward.do === "multiply") output += "Multiplies luck by " + reward.amt + "x";
+    } else if (reward.type === "allow") {
+        if (reward.do === "usage") {
+            if (reward.amt === "pickaxe27") output += "Allows usage of the Tree of Life in World 1.";
+        }
     }
     return output;
 }

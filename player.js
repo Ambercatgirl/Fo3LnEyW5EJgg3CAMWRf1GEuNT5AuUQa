@@ -29,7 +29,7 @@ class playerTemplate {
             "gear25": false,
             "gear26": false,
             "gear27": false,
-            //"gear28": false,
+            "gear28": false,
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -663,10 +663,13 @@ const dailyMessages = {
         showUntil : "June 15, 9999",
     },
     "chooseName" : {
-        showUntil : "June 15, 9999",
+        showUntil : "June 25, 0000",
     },
     "portalUpdate" : {
         showUntil : "June 25, 2024",
+    },
+    "trophyUpdate" : {
+        showUntil : "July 1, 2024",
     },
     "sr1Unlocked" : {
         showUntil : "June 25, 0000",

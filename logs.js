@@ -15,8 +15,8 @@ class secureLogs {
     #canGenCaves;
     #consoleDetected = 0;
     #consoleCheckTimer;
-    #myNum = 1.5;
-    #thisPerformance = 0;
+    #myNum = 0.6;
+    #highestDifference = 0;
     #highestPerformance = 0;
     testTotals = [];
     //0.64
@@ -43,18 +43,25 @@ class secureLogs {
         const variant = intended.variant === undefined ? undefined : intended.variant;
         fromCave = fromCave === undefined ? [false, 1, "none"] : fromCave;
         let luckModifier;
-        if (player.stats.currentPickaxe === 27 || currentWorld === 1.1) {
+        if (player.stats.currentPickaxe === 27) luckModifier = player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level];
+        if (currentWorld === 1.1) {
             const pickaxe = player.upgrades["pickaxe27"];
-            luckModifier = pickaxe.levelLuck[pickaxe.level];
             luckModifier += getRewardTypes("luck", "add");
             if (player.gears["gear20"]) luckModifier *= ((pickaxe.levelLuck[pickaxe.level] * 0.05) + 1);
             luckModifier *= getRewardTypes("luck", "multiply")
             if (isNaN(luckModifier)) luckModifier = 1;
         } else {
-            luckModifier = (this.#maxLuck[player.stats.currentPickaxe] + (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0)) + (getRewardTypes("luck", "add")) * ((player.gears["gear1"] ? 1.1 : 1) * (getRewardTypes("luck", "multiply")) * (player.gears["gear5"] ? 1.6 : 1)) * (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1) * 10;
+            luckModifier = this.#maxLuck[player.stats.currentPickaxe];
+        }
+        luckModifier += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0) + (getRewardTypes("luck", "add"));
+        luckModifier *= (player.gears["gear1"] ? 1.1 : 1) * (getRewardTypes("luck", "multiply")) * (player.gears["gear5"] ? 1.6 : 1);
+        if (player.gears["gear20"]) {
+            if (player.stats.currentPickaxe === 27) luckModifier *= ((player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level] * 0.05) + 1);
+            else luckModifier *= (verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1;
         }
         luckModifier *= 1.5;
         luckModifier *= 1.25;
+        luckModifier *= 10;
         const maxLuck = luckModifier;
         let luck;
         if (fromCave[1] > 1) {
@@ -190,7 +197,9 @@ class secureLogs {
         return this.#maxLuck;
     }
     getCurrentLuck() {
-        if (player.stats.currentPickaxe === 27 || currentWorld === 1.1) {
+        let luck; 
+        if (player.stats.currentPickaxe === 27) luck = player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level];
+        if (currentWorld === 1.1) {
             const pickaxe = player.upgrades["pickaxe27"];
             let luck = pickaxe.levelLuck[pickaxe.level];
             luck += getRewardTypes("luck", "add");
@@ -199,14 +208,18 @@ class secureLogs {
             luck *= getRewardTypes("luck", "multiply")
             if (isNaN(luck)) return 1;
             else return luck;
+        } else {
+            if (player.stats.currentPickaxe === 27 && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = 0; luck = 1;}
+            else luck ??= this.#maxLuck[player.stats.currentPickaxe];
         }
-        if (player.stats.currentPickaxe === 27 && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = 0;
-        let luck = this.#maxLuck[player.stats.currentPickaxe];
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         luck += getRewardTypes("luck", "add");
         if (currentWorld < 2)
             luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
-        luck *= (player.gears["gear20"] ? ((verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1) : 1);
+        if (player.gears["gear20"]) {
+            if (player.stats.currentPickaxe === 27) luck *= ((player.upgrades["pickaxe27"].levelLuck[player.upgrades["pickaxe27"].level] * 0.05) + 1);
+            else luck *= (verifiedOres.getLuckBoosts()[player.stats.currentPickaxe] * 0.05) + 1;
+        }
         luck *= getRewardTypes("luck", "multiply");
         if (isNaN(luck)) return 1;
         else return luck;
@@ -265,11 +278,10 @@ class secureLogs {
             get("secretDebugStats").textContent = output;
         }
         if (total > this.#highestPerformance) this.#highestPerformance = total;
-        
     }
     #getBaseNumber() {
         const times = [];
-        for (let i = 0; i < 2000; i++) {
+        for (let i = 0; i < 800; i++) {
             const timeBefore = performance.now();
             console.dir()
             const timeAfter = performance.now() - timeBefore;
@@ -291,6 +303,7 @@ class secureLogs {
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
         total /= times.length
+        if (this.#myNum/total > this.#highestDifference) this.#highestDifference = this.#myNum/total;
         return this.#myNum/total;
     }
     getConsoleStats() {
@@ -298,6 +311,9 @@ class secureLogs {
             clearInterval(this.#consoleCheckTimer);
             console.log(this.#consoleDetected, this.#highestPerformance);
         }
+    }
+    getHighestPerformance() {
+        window.alert(`${this.#highestPerformance}, ${this.#highestDifference}`);
     }
 }
 function encryptLogData(log, times) {
