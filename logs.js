@@ -238,7 +238,7 @@ class secureLogs {
     }
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
-        const lowEnd = 1.2 * thisModifier;
+        const lowEnd = 1.2 / thisModifier;
         const highEnd = 6.5 / thisModifier;
         const times = [];
         for (let i = 0; i < 500; i++) {
