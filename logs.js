@@ -239,7 +239,7 @@ class secureLogs {
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
         const lowEnd = 1.2 * thisModifier;
-        const highEnd = 6.5 * thisModifier;
+        const highEnd = 6.5 / thisModifier;
         const times = [];
         for (let i = 0; i < 500; i++) {
             const timeBefore = performance.now();
@@ -250,14 +250,16 @@ class secureLogs {
         }
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
-        if (total > highEnd) {
+        const distToLow = Math.abs(total - lowEnd);
+        const distToHigh = Math.abs(total - highEnd)
+        if ((total > highEnd) && distToHigh > distToLow) {
             this.#consoleDetected++;
             if (debug) {
                 if (this.#consoleDetected < 2) window.alert("MEOWMEOWMEOW");
             }
         }
         if (debug) {
-            const output = `${roundNumberToMillionth(thisModifier)}x performance, ${roundNumberToMillionth(total)} time, ${roundNumberToMillionth(lowEnd)} low, ${roundNumberToMillionth(highEnd)} high.`;
+            const output = `${roundNumberToMillionth(thisModifier)}x performance, ${roundNumberToMillionth(total)} time, ${roundNumberToMillionth(lowEnd)} low, ${roundNumberToMillionth(distToLow)} dist to low, ${roundNumberToMillionth(highEnd)} high, ${roundNumberToMillionth(distToHigh)} dist to high.`;
             get("secretDebugStats").textContent = output;
         }
         if (total > this.#highestPerformance) this.#highestPerformance = total;
