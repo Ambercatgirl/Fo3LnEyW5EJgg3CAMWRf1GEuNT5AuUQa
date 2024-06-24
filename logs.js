@@ -15,7 +15,7 @@ class secureLogs {
     #canGenCaves;
     #consoleDetected = 0;
     #consoleCheckTimer;
-    #myNum = 1.3;
+    #myNum = 1.5;
     #thisPerformance = 0;
     #highestPerformance = 0;
     testTotals = [];
@@ -165,6 +165,7 @@ class secureLogs {
                     output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this);">Click Me To Copy Verification</span></span><br>`
                 }
                 if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
+                localStorage.setItem("logStorage", output)
         } else {
             this.#clearLogs();
         }
@@ -239,7 +240,7 @@ class secureLogs {
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
         const lowEnd = 1.2 / thisModifier;
-        const highEnd = 6.5 / thisModifier;
+        const highEnd = 10 / thisModifier;
         const times = [];
         for (let i = 0; i < 500; i++) {
             const timeBefore = performance.now();
@@ -255,7 +256,7 @@ class secureLogs {
         if ((total > highEnd) && distToHigh > distToLow) {
             this.#consoleDetected++;
             if (debug) {
-                if (this.#consoleDetected < 2) window.alert("MEOWMEOWMEOW");
+                if (this.#consoleDetected < 2) window.alert(`${thisModifier}, ${roundNumberToMillionth(total)}, ${roundNumberToMillionth(lowEnd)}, ${roundNumberToMillionth(highEnd)}`);
             }
         }
         if (debug) {
