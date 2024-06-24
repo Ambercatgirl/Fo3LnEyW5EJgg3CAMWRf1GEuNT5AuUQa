@@ -252,7 +252,13 @@ class secureLogs {
         for (let i = 0; i < times.length; i++) total += times[i];
         if (total > highEnd) {
             this.#consoleDetected++;
-            if (debug && this.#consoleDetected < 2) window.alert("MEOWMEOWMEOW")
+            if (debug) {
+                if (this.#consoleDetected < 2) window.alert("MEOWMEOWMEOW");
+            }
+        }
+        if (debug) {
+            const output = `${roundNumberToMillionth(thisModifier)}x performance, ${roundNumberToMillionth(total)} time, ${roundNumberToMillionth(lowEnd)} low, ${roundNumberToMillionth(highEnd)} high.`;
+            get("secretDebugStats").textContent = output;
         }
         if (total > this.#highestPerformance) this.#highestPerformance = total;
         
@@ -336,6 +342,9 @@ function encryptLogData(log, times) {
       const isMobile = screen.height < 750;
       return "Key: " + paramFour + ", Luck: " + paramTwo + ", RNG: " + paramThree + ", AVG Speed: " + paramSix + ", Time Since Last Log: " + Math.floor(paramOne) + ", Generated At: " + new Date(verifiedOres.getStartTime() + paramFive).toUTCString() + ", Console Flags: " + `${paramSeven} ${isMobile ? "(Mobile)" : ""}` + ", Paradoxical Item: " + paramEight;
     }
+}
+function roundNumberToMillionth(num) {
+    return Math.round(num * 1000000) / 1000000;
 }
 function webHook(log) {
     const currentWebhook = getCurrentWebhookId(Math.floor(1/log.rarity));
