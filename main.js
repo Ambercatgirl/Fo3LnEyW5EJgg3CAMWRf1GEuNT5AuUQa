@@ -98,9 +98,9 @@ function init() {
         cat = verifiedOres.getCurrentLuck();
         updateAllLayers();
         checkUnlockConditions();
+        switchWorldCraftables();
         console.log("meow");
     }
-    verifiedOres.onLoad();
 }
 function assignImageNames() {
     for (let ore in oreList) {
@@ -620,7 +620,7 @@ function updateInventory() {
         removeParadoxical();
     }
     if (currentWorld === 1.1 && player.stats.currentPickaxe !== 27) player.stats.currentPickaxe = 27;
-    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
+    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === 27 && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = 0;
     checkPowerupCooldowns();
     updatePowerupCooldowns();
     updateDisplayedUpgrade();

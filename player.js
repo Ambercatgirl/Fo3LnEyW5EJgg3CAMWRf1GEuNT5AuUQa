@@ -469,6 +469,13 @@ function loadNewData(data) {
             }
         }
         data = data.player;
+        if (data.trophyProgress !== undefined) {
+            for (let trophy in data.trophyProgress) {
+                if (player.trophyProgress[trophy] !== undefined) {
+                    player.trophyProgress[trophy] = data.trophyProgress[trophy];
+                }
+            }
+        }
         if (data.wasUsing !== undefined) {
             data.stats.currentPickaxe = data.wasUsing;
         }
@@ -487,7 +494,7 @@ function loadNewData(data) {
             for (let propertyName in data.pickaxes) if (player.pickaxes[propertyName] !== undefined) player.pickaxes[propertyName] = data.pickaxes[propertyName];
         }
         if (data.stats.currentPickaxe !== undefined) player.stats.currentPickaxe = data.stats.currentPickaxe;
-        if (player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
+        if (player.stats.currentPickaxe === 27 && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = 0;
         if (data.stats.blocksMined !== undefined) player.stats.blocksMined = data.stats.blocksMined;
         if (data.stats.cavesGenerated !== undefined) player.stats.cavesGenerated = data.stats.cavesGenerated;
         if (data.stats.timePlayed !== undefined) player.stats.timePlayed = data.stats.timePlayed;
@@ -618,13 +625,6 @@ function loadNewData(data) {
         player.viewedMessages = data.viewedMessages;
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
-        if (data.trophyProgress !== undefined) {
-            for (let trophy in data.trophyProgress) {
-                if (player.trophyProgress[trophy] !== undefined) {
-                    player.trophyProgress[trophy] = data.trophyProgress[trophy];
-                }
-            }
-        }
         showNextInQueue();
     } catch (err) {
         window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}, ${console.log(err)}`);

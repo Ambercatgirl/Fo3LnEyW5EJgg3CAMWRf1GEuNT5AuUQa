@@ -200,7 +200,7 @@ class secureLogs {
             if (isNaN(luck)) return 1;
             else return luck;
         }
-        if (player.stats.currentPickaxe === 27) player.stats.currentPickaxe = 0;
+        if (player.stats.currentPickaxe === 27 && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = 0;
         let luck = this.#maxLuck[player.stats.currentPickaxe];
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         luck += getRewardTypes("luck", "add");
@@ -257,6 +257,7 @@ class secureLogs {
             this.#consoleDetected++;
             if (debug) {
                 if (this.#consoleDetected < 2) window.alert(`${thisModifier}, ${roundNumberToMillionth(total)}, ${roundNumberToMillionth(lowEnd)}, ${roundNumberToMillionth(highEnd)}`);
+                this.getConsoleStats();
             }
         }
         if (debug) {

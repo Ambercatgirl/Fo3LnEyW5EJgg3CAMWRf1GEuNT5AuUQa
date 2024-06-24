@@ -304,15 +304,21 @@ function displayRecipe(recipe) {
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
         description.style.display = "block";
+        let equippedButton;
         if (recipe !== "pickaxe27") {
             let time = get("craftingTimeDisplay").cloneNode(true);
             time.style.display = "block";
             parentElement.appendChild(time);
+        } else if (currentWorld !== 1.1) {
+            equippedButton = get("pickaxe27Craft").cloneNode(true);
+            equippedButton.id = "pickaxe27TempCraft";
+            equippedButton.style.display = "block";
         }
         let title = document.getElementById("descriptionTitle").cloneNode(true);
         title.style.display = "block";
         parentElement.appendChild(title);
         parentElement.appendChild(description);
+        if (equippedButton !== undefined) parentElement.appendChild(equippedButton)
         currentRecipe = recipe;
     } else {
         document.getElementById("craftingRecipeTitle").style.display = "none";
@@ -326,36 +332,45 @@ let lastCount = -1;
 function updateActiveRecipe() {
     let totalCount = 0;
     let count = 0;
-    if (currentRecipe === "pickaxe27") return;
     if (currentRecipe !== undefined) {
-        const recipe = recipes[currentRecipe].recipe;
-        const elements = recipeElements[currentRecipe].children;
-        let totalRarity = 0;
-        let currentRarity = 0;
-        for (let i = 0; i < recipe.length; i++) {
-            let ore = recipe[i].ore;
-            const toChange = elements[i];
-            if (oreList[ore] !== undefined) {
-                totalCount++;
-                let needed = recipe[i].amt;
-                let amtOwned = oreList[ore]["normalAmt"];
-                totalRarity += oreList[ore]["numRarity"] * needed;
-                toChange.innerHTML = `${ore}<span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${amtOwned.toLocaleString()}/${needed.toLocaleString()}</span>`;
-                if(amtOwned >= needed) {
-                    count++;
-                    toChange.style.color = "#6BC267";
-                    currentRarity += oreList[ore]["numRarity"] * needed;
+        if (currentRecipe !== "pickaxe27") {
+            const recipe = recipes[currentRecipe].recipe;
+            const elements = recipeElements[currentRecipe].children;
+            let totalRarity = 0;
+            let currentRarity = 0;
+            for (let i = 0; i < recipe.length; i++) {
+                let ore = recipe[i].ore;
+                const toChange = elements[i];
+                if (oreList[ore] !== undefined) {
+                    totalCount++;
+                    let needed = recipe[i].amt;
+                    let amtOwned = oreList[ore]["normalAmt"];
+                    totalRarity += oreList[ore]["numRarity"] * needed;
+                    toChange.innerHTML = `${ore}<span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${amtOwned.toLocaleString()}/${needed.toLocaleString()}</span>`;
+                    if(amtOwned >= needed) {
+                        count++;
+                        toChange.style.color = "#6BC267";
+                        currentRarity += oreList[ore]["numRarity"] * needed;
+                    }
+                    else {
+                        toChange.style.color = "#FF3D3D";
+                        currentRarity += oreList[ore]["numRarity"] * amtOwned;
+                    }  
                 }
-                else {
-                    toChange.style.color = "#FF3D3D";
-                    currentRarity += oreList[ore]["numRarity"] * amtOwned;
-                }  
             }
         }
         let button = recipeElements[currentRecipe].lastChild;
         const type = (currentRecipe.indexOf('pickaxe') > -1) ? "pickaxe" : "gear";
         const num = Number(currentRecipe.substring(type.length));
-        if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) {
+        if (currentRecipe === "pickaxe27" && currentWorld !== 1.1) {
+            button = get("pickaxe27TempCraft");
+            if (!(buttonGradients["pickaxe27Craft"]["applied"])) {
+                button.style.backgroundImage = buttonGradients["pickaxe27Craft"]["gradient"];
+                buttonGradients["pickaxe27Craft"]["applied"] = true;
+            }
+            if (player.stats.currentPickaxe === 27) button.textContent = "Equipped!";
+            else button.textContent = "Equip!";
+        } else if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) {
             if (!(buttonGradients[button.id]["applied"])) {
                 button.style.backgroundImage = buttonGradients[button.id]["gradient"];
                 buttonGradients[button.id]["applied"] = true;
@@ -484,7 +499,13 @@ const buttonGradients = {
 }
 function craftPickaxe(item) {
     const recipe = recipes[item].recipe;
-    const type = (item.indexOf("pickaxe") > -1) ? "pickaxe" : "gear"
+    const type = (item.indexOf("pickaxe") > -1) ? "pickaxe" : "gear";
+    if (item === "pickaxe27" && player.trophyProgress["subrealmOneCompletion"].trophyOwned) {
+        player.stats.currentPickaxe = 27;
+        updateActiveRecipe();
+        utilitySwitchActions();
+        return;
+    }
     if (!player.pickaxes[item] && !player.gears[item]) {
         if (item === "pickaxe13" && !player.pickaxes["pickaxe9"]) return;
         for (let i = 0; i < recipe.length; i++) {
@@ -542,8 +563,9 @@ function showPickaxes() {
     m88++;
     if (m88 === 6) {
         let show = true;
-        for (let gear in player.gears) if (!player.gears[gear]) show = false;
-        for (let pickaxe in player.pickaxes) if (pickaxe !== "pickaxe26" && !player.pickaxes[pickaxe]) show = false;
+        if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) show = false;
+        if (!player.trophyProgress["worldOneCompletion"].trophyOwned) show = false;
+        if (!player.trophyProgress["worldTwoCompletion"].trophyOwned) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
@@ -558,7 +580,6 @@ function showGears() {
     m87++;
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
-        let children = document.getElementById("pickaxeCrafts").children;
         const list = currentWorld === 1 ? showOrders.worldOnePickaxes : (currentWorld === 1.1 ? showOrders.srOnePickaxes : showOrders.worldTwoPickaxes);
         for (let i = 0; i < list.length; i++) {
             getButtonByName(list[i]).style.display = "block";
@@ -573,6 +594,9 @@ function switchWorldCraftables() {
     if (currentWorld === 1) {
         gearList = showOrders.worldOneGears;
         pickaxeList = showOrders.worldOnePickaxes;
+        const secondaryList = showOrders.worldTwoPickaxes;
+        for (let i = 0; i < secondaryList.length; i++) if (player.pickaxes[secondaryList[i]]) pickaxeList.push(secondaryList[i]);
+        if (player.trophyProgress["subrealmOneCompletion"].trophyOwned) pickaxeList.push("pickaxe27");
     } else if (currentWorld === 1.1) {
         gearList = showOrders.srOneGears;
         pickaxeList = showOrders.srOnePickaxes;

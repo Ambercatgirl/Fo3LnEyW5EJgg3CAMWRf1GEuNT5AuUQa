@@ -528,7 +528,7 @@ function sr1Helper(state) {
             document.body.style.fontFamily = `system-ui, Tahoma, Verdana, sans-serif, Noto Color Emoji`;
             document.getElementById("switchFont").disabled = true;
         }
-        player.wasUsing = player.stats.currentPickaxe;
+        if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.wasUsing = player.stats.currentPickaxe;
         player.stats.currentPickaxe = 27;
         document.getElementById("theWorkshop").style.display = "block";
     } else {
