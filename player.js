@@ -155,6 +155,24 @@ class playerTemplate {
         }
         this.viewedMessages = {}
         this.avgSpeed = 0;
+        this.trophyProgress = {
+            "worldOneCompletion" : {
+                lastMinedAmt : 0,
+                lastPickaxeUsed : 0,
+                blocksWithWOG : 0,
+                trophyOwned : false
+            },
+            "worldTwoCompletion" : {
+                lastMinedAmt : 0,
+                lastPickaxeUsed : 0,
+                blocksWithCoronary : 0,
+                trophyOwned : false
+            },
+            "subrealmOneCompletion" : {
+                trophyOwned : false
+
+            },
+        }
     }
 }
 let player = new playerTemplate();
@@ -600,6 +618,13 @@ function loadNewData(data) {
         player.viewedMessages = data.viewedMessages;
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
+        if (data.trophyProgress !== undefined) {
+            for (let trophy in data.trophyProgress) {
+                if (player.trophyProgress[trophy] !== undefined) {
+                    player.trophyProgress[trophy] = data.trophyProgress[trophy];
+                }
+            }
+        }
         showNextInQueue();
     } catch (err) {
         window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}, ${console.log(err)}`);

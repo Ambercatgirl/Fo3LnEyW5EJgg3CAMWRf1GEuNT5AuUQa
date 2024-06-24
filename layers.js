@@ -836,8 +836,9 @@ function createAllLayers() {
     //for (let i = 0; i < worldOneLayers.length; i++) layerDictionary[worldOneLayers[i]] = createLayer([layerList[worldOneLayers[i]], layerList["worldOneCommons"]]);
 }
 function updateAllLayers() {
-    for (let layer in layerDictionary) layerDictionary[layer].layer = applyLuckToLayer(layerDictionary[layer].layer, verifiedOres.getCurrentLuck());
-    oreList["luna"]["decimalRarity"] = 1/(oreList["luna"]["numRarity"] / verifiedOres.getCurrentLuck());
+    const luck = verifiedOres.getCurrentLuck();
+    for (let layer in layerDictionary) layerDictionary[layer].layer = applyLuckToLayer(layerDictionary[layer].layer, luck);
+    oreList["luna"]["decimalRarity"] = 1/(oreList["luna"]["numRarity"] / luck);
     createGenerationProbabilities();
 }
 function createGenerationProbabilities() {
@@ -900,9 +901,10 @@ function insertIntoLayers(obj) {
     let layers = obj["layers"];
     let useLuck = obj["useLuck"];
     if (layers === undefined) layers = allLayers;
+    const luck = verifiedOres.getCurrentLuck();
     for (let i = 0; i < layers.length; i++) {
         if (!(layerDictionary[layers[i]].layer.includes(ore))) {
-            if (useLuck) oreList[ore]["decimalRarity"] = 1/(oreList[ore]["numRarity"] / verifiedOres.getCurrentLuck());
+            if (useLuck) oreList[ore]["decimalRarity"] = 1/(oreList[ore]["numRarity"] / luck);
             let layer = layerDictionary[layers[i]].layer;
             for (let j = 0; j < layer.length; j++) {
                 if (oreList[layer[j]]["decimalRarity"] > oreList[ore]["decimalRarity"]) {
@@ -1125,6 +1127,23 @@ class ores {
         if (tier === "Ethereal") return "darken 4s ease-in-out 1";
         if (tier === "Imaginary") return "rotate 4s linear 1";
         return "";
+    }
+}
+const variantInformation = {
+    "Normal" : {
+        color: ""
+    },
+    "Electrified" : {
+        color: "#e365fc"
+    },
+    "Radioactive" : {
+        color: "#c9fc3a"
+    },
+    "Explosive" : {
+        color: "#ff4b33"
+    },
+    getVariantColor: function(name) {
+        return variantInformation[name].color;
     }
 }
 const oreInformation = new ores();

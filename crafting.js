@@ -140,7 +140,7 @@ const recipes = {
     },
     "pickaxe26" : {
         name : "",
-        recipe : [{ore:"❌", amt:44444444444},{ore:"🕳️", amt:2600000},{ore:"✴️", amt:260},{ore:"⚙️", amt:1750000},{ore:"💠", amt:1460000},{ore:"🫧", amt:1000000},{ore:"💍", amt:584000},{ore:"🎍", amt:240000},{ore:"👑", amt:14000},{ore:"💎", amt:51500},{ore:"🌟", amt:34000},{ore:"💥", amt:23360},{ore:"🌀", amt:14175},{ore:"🪐", amt:12350},{ore:"🥗", amt:10950},{ore:"🪩", amt:8750},{ore:"📌", amt:275},{ore:"🚧", amt:320},{ore:"💫", amt:4350},{ore:"⛏️", amt:1},{ore:"☯️", amt:1},{ore:"🌳", amt:30},{ore:"🏰", amt:30},{ore:"🚿", amt:30},{ore:"🏔️", amt:30},{ore:"⚠️", amt:30},{ore:"🐪", amt:30},{ore:"🐋", amt:1095},{ore:"💵", amt:30},{ore:"🍃", amt:25},{ore:"👾", amt:15},{ore:"🪡", amt:15},{ore:"🚽", amt:15},{ore:"🎓", amt:15},{ore:"⚡", amt:15},{ore:"💘", amt:30},{ore:"💢", amt:50},{ore:"🪽", amt:2},{ore:"🗝️", amt:2},{ore:"🚫", amt:2},{ore:"♨️", amt:1},]        ,
+        recipe : [{ore:"❌", amt:44444444444},{ore:"🕳️", amt:2600000},{ore:"✴️", amt:260},{ore:"⚙️", amt:1750000},{ore:"💠", amt:1460000},{ore:"🫧", amt:1000000},{ore:"💍", amt:584000},{ore:"🎍", amt:240000},{ore:"👑", amt:140000},{ore:"💎", amt:51500},{ore:"🌟", amt:34000},{ore:"💥", amt:23360},{ore:"🌀", amt:14175},{ore:"🪐", amt:12350},{ore:"🥗", amt:10950},{ore:"🪩", amt:8750},{ore:"📌", amt:275},{ore:"🚧", amt:320},{ore:"💫", amt:4350},{ore:"⛏️", amt:1},{ore:"☯️", amt:1},{ore:"🌳", amt:30},{ore:"🏰", amt:30},{ore:"🚿", amt:30},{ore:"🏔️", amt:30},{ore:"⚠️", amt:30},{ore:"🐪", amt:30},{ore:"🐋", amt:1095},{ore:"💵", amt:30},{ore:"🍃", amt:25},{ore:"👾", amt:15},{ore:"🪡", amt:15},{ore:"🚽", amt:15},{ore:"🎓", amt:15},{ore:"⚡", amt:15},{ore:"💘", amt:30},{ore:"💢", amt:50},{ore:"🪽", amt:2},{ore:"🗝️", amt:2},{ore:"🚫", amt:2},{ore:"♨️", amt:1},]        ,
         upgrades : {}
     },
     "pickaxe27" : {
@@ -1082,9 +1082,9 @@ const pickaxeStats = {
     11 : {mined: 1018, revealed: 2993, luck: 30, rate: 100, src: "⛏️", ability:"media/abilityImages/whirlpoolOfFateAbility.png"},
     12 : {mined: 1541, revealed: 1861, luck: 75, rate: 150, src: `<img class="mineImage" src="media/wingsOfGloryIcon.png"></img>`, ability:"media/abilityImages/wingsOfGloryAbility.png"},
     13 : {mined: 1, revealed: 1, luck: 1, rate: 1, src: `<img class="mineImage" src="media/theKeyIcon.png"></img>`},
-    14 : {mined: 40, revealed: 51, luck: 1.05, rate: 45, src: "⛏️", ability:"media/abilityImages/extremeEcholocatorAbility.png"},
+    14 : {mined: 40, revealed: 51, luck: 1.05, rate: 45, src: `<img class="mineImage" src="media/extremeEcholocatorIcon.png"></img>`, ability:"media/abilityImages/extremeEcholocatorAbility.png"},
     15 : {mined: 112, revealed: 140, luck: 1.075, rate: 75, src: "⛏️", ability:"media/abilityImages/corundumCaverAbility.png"},
-    16 : {mined: 218, revealed: 292, luck: 1.3, rate: 100, src: "⛏️", ability:"media/abilityImages/starborneSlasherAbility.png"},
+    16 : {mined: 218, revealed: 292, luck: 1.3, rate: 100, src: `<img class="mineImage" src="media/starborneSlasherIcon.webp"></img>`, ability:"media/abilityImages/starborneSlasherAbility.png"},
     17 : {mined: 826, revealed: 936, luck: 1, rate: 150, src: `<img class="mineImage" src="media/nyabombIcon.png"></img>`, ability:"media/abilityImages/nyabombAbility.png"},
     18 : {mined: 1005, revealed: 1160, luck: 1.5, rate: 150, src:  `<img class="mineImage" src="media/lunarLightsabreIcon.png"></img>`, ability:"media/abilityImages/lunarLightsabreAbility.png"},
     19 : {mined: 656, revealed: 754, luck: 2, rate: 60, src: "⛏️", ability:"media/abilityImages/gemstoneEngraverAbility.png"},
@@ -1093,7 +1093,7 @@ const pickaxeStats = {
     22 : {mined: 2498, revealed: 5632, luck: 4, rate: 120, src: "⛏️", ability:"media/abilityImages/singularitySlammerAbility.png"},
     23 : {mined: 4518, revealed: 6325, luck: 8.25, rate: 150, src: `<img class="mineImage" src="media/staffOfBindingIcon.png"></img>`, ability:"media/abilityImages/staffOfBindingAbility.png"},
     24 : {mined: 7964, revealed: 9800, luck: 12.5, rate: 175, src: `<img class="mineImage" src="media/sssIcon.png"></img>`, ability:"media/abilityImages/sssAbility.png"},
-    25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300, src: "⛏️", ability:"media/abilityImages/coronaryCatastropheAbility.png"},
+    25 : {mined: 15131, revealed: 18594, luck: 50, rate: 300, src: `<img class="mineImage" src="media/coronaryCatastropheIcon.webp"></img>`, ability:"media/abilityImages/coronaryCatastropheAbility.png"},
     26 : {mined: 14343, revealed: 17431, luck: 175, rate: 150, src: "⛏️"},
     27 : {
         0 : {mined: 4383, revealed: 4576, luck: 1},
