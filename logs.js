@@ -250,8 +250,8 @@ class secureLogs {
         }
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
-        const distToLow = Math.abs(total - lowEnd);
-        const distToHigh = Math.abs(total - highEnd)
+        const distToLow = lowEnd - total;
+        const distToHigh = highEnd - total;
         if ((total > highEnd) && distToHigh > distToLow) {
             this.#consoleDetected++;
             if (debug) {
