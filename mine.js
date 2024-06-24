@@ -427,10 +427,11 @@ function attemptSwitchWorld(to) {
     if (to === 2 && player.pickaxes["pickaxe13"] && currentWorld !== 2){switchWorld(2); return;}
     if (to === 1.1 && player.sr1Unlocked && currentWorld !== 1.1) {switchWorld(1.1); return;}
     if (to === 1 && currentWorld !== 1) {switchWorld(1); return;}
+    if (to === 0) {showTrophyRoom(true); return;}
 }
 function switchWorld(to, skipAnim) {
     get("blackScreen").style.display = "block";
-    get("blackScreen").style.animation = "fadeToBlack 2s linear 1";
+    if (!skipAnim) get("blackScreen").style.animation = "fadeToBlack 2s linear 1";
     player.settings.lastWorld = to;
     const timeout = skipAnim ? 0 : 1000;
     setTimeout(() => {

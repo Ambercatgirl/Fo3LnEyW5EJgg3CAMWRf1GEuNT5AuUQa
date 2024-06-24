@@ -37,6 +37,7 @@ const birthdays = {
 const date = new Date();
 let limitedTimer;
 let inventoryTimer;
+let trophyTimer;
 let minedElement;
 let revealedElement;
 let locationElement;
@@ -51,7 +52,8 @@ function init() {
     blockElement = document.getElementById("blockDisplay");
     displayRows = document.getElementsByClassName("blockDisplayRow");
     messageElement = document.getElementById("spawnMessage");
-    eventElement = document.getElementById("eventMessages")
+    eventElement = document.getElementById("eventMessages");
+    document.getElementById('dataFileUpload').addEventListener('change', getFileContents, false);
     document.getElementById("menuSelectionContainer").addEventListener('click', (event) => {
         if (event.target.parentElement.classList.contains("menuCategory")) closeMenu();
     }, false);
@@ -69,6 +71,7 @@ function init() {
     if (Math.random() < 1/1000) document.getElementById("cat").innerText = "CatAxe";
     limitedTimer = setInterval(checkLimitedOres, 1000);
     inventoryTimer = setInterval(updateInventory, 500);
+    trophyTimer = setInterval(checkUnlockConditions, 5000)
     if (date.getMonth() === 3 && date.getDate() === 1) {
         document.title = "The Sily Caverns";
     }
@@ -94,6 +97,7 @@ function init() {
         repeatDataSave();
         cat = verifiedOres.getCurrentLuck();
         updateAllLayers();
+        checkUnlockConditions();
         console.log("meow");
     }
     verifiedOres.onLoad();
@@ -240,7 +244,7 @@ function movePlayer(dir, reps) {
                     mine[curY][curX] = "⚪";
                     curY += dir.y;
                     curX += dir.x;
-                    dir.x !== 0 ? movementsX++ : null;
+                    movementsX += Math.abs(dir.y) + Math.abs(dir.x)
                     if (dir.y !== 0) setLayer(curY);
                     mineBlock(curX, curY, "mining");
                     mine[curY][curX] = "⛏️";
@@ -259,6 +263,7 @@ function movePlayer(dir, reps) {
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant})
                             giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant});
                             checkAllAround(curX, curY);
+                            playSound("Celestial")
                         }
                     }
                 }
@@ -639,7 +644,6 @@ function updateInventory() {
     }
     let speed = calcAverageSpeed();
     if (speed !== undefined) player.avgSpeed = speed;
-    verifiedOres.getBenchmark();
 }
 function updateDisplayTimer(state) {
     if (state) {
@@ -1090,7 +1094,7 @@ const events = {
         rate: 1/3500,
         duration: 3000000,
         boost: 1.75,
-        ore: "🥗 ",
+        ore: "🥗",
         message: `<i><span style="background-image:linear-gradient(to right, #6a9c44, #78db2c, #27d111, #083802, #2f7327);" class="eventGradient">Leafy greens cloud your vision...</span></i>`,
         world: 1,
         specialText: "N/A",
@@ -1374,5 +1378,4 @@ az.src = "media/Untitled_Artwork2.png"
             }
 }
 */
-
 
