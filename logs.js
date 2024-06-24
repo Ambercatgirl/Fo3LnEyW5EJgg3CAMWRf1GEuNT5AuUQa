@@ -251,8 +251,8 @@ class secureLogs {
     }
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
-        const lowEnd = 1.2 / thisModifier;
-        const highEnd = 10 / thisModifier;
+        const lowEnd = 1.2 * thisModifier;
+        const highEnd = 10 * thisModifier;
         const times = [];
         for (let i = 0; i < 500; i++) {
             const timeBefore = performance.now();
@@ -302,8 +302,8 @@ class secureLogs {
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
         total /= times.length
-        if (this.#myNum/total > this.#highestDifference) this.#highestDifference = this.#myNum/total;
-        return this.#myNum/total;
+        if (total/this.#myNum > this.#highestDifference) this.#highestDifference = total/this.#myNum;
+        return total/this.#myNum;
     }
     getConsoleStats() {
         if (debug) {
