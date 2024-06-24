@@ -172,7 +172,6 @@ class secureLogs {
                     output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this);">Click Me To Copy Verification</span></span><br>`
                 }
                 if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
-                localStorage.setItem("logStorage", output)
         } else {
             this.#clearLogs();
         }
@@ -266,7 +265,7 @@ class secureLogs {
         for (let i = 0; i < times.length; i++) total += times[i];
         const distToLow = lowEnd - total;
         const distToHigh = highEnd - total;
-        if ((total > highEnd) && distToHigh > distToLow) {
+        if ((total > highEnd) && total > lowEnd * 10) {
             this.#consoleDetected++;
             if (debug) {
                 if (this.#consoleDetected < 2) window.alert(`${thisModifier}, ${roundNumberToMillionth(total)}, ${roundNumberToMillionth(lowEnd)}, ${roundNumberToMillionth(highEnd)}`);
