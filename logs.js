@@ -290,7 +290,7 @@ class secureLogs {
         let total = 0;
         for (let i = 0; i < times.length; i++) total += times[i];
         total /= times.length
-        return total / this.#myNum;
+        return this.#myNum/total;
     }
     getConsoleStats() {
         if (debug) {
