@@ -251,8 +251,9 @@ class secureLogs {
     }
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
-        const lowEnd = 1.2 * thisModifier;
-        const highEnd = 10 * thisModifier;
+        let lowEnd = 1.2 * thisModifier;
+        let highEnd = 10 * thisModifier;
+        if (thisModifier < 0.1) {lowEnd = 1.2; highEnd = 10;}
         const times = [];
         for (let i = 0; i < 500; i++) {
             const timeBefore = performance.now();

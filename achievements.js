@@ -38,8 +38,8 @@ const achievementList = {
     "subrealmOneCompletion" : {
         name : "Subrealm One Completion",
         requirement: function(get) {
-            if (get) return `${indexHasOre("🏳️‍⚧️")}/1 🏳️‍⚧️ found.`
-            if (indexHasOre("🏳️‍⚧️") > 0) {
+            if (get) return `${indexHasOre("🏁")}/1 🏁 found.`
+            if (indexHasOre("🏁") > 0) {
                 return true;
             }
         },
