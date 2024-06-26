@@ -2633,6 +2633,10 @@ background-size: 100%;
   justify-content: center;
   margin-bottom: 3%;
 }
+#worldTwoCompletion {
+  width: auto;
+  height: auto;
+}
 @keyframes flashGreen {
   0% {background-color:white;}
   50% {background-color:#6BC267;}

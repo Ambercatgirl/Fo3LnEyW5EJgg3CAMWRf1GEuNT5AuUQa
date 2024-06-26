@@ -26,14 +26,14 @@ const achievementList = {
                 player.trophyProgress["worldTwoCompletion"].blocksWithCoronary += totalMinedWithCoronary;
             }
             player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
-            player.trophyProgress["worldTwoCompletion"].worldTwoCompletion = player.stats.blocksMined;
+            player.trophyProgress["worldTwoCompletion"].lastMinedAmt = player.stats.blocksMined;
             if (get) return `${player.trophyProgress["worldTwoCompletion"].blocksWithCoronary.toLocaleString()}/25,000,000,000 blocks mined with Coronary Catastrophe in World 2.<br>Oblivion Fracturer: ${player.gears["gear21"] ? "Obtained." : "Required."}`
             if (player.trophyProgress["worldTwoCompletion"].blocksWithCoronary > 25000000000 && player.gears["21"]) {
                 return true;
             }
         },
         reward: {type: "luck", do: "add", amt: 5},
-        icon: "<span class='trophyIcon'>Trophy made by @person</span>"
+        icon: "<span class='trophyIcon'>Trophy made by @wrab</span>"
     },
     "subrealmOneCompletion" : {
         name : "Subrealm One Completion",

@@ -75,7 +75,7 @@ class secureLogs {
             luck = oreList[ore]["numRarity"] * oreList[ore]["decimalRarity"];
         }
         if (((obj.stack.includes("mine.js") || obj.stack.includes("caves.js")) && luck <= maxLuck) || debug) {
-            this.#spawnLogs.push({x: c, y: r, block: ore, luck: luck, caveInfo: fromCave, variant: variant, avgSpeed: player.avgSpeed, paradoxical: player.powerupVariables.fakeEquipped.item, console: this.#consoleDetected})
+            this.#spawnLogs.push({x: c, y: r, block: ore, luck: luck, caveInfo: fromCave, variant: variant, avgSpeed: player.avgSpeed, paradoxical: player.powerupVariables.fakeEquipped.item, console: this.#consoleDetected, genAt: Date.now()})
             Object.freeze(this.#spawnLogs[this.#spawnLogs.length - 1])
         } else {
             console.log("failed to create, ", obj.stack, luck, maxLuck);
@@ -104,7 +104,7 @@ class secureLogs {
                     let variant = log.variant === undefined ? "Normal" : log.variant;
                     rng /= multis[variant - 1];
                     variant = names[variant - 1];
-                    this.#verifiedLogs["All"].push({block: log.block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: variant, luck: log.luck, caveInfo: log.caveInfo, rarity: rng, avgSpeed: log.avgSpeed, paradoxical: log.paradoxical, console: log.console})
+                    this.#verifiedLogs["All"].push({block: log.block, y: r, x: c, time: Date.now() - this.#startTime, mined: false, variant: variant, luck: log.luck, caveInfo: log.caveInfo, rarity: rng, avgSpeed: log.avgSpeed, paradoxical: log.paradoxical, console: log.console, genAt: log.genAt})
                     Object.freeze(this.#verifiedLogs["All"][this.#verifiedLogs["All"].length - 1])
                     this.#spawnLogs.splice(i, 1);
                     break;
@@ -303,7 +303,7 @@ class secureLogs {
         for (let i = 0; i < times.length; i++) total += times[i];
         total /= times.length;
         let num = total/this.#myNum;
-        if (num === 0) num = 0.1;
+        if (num < 0) num = 0.1;
         if (num > this.#highestDifference) this.#highestDifference = num;
         return num;
     }
@@ -333,6 +333,8 @@ function encryptLogData(log, times) {
     output += log.console;
     output += ", ";
     output += (log.paradoxical === undefined ? "none" : log.paradoxical);
+    output += ", ";
+    output += new Date(log.genAt);
     return toBinary(output);
   }
   function decryptLogData(toDecrypt, key) {
@@ -358,10 +360,12 @@ function encryptLogData(log, times) {
       toDecrypt = toDecrypt.substring(toDecrypt.indexOf(',') + 2);
       let paramSeven = toDecrypt.substring(0, toDecrypt.indexOf(", "));
       toDecrypt = toDecrypt.substring(toDecrypt.indexOf(',') + 2);
-      let paramEight = toDecrypt.substring(0);
+      let paramEight = toDecrypt.substring(0, toDecrypt.indexOf(", "));
+      toDecrypt = toDecrypt.substring(toDecrypt.indexOf(',') + 2);
+      let paramNine = toDecrypt.substring(0);
       paramOne = Math.pow(10, paramOne);
       const isMobile = screen.height < 750;
-      return "Key: " + paramFour + ", Luck: " + paramTwo + ", RNG: " + paramThree + ", AVG Speed: " + paramSix + ", Time Since Last Log: " + Math.floor(paramOne) + ", Generated At: " + new Date(verifiedOres.getStartTime() + paramFive).toUTCString() + ", Console Flags: " + `${paramSeven} ${isMobile ? "(Mobile)" : ""}` + ", Paradoxical Item: " + paramEight;
+      return "Key: " + paramFour + ", Luck: " + paramTwo + ", RNG: " + paramThree + ", AVG Speed: " + paramSix + ", Time Since Last Log: " + Math.floor(paramOne) + ", Generated At: " + new Date(paramNine).toUTCString() + ", Console Flags: " + `${paramSeven} ${isMobile ? "(Mobile)" : ""}` + ", Paradoxical Item: " + paramEight;
     }
 }
 function roundNumberToMillionth(num) {

@@ -610,7 +610,6 @@ function loadNewData(data) {
             layer: Math.round(Math.random() * 100000),
             lastAddedOn: new Date().getDate()
         }
-        
         if (new Date().getDate() !== data.luna.lastAddedOn) {
             player.luna.layer = Math.round(Math.random() * 100000);
             player.luna.lastAddedOn = new Date().getDate();

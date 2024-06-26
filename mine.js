@@ -129,6 +129,7 @@ function giveBlock(obj) {
     inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
+    return 3;
     let rng = Math.round(Math.random() * 499 + 1);
     if (rng === 1) {return 4;} // 1:500
     else if (rng <= 3) {return 3;} // 1:250
@@ -161,9 +162,12 @@ function generateBlock(location) {
     let oreRarity = oreList[blockToGive]["numRarity"];
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
+        let variant = rollVariant();
+        if (player.gears["gear25"] && variant === 1) variant = rollVariant();
         if (blockToGive === "sillyMiner") {
             const nextOre = layerDictionary[currentLayer].layer[layerDictionary[currentLayer].layer.indexOf("sillyMiner") + 1];
-            mine[location["Y"]][location["X"]] = nextOre; 
+            if (oreList[nextOre]["numRarity"] >= 750000) mine[location["Y"]][location["X"]] = {ore: nextOre, variant:variant}; 
+            else mine[location["Y"]][location["X"]] = nextOre;
             if (Math.floor(1/oreList[nextOre]["decimalRarity"] < 750000)) return;
             else blockToGive = nextOre;
         }
@@ -171,8 +175,6 @@ function generateBlock(location) {
             blockToGive = checkSpecials(blockToGive);
             mine[location["Y"]][location["X"]] = blockToGive;
         }
-        let variant = rollVariant();
-        if (player.gears["gear25"] && variant === 1) variant = rollVariant();
         mine[location["Y"]][location["X"]] = {ore: blockToGive, variant: variant};
         const tier = oreList[blockToGive]["oreTier"];
         if (oreList[blockToGive]["hasLog"]) {
