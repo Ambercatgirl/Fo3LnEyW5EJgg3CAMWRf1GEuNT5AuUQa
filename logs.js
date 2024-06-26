@@ -247,7 +247,7 @@ class secureLogs {
     }
     #onLoad() {
         const isMobile = screen.height < 500;
-        if (debug) window.alert(isMobile)
+        if (debug) window.alert(`${screen.width}, ${screen.height}`)
         if (!isMobile) {
             this.#consoleCheckTimer = setInterval(() => {
                 this.#checkForConsole();
