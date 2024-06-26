@@ -245,9 +245,13 @@ class secureLogs {
         return this.#canGenCaves;
     }
     #onLoad() {
-        this.#consoleCheckTimer = setInterval(() => {
-            this.#checkForConsole()
-        }, 750);
+        const isMobile = screen.height < 500;
+        if (debug) window.alert(isMobile)
+        if (!isMobile) {
+            this.#consoleCheckTimer = setInterval(() => {
+                this.#checkForConsole();
+            }, 750);
+        }
     }
     #checkForConsole() {
         const thisModifier = this.#getBenchmark();
@@ -365,7 +369,6 @@ function encryptLogData(log, times) {
       toDecrypt = toDecrypt.substring(toDecrypt.indexOf(',') + 2);
       let paramNine = toDecrypt.substring(0);
       paramOne = Math.pow(10, paramOne);
-      const isMobile = screen.height < 750;
       return "Key: " + paramFour + ", Luck: " + paramTwo + ", RNG: " + paramThree + ", AVG Speed: " + paramSix + ", Time Since Last Log: " + Math.floor(paramOne) + ", Generated At: " + new Date(paramNine).toUTCString() + ", Console Flags: " + `${paramSeven} ${isMobile ? "(Mobile)" : ""}` + ", Paradoxical Item: " + paramEight;
     }
 }
