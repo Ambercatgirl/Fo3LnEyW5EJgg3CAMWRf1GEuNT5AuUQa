@@ -129,7 +129,6 @@ function giveBlock(obj) {
     inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
-    return 3;
     let rng = Math.round(Math.random() * 499 + 1);
     if (rng === 1) {return 4;} // 1:500
     else if (rng <= 3) {return 3;} // 1:250

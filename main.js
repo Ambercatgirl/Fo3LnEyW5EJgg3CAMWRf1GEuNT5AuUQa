@@ -471,7 +471,6 @@ function checkDisplayVariant(location) {
     let includeSize;
     let specialVariant;
     if (oreList[location.ore]["hasImage"]) {
-        console.log(oreList[location.ore])
         oreToAdd = `<img class="mineImage" src="${oreList[location.ore]["src"]}"></img>`;
         includeSize = "";
         specialVariant = "Img";
