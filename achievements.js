@@ -3,7 +3,7 @@ const achievementList = {
         name : "World One Completionist",
         requirement: function(get) {
             const blocksMinedNow = player.stats.blocksMined;
-            if (player.trophyProgress["worldOneCompletion"].lastPickaxeUsed === 12 && player.stats.currentPickaxe === 12) {
+            if (player.trophyProgress["worldOneCompletion"].lastPickaxeUsed === "pickaxe12" && player.stats.currentPickaxe === "pickaxe12") {
                 const totalMinedWithWOG = blocksMinedNow - player.trophyProgress["worldOneCompletion"].lastMinedAmt;
                 player.trophyProgress["worldOneCompletion"].blocksWithWOG += totalMinedWithWOG;
             }
@@ -21,7 +21,7 @@ const achievementList = {
         name : "World Two Completionist",
         requirement: function(get) {
             const blocksMinedNow = player.stats.blocksMined;
-            if (player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed === 25 && player.stats.currentPickaxe === 25 && currentWorld === 2) {
+            if (player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed === "pickaxe25" && player.stats.currentPickaxe === "pickaxe25" && currentWorld === 2) {
                 const totalMinedWithCoronary = blocksMinedNow - player.trophyProgress["worldTwoCompletion"].lastMinedAmt;
                 player.trophyProgress["worldTwoCompletion"].blocksWithCoronary += totalMinedWithCoronary;
             }

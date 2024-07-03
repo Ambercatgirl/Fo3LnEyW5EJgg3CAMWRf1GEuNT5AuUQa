@@ -292,6 +292,21 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#abyssalLeaper span{
+    background: linear-gradient(to right, #2D3250, #424769, #7077A1, #424769, #2D3250);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#rngManipulator span{
+    background: linear-gradient(to right,#d20202, #d20202);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#makeshiftAccelerator span{
+    background: linear-gradient(to right,#5F9EA0, #5F9EA0);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #text span{
     background: linear-gradient(to right,);
     background-clip: text;

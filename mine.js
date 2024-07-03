@@ -281,7 +281,7 @@ const checkSpecials = function(block) {
             block = "watermelonDiamond";
             break;
             case "💠" :
-            if (player.stats.currentPickaxe === 4) block = "pixel";
+            if (player.stats.currentPickaxe === "pickaxe4") block = "pixel";
             break;
         }
     }
@@ -442,7 +442,7 @@ function switchWorld(to, skipAnim) {
         canMine = false;
         endEvent();
         stopMining();
-        mine = [];
+        mine = [[]];
         player.oreTracker.existingOres = [];
         removeTrackerInformation();
         m87 = 0;
@@ -460,7 +460,7 @@ function switchWorld(to, skipAnim) {
             curX = 1000000000;
             curY = 2001; 
             createMine();
-            if (player.stats.currentPickaxe === 25) {
+            if (player.stats.currentPickaxe === "pickaxe25") {
                 if (Math.random() < 1/10000) {
                     mine[curY + 1][curX] = "🩷";
                     playSound(oreList["🩷"]["oreTier"]);
@@ -473,6 +473,7 @@ function switchWorld(to, skipAnim) {
             }
             layerNum = 1;
             switchLayerIndex(0, "tvLayer", 2);
+            removeSiphoner();
         } else if (currentWorld < 2) {
             distanceMulti = 0;
             y = 1000;
@@ -482,7 +483,7 @@ function switchWorld(to, skipAnim) {
             curY = 0; 
             createMine();
             if (currentWorld === 1) {
-                if (player.stats.currentPickaxe === 1) {
+                if (player.stats.currentPickaxe === "pickaxe1") {
                     if (Math.random() < 1/10000) {
                         mine[curY + 1][curX] = "🩶";
                         playSound(oreList["🩶"]["oreTier"]);
@@ -532,7 +533,7 @@ function sr1Helper(state) {
             document.getElementById("switchFont").disabled = true;
         }
         if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.wasUsing = player.stats.currentPickaxe;
-        player.stats.currentPickaxe = 27;
+        player.stats.currentPickaxe = "pickaxe27";
         document.getElementById("theWorkshop").style.display = "block";
     } else {
         if (!player.settings.usingNewEmojis) {

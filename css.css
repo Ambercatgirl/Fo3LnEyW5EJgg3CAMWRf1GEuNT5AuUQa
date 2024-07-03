@@ -647,19 +647,21 @@ img.roundcat {
 }
 .hologram {
   height: 2vw;
-  width: 40%;
+  width: 100%;
   display: flex;
   align-items: flex-end;
   margin: auto;
   justify-content: center;
-
+  position: relative;
 }
 .hologram button {
   height: 100%;
-  width: 100%;
+  width: 40%;
   border: none;
-  border-top: 0.1vw solid white;
+  border-top: 0.1vw solid #6BC267;
   background: none;
+  font-size: 1.25vw;
+  font-weight: 750;
 }
 #hologramTriangle {
   position: absolute;
@@ -671,7 +673,7 @@ img.roundcat {
   width: 25vw;
   height: auto;
   position: absolute;
-  bottom: 17.7vw;
+  bottom: 16.7vw;
   opacity: 100%;
   z-index: 9;
   border-top: 0.1vw solid white;
