@@ -307,6 +307,16 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#ballastBreaker span{
+    background: linear-gradient(to right,#882608, #6c1805, #360a0a);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#tropicalCarver span{
+    background: linear-gradient(to right,#feda84, #976393, #43457f, #ff9b83);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #text span{
     background: linear-gradient(to right,);
     background-clip: text;

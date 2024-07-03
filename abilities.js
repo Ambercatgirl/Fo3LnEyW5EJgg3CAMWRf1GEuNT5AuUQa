@@ -13,9 +13,9 @@ const abilityTestNums = []
 let abilityTestAmt = 0;
 async function rollAbilities(force) {
     let m = 1;
-    //if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
-    //if (player.gears["gear23"]) m += 0.15;
-    //if (batteryEvent) m += 0.1;
+    if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
+    if (player.gears["gear23"]) m += 0.15;
+    if (batteryEvent) m += 0.1;
     if (Math.random() < 1/500 && verifiedOres.canGenerateCaves()) {
         if (player.settings.cavesEnabled) {
             player.stats.cavesGenerated++;
@@ -25,7 +25,13 @@ async function rollAbilities(force) {
     }
     if (debug && force) m = 10000000;
     const pickaxe = pickaxeStats[player.stats.currentPickaxe]
-    if (Math.random() <= (1/pickaxe.rate)*m) pickaxe.doAbility();
+    if (Math.random() <= (m/pickaxe.rate)) {
+        const preMined = player.stats.blocksMined;
+        const preRevealed = blocksRevealedThisReset;
+        pickaxe.doAbility(curX, curY);
+        abilityTestNums.push({mined: player.stats.blocksMined - preMined, revealed: blocksRevealedThisReset - preRevealed});
+        abilityTestAmt++;
+    }
 }
 function getTestAvg() {
     let mined = 0;
@@ -349,32 +355,11 @@ function pickaxeAbility11(x, y) {
     y -= 37;
     pickaxeArrayLoop(pickaxe11Nums, x, y);
 }
+let pickaxe12Nums = [];
 function pickaxeAbility12(x, y) {
-    let startNums = [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 4, 5, 6, 6];
-    let endNums = [37, 36, 35, 34, 29, 31, 30, 29, 28, 27, 26, 24, 29, 28, 32, 31, 25, 24, 23, 16, 24, 23, 22, 24, 26, 28, 19, 31, 30, 24, 13, 20, 21];
-    let numSkips = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [28], [27], [], [], [], [], [19, 20], [21, 22], [], [], [], [], [], [24], [12, 25], [13], [], [15], [16]];
-    let i = 0;
-    for (let r = y - 16; r < y + 17; r++) {
-        if (mine[r] != undefined) {
-            for (let c = x + startNums[i]; c <= x + endNums[i]; c++) {
-                if (!(numSkips[i].includes(c - x))) {
-                    pickaxeAbilityMineBlock(c, r);
-                }
-            }
-        }
-        i++;
-    }
-    i = 0;
-    for (let r = y - 16; r < y + 17; r++) {
-        if (mine[r] != undefined) {
-            for (let c = x - startNums[i]; c >= x - endNums[i]; c--) {
-                if (!(numSkips[i].includes(-(c - x)))) {
-                    pickaxeAbilityMineBlock(c, r);
-                }
-            }
-        }
-        i++;
-    }
+    x -= 103;
+    y -= 56;
+    pickaxeArrayLoop(pickaxe12Nums, x, y);
 }
 function pickaxeAbility14(translatex, translatey) {
     let r = Math.round((Math.random() * 5) + 1)
@@ -752,26 +737,27 @@ function pickaxeAbility25(x, y) {
     }
 }
 const abilityTable = {
-    " 27":1/19,
-    " 25":1/17,
-    " 24":1/15,
-    " 23":1/13,
-    " 22":1/11,
-    " 21":1/9,
-    " 12":1/7,
-    " 20":1/5,
-    " 11":1/3,
-    " 18":1/1
+    "pickaxe23" : 1/17,
+    "pickaxe25" : 1/15,
+    "pickaxe10" : 1/13,
+    "pickaxe27" : 1/11,
+    "pickaxe21" : 1/9,
+    "pickaxe22" : 1/7,
+    "pickaxe12" : 1/5,
+    "pickaxe24" : 1/3,
+    "pickaxe11" : 1/1,
 }
 function pickaxeAbility26(x, y) {
     const abilityTableArray = Object.keys(abilityTable);
+    const offset = Math.floor(Math.random() * 400) + 250;
     const points = {
         "a" : {"X":x, "Y":y},
-        "b" : {"X":x + 300, "Y":y - 300},
-        "c" : {"X":x - 300, "Y":y - 300},
-        "d" : {"X":x + 300, "Y":y + 300},
-        "e" : {"X":x - 300, "Y":y + 300}
+        "b" : {"X":x + offset, "Y":y - offset},
+        "c" : {"X":x - offset, "Y":y - offset},
+        "d" : {"X":x + offset, "Y":y + offset},
+        "e" : {"X":x - offset, "Y":y + offset}
     }
+    console.log
     for (let propertyName in points) {
         let low = 0;
         let high = abilityTableArray.length;
@@ -784,40 +770,11 @@ function pickaxeAbility26(x, y) {
                 high = mid;
             }
         }
-        let num = Number(abilityTableArray[low].substring(1));
-        switch (num) {
-            case 11:
-                pickaxeAbility11(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 12:
-                pickaxeAbility12(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 18:
-                pickaxeAbility18(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 20:
-                pickaxeAbility20(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 21:
-                pickaxeAbility21(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 22:
-                pickaxeAbility22(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-             case 23:
-                pickaxeAbility23(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 24:
-                pickaxeAbility24(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 25:
-                pickaxeAbility25(points[propertyName]["X"], points[propertyName]["Y"]);
-                break;
-            case 27:
-                const overrideLevel = Math.round(Math.random() * 5);
-                pickaxeAbility27(points[propertyName]["X"], points[propertyName]["Y"], overrideLevel);
-                break;
-        }
+        if (abilityTableArray[low] === "pickaxe27") {
+            const overrideLevel = Math.round(Math.random() * 3) + 2;
+            pickaxeAbility27(points[propertyName]["X"], points[propertyName]["Y"], overrideLevel);
+            console.log("fuck", overrideLevel)
+        } else pickaxeStats[abilityTableArray[low]].doAbility(points[propertyName]["X"], points[propertyName]["Y"])
     }
 }
 const treeLevels = {

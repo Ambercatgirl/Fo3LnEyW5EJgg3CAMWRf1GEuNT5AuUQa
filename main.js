@@ -127,6 +127,7 @@ function assignPickaxeNums(json) {
     pickaxe9Nums = json.pickaxeNums9;
     pickaxe10Nums = json.pickaxeNums10;
     pickaxe11Nums = json.pickaxeNums11;
+    pickaxe12Nums = json.pickaxeNums12;
     treeLevels[0] = json.pickaxeNums27A;
     treeLevels[1] = json.pickaxeNums27B;
     treeLevels.cherryBranch = json.cherryBranch;
@@ -517,14 +518,15 @@ function displayArea() {
     minedElement.textContent = player.stats.blocksMined.toLocaleString() + " Blocks Mined";
 }
 function addPickaxeIcon() {
-    return pickaxeStats[player.stats.currentPickaxe].src;
+    return `<span class="mineSpan">${pickaxeStats[player.stats.currentPickaxe].src}</span>`
 }
 function checkDisplayVariant(location) {
     let oreToAdd;
     let includeSize;
     let specialVariant;
     if (oreList[location.ore]["hasImage"]) {
-        oreToAdd = `<img class="mineImage" src="${oreList[location.ore]["src"]}"></img>`;
+        let isLarge = oreList[location.ore]["oreTier"] === "Imaginary";
+        oreToAdd = `<img class="${isLarge ? 'largeMineImage' : 'mineImage'}" src="${oreList[location.ore]["src"]}"></img>`;
         includeSize = "";
         specialVariant = "Img";
     } else {
@@ -544,7 +546,7 @@ function checkDisplayVariant(location) {
             return `<span class="explosiveBlock${specialVariant} ${includeSize}">${oreToAdd}</span>`
         }
     } else {
-        return `<span class="${includeSize}">${oreToAdd}</span>`
+        return `<span class="${includeSize} mineSpan">${oreToAdd}</span>`
     }
 }
 
@@ -1426,7 +1428,7 @@ let pickaxe25Nums = [];
 let testNums = [];
 /*
 const az = new Image();
-az.src = "38a9b9e0fb2495905f500df5b3bfcab3.png"
+az.src = "media/wings_re_3.webp"
         az.onload = () => {
             const c = new OffscreenCanvas(az.width,az.height)
             const cc = c.getContext("2d")

@@ -184,7 +184,7 @@ class secureLogs {
             else return luck;
         }
         if (player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; baseLuck = 1;}
-        baseLuck += player.gears["gear30"] ? 1 : 0;
+        baseLuck += player.gears["gear30"] ? 0.3 : 0;
         baseLuck += getRewardTypes("luck", "add");
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         if (currentWorld < 2) luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
