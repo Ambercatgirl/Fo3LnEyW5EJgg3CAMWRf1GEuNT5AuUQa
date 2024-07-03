@@ -675,7 +675,7 @@ img.roundcat {
   position: absolute;
   bottom: 16.7vw;
   opacity: 100%;
-  z-index: 9;
+  z-index: 15;
   border-top: 0.1vw solid white;
   border-bottom: 0.1vw solid white;
   box-shadow: 0 0 10px white;
@@ -2091,10 +2091,23 @@ button {
   font-size: 1.8vw;
   margin-left: -0.2vw;
 }
+.largeMineImage {
+  position: absolute;
+  width: 10vw;
+  height: 10vw;
+}
 .mineImage {
-  width: 1.4vw;
-  height: 1.4vw;
-  margin-left: 0.3vw;
+  position: absolute;
+  width: 1.7vw;
+  height: 1.7vw;
+}
+.mineSpan {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5.2631%;
+  width: 100%;
 }
 .electrifiedBlock {
   position: relative;

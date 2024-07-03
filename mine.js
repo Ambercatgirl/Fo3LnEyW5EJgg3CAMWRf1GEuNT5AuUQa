@@ -342,7 +342,8 @@ function switchDistance(num) {
         layerDistanceY = 1000 + (2000 * distanceMulti);
     }
     if (isNaN(layerDistanceY)) {layerDistanceY = 1000; distanceMulti = 0;}
-    const teleportLayer = getLayer(layerDistanceY).layer.slice(-1)
+    let teleportLayer = getLayer(layerDistanceY).layer;
+    for (let i = 0; i < teleportLayer.length; i++) if (oreList[teleportLayer[i]]["oreTier"] === "Layer") {teleportLayer = teleportLayer[i]; break;}
     get("meterDisplay").textContent = `${teleportLayer} ${(currentWorld === 2 ? layerDistanceY - 2000 : layerDistanceY).toLocaleString()}m`
 }
 

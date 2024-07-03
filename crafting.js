@@ -160,47 +160,47 @@ const recipes = {
     },
     "gear0" : {
         name : "",
-        recipe : [{ore:"🪨", amt:300000},{ore:"🟧", amt:25000},{ore:"🟥", amt:25000},{ore:"🟪", amt:25000},{ore:"🔋", amt:1},],
+        recipe : [{ore:"🪨", amt:1000000},{ore:"🟠", amt:9750},{ore:"◽", amt:2400},{ore:"🔲", amt:15},{ore:"🔶", amt:2},{ore:"🔋", amt:1},],
         upgrades : {}
     },
     "gear1" : {
         name : "",
-        recipe : [{ore:"🌫️", amt:7500000},{ore:"🧡", amt:10},{ore:"💜", amt:5},{ore:"🎭", amt:1},{ore:"🪄", amt:2},{ore:"🕯️", amt:1},],
+        recipe : [{ore:"🌫️", amt:5000000},{ore:"🟤", amt:12500},{ore:"⬜", amt:1700},{ore:"🟦", amt:200},{ore:"🔻", amt:20},{ore:"🔷", amt:4},{ore:"🎭", amt:2},{ore:"🪄", amt:1},{ore:"🕯️", amt:1}],
         upgrades : {}
     },
     "gear2" : {
         name : "",
-        recipe : [{ore:"🌵", amt:12500000},{ore:"🖤", amt:1},{ore:"🤍", amt:7},{ore:"🖍️", amt:2},{ore:"⚱️", amt:2},{ore:"🎀", amt:1},{ore:"⭐", amt:1},],
+        recipe : [{ore:"🌵", amt:10000000},{ore:"🔴", amt:55000},{ore:"🔹", amt:35},{ore:"🔸", amt:25},{ore:"🖤", amt:10},{ore:"🤍", amt:20},{ore:"🖍️", amt:5},{ore:"⚱️", amt:8},{ore:"⭐", amt:1}],
         upgrades : {}
     },
     "gear3" : {
         name : "",
-        recipe : [{ore:"🪨", amt:30000000},{ore:"💠", amt:25},{ore:"⚜️", amt:25},{ore:"🔋", amt:10},{ore:"🔮", amt:7},{ore:"☄️", amt:5},{ore:"💎", amt:1},],
+        recipe : [{ore:"🪨", amt:100000000},{ore:"💠", amt:50},{ore:"⚜️", amt:50},{ore:"🔋", amt:15},{ore:"🔮", amt:10},{ore:"☄️", amt:6},{ore:"💎", amt:3}],
         upgrades : {}
     },
     "gear4" : {
         name : "",
-        recipe : [{ore:"🟫", amt:10000000},{ore:"🧱", amt:10000000},{ore:"🌫️", amt:10000000},{ore:"🌊", amt:10000000},{ore:"🪨", amt:10000000},{ore:"☢️", amt:10000000},{ore:"🌵", amt:10000000},{ore:"📰", amt:10000000},{ore:"📟", amt:15},{ore:"⌚", amt:2},{ore:"🔥", amt:1},],
+        recipe : [{ore:"🟫", amt:15000000},{ore:"🧱", amt:15000000},{ore:"🌫️", amt:15000000},{ore:"🌊", amt:15000000},{ore:"🪨", amt:15000000},{ore:"☢️", amt:15000000},{ore:"🌵", amt:60000000},{ore:"📰", amt:15000000},{ore:"📟", amt:7},{ore:"⌚", amt:2},{ore:"🔥", amt:2},],
         upgrades : {}
     },
     "gear5" : {
         name : "",
-        recipe : [{ore:"🌫️", amt:50000000},{ore:"🌊", amt:50000000},{ore:"🪄", amt:50},{ore:"🎨", amt:25},{ore:"🕋", amt:20},{ore:"🕯️", amt:15},{ore:"🌀", amt:1},{ore:"⌛", amt:1},],
+        recipe : [{ore:"🌫️", amt:150000000},{ore:"🌊", amt:150000000},{ore:"🪄", amt:75},{ore:"🎨", amt:30},{ore:"🕋", amt:25},{ore:"🕯️", amt:15},{ore:"🌀", amt:1},{ore:"⌛", amt:1},],
         upgrades : {}
     },
     "gear6" : {
         name : "",
-        recipe : [{ore:"🌵", amt:150000000},{ore:"⚱️", amt:75},{ore:"🗡️", amt:50},{ore:"🎀", amt:20},{ore:"🔆", amt:10},{ore:"⭐", amt:15},{ore:"💥", amt:2},{ore:"🪐", amt:1},],
+        recipe : [{ore:"🌵", amt:450000000},{ore:"⚱️", amt:400},{ore:"🗡️", amt:350},{ore:"🎀", amt:100},{ore:"🔆", amt:50},{ore:"⭐", amt:45},{ore:"💥", amt:10},{ore:"🪐", amt:5},],
         upgrades : {}
     },
     "gear7" : {
         name : "",
-        recipe : [{ore:"🌫️", amt:17500000},{ore:"🎭", amt:10},{ore:"🎴", amt:5},{ore:"🎨", amt:2},{ore:"🕋", amt:1},],
+        recipe : [{ore:"🌫️", amt:25000000},{ore:"🟥", amt:1000000},{ore:"🧧", amt:20500},{ore:"🔺", amt:100},{ore:"🎭", amt:5},{ore:"🎴", amt:3},{ore:"🎨", amt:1},{ore:"🕋", amt:1},],
         upgrades : {}
     },
     "gear8" : {
         name : "",
-        recipe : [{ore:"☢️", amt:20000000},{ore:"🧪", amt:20},{ore:"⚗️", amt:15},{ore:"⏹️", amt:5},{ore:"🔳", amt:3},],
+        recipe : [{ore:"☢️", amt:40000000},{ore:"⬛", amt:6500},{ore:"🔲", amt:700},{ore:"🔶", amt:100},{ore:"🧪", amt:10},{ore:"⚗️", amt:5},{ore:"⏹️", amt:3},{ore:"🔳", amt:1}],
         upgrades : {}
     },
     "gear9" : {
@@ -305,17 +305,17 @@ const recipes = {
     },
     "gear29" : {  
         name : "",
-        recipe : [{ore:"🟫", amt:1}],
+        recipe : [{ore:"📰", amt:1000000000},{ore:"🎲", amt:9000},{ore:"🏆", amt:1900},{ore:"🗜️", amt:1700},{ore:"⌚", amt:1400},{ore:"📝", amt:350},{ore:"🌟", amt:250},{ore:"👀", amt:70},{ore:"🪅", amt:20},{ore:"💵", amt:6}],
         upgrades: {}
     },
     "gear30" : {  
         name : "",
-        recipe : [{ore:"🟫", amt:1}],
+        recipe : [{ore:"🌫️", amt:350000},{ore:"◾", amt:350},{ore:"🧧", amt:175},{ore:"🔻", amt:1},{ore:"🤍", amt:2}],
         upgrades: {}
     },
     "gear31" : {  
         name : "",
-        recipe : [{ore:"🟫", amt:1},],
+        recipe : [{ore:"☢️", amt:600000},{ore:"🔵", amt:9000},{ore:"🟨", amt:10},{ore:"🔘", amt:3},{ore:"🔸", amt:2},{ore:"💙", amt:5},{ore:"❤️", amt:4}],
         upgrades: {}
     },
 }
@@ -498,8 +498,8 @@ const buttonGradients = {
     "pickaxe26Craft" : {"gradient" : "linear-gradient(to right, #000000, #5D0000, #734600, #807A00, #074D00, #006564, #021652 , #3B0076, #460038, #5D0000, #000000)","applied" : false},
     "pickaxe27Craft" : {"gradient" : "linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B)","applied" : false},
     "pickaxe28Craft" : {"gradient" : "linear-gradient(to right, #c370e1, #8282e6, #ffffcd)","applied" : false},
-    "pickaxe29Craft" : {"gradient" : "linear-gradient(to right, darkgray, darkgray)","applied" : false},
-    "pickaxe30Craft" : {"gradient" : "linear-gradient(to right, darkgray, darkgray)","applied" : false},
+    "pickaxe29Craft" : {"gradient" : "linear-gradient(to right, #882608, #6c1805, #360a0a)","applied" : false},
+    "pickaxe30Craft" : {"gradient" : "linear-gradient(to right, #feda84, #976393, #43457f, #ff9b83)","applied" : false},
     
 
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
@@ -571,8 +571,9 @@ function craftPickaxe(item) {
 function getButtonByName(item) {
     const toSearch = document.getElementsByClassName("craftingButton");
     for (let i = 0; i < toSearch.length; i++) {
-        const toCheck = toSearch[i].getAttribute('onclick');
-        if (toCheck.indexOf(item) > -1) return toSearch[i];
+        let toCheck = toSearch[i].getAttribute('onclick');
+        toCheck = toCheck.substring(15, toCheck.length - 2)
+        if (toCheck === item) return toSearch[i];
     }
     return false;
 }
@@ -643,7 +644,7 @@ function switchWorldCraftables() {
         gearList = showOrders.worldTwoGears;
         pickaxeList = showOrders.worldTwoPickaxes;
     }
-    for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "block";
+    for (let i = 0; i < gearList.length; i++) {console.log(gearList[i]); getButtonByName(gearList[i]).style.display = "block";}
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "block";
     document.getElementById("nullChroma").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
@@ -1150,7 +1151,7 @@ const pickaxeStats = {
         luck: 1, 
         rate: 1, 
         src: "⛏️", 
-        doAbility: function() {null;},
+        doAbility: function(x, y) {null;},
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1161,7 +1162,7 @@ const pickaxeStats = {
         rate: 50, 
         src: `<img class="mineImage" src="media/mulchMalletIcon.png"></img>`, 
         ability:"media/abilityImages/mulchMalletAbility.png", 
-        doAbility: function() {pickaxeAbility1(curX, curY)},
+        doAbility: function(x, y) {pickaxeAbility1(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1173,7 +1174,7 @@ const pickaxeStats = {
         rate: 50, 
         src: `<img class="mineImage" src="media/mudSickleIcon.png"></img>`, 
         ability:"media/abilityImages/mudSickleAbility.png", 
-        doAbility: function() {pickaxeAbility2(curX, curY)},
+        doAbility: function(x, y) {pickaxeAbility2(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1185,7 +1186,7 @@ const pickaxeStats = {
         rate: 100, 
         src: `<img class="mineImage" src="media/dirtRavagerIcon.png"></img>`, 
         ability:"media/abilityImages/dirtRavagerAbility.png", 
-        doAbility: function() {pickaxeAbility3(curX, curY)},
+        doAbility: function(x, y) {pickaxeAbility3(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1197,7 +1198,7 @@ const pickaxeStats = {
         rate: 60, 
         src: `<img class="mineImage" src="media/crystallineExcavatorIcon.png"></img>`, 
         ability:"media/abilityImages/crystallineExcavatorAbility.png", 
-        doAbility: function() {pickaxeAbility28(curX, curY) },
+        doAbility: function(x, y) {pickaxeAbility28(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
         },
@@ -1209,7 +1210,7 @@ const pickaxeStats = {
         rate: 50,
         src: "⛏️",
         ability: "media/abilityImages/anchorAbility.png",
-        doAbility: function () { pickaxeAbility29(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility29(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1221,7 +1222,7 @@ const pickaxeStats = {
         rate: 45,
         src: "⛏️",
         ability: "media/abilityImages/palmTreeAbility.png",
-        doAbility: function () { pickaxeAbility30(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility30(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1233,7 +1234,7 @@ const pickaxeStats = {
         rate: 35,
         src: `<img class="mineImage" src="media/voidCrusherIcon.webp"></img>`,
         ability: "media/abilityImages/voidCrusherAbility.png",
-        doAbility: function () { pickaxeAbility4(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility4(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
     },
@@ -1245,7 +1246,7 @@ const pickaxeStats = {
         rate: 35,
         src: `<img class="mineImage" src="media/geodeStaffIcon.png"></img>`,
         ability: "media/abilityImages/geodeStaffAbility.png",
-        doAbility: function () { pickaxeAbility5(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility5(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "Enables cave spawns in World 1, along with every pickaxe after it."
@@ -1258,7 +1259,7 @@ const pickaxeStats = {
         rate: 40,
         src: `<img class="mineImage" src="media/earthSoilerIcon.png"></img>`,
         ability: "media/abilityImages/earthSoilerAbility.png",
-        doAbility: function () { pickaxeAbility6(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility6(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
     },
@@ -1270,7 +1271,7 @@ const pickaxeStats = {
         rate: 65,
         src: `<img class="mineImage" src="media/cryptSmasherIcon.png"></img>`,
         ability: "media/abilityImages/cryptSmasherAbility.png",
-        doAbility: function () { pickaxeAbility7(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility7(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "85% line repetition chance, 7 max repetitions.",
@@ -1283,7 +1284,7 @@ const pickaxeStats = {
         rate: 60,
         src: "⛏️",
         ability: "media/abilityImages/labyrinthianTideAbility.png",
-        doAbility: function () { pickaxeAbility8(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility8(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "70% line repetition chance, 7 max repetitions.",
@@ -1296,7 +1297,7 @@ const pickaxeStats = {
         rate: 35,
         src: `<img class="mineImage" src="media/77LeafDestroyerIcon.png"></img>`,
         ability: "media/abilityImages/77LeafDestroyerAbility.png",
-        doAbility: function () { pickaxeAbility9(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility9(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "<i>The pickaxe resonates with a distant entity.. a signal sent from far beyond these lands. Further traces of it are found within the blueprint for a particular craft of a key, one designed to open the lock to a completely new world..</i>",
@@ -1309,7 +1310,7 @@ const pickaxeStats = {
         rate: 50,
         src: "⛏️",
         ability: "media/abilityImages/planetBusterAbility.png",
-        doAbility: function () { pickaxeAbility10(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility10(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
 },
@@ -1321,19 +1322,19 @@ const pickaxeStats = {
         rate: 80,
         src: `<img class="mineImage" src="media/whirlpoolOfFateIcon.png"></img>`,
         ability: "media/abilityImages/whirlpoolOfFateAbility.png",
-        doAbility: function () { pickaxeAbility11(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility11(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
 },
     //1027.5 cons
     "pickaxe12": {
-        mined: 1541,
-        revealed: 1861,
-        luck: 75,
-        rate: 150,
+        mined: 7269,
+        revealed: 8025,
+        luck: 60,
+        rate: 250,
         src: `<img class="mineImage" src="media/wingsOfGloryIcon.png"></img>`,
         ability: "media/abilityImages/wingsOfGloryAbility.png",
-        doAbility: function () { pickaxeAbility12(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility12(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "Mines 2 blocks at once when using automine.<br>Has 2x special cave type luck and slightly increased cave size.",
@@ -1345,7 +1346,7 @@ const pickaxeStats = {
         luck: 1,
         rate: 1,
         src: `<img class="mineImage" src="media/theKeyIcon.png"></img>`,
-        doAbility: function () { null; },
+        doAbility: function(x, y) { null; },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1356,7 +1357,7 @@ const pickaxeStats = {
         rate: 45,
         src: `<img class="mineImage" src="media/extremeEcholocatorIcon.png"></img>`,
         ability: "media/abilityImages/extremeEcholocatorAbility.png",
-        doAbility: function () { pickaxeAbility14(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility14(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1367,7 +1368,7 @@ const pickaxeStats = {
         rate: 75,
         src: "⛏️",
         ability: "media/abilityImages/corundumCaverAbility.png",
-        doAbility: function () { pickaxeAbility15(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility15(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1378,7 +1379,7 @@ const pickaxeStats = {
         rate: 100,
         src: `<img class="mineImage" src="media/starborneSlasherIcon.webp"></img>`,
         ability: "media/abilityImages/starborneSlasherAbility.png",
-        doAbility: function () { pickaxeAbility16(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility16(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1389,7 +1390,7 @@ const pickaxeStats = {
         rate: 150,
         src: `<img class="mineImage" src="media/nyabombIcon.png"></img>`,
         ability: "media/abilityImages/nyabombAbility.png",
-        doAbility: function () { pickaxeAbility17(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility17(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1400,7 +1401,7 @@ const pickaxeStats = {
         rate: 150,
         src: `<img class="mineImage" src="media/lunarLightsabreIcon.png"></img>`,
         ability: "media/abilityImages/lunarLightsabreAbility.png",
-        doAbility: function () { pickaxeAbility18(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility18(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1411,7 +1412,7 @@ const pickaxeStats = {
         rate: 60,
         src: "⛏️",
         ability: "media/abilityImages/gemstoneEngraverAbility.png",
-        doAbility: function () { pickaxeAbility19(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility19(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
         extraInformation: "High repetition chance, 7 max repititions."
@@ -1423,7 +1424,7 @@ const pickaxeStats = {
         rate: 75,
         src: `<img class="mineImage" src="media/gamblersFallacyIcon.png"></img>`,
         ability: "media/abilityImages/gamblersFallacyAbility.png",
-        doAbility: function () { pickaxeAbility20(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility20(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1434,7 +1435,7 @@ const pickaxeStats = {
         rate: 75,
         src: "⛏️",
         ability: "media/abilityImages/exponentialCentrifugeAbility.png",
-        doAbility: function () { pickaxeAbility21(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility21(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1445,7 +1446,7 @@ const pickaxeStats = {
         rate: 120,
         src: "⛏️",
         ability: "media/abilityImages/singularitySlammerAbility.png",
-        doAbility: function () { pickaxeAbility22(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility22(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1456,7 +1457,7 @@ const pickaxeStats = {
         rate: 150,
         src: `<img class="mineImage" src="media/staffOfBindingIcon.png"></img>`,
         ability: "media/abilityImages/staffOfBindingAbility.png",
-        doAbility: function () { pickaxeAbility23(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility23(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1467,7 +1468,7 @@ const pickaxeStats = {
         rate: 175,
         src: `<img class="mineImage" src="media/sssIcon.png"></img>`,
         ability: "media/abilityImages/sssAbility.png",
-        doAbility: function () { pickaxeAbility24(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility24(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
         extraInformation: "You've mined too much, best to turn back now. Be warned.",
@@ -1479,18 +1480,18 @@ const pickaxeStats = {
         rate: 300,
         src: `<img class="mineImage" src="media/coronaryCatastropheIcon.webp"></img>`,
         ability: "media/abilityImages/coronaryCatastropheAbility.png",
-        doAbility: function () { pickaxeAbility25(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility25(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
         extraInformation: "<i style='font-size: 75%;'>..This is where it ends? The most powerful tool in all the worlds..? No.. it can't end here there must be something more...</i><br><i>Warning: High mine capacities with this pickaxe may lead to game crashes.</i>",
 },
     "pickaxe26": {
-        mined: 14343,
-        revealed: 17431,
+        mined: 21021,
+        revealed: 26494,
         luck: 175,
         rate: 150,
         src: "⛏️",
-        doAbility: function () { pickaxeAbility26(curX, curY) },
+        doAbility: function(x, y) { pickaxeAbility26(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
 },
@@ -1503,7 +1504,7 @@ const pickaxeStats = {
         5 : {mined: 54298, revealed: 63893, luck: 100},
         rate: 500,
         src : "⛏️",
-        doAbility: function() {pickaxeAbility27(curX, curY)},
+        doAbility: function(x, y) {pickaxeAbility27(x, y)},
         canSpawnCaves:[1.1],
         canMineIn:[1, 1.1],
     },
@@ -1556,6 +1557,7 @@ function ct() {
     }
     let commonProcsNeeded = 0;
     let procsNeeded = [];
+    console.log(recipeLayers)
     if (recipeLayers["commons"] !== undefined) {
         commonProcsNeeded = recipeLayers["commons"].highestRarity / abilityMined;
     }
