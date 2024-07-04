@@ -176,20 +176,21 @@ class secureLogs {
         let baseLuck = this.getBaseLuck(player.stats.currentPickaxe);
         let luck = baseLuck;
         if (currentWorld === 1.1) {
-            luck += getRewardTypes("luck", "add");
+            baseLuck += getRewardTypes("luck", "add");
+            baseLuck *= getRewardTypes("luck", "multiply")
             if (player.gears["gear20"]) luck *= ((baseLuck * 0.05) + 1);
             luck *= 1.25;
-            luck *= getRewardTypes("luck", "multiply")
+            
             if (isNaN(luck)) return 1;
             else return luck;
         }
         if (player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; baseLuck = 1;}
         baseLuck += player.gears["gear30"] ? 0.3 : 0;
         baseLuck += getRewardTypes("luck", "add");
+        baseLuck *= getRewardTypes("luck", "multiply");
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
         if (currentWorld < 2) luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         if (player.gears["gear20"]) luck *= (baseLuck * 0.05) + 1;
-        luck *= getRewardTypes("luck", "multiply");
         luck *= 1.25;
         if (isNaN(luck)) return 1;
         else return luck;
@@ -219,7 +220,7 @@ class secureLogs {
         return this.#canGenCaves;
     }
     #onLoad() {
-        const isMobile = screen.width < 400;
+        const isMobile = screen.width < 500;
         if (!isMobile && !debug) {
             this.#consoleCheckTimer = setInterval(() => {
                 this.#checkForConsole();

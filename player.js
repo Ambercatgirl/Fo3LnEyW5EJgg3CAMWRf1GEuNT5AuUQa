@@ -675,6 +675,9 @@ const dailyMessages = {
     "trophyUpdate" : {
         showUntil : "July 1, 2024",
     },
+    "worldOneRevamp" : {
+        showUntil : "July 20, 2024",
+    },
     "sr1Unlocked" : {
         showUntil : "June 25, 0000",
     }

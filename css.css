@@ -653,15 +653,16 @@ img.roundcat {
   margin: auto;
   justify-content: center;
   position: relative;
+  
 }
 .hologram button {
   height: 100%;
   width: 40%;
   border: none;
-  border-top: 0.1vw solid #6BC267;
   background: none;
   font-size: 1.25vw;
   font-weight: 750;
+  box-shadow: 0px -0.2vw 6px -1px red;
 }
 #hologramTriangle {
   position: absolute;

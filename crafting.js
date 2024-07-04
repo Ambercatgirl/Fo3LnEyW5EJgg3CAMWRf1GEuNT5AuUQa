@@ -175,7 +175,7 @@ const recipes = {
     },
     "gear3" : {
         name : "",
-        recipe : [{ore:"🪨", amt:100000000},{ore:"💠", amt:50},{ore:"⚜️", amt:50},{ore:"🔋", amt:15},{ore:"🔮", amt:10},{ore:"☄️", amt:6},{ore:"💎", amt:3}],
+        recipe : [{ore:"🪨", amt:75000000},{ore:"💠", amt:50},{ore:"⚜️", amt:50},{ore:"🔋", amt:15},{ore:"🔮", amt:10},{ore:"☄️", amt:6},{ore:"💎", amt:3}],
         upgrades : {}
     },
     "gear4" : {
@@ -644,7 +644,7 @@ function switchWorldCraftables() {
         gearList = showOrders.worldTwoGears;
         pickaxeList = showOrders.worldTwoPickaxes;
     }
-    for (let i = 0; i < gearList.length; i++) {console.log(gearList[i]); getButtonByName(gearList[i]).style.display = "block";}
+    for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "block";
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "block";
     document.getElementById("nullChroma").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
@@ -1557,7 +1557,6 @@ function ct() {
     }
     let commonProcsNeeded = 0;
     let procsNeeded = [];
-    console.log(recipeLayers)
     if (recipeLayers["commons"] !== undefined) {
         commonProcsNeeded = recipeLayers["commons"].highestRarity / abilityMined;
     }
@@ -1604,6 +1603,7 @@ function createPolygon(element) {
     image.id = "abilityImage";
     image.style.display = "none";
     element.children[0].textContent = "Hide Ability";
+    element.children[0].style.boxShadow = "0px -0.2vw 6px -1px green";
     get(element.id).appendChild(image);
     get(element.id).appendChild(canvas);
     lastUsedId = element.id;
@@ -1626,6 +1626,6 @@ function removePolygon(element) {
         get(lastUsedId).removeChild(get("abilityImage"));
         lastUsedId = undefined; 
         justCreated = false;
-        if (element !== undefined) element.children[0].textContent = "View Ability";
+        if (element !== undefined) {element.children[0].textContent = "View Ability"; element.children[0].style.boxShadow = "0px -0.2vw 6px -1px red";}
     }
 }

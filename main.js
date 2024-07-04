@@ -471,6 +471,7 @@ function calcSpeed() {
         if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1}
         else return {speed: 7, reps: (-2 + sr1Level)}
     }
+    if (debug) return {speed: 0, reps: 100}
     return {speed: miningSpeed, reps: reps}
 }
 //DISPLAY
