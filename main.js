@@ -60,7 +60,6 @@ function init() {
     createInventory();
     createGearRecipes();
     createPickaxeRecipes();
-    switchPowerupDisplay(0);
     assignImageNames();
     createAllLayers();
     createMine();
@@ -100,6 +99,7 @@ function init() {
         updateAllLayers();
         checkUnlockConditions();
         switchWorldCraftables();
+        switchPowerupDisplay(0);
         console.log("meow");
     }
 }
@@ -243,7 +243,7 @@ function loadContent() {
 }
 
 //MOVEMENT
-function movePlayer(dir, reps) {
+function movePlayer(dir, reps, type) {
     for (let i = 0; i < reps; i++) {
         if (canMine) {
             if (verifiedOres.isRightPickaxe()) {
@@ -263,7 +263,7 @@ function movePlayer(dir, reps) {
                     mineBlock(curX, curY, "mining");
                     mine[curY][curX] = "⛏️";
                     lastDirection = dir.key;
-                    if (player.gears["gear29"] && !isHoldingShift) {
+                    if (player.gears["gear29"] && !isHoldingShift && type !== "single") {
                         if (dir.y !== 0) {
                             if (curY > 0 && mine[curY + dir.y][curX] === "⚪") {
                                 mine[curY][curX] = "⚪";
@@ -423,7 +423,7 @@ function goDirection(direction, speed) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
-        loopTimer = setInterval(movePlayer, miningSpeed, movements, reps);
+        loopTimer = setInterval(movePlayer, miningSpeed, movements, reps, "auto");
         curDirection = direction;
         energySiphonerDirection = direction;
         updateDisplayTimer(true);
@@ -438,7 +438,7 @@ function moveOne(dir, button) {
     let movements = {x:0, y:0, key:dir};
     movements.x = (dir === "a" ? -1 : (dir === "d" ? 1 : 0));
     movements.y = (dir === "s" ? 1 : (dir === "w" ? -1 : 0));
-    movePlayer(movements, 1);
+    movePlayer(movements, 1, "single");
     curDirection = "";
     setTimeout(() => {
         button.disabled = false;
@@ -472,7 +472,7 @@ function calcSpeed() {
         else return {speed: 7, reps: (-2 + sr1Level)}
     }
     if (debug) return {speed: 0, reps: 100}
-    return {speed: miningSpeed, reps: reps}
+    else return {speed: miningSpeed, reps: reps}
 }
 //DISPLAY
 let displayRows;
@@ -675,9 +675,14 @@ function updateInventory() {
     if (player.powerupVariables.fakeEquipped.item !== undefined && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
         removeParadoxical();
     }
+    if (player.powerupVariables.caveBoosts.active && Date.now() >= player.powerupVariables.caveBoosts.removeAt) {
+        player.powerupVariables.caveBoosts.removeAt = 0;
+        player.powerupVariables.caveBoosts.active = false;
+        caveLuck = 1;
+    }
+
     if (currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") player.stats.currentPickaxe = "pickaxe27";
     else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = "pickaxe0";
-    checkPowerupCooldowns();
     updatePowerupCooldowns();
     updateDisplayedUpgrade();
     if (player.gears["gear24"]) autoPowerups();
