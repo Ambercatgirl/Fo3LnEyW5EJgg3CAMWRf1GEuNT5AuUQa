@@ -323,13 +323,14 @@ recipeElements = {};
 let currentRecipe = undefined;
 function displayRecipe(recipe) {
     removePolygon();
-    const parentElement = document.getElementById("displayRecipe");
-    document.getElementById("craftingRecipeTitle").style.display = "none";
+    //const parentElement = document.getElementById("displayRecipe");
+    const oldElement = get("displayRecipe");
+    if (oldElement) oldElement.remove();
+    const parentElement = document.createElement("div");
+    parentElement.id = "displayRecipe";
+    if (currentRecipe !== undefined) getButtonByName(currentRecipe).classList.remove("selectedOutline");
     while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
     if (currentRecipe === undefined || currentRecipe !== recipe) {
-        if (recipe !== "pickaxe27") {
-            document.getElementById("craftingRecipeTitle").style.display = "block";
-        }
         recipeElements[recipe].style.display = "block";
         parentElement.appendChild(recipeElements[recipe]);
         const description = document.getElementById(`${recipe}Description`).cloneNode(true);
@@ -348,10 +349,11 @@ function displayRecipe(recipe) {
         title.style.display = "block";
         parentElement.appendChild(title);
         parentElement.appendChild(description);
-        if (equippedButton !== undefined) parentElement.appendChild(equippedButton)
+        if (equippedButton !== undefined) parentElement.appendChild(equippedButton);
         currentRecipe = recipe;
+        getButtonByName(currentRecipe).insertAdjacentElement("afterend", parentElement)
+        getButtonByName(currentRecipe).classList.add("selectedOutline");
     } else {
-        document.getElementById("craftingRecipeTitle").style.display = "none";
         recipeElements[recipe].style.display = "none";
         while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
         currentRecipe = undefined;
@@ -578,6 +580,10 @@ function getButtonByName(item) {
     return false;
 }
 function utilitySwitchActions() {
+    const element = document.getElementsByClassName("equippedOutline");
+    if (element[0] !== undefined) element[0].classList.remove("equippedOutline");
+    const toAdd = getButtonByName(player.stats.currentPickaxe);
+    if (toAdd) toAdd.classList.add("equippedOutline");
     changeLayerOres();
     updateAllLayers();
     switchLayerIndex(0);
@@ -644,11 +650,11 @@ function switchWorldCraftables() {
         gearList = showOrders.worldTwoGears;
         pickaxeList = showOrders.worldTwoPickaxes;
     }
-    for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "block";
-    for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "block";
+    for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "flex";
+    for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
     document.getElementById("nullChroma").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
-    if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "block";
+    if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "flex";
     else document.getElementById("sillyRecipe").style.display = "none";
 }
 function toggleOreForge() {
@@ -1118,7 +1124,7 @@ function updateUpgradeDisplay() {
     
     let output = "";
     if (player.upgrades["pickaxe27"].level >= player.upgrades["pickaxe27"].maxLevel) {
-        output = ""
+        output = "Ability Size: 54,298<br>Luck: 100";
     } else {
         let descriptions = upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].descriptions;
         for (let i = 0; i < descriptions.length; i++) {

@@ -359,11 +359,18 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 .craftingButton span {
   font-size: 1.25vw;
 }
+.selectedOutline {
+  border: 0.2vw solid #494949!important;
+}
+.equippedOutline {
+  box-shadow: 0 0 10px #00FF23;
+}
 #craftingTimeDisplay {
   width: 100%;
   height: 2vw;
   font-size: 1vw;
   border-bottom:3px solid #333; 
+  margin-bottom: 0px;
 }
 .mobile {
   display: inline-block;
@@ -381,7 +388,8 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   font-size: 1vw;
   display: none;
   width: 100%;
-  border:3px solid #333; 
+  border:0.25vw solid #333; 
+  border-top: none;
   border-left: none;
   border-right: none;
   text-align: center;
@@ -395,11 +403,11 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   margin: 0;
 }
 #displayRecipe {
-  margin:auto;
+  margin-top: -0.25vw;
   height: auto;
   width: 100%;
-  margin: 0%;
   text-align: center;
+  border-bottom: 0.25vw solid #333;
 }
 
 .latestDisplay {
@@ -413,7 +421,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 .itemDescription {
   font-size:1.5vw;
   position: relative;
-  margin-bottom: 1vw;
+  margin-bottom: 0.25vw;
 }
 #gearCrafts {
   display:flex;
@@ -421,21 +429,20 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   align-items:center;
   gap:1vh;
   width: 100%;
-  border-bottom:1px solid #333;
   border-top:1px solid #333;
   padding-top: 3%;
-  padding-bottom: 3%;
+  padding-bottom: 0.5vw;
 }
 #pickaxeCrafts {
   display:flex;
   flex-flow:column;
   align-items:center;
-  gap:1vh;
+  gap:0.5vw;
   width: 100%;
-  border-bottom:1px solid #333;
   border-top:1px solid #333;
   padding-top: 3%;
-  padding-bottom: 3%;
+  padding-bottom: 0.5vw;
+  border-bottom: none;
 }
 .craftPickaxeButton {
   background: none;
@@ -501,6 +508,10 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
   height: 2.25vw;
   font-weight: 750;
   font-size: 1.25vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
 }
 .craftingButton:hover {
   background-color: gray;
@@ -671,12 +682,11 @@ img.roundcat {
   opacity: 25%;
 }
 #abilityImage {
+  z-index: 4!important;
   width: 25vw;
   height: auto;
   position: absolute;
   bottom: 16.7vw;
-  opacity: 100%;
-  z-index: 15;
   border-top: 0.1vw solid white;
   border-bottom: 0.1vw solid white;
   box-shadow: 0 0 10px white;

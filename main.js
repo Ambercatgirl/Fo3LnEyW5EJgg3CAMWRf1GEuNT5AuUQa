@@ -675,6 +675,9 @@ function updateInventory() {
     if (player.powerupVariables.fakeEquipped.item !== undefined && Date.now() >= player.powerupVariables.fakeEquipped.removeAt) {
         removeParadoxical();
     }
+    if (player.powerupVariables.fakeTreeLevel.level !== undefined && Date.now() >= player.powerupVariables.fakeTreeLevel.removeAt) {
+        removeParadoxical();
+    }
     if (player.powerupVariables.caveBoosts.active && Date.now() >= player.powerupVariables.caveBoosts.removeAt) {
         player.powerupVariables.caveBoosts.removeAt = 0;
         player.powerupVariables.caveBoosts.active = false;
