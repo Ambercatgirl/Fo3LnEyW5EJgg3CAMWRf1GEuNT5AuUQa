@@ -125,6 +125,7 @@ class playerTemplate {
             currentChosenOre : {ore: undefined, removeAt: 0, lastOre: undefined},
             commonsAffected : {state: false, removeAt: 0},
             fakeEquipped: {originalState: undefined, item: undefined, removeAt: 0},
+            fakeTreeLevel: {originalState: undefined, level: undefined, removeAt: 0},
             nextAuto: Date.now(),
             autoNum: 1,
             caveBoosts: {removeAt: 0, active: false}
@@ -286,9 +287,14 @@ const powerupList = {
         getActiveFor: function() {
             if (player.powerupVariables.fakeEquipped.item !== undefined) {
                 get("powerupInformation").innerHTML = `Fake Equipped:<br>${getItemNameFromParadoxical(player.powerupVariables.fakeEquipped.item)}`;
-            } else get("powerupInformation").innerHTML = "";
+            } else if (player.powerupVariables.fakeTreeLevel.level !== undefined) {
+                get("powerupInformation").innerHTML = `Fake Equipped:<br>TOL Level ${player.powerupVariables.fakeTreeLevel.level}`;
+            }
+            else get("powerupInformation").innerHTML = "";
             const beginTime = player.powerupCooldowns["powerup5"].cooldown - (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
-            const endTime = player.powerupVariables.fakeEquipped.removeAt;
+            let endTime;
+            if (player.powerupVariables.fakeEquipped.item !== undefined) endTime = player.powerupVariables.fakeEquipped.removeAt;
+            else endTime = player.powerupVariables.fakeTreeLevel.removeAt;
             const progressTime = endTime - Date.now();
             const abilityTime = endTime - beginTime;
             return {progress: progressTime, active: abilityTime};
@@ -576,6 +582,10 @@ function loadNewData(data) {
                 data.pickaxes[item] = false;
                 if (data.wasUsing === undefined) data.stats.currentPickaxe = isNaN(data.powerupVariables.fakeEquipped.originalState) ? data.powerupVariables.fakeEquipped.originalState : `pickaxe${data.powerupVariables.fakeEquipped.originalState}`;
             }
+        }
+        if (data.powerupVariables !== undefined && data.powerupVariables.fakeTreeLevel !== undefined && data.powerupVariables.fakeTreeLevel.level !== undefined) {
+            let level = data.powerupVariables.fakeTreeLevel.originalState;
+            data.upgrades["pickaxe27"].level = level;
         }
         if (data.gears !== undefined && player.gears !== undefined) {
             for (let propertyName in data.gears) if (player.gears[propertyName] !== undefined) player.gears[propertyName] = data.gears[propertyName];

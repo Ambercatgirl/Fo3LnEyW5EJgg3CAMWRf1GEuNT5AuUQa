@@ -53,6 +53,7 @@ function powerup1(x, y) {
         }
         displayArea();
         player.powerupCooldowns["powerup1"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
+        applyNearbyData();
     }
     
 }
@@ -62,6 +63,7 @@ function powerup2() {
         player.powerupVariables.caveBoosts.removeAt = Date.now() + 150000;
         player.powerupVariables.caveBoosts.active = true;
         caveLuck = 2;
+        applyNearbyData();
     }
 }
 
@@ -76,52 +78,73 @@ function powerup3() {
         player.powerupVariables.currentChosenOre.removeAt = Date.now() + (player.gears["gear24"] ? 600000 * 1.5 : 600000);;
         updateAllLayers();
         player.powerupCooldowns["powerup3"].cooldown = Date.now() + (player.gears["gear24"] ? 3000000 * 0.75 : 3000000);
+        applyNearbyData();
     }
 }
 function powerup4() {
     if (Date.now() >= player.powerupCooldowns["powerup4"].cooldown && player.powerupCooldowns["powerup4"].unlocked) {
         player.powerupVariables.commonsAffected.state = true;
-        player.powerupVariables.commonsAffected.removeAt = Date.now() + (player.gears["gear24"] ? 300000 * 1.5 : 300000);;
+        player.powerupVariables.commonsAffected.removeAt = Date.now() + (player.gears["gear24"] ? 300000 * 1.5 : 300000);
         player.powerupCooldowns["powerup4"].cooldown = Date.now() + (player.gears["gear24"] ? 1200000 * 0.75 : 1200000);
-        updateAllLayers()
+        updateAllLayers();
+        applyNearbyData();
     }
 }
 function powerup5() {
-    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && currentWorld !== 1.1 && player.powerupCooldowns["powerup5"].unlocked) {
-        removeParadoxical();
-        let toChooseFrom = [];
-        for (let pickaxe in pickaxeStats) {
-            if (currentWorld === 1) {
-                if (pickaxe !== "pickaxe27") toChooseFrom.push(pickaxe);
-            } else if (currentWorld === 2) {
-                if (pickaxeStats[pickaxe].canMineIn.includes(2)) toChooseFrom.push(pickaxe)
+    if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && player.powerupCooldowns["powerup5"].unlocked) {
+        if (currentWorld !== 1.1) {
+            removeParadoxical();
+            let toChooseFrom = [];
+            for (let pickaxe in pickaxeStats) {
+                if (currentWorld === 1) {
+                    if (pickaxe !== "pickaxe27") toChooseFrom.push(pickaxe);
+                } else if (currentWorld === 2) {
+                    if (pickaxeStats[pickaxe].canMineIn.includes(2)) toChooseFrom.push(pickaxe)
+                }
+            }
+            toChooseFrom = toChooseFrom.concat(Object.keys(player.gears));
+            for (let i = toChooseFrom.length - 1; i >= 0; i--) {
+                if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]]) toChooseFrom.splice(i, 1);
+            }
+            if (toChooseFrom.length > 0) {
+                let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];
+                player.powerupVariables.fakeEquipped.item = toGive;
+                if (player.pickaxes[toGive] !== undefined) {
+                    player.powerupVariables.fakeEquipped.originalState = player.stats.currentPickaxe;
+                    player.stats.currentPickaxe = toGive;
+                    player.pickaxes[toGive] = true;
+                }
+                if (player.gears[toGive] !== undefined) {
+                    player.gears[toGive] = true;
+                    if (toGive === "gear0") document.getElementById("trackerLock").style.display = "none";
+                    if (toGive === "gear9") document.getElementById("sillyRecipe").style.display = "block";
+                }
+                updateAllLayers();
+                let tempDirection = curDirection;
+                stopMining();
+                goDirection(tempDirection);
+                player.powerupVariables.fakeEquipped.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);
+                player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
+                utilitySwitchActions();
+            }
+        } else {
+            removeParadoxical();
+            const curTreeLevel = player.upgrades["pickaxe27"].level;
+            if (curTreeLevel < 5) {
+               const chosenLevel = curTreeLevel + 1;
+                player.powerupVariables.fakeTreeLevel.originalState = player.upgrades["pickaxe27"].level;
+                player.powerupVariables.fakeTreeLevel.level = chosenLevel;
+                player.upgrades["pickaxe27"].level = chosenLevel;
+                updateAllLayers();
+                let tempDirection = curDirection;
+                stopMining();
+                goDirection(tempDirection);
+                player.powerupVariables.fakeTreeLevel.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);
+                player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
+                utilitySwitchActions();
             }
         }
-        toChooseFrom = toChooseFrom.concat(Object.keys(player.gears));
-        for (let i = toChooseFrom.length - 1; i >= 0; i--) {
-            if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]]) toChooseFrom.splice(i, 1);
-        }
-        if (toChooseFrom.length > 0) {
-            let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];
-            player.powerupVariables.fakeEquipped.item = toGive;
-            if (player.pickaxes[toGive] !== undefined) {
-                player.powerupVariables.fakeEquipped.originalState = player.stats.currentPickaxe;
-                player.stats.currentPickaxe = toGive;
-                player.pickaxes[toGive] = true;
-            }
-            if (player.gears[toGive] !== undefined) {
-                player.gears[toGive] = true;
-                if (toGive === "gear0") document.getElementById("trackerLock").style.display = "none";
-                if (toGive === "gear9") document.getElementById("sillyRecipe").style.display = "block";
-            }
-            updateAllLayers();
-            let tempDirection = curDirection;
-            stopMining();
-            goDirection(tempDirection);
-            player.powerupVariables.fakeEquipped.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);
-            player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
-            utilitySwitchActions();
-        }
+        applyNearbyData();
     }
 }
 

@@ -45,6 +45,8 @@ let oreList = {
     'pixel' : { 'decimalRarity': 1 / 6000000000, 'numRarity': 6000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "You seriously cannot be this unlucky... just craft it already...", 'oreTier': 'Celestial', 'normalAmt': 0, 'electrifiedAmt': 0, 'radioactiveAmt': 0, 'explosiveAmt': 0, "hasImage":true, "src" : "media/ores/pixel.webp", "oreName":"Pixel"},
     'matrix' : { 'decimalRarity': 1 / 1011010000, 'numRarity': 1011010000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Caverns so silly, even the matrix is!...", 'oreTier': 'Interstellar', 'normalAmt': 0, 'electrifiedAmt': 0, 'radioactiveAmt': 0, 'explosiveAmt': 0, "hasImage":true, "src" : "media/ores/matrix.webp", "oreName":"Matrix"},
     'apatite' : { 'decimalRarity': 1 / 3250000000, 'numRarity': 3250000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "A bright,sparkly, and gleaming crystal illuminates the caverns as it slowly appears...", 'oreTier': 'Metaversal', 'normalAmt': 0, 'electrifiedAmt': 0, 'radioactiveAmt': 0, 'explosiveAmt': 0, "hasImage":true, "src" : "media/ores/apatite.webp", "oreName":"Apatite"},
+    'draedon' : { 'decimalRarity': 1 / 480000000000, 'numRarity': 480000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "An unknown factor - a catalyst is what you are...", 'oreTier': 'Celestial', 'normalAmt': 0, 'electrifiedAmt': 0, 'radioactiveAmt': 0, 'explosiveAmt': 0,  "hasImage":true, "src" : "media/ores/draedon.webp", "oreName":"Draedon"},
+    
     //summer event fuck i forgot my bad chat
     //🏐🌴🐙🐬🍧🏖️🏄‍♂️🎋☀️
     '🏐' : { 'decimalRarity': 1 / 1475000, 'numRarity': 1475000, 'hasLog': false, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "🏐 Has Spawned!", 'oreTier': 'Antique', 'normalAmt': 0, 'electrifiedAmt': 0, 'radioactiveAmt': 0, 'explosiveAmt': 0},
@@ -1038,6 +1040,11 @@ const limitedOres = {
         "layers" : ["cactusLayer"],
         "timeType" : "month",
         "timeValues" : [5, 6, 7]
+    },
+    "draedon": {
+        "layers" : ["radioactiveLayer"],
+        "timeType" : "day",
+        "timeValues" : [4]
     },
 }
 function checkLimitedOres() {
