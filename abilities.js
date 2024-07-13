@@ -60,7 +60,7 @@ function powerup1(x, y) {
 function powerup2() {
     if (Date.now() >= player.powerupCooldowns["powerup2"].cooldown && player.powerupCooldowns["powerup2"].unlocked) {
         player.powerupCooldowns["powerup2"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
-        player.powerupVariables.caveBoosts.removeAt = Date.now() + 150000;
+        player.powerupVariables.caveBoosts.removeAt = Date.now() + (player.gears["gear24"] ? 150000 * 1.5 : 150000);
         player.powerupVariables.caveBoosts.active = true;
         caveLuck = 2;
         applyNearbyData();
@@ -118,6 +118,7 @@ function powerup5() {
                     player.gears[toGive] = true;
                     if (toGive === "gear0") document.getElementById("trackerLock").style.display = "none";
                     if (toGive === "gear9") document.getElementById("sillyRecipe").style.display = "block";
+                    if (toGive === "gear24") get("allowAutoPowerup").style.display = "block";
                 }
                 updateAllLayers();
                 let tempDirection = curDirection;
@@ -855,6 +856,12 @@ function pickaxeAbility30(x, y) {
     x -= 13;
     y -= 15;
     pickaxeArrayLoop(pickaxe30Nums, x, y);
+}
+let pickaxe31Nums = [];
+function pickaxeAbility31(x, y) {
+    x = x - 300;
+    y = y - 200;
+    pickaxeArrayLoop(pickaxe31Nums, x, y);
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {
