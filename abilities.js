@@ -90,6 +90,7 @@ function powerup4() {
         applyNearbyData();
     }
 }
+const paradoxicalCantGive = ["pickaxe27", "pickaxe31"]
 function powerup5() {
     if (Date.now() >= player.powerupCooldowns["powerup5"].cooldown && player.powerupCooldowns["powerup5"].unlocked) {
         if (currentWorld !== 1.1) {
@@ -97,9 +98,9 @@ function powerup5() {
             let toChooseFrom = [];
             for (let pickaxe in pickaxeStats) {
                 if (currentWorld === 1) {
-                    if (pickaxe !== "pickaxe27") toChooseFrom.push(pickaxe);
+                    if (paradoxicalCantGive.indexOf(pickaxe) === -1) toChooseFrom.push(pickaxe);
                 } else if (currentWorld === 2) {
-                    if (pickaxeStats[pickaxe].canMineIn.includes(2)) toChooseFrom.push(pickaxe)
+                    if (pickaxeStats[pickaxe].canMineIn.includes(2) && paradoxicalCantGive.indexOf(pickaxe) === -1) toChooseFrom.push(pickaxe)
                 }
             }
             toChooseFrom = toChooseFrom.concat(Object.keys(player.gears));
@@ -121,14 +122,12 @@ function powerup5() {
                     if (toGive === "gear24") get("allowAutoPowerup").style.display = "block";
                 }
                 updateAllLayers();
-                let tempDirection = curDirection;
-                stopMining();
-                goDirection(tempDirection);
+                updateSpeed();
                 player.powerupVariables.fakeEquipped.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);
                 player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
                 utilitySwitchActions();
             }
-        } else {
+        } else if (currentWorld === 1.1) {
             removeParadoxical();
             const curTreeLevel = player.upgrades["pickaxe27"].level;
             if (curTreeLevel < 5) {
@@ -168,19 +167,15 @@ function gearAbility1() {
         }
 }
 function activateSiphoner() {
-    const temp = curDirection;
-    curDirection = "";
     baseSpeed -= 3;
-    goDirection(temp);
+    updateSpeed();
 }
 function removeSiphoner() {
     ability1Stacks = 0;
     energySiphonerCooldown = Date.now() + 5000;
     baseSpeed += 3;
     energySiphonerActive = false;
-    const temp = curDirection;
-    curDirection = "";
-    if (temp !== "") goDirection(temp);
+    updateSpeed();
 }
 function gearAbility2() {
     if (currentWorld === 1 && player.gears["gear9"]) {
@@ -775,7 +770,6 @@ function pickaxeAbility26(x, y) {
         "d" : {"X":x + offset, "Y":y + offset},
         "e" : {"X":x - offset, "Y":y + offset}
     }
-    console.log
     for (let propertyName in points) {
         let low = 0;
         let high = abilityTableArray.length;

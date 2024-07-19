@@ -8,6 +8,10 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
 
  */
 const recipes = {
+    "pickaxe0" : {
+        name: "What do I even name pickaxe 0",
+        recipe: []
+    },
     "pickaxe1" : {
         name : "Mulch Mallet",
         recipe : [{ore:"🟫", amt:5000},{ore:"🟧", amt:160},{ore:"🟡", amt:30},{ore:"🔴", amt:17},{ore:"⚫", amt:7}],
@@ -95,57 +99,57 @@ const recipes = {
     },
     "pickaxe15" : {
         name : "Corundum Caver",
-        recipe : [{ore:"🚪", amt:400000},{ore:"🔁", amt:1800},{ore:"⬇️", amt:150},{ore:"⏫", amt:18},{ore:"▶️", amt:2},],
+        recipe : [{ore:"🚪", amt:400000},{ore:"🔁", amt:1800},{ore:"⬇️", amt:150},{ore:"⏫", amt:18},{ore:"▶️", amt:1},],
         upgrades : {}
     },
     "pickaxe16" : {
         name : "Starborne Slasher",
-        recipe : [{ore:"🌐", amt:1000000},{ore:"⤵️", amt:1900},{ore:"↪️", amt:960},{ore:"🔽", amt:100},{ore:"⏮️", amt:20},{ore:"📕", amt:1},],
+        recipe : [{ore:"🌐", amt:1000000},{ore:"⤵️", amt:1900},{ore:"↪️", amt:960},{ore:"🔽", amt:95},{ore:"⏮️", amt:15},{ore:"📕", amt:1},],
         upgrades : {}
     },
     "pickaxe17" : {
         name : "Nyabomb",
-        recipe : [{ore:"♟️", amt:3000000},{ore:"🔂", amt:28000},{ore:"⏺️", amt:75},{ore:"⏏️", amt:25},{ore:"📗", amt:5},{ore:"📘", amt:3},{ore:"✏️", amt:1},],
+        recipe : [{ore:"♟️", amt:3000000},{ore:"🔂", amt:16000},{ore:"⏺️", amt:40},{ore:"⏏️", amt:10},{ore:"📗", amt:5},{ore:"📘", amt:3},{ore:"✏️", amt:1},],
         upgrades : {}
     },
     "pickaxe18" : {
         name : "Lunar Lightsabre",
-        recipe : [{ore:"☁️", amt:7500000},{ore:"⬅️", amt:12800},{ore:"↖️", amt:2500},{ore:"➡️", amt:2250},{ore:"📙", amt:6},{ore:"🌧️", amt:2},{ore:"🌤️", amt:1},],
+        recipe : [{ore:"☁️", amt:7500000},{ore:"⬅️", amt:6000},{ore:"↖️", amt:1300},{ore:"➡️", amt:1150},{ore:"📙", amt:6},{ore:"🌧️", amt:2},{ore:"🌤️", amt:1},],
         upgrades : {}
     },
     "pickaxe19" : {
         name : "Gemstone Engraver",
-        recipe : [{ore:"♟️", amt:12500000},{ore:"⬆️", amt:19000},{ore:"◀️", amt:2400},{ore:"⏯️", amt:275},{ore:"⏸️", amt:240},{ore:"📗", amt:15},{ore:"🧠", amt:2},{ore:"📐", amt:1},],
+        recipe : [{ore:"♟️", amt:12500000},{ore:"⬆️", amt:9750},{ore:"◀️", amt:1200},{ore:"⏯️", amt:275},{ore:"⏸️", amt:130},{ore:"📗", amt:15},{ore:"🧠", amt:2},{ore:"📐", amt:1},],
         upgrades : {}
     },
     "pickaxe20" : {
         name : "Gambler's Fallacy",
-        recipe : [{ore:"❌", amt:2000000},{ore:"📺", amt:35000000},{ore:"🔼", amt:6700},{ore:"⏪", amt:1950},{ore:"✴️", amt:3},{ore:"📙", amt:20},{ore:"🛡️", amt:20},{ore:"🪃", amt:10},{ore:"🪓", amt:3},],
+        recipe : [{ore:"❌", amt:2000000},{ore:"📺", amt:35000000},{ore:"🔼", amt:4850},{ore:"⏪", amt:1400},{ore:"✴️", amt:3},{ore:"📙", amt:20},{ore:"🛡️", amt:20},{ore:"🪃", amt:10},{ore:"🪓", amt:3},],
         upgrades : {}
     },
     "pickaxe21" : {
         name : "Exponential Centrifuge",
-        recipe : [{ore:"☁️", amt:37500000},{ore:"🚪", amt:37500000},{ore:"🔃", amt:2670000},{ore:"⏏️", amt:850},{ore:"📘", amt:50},{ore:"🔑", amt:20},{ore:"🌨️", amt:10},{ore:"🖇️", amt:10},{ore:"⛈️", amt:3},],
+        recipe : [{ore:"☁️", amt:37500000},{ore:"🚪", amt:37500000},{ore:"🔃", amt:2160000},{ore:"⏏️", amt:70},{ore:"📘", amt:50},{ore:"🔑", amt:20},{ore:"🌨️", amt:10},{ore:"🖇️", amt:10},{ore:"⛈️", amt:3},],
         upgrades : {}
     },
     "pickaxe22" : {
         name : "Singularity Slammer",
-        recipe : [{ore:"❌", amt:75000000},{ore:"📺", amt:100000000},{ore:"🔄", amt:2675000},{ore:"↪️", amt:310000},{ore:"⏬", amt:9000},{ore:"⏯️", amt:2400},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:1},],
+        recipe : [{ore:"❌", amt:75000000},{ore:"📺", amt:100000000},{ore:"🔄", amt:2230000},{ore:"↪️", amt:260000},{ore:"⏬", amt:7800},{ore:"⏯️", amt:2100},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:1},],
         upgrades : {}
     },
     "pickaxe23" : {
         name : "Staff of Binding",
-        recipe : [{ore:"🚪", amt:200000000},{ore:"↘️", amt:175000},{ore:"➡️", amt:85000},{ore:"🔽", amt:57000},{ore:"🔒", amt:125},{ore:"🔑", amt:100},{ore:"🖇️", amt:35},{ore:"🔏", amt:5},{ore:"⛓️", amt:4},],
+        recipe : [{ore:"🚪", amt:200000000},{ore:"↘️", amt:148000},{ore:"➡️", amt:73000},{ore:"🔽", amt:49000},{ore:"🔒", amt:125},{ore:"🔑", amt:100},{ore:"🖇️", amt:35},{ore:"🔏", amt:5},{ore:"⛓️", amt:4},],
         upgrades : {}
     },
     "pickaxe24" : {
         name : "SSS",
-        recipe : [{ore:"☁️", amt:625000000},{ore:"🔃", amt:18500000},{ore:"⤵️", amt:2800000},{ore:"⏬", amt:33000},{ore:"⏺️", amt:21000},{ore:"📙", amt:7500},{ore:"📘", amt:6000},{ore:"🌨️", amt:300},{ore:"🪁", amt:200},{ore:"⛈️", amt:120},{ore:"🌩️", amt:45},{ore:"🪶", amt:4},],
+        recipe : [{ore:"☁️", amt:625000000},{ore:"🔃", amt:16175000},{ore:"⤵️", amt:2440000},{ore:"⏬", amt:28900},{ore:"⏺️", amt:18300},{ore:"📙", amt:7500},{ore:"📘", amt:6000},{ore:"🌨️", amt:300},{ore:"🪁", amt:200},{ore:"⛈️", amt:120},{ore:"🌩️", amt:45},{ore:"🪶", amt:4},],
         upgrades : {}
     },
     "pickaxe25" : {
         name : "Coronary Catastrophe",
-        recipe : [{ore:"🌐", amt:1500000000},{ore:"🔂", amt:30000000},{ore:"⬇️", amt:1700000},{ore:"◀️", amt:250000},{ore:"⏫", amt:200000},{ore:"🖱️", amt:2300},{ore:"💔", amt:200},{ore:"🔪", amt:50},{ore:"🧂", amt:20},{ore:"📽️", amt:10},{ore:"💘", amt:1},],
+        recipe : [{ore:"🌐", amt:1500000000},{ore:"🔂", amt:17825000},{ore:"⬇️", amt:1480000},{ore:"◀️", amt:220000},{ore:"⏫", amt:178000},{ore:"🖱️", amt:2300},{ore:"💔", amt:200},{ore:"🔪", amt:50},{ore:"🧂", amt:20},{ore:"📽️", amt:10},{ore:"💘", amt:1},],
         upgrades : {}
     },
     "pickaxe26" : {
@@ -160,7 +164,7 @@ const recipes = {
     },
     "pickaxe31" : {
         name: "Undersea Eviscerator",
-        recipe : [{ore:"🌊", amt:500000000000},{ore:"⛵", amt:440000000},{ore:"🎣", amt:425000000},{ore:"🤿", amt:404000000},{ore:"🫧", amt:400000000},{ore:"🐟", amt:134000000},{ore:"👑", amt:53000000},{ore:"🔱", amt:50000000},{ore:"🌀", amt:5600000},{ore:"👿", amt:4650000},{ore:"🪩", amt:3500000},{ore:"💫", amt:1750000},{ore:"🐋", amt:435000},{ore:"⚓", amt:4600},{ore:"🪸", amt:1250},{ore:"HD 160529", amt:1}],
+        recipe : [{ore:"🌊", amt:500000000000},{ore:"⛵", amt:352000000},{ore:"🎣", amt:340000000},{ore:"🤿", amt:323200000},{ore:"🫧", amt:320000000},{ore:"🐟", amt:107200000},{ore:"👑", amt:42400000},{ore:"🔱", amt:40000000},{ore:"🌀", amt:4480000},{ore:"👿", amt:3720000},{ore:"🪩", amt:2800000},{ore:"💫", amt:1400000},{ore:"🐋", amt:348000},{ore:"⚓", amt:3680},{ore:"🪸", amt:1000},{ore:"HD 160529", amt:1}],
         upgrades : {}
     },
     "gear0" : {
@@ -240,12 +244,12 @@ const recipes = {
     },
     "gear15" : {
         name : "High Powered Vacuum",
-        recipe : [{ore:"☁️", amt:20000000},{ore:"📺", amt:60000000},{ore:"🚪", amt:20000000},{ore:"🌐", amt:20000000},{ore:"♟️", amt:20000000},{ore:"◀️", amt:12625},{ore:"⏺️", amt:1400},{ore:"📗", amt:60},{ore:"📕", amt:50},{ore:"📙", amt:40},{ore:"📘", amt:30},{ore:"🛡️", amt:15},],
+        recipe : [{ore:"☁️", amt:6000000},{ore:"📺", amt:6000000},{ore:"🚪", amt:6000000},{ore:"🌐", amt:6000000},{ore:"♟️", amt:6000000},{ore:"◀️", amt:12625},{ore:"⏺️", amt:1400},{ore:"📗", amt:60},{ore:"📕", amt:50},{ore:"📙", amt:40},{ore:"📘", amt:30},{ore:"🛡️", amt:15},],
         upgrades : {}
     },
     "gear16" : {
         name : "Unlocked Speedcap",
-        recipe : [{ore:"🌐", amt:45000000},{ore:"➡️", amt:27500},{ore:"⏩", amt:5000},{ore:"⏭️", amt:3800},{ore:"▶️", amt:920},{ore:"🖱️", amt:30},{ore:"🍆", amt:3},{ore:"💔", amt:1},],
+        recipe : [{ore:"🌐", amt:60000000},{ore:"➡️", amt:27500},{ore:"⏩", amt:5000},{ore:"⏭️", amt:3800},{ore:"▶️", amt:920},{ore:"🖱️", amt:30},{ore:"🍆", amt:3},{ore:"💔", amt:1},],
         upgrades : {}
     },
     "gear17" : {
@@ -321,6 +325,16 @@ const recipes = {
     "gear31" : {  
         name : "Makeshift Accelerator",
         recipe : [{ore:"☢️", amt:600000},{ore:"🔵", amt:9000},{ore:"🟨", amt:10},{ore:"🔘", amt:3},{ore:"🔸", amt:2},{ore:"💙", amt:5},{ore:"❤️", amt:4}],
+        upgrades: {}
+    },
+    "gear32" : {  
+        name : "Quantum Entangler",
+        recipe : [{ore:"📺", amt:750000},{ore:"🔵", amt:9000},{ore:"🟨", amt:10},{ore:"🔘", amt:3},{ore:"🔸", amt:2},{ore:"💙", amt:5},{ore:"❤️", amt:4}],
+        upgrades: {}
+    },
+    "gear33" : {  
+        name : "Subatomic Superpositioner",
+        recipe : [{ore:"🚪", amt:45000000},{ore:"🔵", amt:9000},{ore:"🟨", amt:10},{ore:"🔘", amt:3},{ore:"🔸", amt:2},{ore:"💙", amt:5},{ore:"❤️", amt:4}],
         upgrades: {}
     },
 }
@@ -607,9 +621,7 @@ function utilitySwitchActions() {
     verifiedOres.checkCaves();
     displayArea();
     player.displayStatistics.luck = Math.floor(verifiedOres.getCurrentLuck());
-    const temp = curDirection;
-    curDirection = "";
-    goDirection(temp);
+    updateSpeed();
 }
 let m87 = 0;
 let m88 = 0;
@@ -1544,7 +1556,8 @@ const pickaxeStats = {
         revealed: 35899,
         luck: 425,
         rate: 200,
-        src : "⛏️",
+        src : `<img class="mineImage" src="media/underseaEvisceratorIcon.webp"></img>`,
+        ability: "media/abilityImages/underseaEvisceratorAbility.png",
         doAbility: function(x, y) {pickaxeAbility31(x, y)},
         canSpawnCaves:[1, 1.2, 2],
         canMineIn:[1, 1.2, 2],
@@ -1558,7 +1571,7 @@ const pickaxeStats = {
 function ct() {
     const nums = calcSpeed();
     nums.speed = nums.speed < 1 ? 0 : nums.speed;
-    const speed = (1000 / nums.speed) * nums.reps;
+    const speed = (1000 / nums.speed) * nums.reps + nums.extra;
     const pickaxeUsing = player.stats.currentPickaxe;
     const abilityMined = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].mined : pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
     const abilityRevealed = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].revealed : pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].revealed;
@@ -1618,7 +1631,6 @@ function ct() {
             if (recipeLayers[layer].highestProcs < recipeLayers["commons"].highestProcs && !commonsAdded) {
                 recipeLayers[layer].highestProcs = recipeLayers["commons"].highestProcs;
                 commonsAdded = true;
-                delete recipeLayers["commons"];
             }
         }
     }
