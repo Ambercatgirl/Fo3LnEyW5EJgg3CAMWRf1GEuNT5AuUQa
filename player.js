@@ -33,6 +33,8 @@ class playerTemplate {
             "gear29": false,
             "gear30": false,
             "gear31": false,
+            "gear32": false,
+            "gear33": false,
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -189,6 +191,7 @@ class playerTemplate {
             luck: 1
         },
         this.serverHook = undefined;
+        this.serverHookName = undefined;
     }
 }
 let player = new playerTemplate();
@@ -710,12 +713,13 @@ function loadNewData(data) {
         if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
         else get("allowAutoPowerup").style.display = "none";
         if (data.webHook !== undefined) {
-            if (data.webHook.active === true) {
-                player.webHook.active = data.webHook.active;
-                player.webHook.link = data.webHook.link;
-                if (data.webHook.ids !== undefined) {
-                    for (let id in data.webHook.ids) {
+            if (data.webHook.ids !== undefined) {
+                for (let id in data.webHook.ids) {
+                    if (data.webHook.ids[id].link === undefined) {
+                        delete data.webHook.ids[id];
+                    } else {
                         player.webHook.ids[id] = data.webHook.ids[id];
+                        addToCreated(id)
                     }
                 }
             }
@@ -739,6 +743,12 @@ function loadNewData(data) {
         player.name = data.name;
         data.viewedMessages ??= {};
         player.viewedMessages = data.viewedMessages;
+        if (player.viewedMessages["waterWorld"] === undefined) {
+            player.settings.spawnMessageTiers.push("Hyperdimensional", "Infinitesimal");
+            player.settings.stopOnRare.allowList.push("Hyperdimensional", "Infinitesimal");
+            applyStopOnRareData();
+            applySpawnMessageData();
+        }
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
@@ -792,6 +802,9 @@ const dailyMessages = {
     },
     "summerEvent" : {
         showUntil : "August 30, 2024",
+    },
+    "waterWorld" : {
+        showUntil : "July 21, 2024",
     },
     "sr1Unlocked" : {
         showUntil : "June 25, 0000",
