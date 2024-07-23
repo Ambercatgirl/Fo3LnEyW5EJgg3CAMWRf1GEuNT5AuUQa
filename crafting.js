@@ -134,7 +134,7 @@ const recipes = {
     },
     "pickaxe22" : {
         name : "Singularity Slammer",
-        recipe : [{ore:"❌", amt:75000000},{ore:"📺", amt:100000000},{ore:"🔄", amt:2230000},{ore:"↪️", amt:260000},{ore:"⏬", amt:7800},{ore:"⏯️", amt:2100},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:1},],
+        recipe : [{ore:"❌", amt:75000000},{ore:"📺", amt:100000000},{ore:"🔄", amt:2230000},{ore:"↪️", amt:260000},{ore:"⏬", amt:7800},{ore:"⏯️", amt:2100},{ore:"📗", amt:35},{ore:"📕", amt:30},{ore:"📙", amt:25},{ore:"📘", amt:20},{ore:"🛡️", amt:30},{ore:"🪃", amt:25},{ore:"🪓", amt:5},{ore:"🔕", amt:2},{ore:"🔨", amt:1}],
         upgrades : {}
     },
     "pickaxe23" : {

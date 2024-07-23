@@ -125,6 +125,7 @@ function giveBlock(obj) {
             playerInventory["bitcoin"]["normalAmt"]++;
             inventoryObj["bitcoin"] = 0;
         }
+        playerInventory[obj.type]["foundAt"] ??= Date.now();
     } else {
         if (oreRarity === 1) {
             if (player.gears["gear15"] && Math.random() < 0.5) playerInventory[obj.type]["normalAmt"] += 2;
