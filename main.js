@@ -46,6 +46,9 @@ let emojiNames;
 let messageElement;
 let eventElement;
 function init() {
+    for (let propertyName in oreList) {
+        playerInventory[propertyName] = {"normalAmt":0,"electrifiedAmt":0, "radioactiveAmt":0, "explosiveAmt":0, "foundAt": undefined}
+    }
     minedElement = document.getElementById("blocksMined");
     revealedElement = document.getElementById("resetNumber");
     locationElement = document.getElementById("location");
@@ -617,7 +620,7 @@ function createInventory() {
         for (let k = 0; k < arr[j].length; k++) {
             let propertyName = arr[j][k];
             for (let i = 1; i < 5; i++) {
-                let oreNum = oreList[propertyName][variantInvNames[i - 1]];
+                let oreNum = playerInventory[propertyName][variantInvNames[i - 1]];
                 let tempElement = document.createElement('tr');
                 tempElement.classList = "oreDisplay";
                 if (i === 1) {
@@ -632,7 +635,7 @@ function createInventory() {
                 let oreNameBlock = document.createElement("td");
                 if (oreList[propertyName]["hasImage"]) {
                     const tier = oreList[propertyName]["oreTier"]
-                    if ((tier === "Infinitesimal" || tier === "Hyperdimensional") && oreList[propertyName]["hasImage"]) {
+                    if ((tier === "Infinitesimal" || tier === "Hyperdimensional" || oreList[propertyName]["numRarity"] >= 1000000000000000) && oreList[propertyName]["hasImage"]) {
                         oreNameBlock.innerHTML = `<span class="inventoryImage"><img src="${oreList[propertyName]["src"]}" style="width:2.5vw; height:2.5vw;"></img></span>`;
                     } else {
                         oreNameBlock.innerHTML = `<span class="inventoryImage"><img src="${oreList[propertyName]["src"]}"></img></span>`;
@@ -690,8 +693,8 @@ let displayTimer = null;
 function updateInventory() {
     for (let propertyName in inventoryObj) {
         for (let i = 1; i < 5; i++) {
-            oreList[propertyName][names[i - 1]].textContent = "x" + oreList[propertyName][variantInvNames[i - 1]].toLocaleString();
-            if (oreList[propertyName][variantInvNames[i - 1]] > 0) (oreList[propertyName][names[i - 1]].parentElement).style.display = "table";
+            oreList[propertyName][names[i - 1]].textContent = "x" + playerInventory[propertyName][variantInvNames[i - 1]].toLocaleString();
+            if (playerInventory[propertyName][variantInvNames[i - 1]] > 0) (oreList[propertyName][names[i - 1]].parentElement).style.display = "table";
             else (oreList[propertyName][names[i - 1]].parentElement).style.display = "none";
         }
     }
@@ -721,6 +724,7 @@ function updateInventory() {
     else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = "pickaxe0";
     updatePowerupCooldowns();
     updateDisplayedUpgrade();
+    displayNearbyCooldowns();
     if (player.gears["gear24"]) autoPowerups();
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
@@ -797,7 +801,7 @@ function spawnMessage(obj) {
     let blockOutput;
     let curTier = oreList[block]["oreTier"];
     if (oreList[block]["hasImage"]) {
-        if (curTier === "Hyperdimensional" || curTier === "Infinitesimal") {
+        if (curTier === "Hyperdimensional" || curTier === "Infinitesimal" || oreList[block]["numRarity"] >= 1000000000000000) {
             blockOutput = `<span class="latestImage"><img src="${oreList[block]["src"]}" style="width:2.5vw; height:2.5vw;"></img></span>`;
             element.style.height = "2.5vw";
         } else {
@@ -934,7 +938,7 @@ function logFind(type, x, y, variant, atMined, fromReset, duped, fromCave) {
     let blockOutput;
     let curTier = oreList[type]["oreTier"]
     if (oreList[type]["hasImage"]) {
-        if (curTier === "Hyperdimensional" || curTier === "Infinitesimal") {
+        if (curTier === "Hyperdimensional" || curTier === "Infinitesimal" || oreList[type]["numRarity"] >= 1000000000000000) {
             blockOutput = `<span class="latestImage"><img src="${oreList[type]["src"]}" style="width:2.5vw; height:2.5vw;"></img></span>`;
             element.style.height = "2.5vw";
         } else {
