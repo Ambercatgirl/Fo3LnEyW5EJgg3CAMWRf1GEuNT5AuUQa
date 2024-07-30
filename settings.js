@@ -1,9 +1,3 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
 function toggleMenu() {
     const element = document.getElementById("menuHolder");
     element.style.display = element.style.display === "block" ? "none" : "block";
@@ -504,16 +498,17 @@ function createIndexCards(layer) {
                 const caveMulti = getCaveMulti(oldLayer);
                 if (oolProbabilities[property] != undefined) rarity = Math.round(1/oolProbabilities[property]);
                 if (blackOut) indexRarity.textContent = "1/??? Base Rarity.";
-                else indexRarity.textContent = `${rarity.toLocaleString()} Base Rarity.`;
+                else indexRarity.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Base Rarity.`;
                 rarity *= caveMulti;
                 if (blackOut) indexRarityLuck.textContent = "1/??? Adjusted.";
-                else indexRarityLuck.textContent = `${rarity.toLocaleString()} Adjusted.`
+                else indexRarityLuck.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Adjusted.`
             } else {
                 let rarity = oreList[property]["numRarity"];
                 if (blackOut) indexRarity.textContent = "1/??? Base Rarity.";
-                else indexRarity.textContent = `${rarity.toLocaleString()} Base Rarity.`;
+                else indexRarity.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Base Rarity.`;
+                rarity = Math.round(rarity / verifiedOres.getCurrentLuck());
                 if (affectedByLuck && blackOut) indexRarityLuck.textContent = "1/??? With Luck.";
-                else if (affectedByLuck) indexRarityLuck.textContent = `${Math.round(rarity / verifiedOres.getCurrentLuck()).toLocaleString()} With Luck.`
+                else if (affectedByLuck) indexRarityLuck.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} With Luck.`
                 else indexRarityLuck.textContent = "Unaffected By Luck";
             }
             //Add Spawn Message
@@ -1196,7 +1191,6 @@ function getWorldRequirements(world) {
 }
 //SILLINESS BELOW!!!!!!!
 function showCatText() {
-    console.log("cat")
     get("catStuff").style.display = "flex";
 }
 let curCatStep = 0;
@@ -1224,7 +1218,7 @@ function sillyKittyCat(text) {
             typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", get("spawnMessage"));
             get("catStuff").style.display = "none";
             catstuff.layer = currentLayer;
-            insertIntoLayers({ore: "Wavaderg", layers:[currentLayer], "useLuck": true})
+            insertIntoLayers({ore: "Ryoui", layers:[currentLayer], "useLuck": true})
         }
     } else {
         new Audio("audios/meow-2.mp3").play();

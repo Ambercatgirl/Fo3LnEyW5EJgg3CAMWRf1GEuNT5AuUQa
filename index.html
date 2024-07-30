@@ -1,9 +1,3 @@
-<!-- Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
--->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -156,6 +150,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe26`)" id="nullChroma" style="display: none;"><span>N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe27`)" id="treeOfLife" style="display: none;"><span>The Tree of Life</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe31`)" id="underseaEviscerator" style="display: none;"><span>Undersea Eviscerator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe32`)" id="" style="display: none;"><span>Dimensional Slicer</span></button>
                 
                 </div>
                 <div id="gearCrafts" class="hidden">
@@ -233,6 +228,7 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 <p class="itemDescription" id="pickaxe27Description" style="display: none;">The main pickaxe of Subrealm 1.<br>Can be upgraded in The Workshop.<br>Has an ability proc rate of 1/500.<br><span id="treeOfLifeLuck">Has x luck.</span><br>Speed is locked at <span id="treeOfLifeSpeed">10ms</span> and lowers by 1ms for every upgrade (only in Subrealm). The only luck gear that works here is Statistical Amplifier.<br>All other gears function normally.<br>Paradoxical Progression will give access to the next level instead of a random item.<br><span style="font-size: 50%;">Ability design created by @memorysaga.</span><br><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
                 <p class="itemDescription" id="pickaxe31Description" style="display: none;"><span id="pickaxe31Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe31Hologram'))">View Ability</button></span><br><span style="font-size: 50%;">Icon made by @wrab</span></p>
                 <button id="pickaxe27Craft" class="craftPickaxeButton" onclick="craftPickaxe('pickaxe27')" style="display:none; width: 100%; background-image:linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B);">Equip!</button>
+                <p class="itemDescription" id="pickaxe32Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 350,000 blocks.<br></i><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
                 <!--
                     Pickaxes above
                     Gears below
@@ -1004,10 +1000,10 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                             <span class="faqText">This setting allows you to change the speed at which the display will update when automining. (uses ms)</span><br>
 
                             <span class="faqSection">Stop On Rare</span>
-                            <span class="faqText">This setting is one of the more important ones, and will stop you mining if you spawn an ore of the specified tier. Click on the tier name to change what tier it will stop on. A list of all tiers can be found in the ore information section.</span><br>
+                            <span class="faqText">This setting is one of the more important ones, and will stop you mining if you spawn an ore of the specified tier. Click on tiers and select which tiers you would like to be automatically stopped on.</span><br>
 
                             <span class="faqSection">Minimum Spawn Message</span>
-                            <span class="faqText">This setting sets the minimum tier an ore has to be for it to generate a spawn message and appear in latest spawns and latest finds.</span><br>
+                            <span class="faqText">This setting sets the tiers an ore has to be for it to generate a spawn message and appear in latest spawns and latest finds.</span><br>
 
                             <span class="faqSection">Travel To Index On Click</span>
                             <span class="faqText">These settings allow you to specify if clicking an ore in a crafting recipe or in the normal inventory will open the index page for it.</span><br>
@@ -1201,20 +1197,14 @@ Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
                 </form>
                 <button id="submitName" onclick="(player.name = get('enterName').value); showNextInQueue();">Confirm!</button>
             </div>
-            <div id="worldOneRevamp" class="dailyMessage">
+            <div id="worldTwoRevamp" class="dailyMessage">
                 <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
                 <p class="dailyText">
-                    - World One Revamp!!!<br>
-                    - 2 new early game pickaxes!<br>
-                    - 3 new World One gears!<br>
-                    - 15 new Commons in World One!<br>
-                    - Redid EVERY World One pickaxe ability!<br>
-                    - Redid all recipes in World One!<br>
-                    - Tried to fix ETA on recipes.<br>
-                    - Removed most ability descriptions in favor of images.<br>
-                    - WOG and Cavern Capacitator increase cave size!<br>
-                    - Bug Fixes!! YIPPEEEE!! :3<br>
-                    I'll be checking Galaxy chat, game comments, and my discord server a bunch for suggestions with the new progression as it is a work in progress as of right now.
+                    - World Two Revamp!!! (kinda)<br>
+                    - Balanced the commons (and some rares) for all World 2 craftables.<br>
+                    - 2 New World 2 gears.<br>
+                    - Bug Fixes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<br>
+                    - Let me know if progression needs any more tweaking and I'll try to make it better.
                 </p>
             </div>
             <div id="summerEvent" class="dailyMessage">
