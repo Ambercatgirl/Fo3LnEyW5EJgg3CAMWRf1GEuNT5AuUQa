@@ -154,7 +154,6 @@ class secureLogs {
        else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
        else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
        if (log.rng < 1/1000000000 && !debug) {serverWebhook(log, player.stats.blocksMined); serverHooked = true};
-       console.log(formatNumber(1/log.rng, 3))
     }
     showLogs() {
         if (document.getElementById("menuSelectionContainer").style.display !== "none") {

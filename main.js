@@ -62,7 +62,7 @@ function init() {
     createMine();
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     removeFromLayers({"ore":"HD 160529","layers":["waterLayer"]});
-    if (Math.random() < 1/100000) removeFromLayers({"ore":"intercept", "layers":["globeLayer"]})
+    if (Math.random() < 1/1000) insertIntoLayers({"ore":"intercept", "layers":["globeLayer"], "useLuck":true})
     formatEventText();
     addPickaxeDescriptions();
     document.getElementById('dataText').value = "";
@@ -467,7 +467,7 @@ function speedFactorial(num) {
     if (num === 0) return 1;
     return num * speedFactorial(num-1);
 }
-
+let devReps = 100;
 const calcSpeed = function() {
     let miningSpeed = baseSpeed;
     let reps = 1;
@@ -490,7 +490,7 @@ const calcSpeed = function() {
         if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1, extra:0}
         else return {speed: 7, reps: (-2 + sr1Level), extra:0}
     }
-    if (debug) return {speed: 5, reps: 100, extra:0}
+    if (debug) return {speed: 5, reps: devReps, extra:0}
     return {speed: miningSpeed, reps: reps, extra: extraSpeed}
 }
 function updateSpeed() {
