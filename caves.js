@@ -428,7 +428,7 @@ let oolProbabilities = {
     "🔆" : 1/25000000,
 }
 function getCaveType() {
-    if (currentWorld === 1.2) return undefined;
+    if (currentWorld === 1.2) return "watrCave";
     let caveTypeLuck = 1;
     if (player.stats.currentPickaxe === "pickaxe12")
         caveTypeLuck = 2;
