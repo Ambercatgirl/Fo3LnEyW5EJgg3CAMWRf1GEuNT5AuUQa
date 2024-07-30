@@ -1,9 +1,3 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
 function checkValidLocation(x, y) {
     let reps = 0;
     while (reps < 100) {
@@ -166,8 +160,8 @@ function mineCaveBlock(c, r, type, cause) {
         let caveMulti = getCaveMulti(type);
         if (oreList[block]["isBreakable"]) {
             //{type: block, x:c, y:r, fromReset:false, fromCave:true, caveMulti:caveMulti, variant:variant}
-            if (checkFromCave({"X":c, "Y":r})["fromCave"]) giveBlock({type: block, x:c, y:r, fromReset:false, fromCave:true, caveMulti:caveMulti, variant:variant});
-            else giveBlock({type: block, x:c, y:r, variant: variant});
+            if (checkFromCave({"X":c, "Y":r})["fromCave"]) giveBlock({type: block, x:c, y:r, fromReset:false, fromCave:true, caveMulti:caveMulti, variant:variant, amt:1});
+            else giveBlock({type: block, x:c, y:r, variant: variant, amt:1});
             mine[r][c] = "⚪";
         }
     }
@@ -402,6 +396,7 @@ let caveTypes = {
     "ggCave" : {rarity: 1/49, multi: 49},
     "axCave" : {rarity: 1/29, multi: 29},
     "foCave" : {rarity: 1/28, multi: 28},
+    "watrCave" : {rarity: 1/1, multi:1}
 }
 let caveList = {
 "mysteryCave" : ["🌙", "🪔", "💫", "🩺", "💱", "🌟", "☄️", "⭐", "🔆", "🔭", "📡", "❓"],
@@ -414,7 +409,8 @@ let caveList = {
 "ccCave" : ['🇼🇫', '🇷🇪', '🇾🇹', '🇬🇺', '🇨🇼', '🇦🇮', '🇨🇨'],
 "ggCave" : ['🇧🇱', '🇲🇸', '🇮🇪', '🇦🇼', '🇬🇬'],
 "axCave" : ['🇧🇶', '🇸🇭', '🇳🇺', '🇬🇮', '🇬🇫', '🇧🇲', '🇦🇽'],
-"foCave" : ['🇭🇰', '🇮🇲', '🇵🇲', '🇬🇸', '🇳🇫', '🇫🇰', '🇰🇾', '🇫🇴']
+"foCave" : ['🇭🇰', '🇮🇲', '🇵🇲', '🇬🇸', '🇳🇫', '🇫🇰', '🇰🇾', '🇫🇴'],
+"watrCave" : ["eternalCoral", "🌊"],
 }
 
 
@@ -432,7 +428,7 @@ let oolProbabilities = {
     "🔆" : 1/25000000,
 }
 function getCaveType() {
-    if (currentWorld === 1.2) return undefined;
+    if (currentWorld === 1.2) return "watrCave";
     let caveTypeLuck = 1;
     if (player.stats.currentPickaxe === "pickaxe12")
         caveTypeLuck = 2;

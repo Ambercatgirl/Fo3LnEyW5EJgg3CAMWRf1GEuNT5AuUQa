@@ -1,12 +1,3 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
-/*
-
- */
 const recipes = {
     "pickaxe0" : {
         name: "What do I even name pickaxe 0",
@@ -165,6 +156,11 @@ const recipes = {
     "pickaxe31" : {
         name: "Undersea Eviscerator",
         recipe : [{ore:"🌊", amt:500000000000},{ore:"⛵", amt:352000000},{ore:"🎣", amt:340000000},{ore:"🤿", amt:323200000},{ore:"🫧", amt:320000000},{ore:"🐟", amt:107200000},{ore:"👑", amt:42400000},{ore:"🔱", amt:40000000},{ore:"🌀", amt:4480000},{ore:"👿", amt:3720000},{ore:"🪩", amt:2800000},{ore:"💫", amt:1400000},{ore:"🐋", amt:348000},{ore:"⚓", amt:3680},{ore:"🪸", amt:1000},{ore:"HD 160529", amt:1}],
+        upgrades : {}
+    },
+    "pickaxe32" : {
+        name: "Dimensional Slicer",
+        recipe : [],
         upgrades : {}
     },
     "gear0" : {
@@ -334,7 +330,7 @@ const recipes = {
     },
     "gear33" : {  
         name : "Subatomic Superpositioner",
-        recipe : [{ore:"🚪", amt:45000000},{ore:"🔁", amt:25000},{ore:"⬅️", amt:4400},{ore:"🔼", amt:440},{ore:"⏺️", amt:75},{ore:"🔒", amt:4},{ore:"🔑", amt:2}],
+        recipe : [{ore:"🚪", amt:45000000},{ore:"🔁", amt:25000},{ore:"⬅️", amt:4400},{ore:"🔼", amt:440},{ore:"⏺️", amt:75},{ore:"🔒", amt:10},{ore:"🔑", amt:10},{ore:"🖇️", amt:3}],
         upgrades: {}
     },
 }
@@ -531,6 +527,7 @@ const buttonGradients = {
     "pickaxe29Craft" : {"gradient" : "linear-gradient(to right, #882608, #6c1805, #360a0a)","applied" : false},
     "pickaxe30Craft" : {"gradient" : "linear-gradient(to right, #feda84, #976393, #43457f, #ff9b83)","applied" : false},
     "pickaxe31Craft" : {"gradient" : "linear-gradient(to right, #feda84, #976393, #43457f, #ff9b83)","applied" : false},
+    "pickaxe32Craft" : {"gradient" : "linear-gradient(to right, #feda84, #976393, #43457f, #ff9b83)","applied" : false},
     
 
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
@@ -628,7 +625,7 @@ function utilitySwitchActions() {
 let m87 = 0;
 let m88 = 0;
 const showOrders = {
-    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
+    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13", "pickaxe32"],
     worldTwoPickaxes : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
     worldOneGears : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
     worldTwoGears : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
@@ -1070,6 +1067,8 @@ function displayUpgrade(id, location) {
         location.appendChild(maxElement);
         return;
     }
+    const removeMax = document.getElementsByClassName("upgradeMaxLevel")
+    for (let i = 0; i < removeMax.length; i++) removeMax[i].remove();
     const currentUpgrade = upgradeRecipes[id][`upgrade${player.upgrades[id].level}`].recipe;
     if (currentUpgrade === undefined) return;
     let element = document.createElement('p');
@@ -1564,6 +1563,17 @@ const pickaxeStats = {
         canSpawnCaves:[1, 1.2, 2],
         canMineIn:[1, 1.2, 2],
     },
+    "pickaxe32" : {
+        mined: 350000,
+        revealed: 1,
+        luck: 1,
+        rate: 200,
+        src : `<img class="mineImage" src="media/underseaEvisceratorIcon.webp"></img>`,
+        ability: "media/abilityImages/underseaEvisceratorAbility.png",
+        doAbility: function(x, y) {pickaxeAbility32(x, y)},
+        canSpawnCaves:[1, 1.2, 2],
+        canMineIn:[1, 1.2, 2],
+    },
     
 }
  //378 510 for 30
@@ -1616,7 +1626,7 @@ function ct() {
                     recipeLayers["commons"].ore = ore;
                 }
             } else {
-                totalProcsNeeded = totalOreRarity/abilityRevealed;
+                totalProcsNeeded = totalOreRarity/(abilityRevealed > abilityMined ? abilityRevealed : abilityMined);
                 if (oreList[ore]["oreTier"] === "Layer") totalProcsNeeded = totalOreRarity/abilityMined;
                 if (totalProcsNeeded > recipeLayers[currentOreLayer].highestProcs) {
                     recipeLayers[currentOreLayer].highestProcs = totalProcsNeeded;

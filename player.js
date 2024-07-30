@@ -569,6 +569,8 @@ function oldDataToNew(data) {
 
 function loadNewData(data) {
     try {
+        if (data.blocks["Wavaderg"] !== undefined) data.blocks["Ryoui"] = data.blocks["Goober"];
+        delete data.blocks["Wavaderg"];
         for (let propertyName in data.blocks) {
             if (oreList[propertyName] !== undefined) {
                 if (data.blocks[propertyName].normalAmt !== undefined) {
@@ -735,6 +737,7 @@ function loadNewData(data) {
             }
         }
         if (data.serverHook !== undefined) player.serverHook = data.serverHook;
+        if (data.serverHookName !== undefined) player.serverHookName = data.serverHookName;
         data.faqOffered ??= false;
         data.luna ??= {
             layer: Math.round(Math.random() * 100000),
@@ -753,12 +756,23 @@ function loadNewData(data) {
         player.name = data.name;
         data.viewedMessages ??= {};
         player.viewedMessages = data.viewedMessages;
-        if (player.viewedMessages["waterWorld"] === undefined) {
-            player.settings.spawnMessageTiers.push("Hyperdimensional", "Infinitesimal");
-            player.settings.stopOnRare.allowList.push("Hyperdimensional", "Infinitesimal");
-            applyStopOnRareData();
-            applySpawnMessageData();
-        }
+        //sorry i broke stuff so this exists lol mb
+        let sh = false;
+        let si = false;
+        let rh = false;
+        let ri = false;
+        if (player.settings.spawnMessageTiers.indexOf("Hyperdimensional") > -1) sh = true;
+        if (player.settings.spawnMessageTiers.indexOf("Infinitesimal") > -1) si = true;
+        if (player.settings.stopOnRare.allowList.indexOf("Hyperdimensional") > -1) rh = true;
+        if (player.settings.stopOnRare.allowList.indexOf("Infinitesimal") > -1) ri = true;
+        for (let i = player.settings.spawnMessageTiers.length - 1; i >= 0; i--) if (player.settings.spawnMessageTiers[i] === "Hyperdimensional" || player.settings.spawnMessageTiers[i] === "Infinitesimal") player.settings.spawnMessageTiers.splice(i, 1);
+        for (let i = player.settings.stopOnRare.allowList.length - 1; i >= 0; i--) if (player.settings.stopOnRare.allowList[i] === "Hyperdimensional" || player.settings.stopOnRare.allowList[i] === "Infinitesimal") player.settings.stopOnRare.allowList.splice(i, 1);
+        if (sh) player.settings.spawnMessageTiers.push("Hyperdimensional"); 
+        if (si) player.settings.spawnMessageTiers.push("Infinitesimal"); 
+        if (rh) player.settings.stopOnRare.allowList.push("Hyperdimensional"); 
+        if (ri) player.settings.stopOnRare.allowList.push("Infinitesimal"); 
+        applyStopOnRareData();
+        applySpawnMessageData();
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
@@ -801,15 +815,6 @@ const dailyMessages = {
     "chooseName" : {
         showUntil : "June 25, 9999",
     },
-    "portalUpdate" : {
-        showUntil : "June 25, 2024",
-    },
-    "trophyUpdate" : {
-        showUntil : "July 1, 2024",
-    },
-    "worldOneRevamp" : {
-        showUntil : "July 10, 2024",
-    },
     "summerEvent" : {
         showUntil : "August 30, 2024",
     },
@@ -818,7 +823,10 @@ const dailyMessages = {
     },
     "sr1Unlocked" : {
         showUntil : "June 25, 0000",
-    }
+    },
+    "worldTwoRevamp" : {
+        showUntil : "August 3, 2024",
+    },
 }
 function checkMessages(message) {
     if (message === "newPlayer" && player.faqOffered) return;
@@ -852,13 +860,14 @@ function saveNewData(obj) {
     try {
         let data = {blocks: {}, player: player};
         for (let propertyName in playerInventory) {
-            if (indexHasOre(propertyName) > 0) data.blocks[propertyName] = {
+            if (indexHasOre(propertyName)) data.blocks[propertyName] = {
                 n: playerInventory[propertyName]["normalAmt"],
                 l: playerInventory[propertyName]["electrifiedAmt"],
                 r: playerInventory[propertyName]["radioactiveAmt"],
                 e: playerInventory[propertyName]["explosiveAmt"],
                 f: playerInventory[propertyName]["foundAt"]
             };
+            for (let num in data.blocks[propertyName]) if (data.blocks[propertyName][num] > 1e308) data.blocks[propertyName][num] = 1e308;
         }
         if (obj.override !== undefined) data.player = obj.override;
         if (!debug) localStorage.setItem("newPlayerData", JSON.stringify(data));

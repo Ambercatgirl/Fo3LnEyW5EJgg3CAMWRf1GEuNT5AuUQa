@@ -1,9 +1,3 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
 const pixelcoordinate = (x, y, width) => {
     const red = y * (width * 4) + x * 4;
     return [red, red + 1, red + 2, red + 3];
@@ -68,6 +62,7 @@ function init() {
     createMine();
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     removeFromLayers({"ore":"HD 160529","layers":["waterLayer"]});
+    if (Math.random() < 1/100000) removeFromLayers({"ore":"intercept", "layers":["globeLayer"]})
     formatEventText();
     addPickaxeDescriptions();
     document.getElementById('dataText').value = "";
@@ -177,7 +172,7 @@ function setEmojiNames(emojis) {
             }
         }
     }
-    document.getElementById("meterDisplay").setAttribute("title", oreList["🟫"]["oreName"]);
+    document.getElementById("meterDisplay").setAttribute("title", oreList[getLayer(curY).layerMat]["oreName"]);
 }
 
 let chill;
@@ -648,12 +643,13 @@ function createInventory() {
                 let oreRarityBlock = document.createElement("td");
                 let rarity = oreList[propertyName]["numRarity"];
                 rarity *= multis[i - 1];
+                if (oreList[propertyName]["oreTier"] === "Infinitesimal") rarity = Infinity;
                 if (propertyName === "Wavaderg") rarity = ":3";
                 if (oreList[propertyName]["caveExclusive"]) {
                     rarity *= getCaveMultiFromOre(propertyName);
-                    oreRarityBlock.innerText = "1/" + (rarity).toLocaleString() + "*";
+                    oreRarityBlock.innerText = "1/" + (rarity >= 1000000000000 ? formatNumber(rarity, 2) : rarity.toLocaleString()) + "*";
                 } else {
-                    oreRarityBlock.innerText = "1/" + (rarity).toLocaleString();
+                    oreRarityBlock.innerText = "1/" + (rarity >= 1000000000000 ? formatNumber(rarity, 2) : rarity.toLocaleString());
                 }
                 oreRarityBlock.classList = "inventoryElement2";
                 let oreAmountBlock = document.createElement("td");
@@ -693,7 +689,8 @@ let displayTimer = null;
 function updateInventory() {
     for (let propertyName in inventoryObj) {
         for (let i = 1; i < 5; i++) {
-            oreList[propertyName][names[i - 1]].textContent = "x" + playerInventory[propertyName][variantInvNames[i - 1]].toLocaleString();
+            const amt = playerInventory[propertyName][variantInvNames[i - 1]];
+            oreList[propertyName][names[i - 1]].textContent = "x" + (amt >= 1000000 ? formatNumber(amt, 2) : amt.toLocaleString());
             if (playerInventory[propertyName][variantInvNames[i - 1]] > 0) (oreList[propertyName][names[i - 1]].parentElement).style.display = "table";
             else (oreList[propertyName][names[i - 1]].parentElement).style.display = "none";
         }
@@ -920,7 +917,7 @@ function typeWriter(string, loc) {
 }
 
 let loggedFinds = [];
-function logFind(type, x, y, variant, atMined, fromReset, duped, fromCave) {
+function logFind(type, x, y, variant, atMined, fromReset, amt, fromCave) {
     let output = "";
     removeExistingOre({x: x, y:y})
     let spawnElement = document.getElementById("latestFinds");
@@ -947,7 +944,7 @@ function logFind(type, x, y, variant, atMined, fromReset, duped, fromCave) {
     } else {
         blockOutput = type;
     }
-    output += blockOutput + ` ${duped ? "(x2)" : ""}`;
+    output += blockOutput + ` ${amt > 1 ? `(x${amt > 1000000 ? formatNumber(amt, 2) : amt.toLocaleString()})` : ""}`;
     if (fromReset) output += " From Void Prevention.";
     else output += " At " + formatNumber(atMined) +  " Mined.";
     let rng;
@@ -970,7 +967,7 @@ function logFind(type, x, y, variant, atMined, fromReset, duped, fromCave) {
     }
     if (spawnElement.children.length > player.settings.latestLength) spawnElement.removeChild(spawnElement.lastChild);
 }
-const suffixes = ["", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTg", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL", "USXGNTL", "DSXGNTL", "TSXGNTL", "QTSXGNTL", "QNSXGNTL", "SXSXGNTL", "SPSXGNTL", "OSXGNTL", "NVSXGNTL", "SPTGNTL", "USPTGNTL", "DSPTGNTL", "TSPTGNTL", "QTSPTGNTL", "QNSPTGNTL", "SXSPTGNTL", "SPSPTGNTL", "OSPTGNTL", "NVSPTGNTL", "OTGNTL", "UOTGNTL", "DOTGNTL", "TOTGNTL", "QTOTGNTL", "QNOTGNTL", "SXOTGNTL", "SPOTGNTL", "OTOTGNTL", "NVOTGNTL", "NONGNTL", "UNONGNTL", "DNONGNTL", "TNONGNTL", "QTNONGNTL", "QNNONGNTL", "SXNONGNTL", "SPNONGNTL", "OTNONGNTL", "NONONGNTL", "CENT"];
+const suffixes = ["", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTg", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL", "USXGNTL", "DSXGNTL", "TSXGNTL", "QTSXGNTL", "QNSXGNTL", "SXSXGNTL", "SPSXGNTL", "OSXGNTL", "NVSXGNTL", "SPTGNTL", "USPTGNTL", "DSPTGNTL", "TSPTGNTL", "QTSPTGNTL", "QNSPTGNTL", "SXSPTGNTL", "SPSPTGNTL", "OSPTGNTL", "NVSPTGNTL", "OTGNTL", "UOTGNTL", "DOTGNTL", "TOTGNTL", "QTOTGNTL", "QNOTGNTL", "SXOTGNTL", "SPOTGNTL", "OTOTGNTL", "NVOTGNTL", "NONGNTL", "UNONGNTL", "DNONGNTL", "TNONGNTL", "QTNONGNTL", "QNNONGNTL", "SXNONGNTL", "SPNONGNTL", "OTNONGNTL", "NONONGNTL", "CENT", "UCENT"];
 function formatNumber(num, topoint) {
     topoint ??= 1;
     if (topoint < 1) topoint = 1;

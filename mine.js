@@ -1,11 +1,3 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
-
-//MINE CREATION
 function createMine() {
     for (let r = curY - 101; r < curY + 101; r++) {
         if (r > -1)
@@ -58,7 +50,7 @@ function mineBlock(x, y, cause) {
         else placeLayerAround(x, y);
         if (oreList[mineBlockOre]["numRarity"] >= 750000) {
             if (checkFromCave({"X":x, "Y":y})["fromCave"]) {
-                giveBlock({type: mineBlockOre, x:x, y:y, fromReset:false, fromCave:true, caveMulti:checkFromCave({"X":x, "Y":y})["multi"], variant:mineBlockVariant});
+                giveBlock({type: mineBlockOre, x:x, y:y, fromReset:false, fromCave:true, caveMulti:checkFromCave({"X":x, "Y":y})["multi"], variant:mineBlockVariant, amt:1});
                 mine[y][x] = "⚪";
                 checkAllAround(x, y);
                 player.stats.blocksMined++;
@@ -67,7 +59,7 @@ function mineBlock(x, y, cause) {
             if ((cause === "ability" || cause === "infinity") && player.settings.automineProtection && messageIncluded(oreList[mineBlockOre]["oreTier"])) return;
         }
         player.stats.blocksMined++;
-        giveBlock({type: mineBlockOre, x:x, y:y, fromReset: cause === "reset", fromCave:undefined, caveMulti:undefined, variant:mineBlockVariant});
+        giveBlock({type: mineBlockOre, x:x, y:y, fromReset: cause === "reset", fromCave:undefined, caveMulti:undefined, variant:mineBlockVariant, amt:1});
         mine[y][x] = "⚪";
         (cause === "mining") ? rollAbilities() : undefined;
     }
@@ -82,8 +74,8 @@ function placeLayerAround(x, y) {
 
 }
 function getLayerMaterial(layer) {
-    const thisLayer = layer.layer;
-    for (let i = thisLayer.length - 1; i >= 0; i--) if (oreList[thisLayer[i]]["oreTier"] === "Layer") return thisLayer[i];
+    if (layer !== undefined) return layer.layerMat;
+    else return undefined;
 }
 //ORE GENERATION AND OBTAINING
 
@@ -103,13 +95,13 @@ function giveBlock(obj) {
     if (currentWorld < 2 && player.gears["gear4"]) {
         playerInventory[layerMaterial]["normalAmt"]++;
     }
+    playerInventory[obj.type][variantInvNames[inv - 1]] += obj.amt;
     if (oreRarity >= 750000) {
-        let duped = false;
         if (obj.fromCave) {oreRarity *= obj.caveMulti;}
-        if (player.gears["gear22"] && Math.random() < 1/10) {playerInventory[obj.type][variantInvNames[inv - 1]]++; duped = true;}
+        if (player.gears["gear22"] && Math.random() < 1/10) {playerInventory[obj.type][variantInvNames[inv - 1]]++; obj.amt++;}
         if (currentWorld < 2 && player.gears["gear7"]) {gearAbility1();}
         if (messageIncluded(oreList[obj.type]["oreTier"])) {
-            logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset, duped, {cave: obj.fromCave, multi: obj.caveMulti}); 
+            logFind(obj.type, obj.x, obj.y, namesemojis[inv - 1], player.stats.blocksMined, obj.fromReset, obj.amt, {cave: obj.fromCave, multi: obj.caveMulti}); 
         }
         if (oreList[obj.type]["oreTier"] === "Flawless") {
             if (!player.sr1Unlocked) {
@@ -119,7 +111,7 @@ function giveBlock(obj) {
             }
         }
         if (oreList[obj.type]["hasLog"] || oreRarity >= 160000000) {
-            verifiedOres.verifyFind(mine[obj.y][obj.x], obj.y, obj.x, names[inv - 1], duped);
+            verifiedOres.verifyFind(mine[obj.y][obj.x], obj.y, obj.x, names[inv - 1], obj.amt);
         }
         if (Math.random() < 1/100000) {
             playerInventory["bitcoin"]["normalAmt"]++;
@@ -131,12 +123,12 @@ function giveBlock(obj) {
             if (player.gears["gear15"] && Math.random() < 0.5) playerInventory[obj.type]["normalAmt"] += 2;
             if (player.gears["gear26"] && Math.random() < 1/20) playerInventory[layerMaterial]["normalAmt"] += 30;
         } else {
-            if (player.gears["gear13"] && Math.random < 0.75) {
+            if (player.gears["gear13"] && Math.random() < 0.75) {
                 playerInventory[obj.type]["normalAmt"]++;
             }
         }
     }
-    playerInventory[obj.type][variantInvNames[inv - 1]]++;
+    
     inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
@@ -150,7 +142,7 @@ let cat = 1;
 let mainProbabilityTable;
 let mainGenerationTable;
 let lunaY = 1;
-const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠God of The Mine";
+const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠godOfTheMine";
 const generateBlock = function(location) {
     blocksRevealedThisReset++;
     mainProbabilityTable = getLayer(location["Y"]);
@@ -204,6 +196,135 @@ const generateBlock = function(location) {
         } 
     }
 }
+const bulkGenerate = function(y, amt) {
+    player.stats.blocksMined += amt;
+    const originAmt = amt;
+    const generationInfo = getLayer(y);
+    if (y === player.lunaLayer) generationInfo.layer = addLuna([...generationInfo.layer], [...generationInfo.probabilities])[0];
+    const thisTable = generationInfo.layer;
+    const results = {
+    }
+    for (let i = 0; i < thisTable.length; i++) {
+        let estAmt = amt*oreList[thisTable[i]]["decimalRarity"];
+        let oldEst = estAmt;
+        if (estAmt < 1 && Math.random() < estAmt) {estAmt += 1;}
+        estAmt = Math.floor(estAmt);
+        results[thisTable[i]] = {est: estAmt, rand: oldEst}
+        amt -= estAmt;
+        if (estAmt > 0 && specialCases.indexOf(thisTable[i]) > -1) {
+            const celestialRoll = checkSpecials(thisTable[i], true);
+            if (celestialRoll.c !== thisTable[i]) {
+                oreList[celestialRoll.c]["decimalRarity"] = oreList[thisTable[i]]["decimalRarity"]/celestialRoll.r;
+                let cEstAmt = amt*oreList[celestialRoll.c]["decimalRarity"];
+                let cOldEst = cEstAmt;
+                if (cEstAmt < 1 && Math.random() < cEstAmt) cEstAmt++;
+                cEstAmt = Math.floor(cEstAmt);
+                results[thisTable[i]].est -= cEstAmt;
+                results[celestialRoll.c] = {est: cEstAmt, rand: cOldEst}
+            }
+        }
+    }
+    if (results["sillyMiner"]) delete results["sillyMiner"];
+    for (let blockToGive in results) {
+        if (results[blockToGive].est > 0) {
+            let variantDivide = player.gears["gear25"] ? 2 : 1;
+            let variantSubtract = 0;
+            let totalVariants = 0;
+            for (let i = 3; i > 0; i--) {
+                variantSubtract = 0;
+                let estVariantAmt = (results[blockToGive].est-variantSubtract)/(multis[i]/variantDivide);
+                if (estVariantAmt < 1 && Math.random() < estVariantAmt) estVariantAmt++;
+                estVariantAmt = Math.floor(estVariantAmt);
+                totalVariants += estVariantAmt;
+                if (estVariantAmt > 0) {
+                    variantSubtract += estVariantAmt;
+                    if (player.gears["gear22"] && oreList[blockToGive]["numRarity"] >= 750000) {
+                        if (estVariantAmt >= 10) estVariantAmt *= 1.1; 
+                        else if (Math.random() < 1/10) estVariantAmt++;
+                        estVariantAmt = Math.floor(estVariantAmt);
+                    }
+                    playerInventory[blockToGive][variantInvNames[i]] += estVariantAmt;
+                    if (messageIncluded(oreList[blockToGive]["oreTier"])) {
+                        spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: i+1});
+                        logFind(blockToGive, curX, curY, namesemojis[i], player.stats.blocksMined, false, estVariantAmt, {cave: false, multi: 1}); 
+                    }
+                    if (results[blockToGive].rand < 1 && oreList[blockToGive]["hasLog"] && results[blockToGive].rand/originAmt/multis[i] < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
+                        block: blockToGive,
+                        genAt: new Date().toUTCString(),
+                        variant: i+1,
+                        luck: oreList[blockToGive]["decimalRarity"]*oreList[blockToGive]["numRarity"],
+                        rng: results[blockToGive].rand/originAmt/multis[i],
+                        rand: results[blockToGive].rand,
+                        caveInfo: [false, 1, "none"],
+                        avgSpeed: player.avgSpeed,
+                        paradoxical: player.powerupVariables.fakeEquipped.item,
+                        world: currentWorld,
+                        withPickaxe: getItemNameFromParadoxical(player.stats.currentPickaxe),
+                        withEvent: getCurrentEventOre(),
+                        mined: true,
+                        bulkAmt: originAmt,
+                        randEdited: (Math.random.toString().replace(/\n|\r| /g, "") !== "functionrandom(){[nativecode]}"),
+                        from: new Error(),
+                        amt: estVariantAmt
+                    });
+                }
+            }
+            let toGive = results[blockToGive].est - totalVariants;
+            if (toGive > 0) {
+                if (results[blockToGive].rand < 1 && oreList[blockToGive]["hasLog"] && results[blockToGive].rand/originAmt < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
+                    block: blockToGive,
+                    genAt: new Date().toUTCString(),
+                    variant: 1,
+                    luck: oreList[blockToGive]["decimalRarity"]*oreList[blockToGive]["numRarity"],
+                    rng: results[blockToGive].rand/originAmt,
+                    rand: results[blockToGive].rand,
+                    caveInfo: [false, 1, "none"],
+                    avgSpeed: player.avgSpeed,
+                    paradoxical: player.powerupVariables.fakeEquipped.item,
+                    world: currentWorld,
+                    withPickaxe: getItemNameFromParadoxical(player.stats.currentPickaxe),
+                    withEvent: getCurrentEventOre(),
+                    mined: true,
+                    bulkAmt: originAmt,
+                    randEdited: (Math.random.toString().replace(/\n|\r| /g, "") !== "functionrandom(){[nativecode]}"),
+                    from: new Error(),
+                    amt: toGive
+                });
+                if (oreList[blockToGive]["numRarity"] >= 750000) {
+                    playSound(oreList[blockToGive]["oreTier"]);
+                    if (currentActiveEvent !== undefined) {
+                        if (getCurrentEventOre() === blockToGive && blockToGive !== "🪸") endEvent();
+                    } 
+                    if (player.gears["gear7"] && currentWorld < 2) gearAbility1();
+                    if (player.gears["gear22"]) {
+                        if (toGive >= 10) {toGive *= 1.1; toGive = Math.floor(toGive);}
+                        else if (Math.random() < 1/10) toGive++;
+                    }
+                } else if (oreList[blockToGive]["oreTier"] === "Layer") {
+                    if (player.gears["gear15"]) toGive *= 2;
+                    if (player.gears["gear26"]) {
+                        if (toGive >= 30) {toGive *= 1+(20/30); toGive = Math.floor(toGive);}
+                        else if (Math.random() < 1/30) toGive += 20;
+                    }
+                } else if (commons.indexOf(oreList[blockToGive]["oreTier"] > -1)) {
+                    if (player.gears["gear13"]) {
+                        if (toGive > 4) {toGive *= 1.75; toGive = Math.floor(toGive);}
+                        else if (Math.random() < 3/4) toGive++;
+                    }
+                }
+                
+                if (toGive > 0) if (messageIncluded(oreList[blockToGive]["oreTier"])) {
+                    spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: 1});
+                    logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, {cave: false, multi: 1}); 
+                }
+            }
+            playerInventory[blockToGive]["normalAmt"] += toGive;
+            if (player.gears["gear4"] && currentWorld < 2) {playerInventory[generationInfo.layerMat]["normalAmt"] += toGive; inventoryObj[generationInfo.layerMat] ??= 0;}
+            inventoryObj[blockToGive] ??= 0;
+        }
+    }
+}
+
 function addLuna(layer, probs) {
     let fromHere = 0;
     let summedProb = oreList["luna"]["decimalRarity"];
@@ -220,12 +341,12 @@ function addLuna(layer, probs) {
     for (let i = fromHere; i < probs.length; i++) probs[i] += add;
     return [layer, probs];
 }
-const checkSpecials = function(block) {
+const checkSpecials = function(block, get) {
     const originalBlock = block;
     let rand = 1000;
     if (block === "🔮") rand = 10000;
-    if (block === "God of The Mine") rand = 25;
-    if (Math.random() < 1/rand) {
+    if (block === "godOfTheMine") rand = 3;
+    if (Math.random() < 1/rand || get) {
         switch(block) {
             case "💙" : 
             if (curDirection === "")
@@ -298,10 +419,13 @@ const checkSpecials = function(block) {
             case "💠" :
             if (player.stats.currentPickaxe === "pickaxe4") block = "pixel";
             break;
-            case "God of The Mine" :
+            case "godOfTheMine" :
                 if (player.stats.currentPickaxe === "pickaxe31") block = "Omnipotent God of The Mine";
                 break;
         }
+    }
+    if (get) {
+        return {r: rand, c: block};
     }
     if (originalBlock !== block) oreList[block]["decimalRarity"] = (oreList[originalBlock]["decimalRarity"] / rand);
     return block;
@@ -361,7 +485,8 @@ function switchDistance(num) {
     if (isNaN(layerDistanceY)) {layerDistanceY = 1000; distanceMulti = 0;}
     let teleportLayer = getLayer(layerDistanceY).layer;
     for (let i = 0; i < teleportLayer.length; i++) if (oreList[teleportLayer[i]]["oreTier"] === "Layer") {teleportLayer = teleportLayer[i]; break;}
-    get("meterDisplay").textContent = `${teleportLayer} ${(currentWorld === 2 ? layerDistanceY - 2000 : layerDistanceY).toLocaleString()}m`
+    get("meterDisplay").textContent = `${teleportLayer} ${(currentWorld === 2 ? layerDistanceY - 2000 : layerDistanceY).toLocaleString()}m`;
+    get("meterDisplay").setAttribute("title", oreList[teleportLayer]["oreName"]);
 }
 
 async function teleport() {

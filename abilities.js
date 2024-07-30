@@ -1,14 +1,4 @@
-/* Copyright (C) Amber Blessing - All Rights Reserved
- 
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-Written by Amber Blessing <ambwuwu@gmail.com>, January 2024
-*/
 let batteryEvent = false;
-//const preMined = player.stats.blocksMined;
-//const preRevealed = blocksRevealedThisReset;
-//pickaxeAbility25(curX, curY)
-//console.log(player.stats.blocksMined - preMined, blocksRevealedThisReset - preRevealed);
 const abilityTestNums = []
 let abilityTestAmt = 0;
 async function rollAbilities(force) {
@@ -856,6 +846,9 @@ function pickaxeAbility31(x, y) {
     x = x - 300;
     y = y - 200;
     pickaxeArrayLoop(pickaxe31Nums, x, y);
+}
+function pickaxeAbility32(x, y) {
+    bulkGenerate(y, 350000000)
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {
