@@ -1566,7 +1566,7 @@ const pickaxeStats = {
     "pickaxe32" : {
         mined: 350000,
         revealed: 1,
-        luck: 1,
+        luck: 500,
         rate: 200,
         src : `<img class="mineImage" src="media/underseaEvisceratorIcon.webp"></img>`,
         ability: "media/abilityImages/underseaEvisceratorAbility.png",

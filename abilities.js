@@ -848,7 +848,7 @@ function pickaxeAbility31(x, y) {
     pickaxeArrayLoop(pickaxe31Nums, x, y);
 }
 function pickaxeAbility32(x, y) {
-    bulkGenerate(y, 350000000)
+    bulkGenerate(y, 350000)
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {
