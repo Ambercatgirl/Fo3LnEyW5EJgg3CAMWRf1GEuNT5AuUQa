@@ -1218,7 +1218,7 @@ function sillyKittyCat(text) {
             typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", get("spawnMessage"));
             get("catStuff").style.display = "none";
             catstuff.layer = currentLayer;
-            insertIntoLayers({ore: "Ryoui", layers:[currentLayer], "useLuck": true})
+            insertIntoLayers({ore: "Goober", layers:[currentLayer], "useLuck": true})
         }
     } else {
         new Audio("audios/meow-2.mp3").play();
