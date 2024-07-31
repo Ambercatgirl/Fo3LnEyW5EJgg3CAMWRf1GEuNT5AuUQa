@@ -362,11 +362,18 @@
                     <div class="blockDisplayRow"></div>
                 </div>
                 <p id="displayDisabled">Display is Disabled.</p>
-                <div id="trackerLock">
-                    <img src="media/featureLock.png" id="lockImage">
-                    <p id="lockDescription">Craft the Ore Tracker to unlock!</p>
+
+                <div id="sideIconHolder">
+                    <button class="sideIcon" style="background-image:url('media/radar.gif');" onclick="toggleTracker()"></button>
+                    <button class="sideIcon" style="background-image:url('media/placer.png');" id="toggleOrePlacer" onclick="togglePlacement()"></button>
                 </div>
                 <div id="oreTrackerHolder">
+                    <div id="trackerLock">
+                        <div id="trackerLockChain"></div>
+                        <p id="trackerRequirement">
+                            Craft the Ore Tracker!
+                        </p>
+                    </div>
                     <button id="oreTrackerButton" onclick="checkExistingOres()">Track Ores!</button>
                     <p id="trackerOre">Ore: N/A</p>
                     <p id="trackerX">X: N/A</p>
@@ -670,6 +677,9 @@
                             <button class="inputButton roundedRight" onclick="switchHighRarity(get('logRarityInput'))">Set Minimum Log RNG</button>
                         </div>
                         <div class="inputAndButton">
+                            <button class="toggleDisplay fullyRounded" onclick="toggleSimulatedRng(this)" id="simulatedRng" style="background-color: #FF3D3D;">Toggle Simulated RNG</button>
+                          </div>
+                        <div class="inputAndButton">
                           <button class="invSettingButton fullyRounded" onclick="switchToIndex(this, 0)" id="invIndex">Travel to layer index on inventory click</button>
                         </div>
                         <div class="inputAndButton">
@@ -678,6 +688,7 @@
                       <div class="inputAndButton">
                         <button class="toggleDisplay fullyRounded" onclick="changeCanDisplay(this)" id="blockUpdates">Toggle Block Updates</button>
                       </div>
+
                       <div class="inputAndButton">
                         <button class="toggleDisplay fullyRounded" style="background-color: #FF3D3D;" onclick="changeUseNumbers(this)" id="useNumbers">Use Numbers for Pickaxe Names</button>
                       </div>
@@ -765,6 +776,7 @@
                         <p class="playerStat"id="statsBlocksMined">Blocks Mined</p>
                         <p class="playerStat" id="statsSpeed">Speed</p>
                         <p class="playerStat" id="statsSessionReset">Session Resets</p>
+                        <p class="playerStat" id="sessionMined">Mined</p>
                         <p class="playerStat" id="statsReset">Resets</p>
                         <p class="playerStat" id="furthestPosX">Resets</p>
                         <p class="playerStat" id="furthestNegX">Resets</p>

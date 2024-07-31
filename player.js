@@ -107,7 +107,8 @@ class playerTemplate {
             useNyerd: false,
             automineUpdate: 25,
             spawnMessageTiers: ["Antique","Mystical","Divine","Flawless","Interstellar","Metaversal","Sacred","Celestial","Ethereal","Imaginary", "Hyperdimensional", "Infinitesimal"],
-            lastWorld: 1
+            lastWorld: 1,
+            simulatedRng: false
         },
         this.stats = {
             currentPickaxe: "pickaxe0",
@@ -154,6 +155,7 @@ class playerTemplate {
         },
         this.wasUsing = undefined;
         this.sr1Unlocked = false;
+        this.galacticaUnlocked = false;
         this.faqOffered = false;
         this.webHook = {
             active: false,
@@ -626,6 +628,7 @@ function loadNewData(data) {
         if (data.stats.timePlayed !== undefined) player.stats.timePlayed = data.stats.timePlayed;
         if (data.stats.minesReset !== undefined) player.stats.minesReset = data.stats.minesReset;
         player.startingResets = player.stats.minesReset;
+        player.startingBlocks = player.stats.blocksMined;
         data.stats.furthestNegX ??= 1000000;
         data.stats.furthestPosX ??= 1000000;
         data.stats.furthestY ??= 0;
@@ -702,6 +705,8 @@ function loadNewData(data) {
         if (data.settings.automineProtection) toggleAutomineProtection(document.getElementById("automineProtection"));
         data.settings.lastWorld ??= 1;
         player.settings.lastWorld = data.settings.lastWorld;
+        data.settings.simulatedRng ??= false;
+        if (data.settings.simulatedRng) toggleSimulatedRng(get("simulatedRng"));
         if (data.powerupCooldowns !== undefined) {
             for (let property in data.powerupCooldowns) {
                 if (data.powerupCooldowns[property] !== undefined && player.powerupCooldowns[property] !== undefined) {
@@ -719,6 +724,8 @@ function loadNewData(data) {
         }
         data.sr1Unlocked ??= false;
         player.sr1Unlocked = data.sr1Unlocked;
+        data.galacticaUnlocked ??= false;
+        player.galacticaUnlocked = data.galacticaUnlocked;
         //unlock locked features
         if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";

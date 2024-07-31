@@ -38,8 +38,9 @@ function mineBlock(x, y, cause) {
     let mineBlockOre;
     let mineBlockVariant;
     if (mine[y][x].ore !== undefined) {
+        if (mine[y][x].isPlaced) {mine[y][x] = "⚪"; checkAllAround(x, y); return;}
         mineBlockOre = mine[y][x].ore;
-        mineBlockVariant = mine[y][x].variant
+        mineBlockVariant = mine[y][x].variant;
     } else {
         mineBlockOre = mine[y][x];
         mineBlockVariant = undefined;
@@ -110,6 +111,7 @@ function giveBlock(obj) {
                 stopMining();
             }
         }
+        if (obj.type === "Omnipotent God of The Mine") player.galacticaUnlocked = true;
         if (oreList[obj.type]["hasLog"] || oreRarity >= 160000000) {
             verifiedOres.verifyFind(mine[obj.y][obj.x], obj.y, obj.x, names[inv - 1], obj.amt);
         }
@@ -202,8 +204,7 @@ const bulkGenerate = function(y, amt) {
     const generationInfo = getLayer(y);
     if (y === player.lunaLayer) generationInfo.layer = addLuna([...generationInfo.layer], [...generationInfo.probabilities])[0];
     const thisTable = generationInfo.layer;
-    const results = {
-    }
+    const results = {}
     for (let i = 0; i < thisTable.length; i++) {
         let estAmt = amt*oreList[thisTable[i]]["decimalRarity"];
         let oldEst = estAmt;
@@ -215,8 +216,9 @@ const bulkGenerate = function(y, amt) {
             const celestialRoll = checkSpecials(thisTable[i], true);
             if (celestialRoll.c !== thisTable[i]) {
                 oreList[celestialRoll.c]["decimalRarity"] = oreList[thisTable[i]]["decimalRarity"]/celestialRoll.r;
-                let cEstAmt = amt*oreList[celestialRoll.c]["decimalRarity"];
+                let cEstAmt = results[thisTable[i]].est*(1/celestialRoll.r);
                 let cOldEst = cEstAmt;
+                if (results[thisTable[i]].rand < 1) cOldEst*=results[thisTable[i]].rand;
                 if (cEstAmt < 1 && Math.random() < cEstAmt) cEstAmt++;
                 cEstAmt = Math.floor(cEstAmt);
                 results[thisTable[i]].est -= cEstAmt;
@@ -224,12 +226,43 @@ const bulkGenerate = function(y, amt) {
             }
         }
     }
+    let rngModifier = 1;
+    if (originAmt > 35899) {
+        rngModifier = originAmt/35899;
+    }
     if (results["sillyMiner"]) delete results["sillyMiner"];
     for (let blockToGive in results) {
         if (results[blockToGive].est > 0) {
+            if (results[blockToGive].est > 1e308) results[blockToGive].est = 1e308;
+            let rng;
+            if (rngModifier > 1) {
+                rng = results[blockToGive].rand;
+                rng /= originAmt;
+                rng *= rngModifier;
+            } else {
+                rng = oreList[blockToGive]["decimalRarity"];
+            }
+            let wasDuped = false;
+            if (results[blockToGive].rand >= 1) rng = 1;
             let variantDivide = player.gears["gear25"] ? 2 : 1;
             let variantSubtract = 0;
             let totalVariants = 0;
+            //do silly stuff here
+            playerInventory[blockToGive]["foundAt"] ??= Date.now();
+            if (oreList[blockToGive]["numRarity"] >= 750000) {
+                if (Math.random() < 1/100000) {
+                    playerInventory["bitcoin"]["normalAmt"]++;
+                    inventoryObj["bitcoin"] = 0;
+                }
+                if (oreList[blockToGive]["oreTier"] === "Flawless") {
+                    if (!player.sr1Unlocked) {
+                        player.sr1Unlocked = true;
+                        displayMessage("sr1Unlocked");
+                        stopMining();
+                    }
+                }
+                if (blockToGive === "Omnipotent God of The Mine") player.galacticaUnlocked = true;
+            }
             for (let i = 3; i > 0; i--) {
                 variantSubtract = 0;
                 let estVariantAmt = (results[blockToGive].est-variantSubtract)/(multis[i]/variantDivide);
@@ -240,20 +273,22 @@ const bulkGenerate = function(y, amt) {
                     variantSubtract += estVariantAmt;
                     if (player.gears["gear22"] && oreList[blockToGive]["numRarity"] >= 750000) {
                         if (estVariantAmt >= 10) estVariantAmt *= 1.1; 
-                        else if (Math.random() < 1/10) estVariantAmt++;
+                        else if (Math.random() < 1/10) {estVariantAmt++; wasDuped = true;}
                         estVariantAmt = Math.floor(estVariantAmt);
                     }
                     playerInventory[blockToGive][variantInvNames[i]] += estVariantAmt;
+                    if (playerInventory[blockToGive][variantInvNames[i]] > 1e308) playerInventory[blockToGive][variantInvNames[i]] = 1e308;
                     if (messageIncluded(oreList[blockToGive]["oreTier"])) {
                         spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: i+1});
-                        logFind(blockToGive, curX, curY, namesemojis[i], player.stats.blocksMined, false, estVariantAmt, {cave: false, multi: 1}); 
+                        logFind(blockToGive, curX, curY, namesemojis[i], player.stats.blocksMined, false, estVariantAmt, {cave: false, multi: 1}, rng/multis[i]/(wasDuped ? 10 : 1)); 
                     }
-                    if (results[blockToGive].rand < 1 && oreList[blockToGive]["hasLog"] && results[blockToGive].rand/originAmt/multis[i] < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
+                    if (oreList[blockToGive]["hasLog"] && rng < 1 && rng/multis[i] < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
                         block: blockToGive,
                         genAt: new Date().toUTCString(),
                         variant: i+1,
                         luck: oreList[blockToGive]["decimalRarity"]*oreList[blockToGive]["numRarity"],
-                        rng: results[blockToGive].rand/originAmt/multis[i],
+                        rng: rng/multis[i],
+                        mod: rngModifier,
                         rand: results[blockToGive].rand,
                         caveInfo: [false, 1, "none"],
                         avgSpeed: player.avgSpeed,
@@ -271,12 +306,13 @@ const bulkGenerate = function(y, amt) {
             }
             let toGive = results[blockToGive].est - totalVariants;
             if (toGive > 0) {
-                if (results[blockToGive].rand < 1 && oreList[blockToGive]["hasLog"] && results[blockToGive].rand/originAmt < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
+                if (oreList[blockToGive]["hasLog"] && rng < 1 && rng < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
                     block: blockToGive,
                     genAt: new Date().toUTCString(),
                     variant: 1,
                     luck: oreList[blockToGive]["decimalRarity"]*oreList[blockToGive]["numRarity"],
-                    rng: results[blockToGive].rand/originAmt,
+                    rng: rng,
+                    mod: rngModifier,
                     rand: results[blockToGive].rand,
                     caveInfo: [false, 1, "none"],
                     avgSpeed: player.avgSpeed,
@@ -290,6 +326,7 @@ const bulkGenerate = function(y, amt) {
                     from: new Error(),
                     amt: toGive
                 });
+                wasDuped = false;
                 if (oreList[blockToGive]["numRarity"] >= 750000) {
                     playSound(oreList[blockToGive]["oreTier"]);
                     if (currentActiveEvent !== undefined) {
@@ -298,7 +335,7 @@ const bulkGenerate = function(y, amt) {
                     if (player.gears["gear7"] && currentWorld < 2) gearAbility1();
                     if (player.gears["gear22"]) {
                         if (toGive >= 10) {toGive *= 1.1; toGive = Math.floor(toGive);}
-                        else if (Math.random() < 1/10) toGive++;
+                        else if (Math.random() < 1/10) {toGive++; wasDuped = true;}
                     }
                 } else if (oreList[blockToGive]["oreTier"] === "Layer") {
                     if (player.gears["gear15"]) toGive *= 2;
@@ -315,10 +352,11 @@ const bulkGenerate = function(y, amt) {
                 
                 if (toGive > 0) if (messageIncluded(oreList[blockToGive]["oreTier"])) {
                     spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: 1});
-                    logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, {cave: false, multi: 1}); 
+                    logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, {cave: false, multi: 1}, (rng / (wasDuped ? 10 : 1))); 
                 }
             }
             playerInventory[blockToGive]["normalAmt"] += toGive;
+            if (playerInventory[blockToGive]["normalAmt"] > 1e308) playerInventory[blockToGive]["normalAmt"] = 1e308;
             if (player.gears["gear4"] && currentWorld < 2) {playerInventory[generationInfo.layerMat]["normalAmt"] += toGive; inventoryObj[generationInfo.layerMat] ??= 0;}
             inventoryObj[blockToGive] ??= 0;
         }
@@ -573,6 +611,7 @@ function attemptSwitchWorld(to) {
     if (to === 1 && currentWorld !== 1) {switchWorld(1); return;}
     if (to === 1.2 && currentWorld !== 1.2) {switchWorld(1.2); return;}
     if (to === 0) {showTrophyRoom(true); return;}
+    if (to === 0.9 && player.galacticaUnlocked) {switchWorld(0.9); return;}
 }
 function switchWorld(to, skipAnim) {
     get("blackScreen").style.display = "block";
@@ -581,54 +620,17 @@ function switchWorld(to, skipAnim) {
     const timeout = skipAnim ? 0 : 1000;
     canMine = false;
     setTimeout(() => {
+        get("mainSticky").style.backgroundImage = "none";
         resetForSwitch();
         if (currentWorld === 1.1) sr1Helper(false);
         currentWorld = to;
         if (currentWorld === 2) {
-            distanceMulti = 1;
-            y = 1000;
-            allLayers = worldTwoLayers;
-            curX = 1000000;
-            curY = 2001; 
-            createMine();
-            if (player.stats.currentPickaxe === "pickaxe25") {
-                if (Math.random() < 1/10000) {
-                    mine[curY + 1][curX] = "🩷";
-                    playSound(oreList["🩷"]["oreTier"]);
-                    document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
-                } else {
-                    mine[curY + 1][curX] = "📺";
-                }
-            } else {
-                mine[curY + 1][curX] = "📺";
-            }
-            layerNum = 1;
-            switchLayerIndex(0, "tvLayer", 2);
-            if (energySiphonerActive) removeSiphoner();
+            prepareWorldTwo();
         } else if (currentWorld < 2) {
-            distanceMulti = 0;
-            y = 1000;
-            if (currentWorld === 1) allLayers = worldOneLayers;
-            else if (currentWorld === 1.1) allLayers = subRealmOneLayers;
-            else if (currentWorld === 1.2) allLayers = waterWorldLayers;
-            curX = 1000000;
-            curY = 0; 
-            createMine();
-            if (currentWorld === 1) {
-                if (player.stats.currentPickaxe === "pickaxe1") {
-                    if (Math.random() < 1/10000) {
-                        mine[curY + 1][curX] = "🩶";
-                        playSound(oreList["🩶"]["oreTier"]);
-                        document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
-                    } else {
-                        mine[curY + 1][curX] = "🟫";
-                    }
-                }
-            }
-            layerNum = 0;
-            if (currentWorld === 1) switchLayerIndex(0, "dirtLayer", 1);
-            else if (currentWorld === 1.1) {switchLayerIndex(0, "scLayer", 1); sr1Helper(true);}
-            else if (currentWorld === 1.2) switchLayerIndex(0, "waterLayer", 1);
+            if (currentWorld === 1) prepareWorldOne();
+            else if (currentWorld === 1.1) prepareSR1();
+            else if (currentWorld === 1.2) prepareWatr();
+            else if (currentWorld === 0.9) prepareGalactica();
         }
         switchDistance(0);
         displayArea();
@@ -670,6 +672,79 @@ function resetForSwitch() {
     pa4 = [];
     a12 = 0;
     a13 = false;
+}
+function prepareWorldOne() {
+    allLayers = worldOneLayers;
+    distanceMulti = 0;
+    y = 1000;
+    curX = 1000000;
+    curY = 0; 
+    createMine();
+    if (player.stats.currentPickaxe === "pickaxe1") {
+        if (Math.random() < 1/10000) {
+            mine[curY + 1][curX] = "🩶";
+            playSound(oreList["🩶"]["oreTier"]);
+            document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
+        } else {
+            mine[curY + 1][curX] = "🟫";
+        }
+    }
+    layerNum = 0;
+    switchLayerIndex(0, "dirtLayer", 1);
+}
+function prepareSR1() {
+    allLayers = subRealmOneLayers;
+    distanceMulti = 0;
+    y = 1000;
+    curX = 1000000;
+    curY = 0; 
+    createMine();
+    layerNum = 0;
+    switchLayerIndex(0, "scLayer", 1); 
+    sr1Helper(true);
+}
+function prepareGalactica() {
+    get("mainSticky").style.backgroundImage = `url("media/starryBackground.jpg")`;
+    allLayers = galacticaLayers;
+    distanceMulti = 0;
+    y = 1000;
+    curX = 1000000;
+    curY = 0; 
+    createMine();
+    layerNum = 0;
+    switchLayerIndex(0, "starLayer", 1);
+}
+function prepareWatr() {
+    allLayers = waterWorldLayers;
+    distanceMulti = 0;
+    y = 1000;
+    curX = 1000000;
+    curY = 0; 
+    layerNum = 0;
+    createMine();
+    switchLayerIndex(0, "waterLayer", 1);
+}
+function prepareWorldTwo() {
+    distanceMulti = 1;
+    y = 1000;
+    allLayers = worldTwoLayers;
+    curX = 1000000;
+    curY = 2001; 
+    createMine();
+    if (player.stats.currentPickaxe === "pickaxe25") {
+        if (Math.random() < 1/10000) {
+            mine[curY + 1][curX] = "🩷";
+            playSound(oreList["🩷"]["oreTier"]);
+            document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
+        } else {
+            mine[curY + 1][curX] = "📺";
+        }
+    } else {
+        mine[curY + 1][curX] = "📺";
+    }
+    layerNum = 1;
+    switchLayerIndex(0, "tvLayer", 2);
+    if (energySiphonerActive) removeSiphoner();
 }
 function stopMining() {
     curDirection = "";
