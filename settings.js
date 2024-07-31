@@ -520,8 +520,8 @@ function createIndexCards(layer) {
                 if (player.settings.simulatedRng || pickaxeStats[player.stats.currentPickaxe].isDimensional) {
                     if (pickaxeStats[player.stats.currentPickaxe].isDimensional) simAmt = pickaxeStats[player.stats.currentPickaxe].mined;
                     else {
-                        if (player.stats.currentPickaxe === "pickaxe27") simAmt = pickaxeStats[player.upgrades["pickaxe27"].level].mined;
-                        else simAmt = pickaxe.mined;
+                        if (player.stats.currentPickaxe === "pickaxe27") simAmt = pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
+                        else simAmt = pickaxeStats[player.stats.currentPickaxe].mined;
                     }
                     if (simAmt < 35899) rarity = Math.round(1/oreList[property]["decimalRarity"]);
                     else {
