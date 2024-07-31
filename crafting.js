@@ -625,12 +625,14 @@ function utilitySwitchActions() {
 let m87 = 0;
 let m88 = 0;
 const showOrders = {
-    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13", "pickaxe32"],
+    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
     worldTwoPickaxes : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
     worldOneGears : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
     worldTwoGears : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
     srOnePickaxes : ["pickaxe27"],
     srOneGears : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],
+    galacticaPickaxes : ["pickaxe32"],
+    galacticaGears : [],
     wwPickaxes: ["pickaxe31"],
     wwGears: []
 }
@@ -658,11 +660,16 @@ function showGears() {
     m87++;
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
-        const list = currentWorld === 1 ? showOrders.worldOnePickaxes : (currentWorld === 1.1 ? showOrders.srOnePickaxes : (currentWorld === 1.2 ? showOrders.wwPickaxes : showOrders.worldTwoPickaxes));
-        for (let i = 0; i < list.length; i++) {
-            getButtonByName(list[i]).style.display = "block";
-        }
-        document.getElementById("nullChroma").style.display = "none";
+    let list;
+    if (currentWorld === 1) list = showOrders.worldOnePickaxes;
+    if (currentWorld === 1.1) list = showOrders.srOnePickaxes;
+    if (currentWorld === 1.2) list = showOrders.wwPickaxes;
+    if (currentWorld === 2) list = showOrders.worldTwoPickaxes;
+    if (currentWorld === 0.9) list = showOrders.galacticaPickaxes;
+    for (let i = 0; i < list.length; i++) {
+        getButtonByName(list[i]).style.display = "block";
+    }
+    document.getElementById("nullChroma").style.display = "none";
 }
 function switchWorldCraftables() {
     let gearList;
@@ -681,9 +688,12 @@ function switchWorldCraftables() {
     }  else if (currentWorld === 1.2) {
         gearList = showOrders.wwGears;
         pickaxeList = showOrders.wwPickaxes;
-    }else if (currentWorld === 2) {
+    } else if (currentWorld === 2) {
         gearList = showOrders.worldTwoGears;
         pickaxeList = showOrders.worldTwoPickaxes;
+    } else if (currentWorld === 0.9) {
+        gearList = showOrders.galacticaGears;
+        pickaxeList = showOrders.galacticaPickaxes;
     }
     for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "flex";
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
@@ -1560,8 +1570,8 @@ const pickaxeStats = {
         src : `<img class="mineImage" src="media/underseaEvisceratorIcon.webp"></img>`,
         ability: "media/abilityImages/underseaEvisceratorAbility.png",
         doAbility: function(x, y) {pickaxeAbility31(x, y)},
-        canSpawnCaves:[1, 1.2, 2],
-        canMineIn:[1, 1.2, 2],
+        canSpawnCaves:[1, 1.2, 2, 0.9],
+        canMineIn:[1, 1.2, 2, 0.9],
     },
     "pickaxe32" : {
         mined: 350000,
@@ -1571,8 +1581,9 @@ const pickaxeStats = {
         src : `<img class="mineImage" src="media/underseaEvisceratorIcon.webp"></img>`,
         ability: "media/abilityImages/underseaEvisceratorAbility.png",
         doAbility: function(x, y) {pickaxeAbility32(x, y)},
-        canSpawnCaves:[1, 1.2, 2],
-        canMineIn:[1, 1.2, 2],
+        canSpawnCaves:[1, 1.2, 2, 0.9],
+        canMineIn:[1, 1.2, 2, 0.9],
+        isDimensional: true
     },
     
 }
@@ -1601,12 +1612,12 @@ function ct() {
         if (!oreList[ore]["caveExclusive"] && oreList[ore]["oreTier"] !== "Celestial") {
             let currentOreLayer;
             if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"] !== "Layer") {
-                recipeLayers.commons ??= {ore: ore, highestProcs : 0}
+                recipeLayers.commons ??= {ore: ore, highestProcs : 0, amt:0}
                 currentOreLayer = "commons";
             } else {
                 for (let layer in layerDictionary) {
                     if (layerDictionary[layer].layer.includes(ore)) {
-                        recipeLayers[layer] ??= {ore: ore, highestProcs : 0}
+                        recipeLayers[layer] ??= {ore: ore, highestProcs : 0, amt:0}
                         currentOreLayer = layer;
                         break;
                     }
@@ -1621,34 +1632,21 @@ function ct() {
             let totalProcsNeeded;
             if (currentOreLayer === "commons") {
                 totalProcsNeeded = totalOreRarity/abilityMined;
-                if (totalProcsNeeded > recipeLayers["commons"].highestProcs) {
-                    recipeLayers["commons"].highestProcs = totalProcsNeeded;
-                    recipeLayers["commons"].ore = ore;
-                }
+                recipeLayers["commons"].highestProcs += totalProcsNeeded;
+                recipeLayers["commons"].amt++;
             } else {
                 totalProcsNeeded = totalOreRarity/(abilityRevealed > abilityMined ? abilityRevealed : abilityMined);
                 if (oreList[ore]["oreTier"] === "Layer") totalProcsNeeded = totalOreRarity/abilityMined;
-                if (totalProcsNeeded > recipeLayers[currentOreLayer].highestProcs) {
-                    recipeLayers[currentOreLayer].highestProcs = totalProcsNeeded;
-                    recipeLayers[currentOreLayer].ore = ore;
-                }
+                recipeLayers[currentOreLayer].highestProcs += totalProcsNeeded;
+                recipeLayers[currentOreLayer].amt++;
             }
         }
     }
     let totalProcs = 0;
-    let commonsAdded = false;
-    const keys = Object.keys(recipeLayers);
-    if (recipeLayers["commons"] !== undefined) {
-        for (let layer in recipeLayers) {
-            if (recipeLayers[layer].highestProcs < recipeLayers["commons"].highestProcs && !commonsAdded) {
-                recipeLayers[layer].highestProcs = recipeLayers["commons"].highestProcs;
-                commonsAdded = true;
-            }
-        }
-    }
-    if (recipeLayers["commons"] !== undefined) delete recipeLayers["commons"];
+    let commonAdd = 0;
+    if (recipeLayers["commons"] !== undefined) {commonAdd = recipeLayers["commons"].highestProcs / recipeLayers["commons"].amt; delete recipeLayers["commons"]}
     for (let layer in recipeLayers) {
-        totalProcs += recipeLayers[layer].highestProcs;
+        totalProcs += (recipeLayers[layer].highestProcs/recipeLayers[layer].amt)
     }
     let timeForProcs = (Math.floor(totalProcs) * abilityRate) / speed;
     return longTime(timeForProcs * 1000);

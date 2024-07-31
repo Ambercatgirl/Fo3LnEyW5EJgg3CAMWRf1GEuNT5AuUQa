@@ -114,7 +114,7 @@ class secureLogs {
                         log.mined = true;
                         if (log.variant === undefined) log.variant = variant;
                         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
-                        if (log.rng < 1/1000000000 && player.serverHook !== undefined) serverWebhook(log, player.stats.blocksMined);
+                        if (log.rng < 1/1000000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
                         const webhookString = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(x${log.amt}) ` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} ${log.caveInfo[0] ? (log.caveInfo[1] > 1 ? "(" + caveList[log.caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x - 1000000).toLocaleString()}, Y: ${(-1 * log.y).toLocaleString()}${(log.paradoxical === "pickaxe26" ? " " : "")}`;           
                         log.output = webhookString;
                         this.#verifiedLogs["All"][i] = log;
@@ -144,7 +144,7 @@ class secureLogs {
        log.x = "Err";
        log.y = `${-1*curY}?`;
        log.withEvent ??= "None"
-       log.output = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(${log.amt}x)` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x)}, Y: ${(log.y).toLocaleString()}`;           
+       log.output = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(2${log.amt})x ` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x)}, Y: ${(log.y).toLocaleString()}`;           
        log.from = (log.from.stack.indexOf("mine.js") > -1)
        Object.freeze(log);
        this.#verifiedLogs["All"].push(log);
@@ -334,6 +334,7 @@ const worlds = {
     1.1: "SR1",
     1.2: "WW",
     2: "W2",
+    0.9: "Galactica"
 }
 function serverWebhook(log, mined) {
     const color = parseInt(oreInformation.getColors(oreList[log.block]["oreTier"])["backgroundColor"].substring(1), 16);

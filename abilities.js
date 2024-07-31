@@ -16,11 +16,14 @@ async function rollAbilities(force) {
     if (debug && force) m = 10000000;
     const pickaxe = pickaxeStats[player.stats.currentPickaxe]
     if (Math.random() <= (m/pickaxe.rate)) {
-        const preMined = player.stats.blocksMined;
-        const preRevealed = blocksRevealedThisReset;
-        pickaxe.doAbility(curX, curY);
-        abilityTestNums.push({mined: player.stats.blocksMined - preMined, revealed: blocksRevealedThisReset - preRevealed});
-        abilityTestAmt++;
+        if (player.settings.simulatedRng) {
+            let bulkAmt = 0;
+            if (player.stats.currentPickaxe === "pickaxe27") bulkAmt = pickaxe[player.upgrades["pickaxe27"].level].mined;
+            else bulkAmt = pickaxe.mined;
+            bulkGenerate(curY, bulkAmt)
+        } else {
+            pickaxe.doAbility(curX, curY);
+        }
     }
 }
 function getTestAvg() {
@@ -848,7 +851,7 @@ function pickaxeAbility31(x, y) {
     pickaxeArrayLoop(pickaxe31Nums, x, y);
 }
 function pickaxeAbility32(x, y) {
-    bulkGenerate(y, 350000)
+    bulkGenerate(y, 35000)
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {

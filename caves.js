@@ -152,6 +152,7 @@ function mineCaveShape(x, y, type) {
 function mineCaveBlock(c, r, type, cause) {
     let block = mine[r][c];
     if (block !== undefined) {
+        if (block.isPlaced) {mine[r][c] = "⚪"; checkAllAround(c, r); return;}
         let variant = block.variant;
         block = block.ore === undefined ? block : block.ore;
         if (currentWorld === 2 && block === "✖️") {
