@@ -625,18 +625,36 @@ function utilitySwitchActions() {
 let m87 = 0;
 let m88 = 0;
 const showOrders = {
-    worldOnePickaxes : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
-    worldTwoPickaxes : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
-    worldOneGears : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
-    worldTwoGears : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
-    srOnePickaxes : ["pickaxe27"],
-    srOneGears : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],
-    galacticaPickaxes : ["pickaxe32"],
-    galacticaGears : [],
-    wwPickaxes: ["pickaxe31"],
-    wwGears: []
+    "p1" : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
+    "p2" : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
+    "g1" : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
+    "g2" : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
+    "p1.1" : ["pickaxe27"],
+    "g1.1" : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],
+    "p1.2" : ["pickaxe31"],
+    "g1.2" : [],
+    "p0.9": ["pickaxe32"],
+    "g0.9": []
+}
+function replaceWithGalactica() {
+    if (currentWorld !== 1.1) {
+        for (let item in recipes) {
+            const button = getButtonByName(item)
+            if (button) button.style.display = "none";
+    }
+        for (let i = 0; i < showOrders["p0.9"].length; i++) getButtonByName(showOrders["p0.9"][i]).style.display = "block";
+        for (let i = 0; i < showOrders["g0.9"].length; i++) getButtonByName(showOrders["g0.9"][i]).style.display = "block";
+    }
+}
+function removeGalactica() {
+    for (let i = 0; i < showOrders["p0.9"].length; i++) getButtonByName(showOrders["p0.9"][i]).style.display = "none";
+    for (let i = 0; i < showOrders["g0.9"].length; i++) getButtonByName(showOrders["g0.9"][i]).style.display = "none";
+}
+function galacticaShortcut() {
+    get("galacticaCrafts").style.display = "block";
 }
 function showPickaxes() {
+    if (currentWorld !== 0.9) removeGalactica();
     appear(document.getElementById("pickaxeCrafts"));
     disappear(document.getElementById("gearCrafts"));
     m87 = 0;
@@ -661,11 +679,7 @@ function showGears() {
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
     let list;
-    if (currentWorld === 1) list = showOrders.worldOnePickaxes;
-    if (currentWorld === 1.1) list = showOrders.srOnePickaxes;
-    if (currentWorld === 1.2) list = showOrders.wwPickaxes;
-    if (currentWorld === 2) list = showOrders.worldTwoPickaxes;
-    if (currentWorld === 0.9) list = showOrders.galacticaPickaxes;
+    list = showOrders[`p${currentWorld}`]
     for (let i = 0; i < list.length; i++) {
         getButtonByName(list[i]).style.display = "block";
     }
@@ -677,23 +691,14 @@ function switchWorldCraftables() {
     const elements = document.getElementsByClassName("craftingButton");
     for (let i = 0; i < elements.length; i++) elements[i].style.display = "none";
     if (currentWorld === 1) {
-        gearList = showOrders.worldOneGears;
-        pickaxeList = showOrders.worldOnePickaxes;
-        const secondaryList = showOrders.worldTwoPickaxes;
+        gearList = showOrders["g1"];
+        pickaxeList = showOrders["p1"];
+        const secondaryList = showOrders["p2"];
         for (let i = 0; i < secondaryList.length; i++) if (player.pickaxes[secondaryList[i]]) pickaxeList.push(secondaryList[i]);
         if (player.trophyProgress["subrealmOneCompletion"].trophyOwned) pickaxeList.push("pickaxe27");
-    } else if (currentWorld === 1.1) {
-        gearList = showOrders.srOneGears;
-        pickaxeList = showOrders.srOnePickaxes;
-    }  else if (currentWorld === 1.2) {
-        gearList = showOrders.wwGears;
-        pickaxeList = showOrders.wwPickaxes;
-    } else if (currentWorld === 2) {
-        gearList = showOrders.worldTwoGears;
-        pickaxeList = showOrders.worldTwoPickaxes;
-    } else if (currentWorld === 0.9) {
-        gearList = showOrders.galacticaGears;
-        pickaxeList = showOrders.galacticaPickaxes;
+    } else {
+        pickaxeList = showOrders[`p${currentWorld}`];
+        gearList = showOrders[`g${currentWorld}`];
     }
     for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "flex";
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
