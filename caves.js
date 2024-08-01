@@ -29,6 +29,10 @@ function generateCave(x, y, type) {
                 caveList[type] = createGsCave();
         }
     }
+    if (player.settings.simulatedRng) {
+        bulkGenerate(curY, (1000*(caveRateModifier/100)), {type: type, multi: getCaveMulti(type)});
+        return;
+    }
     x ??= curX;
     y ??= curY;
     const newPoints = checkValidLocation(x, y);

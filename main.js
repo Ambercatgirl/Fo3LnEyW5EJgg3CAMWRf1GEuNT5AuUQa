@@ -553,13 +553,16 @@ function checkDisplayVariant(location) {
     let oreToAdd;
     let includeSize;
     let specialVariant;
+    const tier = oreList[location.ore]["oreTier"];
+    let isRare = (tier !== "Layer" && commons.indexOf(tier) === -1) 
     if (oreList[location.ore]["hasImage"]) {
-        const tier = oreList[location.ore]["oreTier"]
-        let isLarge =  tier === "Hyperdimensional" || tier === "Infinitesimal";
-        oreToAdd = `<img class="${isLarge ? 'largeMineImage' : 'mineOre'}" src="${oreList[location.ore]["src"]}"></img>`;
+        let isLarge = tier === "Hyperdimensional" || tier === "Infinitesimal";
+        if (isRare) oreToAdd = `<img class="${isLarge ? 'largeMineImage' : 'mineOre'}" src="${oreList[location.ore]["src"]}"></img>`;
+        else return location.ore;
         includeSize = "";
         specialVariant = "Img";
     } else {
+        if (!isRare) return location.ore;
         oreToAdd = location.ore;
         includeSize = "normalRare";
         specialVariant = "";
@@ -748,6 +751,8 @@ function updateInventory() {
     if (speed !== undefined) player.avgSpeed = speed;
     const avgBlocks = getAvgBlockSpeed();
     get("catPlayerStats").textContent = `${player.displayStatistics.luck.toLocaleString()}x Luck. ${avgBlocks > 1000000000000 ? formatNumber(avgBlocks, 3) : avgBlocks.toLocaleString()} Average Blocks Per Minute.`;
+    player.lastOnline = Date.now();
+    updateOfflineProgress();
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
@@ -974,6 +979,7 @@ function logFind(type, x, y, variant, atMined, fromReset, amt, fromCave, bulkRar
 }
 const suffixes = ["", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTg", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL", "USXGNTL", "DSXGNTL", "TSXGNTL", "QTSXGNTL", "QNSXGNTL", "SXSXGNTL", "SPSXGNTL", "OSXGNTL", "NVSXGNTL", "SPTGNTL", "USPTGNTL", "DSPTGNTL", "TSPTGNTL", "QTSPTGNTL", "QNSPTGNTL", "SXSPTGNTL", "SPSPTGNTL", "OSPTGNTL", "NVSPTGNTL", "OTGNTL", "UOTGNTL", "DOTGNTL", "TOTGNTL", "QTOTGNTL", "QNOTGNTL", "SXOTGNTL", "SPOTGNTL", "OTOTGNTL", "NVOTGNTL", "NONGNTL", "UNONGNTL", "DNONGNTL", "TNONGNTL", "QTNONGNTL", "QNNONGNTL", "SXNONGNTL", "SPNONGNTL", "OTNONGNTL", "NONONGNTL", "CENT", "UCENT"];
 function formatNumber(num, topoint) {
+    num = Math.round(num)
     topoint ??= 1;
     if (topoint < 1) topoint = 1;
     topoint = Math.pow(10, topoint);
@@ -1532,6 +1538,58 @@ function toggleTracker() {
             tracker.onanimationend = undefined;
         };
     }
+}
+let offlineDisplayed = false;
+function toggleOffline() {
+    if (trackerDisplayed) {
+        const tracker = get("oreTrackerHolder");
+        tracker.style.display = "none";
+        tracker.style.right = "-7vw";
+        trackerDisplayed = false;
+    }
+    const offlineDisplay = get("offlineHolder")
+    if (offlineDisplayed) {
+        offlineDisplay.style.animation = "retractOffline 0.5s linear 1";
+        offlineDisplay.onanimationend = () => {
+            offlineDisplay.style.display = "none";
+            offlineDisplay.style.right = "-7vw";
+            offlineDisplay.style.animation = "";
+            offlineDisplayed = false;
+            offlineDisplay.onanimationend = undefined;
+        };
+    } else {
+        offlineDisplay.style.display = "block";
+        offlineDisplay.style.animation = "extendOffline 0.5s linear 1";
+        offlineDisplayed = true;
+        updateOfflineProgress();
+        offlineDisplay.onanimationend = () => {
+            offlineDisplay.style.right = "2.5vw";
+            offlineDisplay.style.animation = "";
+            offlineDisplay.onanimationend = undefined;
+        };
+    }
+}
+function updateOfflineProgress() {
+    if (offlineDisplayed) {
+        let output = "";
+        const layer = getLayer(curY).layer;
+        for (let i = layer.length-1; i >= 0; i--) if (oreList[layer[i]]["oreTier"] !== "Celestial") output += `${layer[i]} `;
+        get("offlineLayer").textContent = `${output}`;
+        if (player.offlineProgress > 28800000) player.offlineProgress = 28800000;
+        get("offlineStats").textContent = `${msToTime(player.offlineProgress)}/08:00:00`;
+        const percent = player.offlineProgress > 0 ? 100/(28800000/(player.offlineProgress)) : 0;
+        get("offlineInteriorGradient").style.width = `${percent}%`;
+        get("offlineInteriorGradient").style.background = "repeating-linear-gradient(45deg, #7f007f, #fff, #7f007f 3vw)";
+        const nums = calcSpeed();
+        const speed = ((1000/nums.speed)*nums.reps)+nums.extra;
+        const willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeStats[player.stats.currentPickaxe].mined/pickaxeStats[player.stats.currentPickaxe].rate)/10) : 0;
+        get("offlineActivate").textContent = `Gen ${willGen > 1000000000 ? formatNumber(willGen, 2) : willGen.toLocaleString()} Blocks.`;
+        return willGen;
+    }
+}
+function generateOfflineProgress() {
+    const offlineAmt = updateOfflineProgress();
+    if (offlineAmt > 0) {bulkGenerate(curY, offlineAmt); player.offlineProgress = 0; updateOfflineProgress();}
 }
 //TY @marbelynrye FOR MAKING THESE IMAGE DATA GATHERERS UR SO COOL FOR THAT
 //IT WORKS SO WELL!!!!

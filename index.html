@@ -362,10 +362,25 @@
                     <div class="blockDisplayRow"></div>
                 </div>
                 <p id="displayDisabled">Display is Disabled.</p>
-
+                <button id="galacticaCrafts" onclick="replaceWithGalactica()"></button>
                 <div id="sideIconHolder">
                     <button class="sideIcon" style="background-image:url('media/radar.gif');" onclick="toggleTracker()"></button>
                     <button class="sideIcon" style="background-image:url('media/placer.png');" id="toggleOrePlacer" onclick="togglePlacement()"></button>
+                    <button class="sideIcon" style="background-image:url('media/offlineProgress.png');" id="toggleOfflineProgress" onclick="toggleOffline()"></button>
+                </div>
+                <div id="offlineHolder">
+                    <p id="offlineTitle">Offline Progression</p>
+                    <p id="offlineStats">00:00:00/08:00:00</p>
+                    <p id="offlineLayerTitle">You can get: -></p>
+                    <p id="offlineLayer"></p>
+                    <button id="offlineActivate" onclick="generateOfflineProgress()"></button>
+                    <div id="offlineProgressBar">
+                        <div id="offlineBar">
+                            <div id="offlineInteriorGradient" title="im not fixing the gradient extending outside of the bar for low offline progress times.">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="oreTrackerHolder">
                     <div id="trackerLock">

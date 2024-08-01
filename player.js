@@ -194,6 +194,8 @@ class playerTemplate {
         },
         this.serverHook = undefined;
         this.serverHookName = undefined;
+        this.lastOnline = Date.now();
+        this.offlineProgress = 0;
     }
 }
 let player = new playerTemplate();
@@ -743,6 +745,7 @@ function loadNewData(data) {
                 }
             }
         }
+        if (player.galacticaUnlocked && player.lastWorld !== 0.9) galacticaShortcut();
         if (data.serverHook !== undefined) player.serverHook = data.serverHook;
         if (data.serverHookName !== undefined) player.serverHookName = data.serverHookName;
         data.faqOffered ??= false;
@@ -758,7 +761,7 @@ function loadNewData(data) {
             player.luna.lastAddedOn = data.luna.lastAddedOn;
         }
         lastBlockAmt = player.stats.blocksMined;
-        switchWorld(player.settings.lastWorld, true)
+        if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true)
         data.name ??= "Cat";
         player.name = data.name;
         data.viewedMessages ??= {};
@@ -780,6 +783,13 @@ function loadNewData(data) {
         if (ri) player.settings.stopOnRare.allowList.push("Infinitesimal"); 
         applyStopOnRareData();
         applySpawnMessageData();
+        data.offlineProgress ??= 0;
+        if (data.lastOnline !== undefined) {
+            data.offlineProgress += Date.now() - data.lastOnline;
+            if (data.offlineProgress < 0) data.offlineProgress = 0;
+            if (data.offlineProgress > 28800000) data.offlineProgress = 28800000;
+            player.offlineProgress = data.offlineProgress;
+        }
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();

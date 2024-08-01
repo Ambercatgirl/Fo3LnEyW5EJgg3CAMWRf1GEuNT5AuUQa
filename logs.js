@@ -141,19 +141,26 @@ class secureLogs {
         }
     }
     createBulkLog(log) {
-       log.x = "Err";
-       log.y = `${-1*curY}?`;
-       log.withEvent ??= "None"
-       log.output = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(2${log.amt})x ` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x)}, Y: ${(log.y).toLocaleString()}`;           
-       log.from = (log.from.stack.indexOf("mine.js") > -1)
-       Object.freeze(log);
-       this.#verifiedLogs["All"].push(log);
-       if (log.caveInfo[0]) this.#verifiedLogs["Cave"].push(log);
-       if (log.variant === 1) this.#verifiedLogs["Normal"].push(log);
-       else if (log.variant === 2) this.#verifiedLogs["Electrified"].push(log);
-       else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
-       else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
-       if (log.rng < 1/1000000000 && !debug) {serverWebhook(log, player.stats.blocksMined); serverHooked = true};
+        log.x = "Err";
+        log.y = `${-1*curY}?`;
+        log.withEvent ??= "None";
+        if (log.caveInfo !== undefined) {
+            const oldInfo = log.caveInfo;
+            log.caveInfo = [true, getCaveMulti(oldInfo.type), oldInfo.type, caveLuck];
+            log.luck = caveLuck;
+        }
+        log.caveInfo ??= [false, 1, "none", caveLuck];
+        log.output = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(x${log.amt}) ` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} ${log.caveInfo[0] ? "(" + caveList[log.caveInfo[2]].slice(-1) + " Cave)" : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x)}, Y: ${(log.y).toLocaleString()}`;           
+        log.from = (log.from.stack.indexOf("mine.js") > -1);
+        Object.freeze(log);
+        this.#verifiedLogs["All"].push(log);
+        if (log.caveInfo[0]) this.#verifiedLogs["Cave"].push(log);
+        if (log.variant === 1) this.#verifiedLogs["Normal"].push(log);
+        else if (log.variant === 2) this.#verifiedLogs["Electrified"].push(log);
+        else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
+        else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
+        if (log.rng <= 1/100000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
+        if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
     }
     showLogs() {
         if (document.getElementById("menuSelectionContainer").style.display !== "none") {
@@ -269,6 +276,7 @@ function webHook(log, mined) {
     const webhookName = webhookInfo.name;
     const webhookLink = webhookInfo.link;
     const color = parseInt(oreInformation.getColors(oreList[log.block]["oreTier"])["backgroundColor"].substring(1), 16);
+    console.log(currentWebhook)
     fetch(webhookLink, {
     body: JSON.stringify({
         "embeds": [{
