@@ -35,6 +35,8 @@ class playerTemplate {
             "gear31": false,
             "gear32": false,
             "gear33": false,
+            "gear34": false,
+            "gear35": false,
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -68,6 +70,7 @@ class playerTemplate {
             "pickaxe29" : false,
             "pickaxe30" : false,
             "pickaxe31" : false,
+            "pickaxe32" : false,
         }
         this.settings = {
             audioSettings: {

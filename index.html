@@ -150,7 +150,7 @@
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe26`)" id="nullChroma" style="display: none;"><span>N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe27`)" id="treeOfLife" style="display: none;"><span>The Tree of Life</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe31`)" id="underseaEviscerator" style="display: none;"><span>Undersea Eviscerator</span></button>
-                    <button class="craftingButton" onclick="displayRecipe(`pickaxe32`)" id="" style="display: none;"><span>Dimensional Slicer</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe32`)" id="dimensionalSlicer" style="display: none;"><span>Dimensional Slicer</span></button>
                 
                 </div>
                 <div id="gearCrafts" class="hidden">
@@ -188,6 +188,8 @@
                     <button class="craftingButton" onclick="displayRecipe('gear26')" style="display: none;" id="stratumNonillonator"><span>Stratum Nonillonator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear27')" style="display: none;" id="biomeEnchanter"><span>Biome Enchanter</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear28')" style="display: none;" id="celestianReaper"><span>Celestian Reaper</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear34')" style="display: none;" id="potentialityMultiplier"><span>Potentiality Multiplier</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear35')" style="display: none;" id="electrifyingPropagator"><span>Electrifying Propagator</span></button>
                 
                 </div>
                 
@@ -267,6 +269,8 @@
                 <p class="itemDescription" id="gear31Description" style="display: none;">Sets mining speed delay to 20ms from 25ms.</p>
                 <p class="itemDescription" id="gear32Description" style="display: none;">Adds ~25 blocks per second to your speed.</p>
                 <p class="itemDescription" id="gear33Description" style="display: none;">Adds ~75 blocks per second to your speed.</p>
+                <p class="itemDescription" id="gear34Description" style="display: none;">Has a 25% chance to multiply normal ability size by 4x and simulted ability size by 2x.</p>
+                <p class="itemDescription" id="gear35Description" style="display: none;">+50% ability activation rate.</p>
                 
             </div>
         </div>
@@ -450,7 +454,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Antique', this)" id="muteAntique">Mute Antiques</button>
-                                <button class="testButton" onclick="testSound('Antique', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Antique', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -461,7 +465,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Mystical', this)"id="muteMystical">Mute Mysticals</button>
-                                <button class="testButton" onclick="testSound('Mystical', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Mystical', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -472,7 +476,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Divine', this)"id="muteDivine">Mute Divines</button>
-                                <button class="testButton" onclick="testSound('Divine', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Divine', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -483,7 +487,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Flawless', this)"id="muteFlawless">Mute Flawless</button>
-                                <button class="testButton" onclick="testSound('Flawless', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Flawless', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -494,7 +498,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Interstellar', this)"id="muteInterstellar">Mute Interstellars</button>
-                                <button class="testButton" onclick="testSound('Interstellar', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Interstellar', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -506,7 +510,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Metaversal', this)"id="muteMetaversal">Mute Metaversals</button>
-                                <button class="testButton" onclick="testSound('Metaversal', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Metaversal', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -517,7 +521,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Sacred', this)"id="muteSacred">Mute Sacreds</button>
-                                <button class="testButton" onclick="testSound('Sacred', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Sacred', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -529,7 +533,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Ethereal', this)"id="muteEthereal">Mute Ethereals</button>
-                                <button class="testButton" onclick="testSound('Ethereal', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Ethereal', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -541,7 +545,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Celestial', this)"id="muteCelestial">Mute Celestials</button>
-                                <button class="testButton" onclick="testSound('Celestial', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Celestial', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -552,7 +556,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Imaginary', this)"id="muteImaginary">Mute Imaginaries</button>
-                                <button class="testButton" onclick="testSound('Imaginary', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Imaginary', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -563,7 +567,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Hyperdimensional', this)"id="muteHyperdimensional">Mute Hyperdimensionals</button>
-                                <button class="testButton" onclick="testSound('Hyperdimensional', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Hyperdimensional', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -574,7 +578,7 @@
                         <div class="spawnSoundSettings">
                             <div class="soundMuteButtonHolder">
                                 <button class="muteButton" onclick="changeCanPlay('Infinitesimal', this)"id="muteInfinitesimal">Mute Infinitesimals</button>
-                                <button class="testButton" onclick="testSound('Infinitesimal', this)">Test</button>
+                                <button class="testButton" onclick="testSound('Infinitesimal', this)">Preview</button>
                             </div>
                             <div class="soundSliderHolder">
                                 <label class="spawnSoundContainer">
@@ -1014,6 +1018,9 @@
                         <p>
                             <span class="faqTitle">Settings</span><br>
 
+                            <span class="faqSection">Simulated RNG</span>
+                            <span class="faqText">This setting changes block generation to calculate averages of what you should get in certain amounts of blocks generated opposed to rolling for each ore individually. Heavily increased game performance, slightly lowered RNG accuracy. Any generation above 35,899 blocks will have a different RNG formula applied to it.</span><br>
+
                             <span class="faqSection">Minimum Speed</span>
                             <span class="faqText">This setting allows you to set a cap on your speed in case the game runs slowly. It will slow you down if you exceed this speed.</span><br>
 
@@ -1192,6 +1199,10 @@
                             <details class="faqText">
                                 <summary>???watr???</summary>
                                 Undersea Eviscerator: 34321 mined, 35899 revealed, 425x luck, 1/200 proc rate (76289 cons)
+                            </details>
+                            <details class="faqText">
+                                <summary>Galactica</summary>
+                                Dimensional Slicer: 75000 mined, 1 revealed, 500x luck, 1/200 proc rate (187,500 cons)
                             </details>
                             <span class="faqSection">Tree of Life Levels:</span>
                             <span class="faqText">0: 4383 mined, 4576 revealed, 1x luck (9.1 cons)</span>

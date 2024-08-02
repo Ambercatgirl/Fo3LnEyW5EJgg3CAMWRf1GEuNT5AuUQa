@@ -30,7 +30,7 @@ function generateCave(x, y, type) {
         }
     }
     if (player.settings.simulatedRng) {
-        bulkGenerate(curY, (1000*(caveRateModifier/100)), {type: type, multi: getCaveMulti(type)});
+        bulkGenerate(curY, (500*(caveRateModifier/100)), {type: type, multi: getCaveMulti(type)});
         return;
     }
     x ??= curX;
@@ -365,7 +365,7 @@ function generateCaveBlock(y, x, type) {
             mine[y][x] = {ore: blockToGive, variant: variant};
             playSound(tier);
             if (oreList[blockToGive]["hasLog"]) {
-                verifiedOres.createLog(y, x, {ore: blockToGive, variant: variant}, new Error(), [true, 1]);
+                verifiedOres.createLog(y, x, {ore: blockToGive, variant: variant}, new Error(), [false, 1]);
                 verifiedOres.verifyLog(y, x);
             }
             if (messageIncluded(tier)) spawnMessage({block: blockToGive, location: {"Y" : y, "X" : x}, caveInfo: undefined, variant: variant});
@@ -380,9 +380,6 @@ function generateCaveBlock(y, x, type) {
         }
     }
 }
-
-
-
 function getCaveMulti(type) {
     if (caveTypes[type] !== undefined) return caveTypes[type].multi;
     else return 1;
@@ -401,7 +398,7 @@ let caveTypes = {
     "ggCave" : {rarity: 1/49, multi: 49},
     "axCave" : {rarity: 1/29, multi: 29},
     "foCave" : {rarity: 1/28, multi: 28},
-    "watrCave" : {rarity: 1/1, multi:1}
+    "watrCave" : {rarity: 1/25, multi:25}
 }
 let caveList = {
 "mysteryCave" : ["🌙", "🪔", "💫", "🩺", "💱", "🌟", "☄️", "⭐", "🔆", "🔭", "📡", "❓"],
@@ -433,6 +430,7 @@ let oolProbabilities = {
     "🔆" : 1/25000000,
 }
 function getCaveType() {
+    if (currentWorld === 0.9) return undefined;
     if (currentWorld === 1.2) return "watrCave";
     let caveTypeLuck = 1;
     if (player.stats.currentPickaxe === "pickaxe12")
