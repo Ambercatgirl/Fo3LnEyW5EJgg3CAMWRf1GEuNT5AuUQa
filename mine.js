@@ -277,6 +277,10 @@ const bulkGenerate = function(y, amt, caveInfo) {
                     }
                 }
                 if (blockToGive === "Omnipotent God of The Mine") player.galacticaUnlocked = true;
+                if (currentActiveEvent !== undefined) {
+                    if (getCurrentEventOre() === blockToGive && blockToGive !== "🪸") endEvent();
+                } 
+                playSound(oreList[blockToGive]["oreTier"]);
             }
             for (let i = 3; i > 0; i--) {
                 variantSubtract = 0;
@@ -343,10 +347,6 @@ const bulkGenerate = function(y, amt, caveInfo) {
                 });
                 wasDuped = false;
                 if (oreList[blockToGive]["numRarity"] >= 750000) {
-                    playSound(oreList[blockToGive]["oreTier"]);
-                    if (currentActiveEvent !== undefined) {
-                        if (getCurrentEventOre() === blockToGive && blockToGive !== "🪸") endEvent();
-                    } 
                     if (player.gears["gear7"] && currentWorld < 2) gearAbility1();
                     if (player.gears["gear22"]) {
                         if (toGive >= 10) {toGive *= 1.1; toGive = Math.floor(toGive);}
@@ -364,8 +364,7 @@ const bulkGenerate = function(y, amt, caveInfo) {
                         else if (Math.random() < 3/4) toGive++;
                     }
                 }
-                
-                if (toGive > 0) if (messageIncluded(oreList[blockToGive]["oreTier"])) {
+                if (messageIncluded(oreList[blockToGive]["oreTier"])) {
                     spawnMessage({block: blockToGive, location: location, caveInfo: (isCave ? {"adjRarity":Math.round(1/rng), "caveType":caveInfo.type} : undefined), variant: 1});
                     logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, (isCave ? {cave: true, multi: caveInfo.multi} : {cave: false, multi: 1}), (rng/(wasDuped ? 10 : 1))); 
                 }

@@ -91,15 +91,13 @@ function powerup5() {
             removeParadoxical();
             let toChooseFrom = [];
             for (let pickaxe in pickaxeStats) {
-                if (currentWorld === 1) {
-                    if (paradoxicalCantGive.indexOf(pickaxe) === -1) toChooseFrom.push(pickaxe);
-                } else if (currentWorld === 2) {
+                if (currentWorld === 2) {
                     if (pickaxeStats[pickaxe].canMineIn.includes(2) && paradoxicalCantGive.indexOf(pickaxe) === -1) toChooseFrom.push(pickaxe)
-                }
+                } else if (currentWorld !== 2 && paradoxicalCantGive.indexOf(pickaxe) === -1) toChooseFrom.push(pickaxe)
             }
             toChooseFrom = toChooseFrom.concat(Object.keys(player.gears));
             for (let i = toChooseFrom.length - 1; i >= 0; i--) {
-                if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]]) toChooseFrom.splice(i, 1);
+                if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || (pickaxeStats[toChooseFrom[i]] !== undefined && pickaxeStats[toChooseFrom[i]].isDimensional)) toChooseFrom.splice(i, 1);
             }
             if (toChooseFrom.length > 0) {
                 let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];

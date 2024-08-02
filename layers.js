@@ -866,7 +866,7 @@ function a89() {
     const addLuck = ["🐞","🥈","🚬","🪸","🪦","🚨","🍖","📜","🐸"];
     const luck = verifiedOres.getCurrentLuck();
     for (let i = 0; i < addLuck.length; i++) {
-        oreList[addLuck[i]]["decimalRarity"] = oreList[addLuck[i]]["numRarity"]/luck;
+        oreList[addLuck[i]]["decimalRarity"] = 1/(oreList[addLuck[i]]["numRarity"]/luck);
     }
 }
 function createLayer(layers) {
