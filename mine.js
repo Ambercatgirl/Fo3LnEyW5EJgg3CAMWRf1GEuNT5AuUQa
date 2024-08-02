@@ -199,16 +199,17 @@ const generateBlock = function(location) {
     }
 }
 const bulkGenerate = function(y, amt, caveInfo) {
-    player.stats.blocksMined += amt;
+    player.stats.blocksMined += (caveInfo === undefined ? amt : 0);
     const originAmt = amt;
     const generationInfo = getLayer(y);
     if (y === player.lunaLayer) generationInfo.layer = addLuna([...generationInfo.layer], [...generationInfo.probabilities])[0];
     const thisTable = (caveInfo !== undefined && caveInfo.type !== "currentLayer") ? caveList[caveInfo.type] : generationInfo.layer;
-    if (caveInfo !== undefined && caveInfo.type === "currentLayer") caveInfo = undefined;
-    const results = {}
+    const sm = (caveInfo !== undefined && caveInfo.type === "currentLayer");
+    const isCave = (!sm && caveInfo !== undefined);
+    const results = {};
     for (let i = 0; i < thisTable.length; i++) {
         let estAmt;
-        if (caveInfo !== undefined && caveInfo.type !== "currentLayer") {
+        if (isCave) {
             if (caveInfo.type === "abysstoneCave") estAmt = amt*(gsProbabilities[caveList["abysstoneCave"].indexOf(thisTable[i])]*caveLuck)
             else if (oolProbabilities[thisTable[i]] !== undefined) estAmt = amt*(oolProbabilities[thisTable[i]]*caveLuck);
             else estAmt = amt*oreList[thisTable[i]]["decimalRarity"];
@@ -220,7 +221,7 @@ const bulkGenerate = function(y, amt, caveInfo) {
         estAmt = Math.floor(estAmt);
         results[thisTable[i]] = {est: estAmt, rand: oldEst}
         amt -= estAmt;
-        if (estAmt > 0 && specialCases.indexOf(thisTable[i]) > -1 && caveInfo === undefined) {
+        if (estAmt > 0 && specialCases.indexOf(thisTable[i]) > -1 && !isCave) {
             const celestialRoll = checkSpecials(thisTable[i], true);
             if (celestialRoll.c !== thisTable[i]) {
                 oreList[celestialRoll.c]["decimalRarity"] = oreList[thisTable[i]]["decimalRarity"]/celestialRoll.r;
@@ -238,7 +239,7 @@ const bulkGenerate = function(y, amt, caveInfo) {
     if (originAmt > 35899) {
         rngModifier = originAmt/35899;
     }
-    if (caveInfo === undefined && results["sillyMiner"]) delete results["sillyMiner"];
+    if (!sm && results["sillyMiner"]) delete results["sillyMiner"];
     for (let blockToGive in results) {
         if (results[blockToGive].est > 0) {
             if (results[blockToGive].est > 1e308) results[blockToGive].est = 1e308;
@@ -250,14 +251,14 @@ const bulkGenerate = function(y, amt, caveInfo) {
             } else {
                 rng = oreList[blockToGive]["decimalRarity"];
             }
-            if (caveInfo !== undefined && caveInfo.type !== "currentLayer") {
+            if (isCave) {
                 if (caveInfo.type === "abysstoneCave") rng = gsProbabilities[caveList["abysstoneCave"].indexOf(blockToGive)]*caveLuck;
                 else if (oolProbabilities[blockToGive] !== undefined) rng = oolProbabilities[blockToGive]*caveLuck;
                 else rng = oreList[blockToGive]["decimalRarity"]*caveLuck;
                 rng/=caveInfo.multi;
             }
             let wasDuped = false;
-            if (results[blockToGive].rand >= 1 && caveInfo === undefined) rng = 1;
+            if (results[blockToGive].rand >= 1 && !isCave) rng = 1;
             let variantDivide = player.gears["gear25"] ? 2 : 1;
             let variantSubtract = 0;
             let totalVariants = 0;
@@ -293,8 +294,8 @@ const bulkGenerate = function(y, amt, caveInfo) {
                     playerInventory[blockToGive][variantInvNames[i]] += estVariantAmt;
                     if (playerInventory[blockToGive][variantInvNames[i]] > 1e308) playerInventory[blockToGive][variantInvNames[i]] = 1e308;
                     if (messageIncluded(oreList[blockToGive]["oreTier"])) {
-                        spawnMessage({block: blockToGive, location: location, caveInfo: ((caveInfo !== undefined && caveInfo.type !== "currentLayer") ? {"adjRarity":Math.round(1/rng), "caveType":caveInfo.type} : undefined), variant: i+1});
-                        logFind(blockToGive, curX, curY, namesemojis[i], player.stats.blocksMined, false, estVariantAmt, ((caveInfo !== undefined && caveInfo.type !== "currentLayer") ? {cave: true, multi: caveInfo.multi} : {cave: false, multi: 1}), rng/multis[i]/(wasDuped ? 10 : 1)); 
+                        spawnMessage({block: blockToGive, location: location, caveInfo: (isCave ? {"adjRarity":Math.round(1/rng), "caveType":caveInfo.type} : undefined), variant: i+1});
+                        logFind(blockToGive, curX, curY, namesemojis[i], player.stats.blocksMined, false, estVariantAmt, (isCave ? {cave: true, multi: caveInfo.multi} : {cave: false, multi: 1}), rng/multis[i]/(wasDuped ? 10 : 1)); 
                     }
                     if (oreList[blockToGive]["hasLog"] && rng < 1 && rng/multis[i] < 1/player.settings.minLogRarity) verifiedOres.createBulkLog({
                         block: blockToGive,
@@ -365,8 +366,8 @@ const bulkGenerate = function(y, amt, caveInfo) {
                 }
                 
                 if (toGive > 0) if (messageIncluded(oreList[blockToGive]["oreTier"])) {
-                    spawnMessage({block: blockToGive, location: location, caveInfo: ((caveInfo !== undefined && caveInfo.type !== "currentLayer") ? {"adjRarity":Math.round(1/rng), "caveType":caveInfo.type} : undefined), variant: 1});
-                    logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, ((caveInfo !== undefined && caveInfo.type !== "currentLayer") ? {cave: true, multi: caveInfo.multi} : {cave: false, multi: 1}), (rng/(wasDuped ? 10 : 1))); 
+                    spawnMessage({block: blockToGive, location: location, caveInfo: (isCave ? {"adjRarity":Math.round(1/rng), "caveType":caveInfo.type} : undefined), variant: 1});
+                    logFind(blockToGive, curX, curY, namesemojis[0], player.stats.blocksMined, false, toGive, (isCave ? {cave: true, multi: caveInfo.multi} : {cave: false, multi: 1}), (rng/(wasDuped ? 10 : 1))); 
                 }
             }
             playerInventory[blockToGive]["normalAmt"] += toGive;
@@ -637,10 +638,9 @@ function switchWorld(to, skipAnim) {
         get("mainSticky").style.backgroundImage = "none";
         resetForSwitch();
         if (currentWorld === 1.1) sr1Helper(false);
-        if (currentWorld === 0.9 && player.galacticaUnlocked) galacticaShortcut();
-        else get("galacticaCrafts").style.display = "none";
-
         currentWorld = to;
+        if (currentWorld !== 0.9 && player.galacticaUnlocked) galacticaShortcut();
+        else get("galacticaCrafts").style.display = "none";
         if (currentWorld === 2) {
             prepareWorldTwo();
         } else if (currentWorld < 2) {
@@ -651,6 +651,7 @@ function switchWorld(to, skipAnim) {
         }
         switchDistance(0);
         displayArea();
+        removeGalactica();
         switchWorldCraftables();
         if (currentRecipe !== undefined) displayRecipe(currentRecipe);
         utilitySwitchActions();

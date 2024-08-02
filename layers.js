@@ -43,7 +43,7 @@ let oreList = {
     'draedon' : { 'decimalRarity': 1 / 480000000000, 'numRarity': 480000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "An unknown factor - a catalyst is what you are...", 'oreTier': 'Celestial',   "hasImage":true, "src" : "media/ores/draedon.webp", "oreName":"Draedon", "eId":"<:me:1265484170893987890>"},
     'HD 160529' : { 'decimalRarity': 1 / 5000000000000000, 'numRarity': 5000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Every droplet of water condenses into an unstable singularity...", 'oreTier': 'Hyperdimensional',   "hasImage":true, "src" : "media/ores/HD160529.png", "oreName":"HD 160529", "eId":"<:HD160529:1267216998564233399>"},
     'Goober' : { 'decimalRarity': 1 / 6210000000000, 'numRarity': 6210000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "You feel the earth shake as the big cate appears...", 'oreTier': 'Infinitesimal', "hasImage":true, "src" : "media/ores/ryouiishereinstead.webp", "oreName":"HOLY SHIT ITS RYOUI???", "eId":""},
-    'eternalCoral' : { 'decimalRarity': 1 / 50000000000000000, 'numRarity': 50000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "A sea of stars expands across dimensions, opening the gateway to an oceanic anomaly...", 'oreTier': 'Hyperdimensional', "hasImage":true, "src" : "media/ores/eternalCoral.png", "oreName":"Eternal Coral", "eId":""},
+    'eternalCoral' : { 'decimalRarity': 1 / 50000000000000, 'numRarity': 50000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': true, 'spawnMessage': "A sea of stars expands across dimensions, opening the gateway to an oceanic anomaly...", 'oreTier': 'Hyperdimensional', "hasImage":true, "src" : "media/ores/eternalCoral.png", "oreName":"Eternal Coral", "eId":""},
     'intercept' : { 'decimalRarity': 1 / 10000000000000000, 'numRarity': 10000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "A shape of seemingly infinite size emerges from the mines, engulfing everything around it...", 'oreTier': 'Infinitesimal', "hasImage":true, "src" : "media/ores/intercept.png", "oreName":"Intercept", "eId":""},
     'aFleetingSoul' : { 'decimalRarity': 1 / 6666000000000000, 'numRarity': 6666000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Hollowed souls howl from their buried tomb, echoing the death of a civilization long lost. The pained cry dissipating as abruptly as it started...", 'oreTier': 'Hyperdimensional', "hasImage":true, "src" : "media/ores/aFleetingSoul.png", "oreName":"A Fleeting Soul", "eId":"<:aFleetingSoul:1267216891777253417>"},
     
@@ -556,10 +556,10 @@ let oreList = {
     'mutatedGrowth' : { 'decimalRarity': 1 / 3666006060600, 'numRarity': 3666006060600, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Thick vines extend throughout the tunnels, covering everything in poison filled thorns...', 'oreTier': 'Imaginary',  'hasImage' : true, "src" : "media/ores/silly_mines_flower.png", "oreName" : "Mutated Growth", "eId":"<:silly_mines_flower:1267217643291672618>"},
     'sillyMiner' : {"noLuck": true, 'decimalRarity': 1 / 5000000000000, 'numRarity': 5000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': true, 'spawnMessage': 'You found someone else mining. Thou must get rid of competitors...', 'oreTier': 'Celestial',  'hasImage' : true, "src" : "media/ores/sillyminer.png", "oreName" : "Silly Miner", "eId":"<:sillyminer:1267217007741505609>"},
     'starglint' : { 'decimalRarity': 1 / 670000000, 'numRarity': 670000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A vibrant pink and purple diamond shines its hue everywhere in a glorious fashion...', 'oreTier': 'Flawless',  'hasImage' : true, "src" : "media/ores/starglint.png", "oreName" : "Starglint", "eId":"<:starglint:1267217763857076325>"},
-    'txtfile' : { 'decimalRarity': 1 / 1000000000000000000, 'numRarity': 1000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'IN̷V̷ALI̷D̷A̷TED̷...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/txtfile.png", "oreName" : "txtfile", "eId":"<:invalidated:1268341621238403205>"},
-    'unstableCore' : { 'decimalRarity': 1 / 10000000000000000, 'numRarity': 10000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'The space around you starts to deconstruct itself...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/unstableCore.png", "oreName" : "Unstable Core", "eId":"<:unstable_core:1268341714188369971>"},
+    'txtfile' : { 'decimalRarity': 1 / 60000000000000000, 'numRarity': 60000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'IN̷V̷ALI̷D̷A̷TED̷...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/txtfile.png", "oreName" : "txtfile", "eId":"<:invalidated:1268341621238403205>"},
+    'unstableCore' : { 'decimalRarity': 1 / 20000000000000000, 'numRarity': 20000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'The space around you starts to deconstruct itself...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/unstableCore.png", "oreName" : "Unstable Core", "eId":"<:unstable_core:1268341714188369971>"},
     'australiumIngot' : { 'decimalRarity': 1 / 450000000, 'numRarity': 450000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A familiar ingot that can give indefinite life shines above the rest...', 'oreTier': 'Flawless',  'hasImage' : true, "src" : "media/ores/australiumIngot.png", "oreName" : "Australium Ingot"},
-    'cosmicIridium':{ 'decimalRarity': 1 / 750000000000000000, 'numRarity': 750000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/cosmicIridium.png", "oreName" : "Cosmic Iridium", "eId":"<:cosmic_iridium:1268341401666453504>"},
+    'cosmicIridium':{ 'decimalRarity': 1 / 125000000000000000, 'numRarity': 125000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/cosmicIridium.png", "oreName" : "Cosmic Iridium", "eId":"<:cosmic_iridium:1268341401666453504>"},
    
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
     "⛏️": { 'decimalRarity': 1 / 10000000, 'numRarity': 10000000, 'hasLog': false, 'isBreakable': false, 'caveExclusive': false, 'spawnMessage': 'Thoughts of what lies on the other side cloud your mind until.. a mirror image appears..?', 'oreTier': 'Celestial',  },
@@ -769,55 +769,63 @@ function getLayer(y) {
         return layerDictionary["starLayer"]
     }
 }
-function a87(num, force) {
+function a87(num, force, g) {
     force ??= false;
     let added = false;
     let korone = false;
     switch (num) {
         case 0:
             if (Math.random() < 1/29 || force) {
+                if (g) return "dirtLayer";
                 insertIntoLayers({"ore":"🐞", "layers":["dirtLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 1:
             if (Math.random() < 1/25 || force) {
+                if (g) return "brickLayer";
                 insertIntoLayers({"ore":"🥈", "layers":["brickLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 2:
             if (Math.random() < 1/17 || force) {
+                if (g) return "foggyLayer";
                 insertIntoLayers({"ore":"🚬", "layers":["foggyLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 3:
             if (Math.random() < 1/40 || force) {
+                if (g) return "waterLayer";
                 insertIntoLayers({"ore":"🪸", "layers":["waterLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 4:
             if (Math.random() < 1/15 || force) {
+                if (g) return "rockLayer";
                 insertIntoLayers({"ore":"🪦", "layers":["rockLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 5:
             if (Math.random() < 1/27 || force) {
+                if (g) return "radioactiveLayer";
                 insertIntoLayers({"ore":"🚨", "layers":["radioactiveLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 6:
             if (Math.random() < 1/19 || force) {
+                if (g) return "cactusLayer";
                 insertIntoLayers({"ore":"🍖", "layers":["cactusLayer"], "useLuck":true});
                 added = true;
             }
             break;
         case 7:
             if (Math.random() < 1/35 || force) {
+                if (g) return "paperLayer";
                 insertIntoLayers({"ore":"📜", "layers":["paperLayer"], "useLuck":true});
                 added = true;
             }
@@ -825,16 +833,19 @@ function a87(num, force) {
         case 7777:
             const sillyRandom = Math.random();
             if (sillyRandom < 1/563 || force === "KORONE") {
+                if (g) return "sillyLayer";
                 insertIntoLayers({"ore":"korosan", "layers":["sillyLayer"], "useLuck":true});
                 added = true;
                 korone = true;
             }
             else if (sillyRandom < 1/13 || force) {
+                if (g) return "sillyLayer";
                 insertIntoLayers({"ore":"🐸", "layers":["sillyLayer"], "useLuck":true});
                 added = true;
             }
             break;
     }
+    if (g) return undefined;
     if (added) {
         if (korone) typeWriter("<i>An unusual presence lurks within the silly layer, making your body feel numb...</i>", get("spawnMessage"), true);
         else typeWriter("<i>In the endless depths of the world, repetitions of earlier environments make up the lower earth, and yet.. a strange sense of unfamiliarity consumes you...</i>", get("spawnMessage"), true);
@@ -844,14 +855,20 @@ function a87(num, force) {
     return (korone ? "KORONE" : added);
 }
 function a88() {
-    const toRemove = ["🐞","🥈","🚬","🪸","🪦","🚨","🍖","📜","🐸"]
+    const toRemove = ["🐞","🥈","🚬","🪸","🪦","🚨","🍖","📜","🐸"];
     for (let i = 0; i < worldOneLayers.length; i++) {
         removeFromLayers({"ore":toRemove[i], "layers":[worldOneLayers[i]]})
     }
     removeFromLayers({"ore":toRemove[8], "layers":["sillyLayer"]})
     removeFromLayers({"ore":"korosan", "layers":["sillyLayer"]})
 }
-
+function a89() {
+    const addLuck = ["🐞","🥈","🚬","🪸","🪦","🚨","🍖","📜","🐸"];
+    const luck = verifiedOres.getCurrentLuck();
+    for (let i = 0; i < addLuck.length; i++) {
+        oreList[addLuck[i]]["decimalRarity"] = oreList[addLuck[i]]["numRarity"]/luck;
+    }
+}
 function createLayer(layers) {
     let output = [];
     for (let i = 0; i < layers.length; i++) {

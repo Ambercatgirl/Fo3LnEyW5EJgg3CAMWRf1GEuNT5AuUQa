@@ -716,9 +716,9 @@ function togglePathBlocks() {
 }
 let testSoundTimeout = null;
 function testSound(name, element) {
-    let time = (allAudios[name].duration * 1000);
     if (allAudios[name].currentTime === 0) {
-        allAudios[name].play();
+        closeMenu();
+        playSound(name);
         element.style.backgroundColor = "#6BC267";
         allAudios[name].onended = (event) => {
             allAudios[name].onended = "";
@@ -726,6 +726,8 @@ function testSound(name, element) {
             allAudios[name].pause();
             allAudios[name].currentTime = 0;
             clearTimeout(testSoundTimeout);
+            get("blockContainer").style.animation = "";
+            get("blockDisplay").style.animation = "";
         };
     } else {
         allAudios[name].onended = "";
@@ -733,6 +735,8 @@ function testSound(name, element) {
         allAudios[name].currentTime = 0;
         element.style.backgroundColor = "#FF3D3D";
         clearTimeout(testSoundTimeout);
+        get("blockContainer").style.animation = "";
+        get("blockDisplay").style.animation = "";
     }
 }
 function enableDisguisedChills() {

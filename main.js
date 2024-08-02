@@ -556,7 +556,7 @@ function checkDisplayVariant(location) {
     const tier = oreList[location.ore]["oreTier"];
     let isRare = (tier !== "Layer" && commons.indexOf(tier) === -1) 
     if (oreList[location.ore]["hasImage"]) {
-        let isLarge = tier === "Hyperdimensional" || tier === "Infinitesimal";
+        let isLarge = tier === "Hyperdimensional" || tier === "Infinitesimal" || oreList[location.ore]["numRarity"] >= 1000000000000000;
         if (isRare) oreToAdd = `<img class="${isLarge ? 'largeMineImage' : 'mineOre'}" src="${oreList[location.ore]["src"]}"></img>`;
         else return location.ore;
         includeSize = "";
@@ -1573,8 +1573,9 @@ function updateOfflineProgress() {
     if (offlineDisplayed) {
         let output = "";
         const layer = getLayer(curY).layer;
-        for (let i = layer.length-1; i >= 0; i--) if (oreList[layer[i]]["oreTier"] !== "Celestial") output += `${layer[i]} `;
-        get("offlineLayer").textContent = `${output}`;
+        let m = 1;
+        for (let i = layer.length-1; i >= 0; i--) if (oreList[layer[i]]["oreTier"] !== "Celestial") output += `${layer[i]}${(i<layer.length-1&& m%5 === 0) ? (m++, "<br>") : (m++," ")}`;
+        get("offlineLayer").innerHTML = `${output}`;
         if (player.offlineProgress > 28800000) player.offlineProgress = 28800000;
         get("offlineStats").textContent = `${msToTime(player.offlineProgress)}/08:00:00`;
         const percent = player.offlineProgress > 0 ? 100/(28800000/(player.offlineProgress)) : 0;
@@ -1582,8 +1583,12 @@ function updateOfflineProgress() {
         get("offlineInteriorGradient").style.background = "repeating-linear-gradient(45deg, #7f007f, #fff, #7f007f 3vw)";
         const nums = calcSpeed();
         const speed = ((1000/nums.speed)*nums.reps)+nums.extra;
-        const willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeStats[player.stats.currentPickaxe].mined/pickaxeStats[player.stats.currentPickaxe].rate)/10) : 0;
-        get("offlineActivate").textContent = `Gen ${willGen > 1000000000 ? formatNumber(willGen, 2) : willGen.toLocaleString()} Blocks.`;
+        let pickaxeMined;
+        if (player.stats.currentPickaxe === "pickaxe27") pickaxeMined = pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
+        else pickaxeMined = pickaxeStats[player.stats.currentPickaxe].mined
+        let willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeMined/pickaxeStats[player.stats.currentPickaxe].rate)/10) : 0;
+        if (player.powerupVariables.fakeEquipped.item !== undefined || player.powerupVariables.fakeTreeLevel.level !== undefined) {get("offlineActivate").textContent = "Cant Gen: Paradoxical Active!"; willGen = 0;}
+        else get("offlineActivate").textContent = `Gen ${willGen > 1000000000 ? formatNumber(willGen, 2) : willGen.toLocaleString()} Blocks.`;
         return willGen;
     }
 }
