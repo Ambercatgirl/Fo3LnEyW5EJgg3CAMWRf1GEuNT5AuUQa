@@ -159,7 +159,8 @@ class secureLogs {
         else if (log.variant === 2) this.#verifiedLogs["Electrified"].push(log);
         else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
         else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
-        if (log.rng <= 1/100000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
+        console.log(log)
+        if (log.rng <= 1/1000000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
     }
     showLogs() {
@@ -276,7 +277,7 @@ function webHook(log, mined) {
     const webhookName = webhookInfo.name;
     const webhookLink = webhookInfo.link;
     const color = parseInt(oreInformation.getColors(oreList[log.block]["oreTier"])["backgroundColor"].substring(1), 16);
-    console.log(currentWebhook)
+    const duped = log.bulkAmt === undefined && log.amt > 1;
     fetch(webhookLink, {
     body: JSON.stringify({
         "embeds": [{
@@ -294,7 +295,7 @@ function webHook(log, mined) {
                 },
                 {
                     "name": "Rarity",
-                    "value": `1/${formatNumber(Math.round(1/log.rng), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}${log.duped ? "(x2)" : ""}`,
+                    "value": `1/${formatNumber(Math.round(1/(log.rng/(duped ? 10 : 1))), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}${duped ? "(x2)" : ""}`,
                     "inline": true
                 },
                 {
@@ -346,7 +347,7 @@ const worlds = {
 }
 function serverWebhook(log, mined) {
     const color = parseInt(oreInformation.getColors(oreList[log.block]["oreTier"])["backgroundColor"].substring(1), 16);
-    const wasDuped = log.amt > 1 && log.bulkAmt === undefined;
+    const duped = log.bulkAmt === undefined && log.amt > 1;
     fetch(player.serverHook, {
         body: JSON.stringify({
         "embeds": [{
@@ -356,7 +357,7 @@ function serverWebhook(log, mined) {
             "fields" : [
                 {
                     "name": "Rarity",
-                    "value": `1/${formatNumber((Math.round(1/log.rng) * (wasDuped ? 10 : 1)), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}`,
+                    "value": `1/${formatNumber((Math.round(1/log.rng/(duped ? 10 : 1))), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}`,
                     "inline": true
                 },
                 {
