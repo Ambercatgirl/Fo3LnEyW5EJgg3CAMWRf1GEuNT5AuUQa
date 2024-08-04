@@ -640,6 +640,15 @@ function randomFunction(ore, cause) {
                 }
             }
             if (layer === undefined) {
+                for (let i = 0; i < galacticaLayers.length; i++) {
+                    if (layerList[galacticaLayers[i]].includes(ore)) {
+                        layer = galacticaLayers[i];
+                        world = 0.9;
+                        break;
+                    }
+                }
+            }
+            if (layer === undefined) {
                 for (let cave in caveTypes) {
                     if (caveList[cave].includes(ore)) {
                         layer = cave;

@@ -576,7 +576,7 @@ function oldDataToNew(data) {
 
 function loadNewData(data) {
     try {
-        if (data.blocks["Wavaderg"] !== undefined) data.blocks["Ryoui"] = data.blocks["Goober"];
+        if (data.blocks["Wavaderg"] !== undefined) data.blocks["Goober"] = data.blocks["Wavaderg"];
         delete data.blocks["Wavaderg"];
         for (let propertyName in data.blocks) {
             if (oreList[propertyName] !== undefined) {
@@ -845,8 +845,11 @@ const dailyMessages = {
         showUntil : "June 25, 0000",
     },
     "worldTwoRevamp" : {
-        showUntil : "August 3, 2024",
+        showUntil : "August 1, 2024",
     },
+    "simRng" : {
+        showUntil : "August 16, 2024",
+    }
 }
 function checkMessages(message) {
     if (message === "newPlayer" && player.faqOffered) return;

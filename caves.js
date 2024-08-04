@@ -30,7 +30,7 @@ function generateCave(x, y, type) {
         }
     }
     if (player.settings.simulatedRng) {
-        bulkGenerate(curY, (500*(caveRateModifier/100)), {type: type, multi: getCaveMulti(type)});
+        bulkGenerate(curY, (500*(caveRateModifier/150)), {type: type, multi: getCaveMulti(type)}, false);
         return;
     }
     x ??= curX;
