@@ -41,7 +41,7 @@ let oreList = {
     'matrix' : { 'decimalRarity': 1 / 1011010000, 'numRarity': 1011010000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Caverns so silly, even the matrix is!...", 'oreTier': 'Interstellar',  "hasImage":true, "src" : "media/ores/matrix.webp", "oreName":"Matrix", "eId":"<:matrix:1267217412747558974>"},
     'apatite' : { 'decimalRarity': 1 / 3250000000, 'numRarity': 3250000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "A bright,sparkly, and gleaming crystal illuminates the caverns as it slowly appears...", 'oreTier': 'Metaversal',  "hasImage":true, "src" : "media/ores/apatite.webp", "oreName":"Apatite", "eId": "<:apatite:1268367312881320016>"},
     'draedon' : { 'decimalRarity': 1 / 480000000000, 'numRarity': 480000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "An unknown factor - a catalyst is what you are...", 'oreTier': 'Celestial',   "hasImage":true, "src" : "media/ores/draedon.webp", "oreName":"Draedon", "eId":"<:me:1265484170893987890>"},
-    'HD 160529' : { 'decimalRarity': 1 / 5000000000000000, 'numRarity': 5000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Every droplet of water condenses into an unstable singularity...", 'oreTier': 'Hyperdimensional',   "hasImage":true, "src" : "media/ores/HD160529.png", "oreName":"HD 160529", "eId":"<:HD160529:1267216998564233399>"},
+    'HD 160529' : { 'decimalRarity': 1 / 2500000000000000, 'numRarity': 2500000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "Every droplet of water condenses into an unstable singularity...", 'oreTier': 'Hyperdimensional',   "hasImage":true, "src" : "media/ores/HD160529.png", "oreName":"HD 160529", "eId":"<:HD160529:1267216998564233399>"},
     'Goober' : { 'decimalRarity': 1 / 6210000000000, 'numRarity': 6210000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "You feel the earth shake as the big cate appears...", 'oreTier': 'Infinitesimal', "hasImage":true, "src" : "media/ores/ryouiishereinstead.webp", "oreName":"HOLY SHIT ITS RYOUI???", "eId": "<:goober:1269098402768093225>"},
     'eternalCoral' : { 'decimalRarity': 1 / 50000000000000, 'numRarity': 50000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': true, 'spawnMessage': "A sea of stars expands across dimensions, opening the gateway to an oceanic anomaly...", 'oreTier': 'Hyperdimensional', "hasImage":true, "src" : "media/ores/eternalCoral.png", "oreName":"Eternal Coral", "eId":"<:eternal_coral:1268367410541367428>"},
     'intercept' : { 'decimalRarity': 1 / 10000000000000000, 'numRarity': 10000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "A shape of seemingly infinite size emerges from the mines, engulfing everything around it...", 'oreTier': 'Infinitesimal', "hasImage":true, "src" : "media/ores/intercept.png", "oreName":"Intercept", "eId": "<:intercept:1268367354870370436>"},
@@ -438,7 +438,7 @@ let oreList = {
     
     //🏳️‍⚧️ 🇺🇳 
     '🇺🇳' : { 'decimalRarity': 1 / 1, 'numRarity': 1, 'hasLog': false, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Layer',  },
-    '🏁': { 'decimalRarity': 1 / 25000000000000, 'numRarity': 25000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Imaginary',  },
+    '🏁': { 'decimalRarity': 1 / 12500000000000, 'numRarity': 12500000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Imaginary',  },
     '🏳️‍⚧️' : { 'decimalRarity': 1 / 500000000000000, 'numRarity': 500000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Imaginary',  },
     
     '🍀': { 'decimalRarity': 1 / 234000000000000, 'numRarity': 234000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'This is it..? The symbol of luck itself, a simple four-leafed clover..?', 'oreTier': 'Imaginary',  },
@@ -559,13 +559,14 @@ let oreList = {
     'txtfile' : { 'decimalRarity': 1 / 60000000000000000, 'numRarity': 60000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'IN̷V̷ALI̷D̷A̷TED̷...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/txtfile.png", "oreName" : "txtfile", "eId":"<:invalidated:1268341621238403205>"},
     'unstableCore' : { 'decimalRarity': 1 / 20000000000000000, 'numRarity': 20000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'The space around you starts to deconstruct itself...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/unstableCore.png", "oreName" : "Unstable Core", "eId":"<:unstable_core:1268341714188369971>"},
     'australiumIngot' : { 'decimalRarity': 1 / 450000000, 'numRarity': 450000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A familiar ingot that can give indefinite life shines above the rest...', 'oreTier': 'Flawless',  'hasImage' : true, "src" : "media/ores/australiumIngot.png", "oreName" : "Australium Ingot"},
-    'cosmicIridium':{ 'decimalRarity': 1 / 125000000000000000, 'numRarity': 125000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/cosmicIridium.png", "oreName" : "Cosmic Iridium", "eId":"<:cosmic_iridium:1268341401666453504>"},
+    'cosmicIridium':{ 'decimalRarity': 1 / 125000000000000000, 'numRarity': 125000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'An elusive material thought to only be legend smashes through the space around you...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/cosmicIridium.png", "oreName" : "Cosmic Iridium", "eId":"<:cosmic_iridium:1268341401666453504>"},
     'nebula':{ 'decimalRarity': 1 / 1, 'numRarity': 1, 'hasLog': false, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Layer',  'hasImage' : true, "src" : "media/ores/nebula (2).png", "oreName" : "Nebula",},
     'ascendedArtifact':{ 'decimalRarity': 1 / 30000000000000000, 'numRarity': 30000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'An alien artifact hidden from view for millenium is finally visible to our astronomers...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/ascendedartifact.png", "oreName" : "Ascended Artifact", "eId": "<:ascended_artifact:1269156869667291206>"},
     'J1407b':{ 'decimalRarity': 1 / 22000000000000000, 'numRarity': 22000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "You marvel at this celestial giant's stunning, expansive rings, their vibrant colors shimmering in the vastness of space...", 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/J1407b.png", "oreName" : "J1407b",},
     'otherside':{ 'decimalRarity': 1 / 58000000000000000, 'numRarity': 58000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Look up at the moon...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/otherside.png", "oreName" : "The Other Side",},
     //'planetIX':{ 'decimalRarity': 1 / 900000000000, 'numRarity': 900000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Once thought to be a mere rumor, a new celestial body reveals itself to you...', 'oreTier': 'Ethereal',  'hasImage' : true, "src" : "media/ores/planetIX.png", "oreName" : "Planet IX",},
     'UHD':{ 'decimalRarity': 1 / 500000000000, 'numRarity': 500000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'this cat caused a big problem', 'oreTier': 'Ethereal',  'hasImage' : true, "src" : "media/ores/UHD.png", "oreName" : "Universe Heat Death",},
+    'catgirl':{ 'decimalRarity': 1 / 1000000000000000, 'numRarity': 1000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'dhjbdfghjgdshbgsdhbgdhg...', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/osaka-sata-andagi.gif", "oreName" : "Ok.",},
    
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
     "⛏️": { 'decimalRarity': 1 / 10000000, 'numRarity': 10000000, 'hasLog': false, 'isBreakable': false, 'caveExclusive': false, 'spawnMessage': 'Thoughts of what lies on the other side cloud your mind until.. a mirror image appears..?', 'oreTier': 'Celestial',  },
@@ -939,6 +940,18 @@ function sortLayerRarities(arr) {
     for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr.length - i - 1; j++) {
             if (oreList[arr[j]]["decimalRarity"] > oreList[arr[j + 1]]["decimalRarity"]) {
+                let lesser = arr[j + 1];
+                arr[j + 1] = arr[j];
+                arr[j] = lesser;
+            }
+        }
+    }
+    return arr;
+}
+function sortLayerBase(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
+            if (oreList[arr[j]]["numRarity"] < oreList[arr[j + 1]]["numRarity"]) {
                 let lesser = arr[j + 1];
                 arr[j + 1] = arr[j];
                 arr[j] = lesser;

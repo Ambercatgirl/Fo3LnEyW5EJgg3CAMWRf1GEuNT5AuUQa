@@ -151,6 +151,7 @@
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe27`)" id="treeOfLife" style="display: none;"><span>The Tree of Life</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe31`)" id="underseaEviscerator" style="display: none;"><span>Undersea Eviscerator</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe32`)" id="dimensionalSlicer" style="display: none;"><span>Dimensional Slicer</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe33`)" id="wormholeExterminator" style="display: none;"><span>Wormhole Exterminator</span></button>
                 
                 </div>
                 <div id="gearCrafts" class="hidden">
@@ -231,6 +232,8 @@
                 <p class="itemDescription" id="pickaxe31Description" style="display: none;"><span id="pickaxe31Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe31Hologram'))">View Ability</button></span><br><span style="font-size: 50%;">Icon made by @wrab</span></p>
                 <button id="pickaxe27Craft" class="craftPickaxeButton" onclick="craftPickaxe('pickaxe27')" style="display:none; width: 100%; background-image:linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B);">Equip!</button>
                 <p class="itemDescription" id="pickaxe32Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 75,000 blocks.<br></i><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
+                <p class="itemDescription" id="pickaxe33Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 50,000 blocks.<br></i><span>Has 2.25x special cave type boost, +1.5x cave luck, ~3x cave size boost.<br></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
+                
                 <!--
                     Pickaxes above
                     Gears below
@@ -968,6 +971,7 @@
                     <button class="faqButton" onclick="showFaqPage(5)">Powerups</button>
                     <button class="faqButton" onclick="showFaqPage(6)">Other Questions</button>
                     <button class="faqButton" onclick="showFaqPage(7)">Pickaxes</button>
+                    <button class="faqButton" onclick="showFaqPage(9)">Gears</button>
                     <button class="faqButton" onclick="showFaqPage(8)">Events</button>
                 </div>
                 <br><br>
@@ -1203,6 +1207,7 @@
                             <details class="faqText">
                                 <summary>Galactica</summary>
                                 Dimensional Slicer: 75000 mined, 1 revealed, 500x luck, 1/200 proc rate (187,500 cons)
+                                Wormhole Exterminator: 60000 mined, 1 revealed, 575 luck, 1/275 proc rate, +1.5x cave luck, 2.25x cave type luck, 3x cave size. (135,909 cons)
                             </details>
                             <span class="faqSection">Tree of Life Levels:</span>
                             <span class="faqText">0: 4383 mined, 4576 revealed, 1x luck (9.1 cons)</span>
@@ -1216,6 +1221,14 @@
                     <div class="faqPage">
                         <p>
                             <span class="faqTitle">Events:</span><br>
+                        
+                        </p>
+                    </div>
+                    <div class="faqPage">
+                        <p>
+                            <span class="faqTitle">Gears</span>
+                            <span class="faqText">Gears are like upgrades, with each one having an effect to make progression easier. Below is a list of the current gears that are active:</span><br>
+                            <span class="faqText" id="curActiveGears"></span>
                         
                         </p>
                     </div>

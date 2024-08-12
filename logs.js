@@ -7,6 +7,7 @@ class secureLogs {
     #startTime = Date.now();
     #isRightPickaxe;
     #canGenCaves;
+    #isLoaded;
     constructor() {
         if (logCreated["created"]) location.reload();
         this.#spawnLogs = [];
@@ -112,6 +113,7 @@ class secureLogs {
                     log.amt = amt;
                     if (log.mined !== true) {
                         log.mined = true;
+                        if (log.amt > 1) log.rng/=10;
                         if (log.variant === undefined) log.variant = variant;
                         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
                         if (log.rng < 1/1000000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
@@ -159,7 +161,6 @@ class secureLogs {
         else if (log.variant === 2) this.#verifiedLogs["Electrified"].push(log);
         else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
         else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
-        console.log(log)
         if (log.rng <= 1/1000000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
     }
@@ -239,6 +240,7 @@ class secureLogs {
         return this.#isRightPickaxe;
     }
     checkPickaxe() {
+        if (!this.#isLoaded) this.#isRightPickaxe = false;
         if (pickaxeStats[player.stats.currentPickaxe].canMineIn.includes(currentWorld)) this.#isRightPickaxe = true;
         else this.#isRightPickaxe = false;
     }
@@ -253,6 +255,12 @@ class secureLogs {
     }
     #onLoad() {
 
+    }
+    gameLoaded() {
+        this.#isLoaded = true;
+    }
+    isLoaded() {
+        return this.#isLoaded;
     }
 }
 //i lost the original code for this so gl :3c
@@ -277,7 +285,6 @@ function webHook(log, mined) {
     const webhookName = webhookInfo.name;
     const webhookLink = webhookInfo.link;
     const color = parseInt(oreInformation.getColors(oreList[log.block]["oreTier"])["backgroundColor"].substring(1), 16);
-    const duped = log.bulkAmt === undefined && log.amt > 1;
     fetch(webhookLink, {
     body: JSON.stringify({
         "embeds": [{
@@ -295,7 +302,7 @@ function webHook(log, mined) {
                 },
                 {
                     "name": "Rarity",
-                    "value": `1/${formatNumber(Math.round(1/(log.rng/(duped ? 10 : 1))), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}${duped ? "(x2)" : ""}`,
+                    "value": `1/${formatNumber(Math.round(1/(log.rng)), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}${duped ? "(x2)" : ""}`,
                     "inline": true
                 },
                 {
@@ -357,7 +364,7 @@ function serverWebhook(log, mined) {
             "fields" : [
                 {
                     "name": "Rarity",
-                    "value": `1/${formatNumber((Math.round(1/log.rng/(duped ? 10 : 1))), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}`,
+                    "value": `1/${formatNumber((Math.round(1/(log.rng))), 3)}${log.caveInfo[1] > 1 ? " Adjusted " : " "}`,
                     "inline": true
                 },
                 {

@@ -16,11 +16,11 @@ async function rollAbilities(force) {
     if (debug && force) m = 10000000;
     const pickaxe = pickaxeStats[player.stats.currentPickaxe]
     if (Math.random() <= (m/pickaxe.rate)) {
-        if (player.settings.simulatedRng) {
+        if (player.settings.simulatedRng && !ca) {
             let bulkAmt = 0;
             if (player.stats.currentPickaxe === "pickaxe27") bulkAmt = pickaxe[player.upgrades["pickaxe27"].level].mined;
             else bulkAmt = pickaxe.mined;
-            if (player.gears["gear34"]) bulkAmt = Math.floor(bulkAmt*2);
+            if (player.gears["gear34"] && Math.random() < 1/4) bulkAmt = Math.floor(bulkAmt*2);
             bulkGenerate(curY, bulkAmt, undefined, false)
         } else {
             pickaxe.doAbility(curX, curY);
@@ -56,7 +56,7 @@ function powerup2() {
         player.powerupCooldowns["powerup2"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
         player.powerupVariables.caveBoosts.removeAt = Date.now() + (player.gears["gear24"] ? 150000 * 1.5 : 150000);
         player.powerupVariables.caveBoosts.active = true;
-        caveLuck = 2;
+        caveLuck++;
         applyNearbyData();
     }
 }
@@ -867,6 +867,9 @@ function pickaxeAbility31(x, y) {
 }
 function pickaxeAbility32(x, y) {
     bulkGenerate(y, 75000, undefined, false)
+}
+function pickaxeAbility33(x, y) {
+    bulkGenerate(y, 65000, undefined, false)
 }
 function pickaxeArrayLoop(array, x, y) {
     for (let i = 0; i < array.length; i++) {

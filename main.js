@@ -40,6 +40,7 @@ let emojiNames;
 let messageElement;
 let eventElement;
 function init() {
+    verifiedOres.gameLoaded();
     for (let propertyName in oreList) {
         playerInventory[propertyName] = {"normalAmt":0,"electrifiedAmt":0, "radioactiveAmt":0, "explosiveAmt":0, "foundAt": undefined}
     }
@@ -201,6 +202,7 @@ let allAudios = {
     "Hyperdimensional" : undefined,
     "Infinitesimal" : undefined
 };
+let osaka;
 function loadContent() {
     keepRunningAudio = new Audio("audios/ambiencebyx2corp.mp3")
     keepRunningAudio.load();
@@ -218,6 +220,7 @@ function loadContent() {
     imaginary = new Audio("audios/imaginary.mp3");
     hyperdimensional = new Audio("audios/hyperdimensional.mp3");
     infinitesimal = new Audio("audios/infinitesimal.mp3");
+    osaka = new Audio("audios/lol.mp3");
     allAudios["Antique"] = chill;
     allAudios["Mystical"] = mystical;
     allAudios["Divine"] = divine;
@@ -293,7 +296,7 @@ function movePlayer(dir, reps, type) {
                             let variant = rollVariant();
                             if (player.gears["gear25"] && variant === 1) variant = rollVariant();
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant, amt:1})
-                            giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant});
+                            giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant, amt:1});
                             checkAllAround(curX, curY);
                             playSound("Celestial")
                         }
@@ -325,6 +328,7 @@ const catstuff = {
     layer: undefined
 }
 document.addEventListener('keydown', (event) => {
+    if (!verifiedOres.isLoaded()) return;
     let name = event.key;
     let validInput = false;
     name = name.toLowerCase();
@@ -488,8 +492,8 @@ const calcSpeed = function() {
     if (currentWorld === 1.1) {
         if (debug) return {speed: 5, reps: devReps, extra:0}
         const sr1Level = player.upgrades["pickaxe27"].level;
-        if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1, extra:0}
-        else return {speed: 7, reps: (-2 + sr1Level), extra:0}
+        if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1, extra:extraSpeed}
+        else return {speed: 7, reps: (-2 + sr1Level), extra:extraSpeed}
     }
     if (debug) return {speed: 5, reps: devReps, extra:0}
     return {speed: miningSpeed, reps: reps, extra: extraSpeed}
@@ -697,6 +701,7 @@ let lastX = 0;
 let lastXCheck = Date.now();
 let resetAddX = 0;
 let displayTimer = null;
+let p33CL = false;
 function updateInventory() {
     for (let propertyName in inventoryObj) {
         for (let i = 1; i < 5; i++) {
@@ -724,11 +729,21 @@ function updateInventory() {
         removeParadoxical();
     }
     if (player.powerupVariables.caveBoosts.active && Date.now() >= player.powerupVariables.caveBoosts.removeAt) {
-        player.powerupVariables.caveBoosts.removeAt = 0;
+        player.powerupVariables.caveBoosts.removeAt = Infinity;
         player.powerupVariables.caveBoosts.active = false;
-        caveLuck = 1;
+        caveLuck--;
     }
-
+    if (!p33CL) {
+        if (player.stats.currentPickaxe === "pickaxe33") {
+            p33CL = true;
+            caveLuck += 1.5;
+        }
+    } else {
+        if (player.stats.currentPickaxe !== "pickaxe33") {
+            caveLuck -= 1.5;
+            p33CL = false;
+        }
+    }
     if (currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") player.stats.currentPickaxe = "pickaxe27";
     else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = "pickaxe0";
     updatePowerupCooldowns();
@@ -758,6 +773,12 @@ function updateInventory() {
     get("catPlayerStats").textContent = `${player.displayStatistics.luck.toLocaleString()}x Luck. ${avgBlocks > 1000000000000 ? formatNumber(avgBlocks, 3) : avgBlocks.toLocaleString()} Average Blocks Per Minute.`;
     player.lastOnline = Date.now();
     updateOfflineProgress();
+    if (ca && pickaxeStats[player.stats.currentPickaxe].isDimensional) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions()}
+    const aud = player.settings.audioSettings["Hyperdimensional"];
+    const oH  = aud.canPlay;
+    if (!oH) aud.canPlay = true;
+    if (Math.random() < 1/100000000) playSound("Hyperdimensional");
+    if (!oH) aud.canPlay = false;
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
@@ -969,8 +990,8 @@ function logFind(type, x, y, variant, atMined, fromReset, amt, fromCave, bulkRar
     } else {
         rng = Math.floor(1/oreList[type]["decimalRarity"]);
     }
-    if (oreList[type]["oreTier"] === "Infinitesimal") rng = Infinity;
-    output += ` 1/${bulkRarity === undefined ? formatNumber(rng * multis[namesemojis.indexOf(variant)], 4) : formatNumber(1/bulkRarity, 4)}`;
+    if (oreList[type]["oreTier"] === "Infinitesimal") {rng = Infinity; if (bulkRarity !== undefined) bulkRarity = Infinity;}
+    output += ` 1/${bulkRarity === undefined ? formatNumber(rng * multis[namesemojis.indexOf(variant)], 4) : formatNumber(bulkRarity === Infinity ? Infinity : (1/bulkRarity), 4)}`;
     output += "</span>";
     element.innerHTML = output;
     if (spawnElement.children.length > 0) {
@@ -1006,6 +1027,18 @@ function getAngleBetweenPoints(obj) {
     return angle;
 }
 function checkExistingOres() {
+    if (!ca) detectCatgirlOres();
+    if (mine[curY] !== undefined && mine[curY][curX+5] !== undefined && mine[curY][curX+5].what === 99999) {
+        if (Math.random() < 1/(Math.log2(player.stats.blocksMined))) {
+            insertIntoLayers({"ore":"catgirl", "layers":["unknownLayer"], "useLuck":true});
+            typeWriter("<i>The appearance of THE cat of all time shakes the universe to it's core...</i>", get("spawnMessage"));
+            playSound("Infinitesimal");
+            ca = true;
+        } else {
+            typeWriter("<i>lol get fucked you have to do that all over again</i>", get("spawnMessage"));
+            playSound("Infinitesimal");
+        }
+    }
     let closestIndex = -1;
     let closestLocation = Infinity;
     for (let i = 0; i < player.oreTracker.existingOres.length; i++) {
@@ -1013,7 +1046,7 @@ function checkExistingOres() {
         mine[player.oreTracker.existingOres[i].posY] ??= [];
         let block = mine[player.oreTracker.existingOres[i].posY][player.oreTracker.existingOres[i].posX];
         block = block.ore === undefined ? block : block.ore;
-        if (num < closestLocation && (block === player.oreTracker.existingOres[i].block)) {
+        if (num < closestLocation && (block === player.oreTracker.existingOres[i].block) || (cg && block === "nebula")) {
             closestIndex = i;
             closestLocation = num;
         }
@@ -1024,23 +1057,45 @@ function checkExistingOres() {
         let variantAtIndex = "";
         if (blockAtIndex.variant !== undefined) variantAtIndex = namesemojis[blockAtIndex.variant - 1];
         if (blockAtIndex.ore !== undefined) blockAtIndex = blockAtIndex.ore;
-        if (blockAtIndex === player.oreTracker.existingOres[closestIndex].block) {
+        if (blockAtIndex === player.oreTracker.existingOres[closestIndex].block || (blockAtIndex === "nebula" && cg)) {
             player.oreTracker.tracking = true;
             player.oreTracker.locationX = player.oreTracker.existingOres[closestIndex].posX;
             player.oreTracker.locationY = player.oreTracker.existingOres[closestIndex].posY;
             let blockOutput;
-            const ore = player.oreTracker.existingOres[closestIndex].block;
+            const ore = cg ? "nebula" : player.oreTracker.existingOres[closestIndex].block;
             if (oreList[ore]["hasImage"]) {
                 blockOutput = `<span class="trackerImage"><img src="${oreList[ore]["src"]}"></img></span>`
             } else {
                 blockOutput = ore;
             }
-            document.getElementById("trackerOre").innerHTML = `Ore: ${variantAtIndex}${blockOutput}`
+            document.getElementById("trackerOre").innerHTML = `Ore: ${variantAtIndex}${cg ? "?????" : blockOutput}`
             document.getElementById("trackerX").innerText = `X: ${(player.oreTracker.locationX - 1000000).toLocaleString()}`
             document.getElementById("trackerY").innerText = `Y: ${(-1 * (player.oreTracker.locationY - (currentWorld < 2 ? 0 : 2000))).toLocaleString()}`
             getAngleBetweenPoints({x:player.oreTracker.locationX, y:player.oreTracker.locationY});
         }
     }
+}
+let ca = false;
+let cg = false;
+function detectCatgirlOres() {
+    let c = 0;
+    for (let r = curY-8; r < curY + 9; r++) if (r > 0) {mine[r] ??= [];} else {return;}
+    c += (mine[curY][curX+1] !== undefined && mine[curY][curX+1].ore === "godOfTheMine") ? 1 : 0
+    c += (mine[curY+5][curX+7] !== undefined && mine[curY+5][curX+7].ore === "Goober") ? 1 : 0
+    c += (mine[curY-6][curX+2] !== undefined && mine[curY-6][curX+2].ore === "✈️") ? 1 : 0
+    c += (mine[curY-8][curX+6] !== undefined && mine[curY-8][curX+6].ore === "Omnipotent God of The Mine") ? 1 : 0
+    c += (mine[curY+3][curX-2] !== undefined && mine[curY+3][curX-2].ore === "👁‍🗨") ? 1 : 0
+    c += (mine[curY][curX-6] !== undefined && mine[curY][curX-6].ore === "🏳️‍⚧️") ? 1 : 0
+    c += (mine[curY-6][curX-4] !== undefined && mine[curY-6][curX-4].ore === "✡️") ? 1 : 0
+    c += (mine[curY+8][curX-5] !== undefined && mine[curY+8][curX-5].ore === "HD 160529") ? 1 : 0
+    if (c === 8) {
+        cg = true;
+        mine[curY+1000000] ??= [];
+        mine[curY+1000000][curX+1000000] = {ore:"nebula", variant:1, what: 99999};
+        player.oreTracker.existingOres = [{block: "?????", posX: curX+1000000, posY: curY+1000000}];
+        checkExistingOres();
+    }
+    displayArea();
 }
 function removeExistingOre(location) {
     for (let i = 0; i < player.oreTracker.existingOres.length; i++) {
@@ -1592,6 +1647,7 @@ function updateOfflineProgress() {
         else pickaxeMined = pickaxeStats[player.stats.currentPickaxe].mined
         let willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeMined/pickaxeStats[player.stats.currentPickaxe].rate)/10) : 0;
         if (player.powerupVariables.fakeEquipped.item !== undefined || player.powerupVariables.fakeTreeLevel.level !== undefined) {get("offlineActivate").textContent = "Cant Gen: Paradoxical Active!"; willGen = 0;}
+        else if (!verifiedOres.isRightPickaxe()) {get("offlineActivate").textContent = "Cant Gen: Wrong Pickaxe!"; willGen = 0;}
         else get("offlineActivate").textContent = `Gen ${willGen > 1000000000 ? formatNumber(willGen, 2) : willGen.toLocaleString()} Blocks.`;
         return willGen;
     }
