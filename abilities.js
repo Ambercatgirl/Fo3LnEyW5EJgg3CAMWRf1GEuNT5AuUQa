@@ -20,7 +20,7 @@ async function rollAbilities(force) {
             let bulkAmt = 0;
             if (player.stats.currentPickaxe === "pickaxe27") bulkAmt = pickaxe[player.upgrades["pickaxe27"].level].mined;
             else bulkAmt = pickaxe.mined;
-            if (player.gears["gear34"] && Math.random() < 1/4) bulkAmt = Math.floor(bulkAmt*2);
+            if (player.gears["gear34"]) bulkAmt = Math.floor(bulkAmt*2);
             bulkGenerate(curY, bulkAmt, undefined, false)
         } else {
             pickaxe.doAbility(curX, curY);
@@ -38,11 +38,16 @@ function getTestAvg() {
     return {m: mined/abilityTestAmt, r: revealed/abilityTestAmt};
 }
 function powerup1(x, y) {
+    if (!pickaxeStats[player.stats.currentPickaxe].canMineIn.includes(currentWorld)) return;
     if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown && player.powerupCooldowns["powerup1"].unlocked) {
         const multiplier = Math.floor(Math.log(player.stats.blocksMined/500000)/Math.log(10)) + 1;
-        for (let r = y - (50 * multiplier); r < y + (50 * multiplier); r++) {
-            for (let c = x - (50 * multiplier); c < x + (50 * multiplier); c++) {
-                pickaxeAbilityMineBlock(c, r);
+        const amt = (101*multiplier)*(101*multiplier)
+        if (amt > 1000000) bulkGenerate(curY, amt, undefined, false);
+        else {
+            for (let r = y - (50 * multiplier); r < y + (50 * multiplier); r++) {
+                for (let c = x - (50 * multiplier); c < x + (50 * multiplier); c++) {
+                    pickaxeAbilityMineBlock(c, r);
+                }
             }
         }
         displayArea();
