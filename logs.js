@@ -217,6 +217,7 @@ class secureLogs {
         if (currentWorld === 1.1) {
             if (player.gears["gear20"]) luck *= ((baseLuck * 0.05) + 1);
             if (player.gears["gear37"]) luck = luck ** 1.035;
+            luck *= 1.2;
             if (isNaN(luck)) return 1;
             else return luck;
         }
@@ -225,6 +226,7 @@ class secureLogs {
         if (currentWorld < 2) luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         if (player.gears["gear20"]) luck *= (baseLuck * 0.05) + 1;
         if (player.gears["gear37"]) luck = luck ** 1.035;
+        luck *= 1.2;
         if (isNaN(luck)) return 1;
         else return luck;
     }

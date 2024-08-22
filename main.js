@@ -497,7 +497,7 @@ const calcSpeed = function() {
         else return {speed: 7, reps: Math.round((-2 + sr1Level)*(player.gears["gear36"] ? 1.75 : 1)), extra:extraSpeed}
     }
     if (player.gears["gear36"]) reps = Math.round(reps*1.75)
-    if (debug) return {speed: 5, reps: devReps, extra:0}
+    //if (debug) return {speed: 5, reps: devReps, extra:0}
     return {speed: miningSpeed, reps: reps, extra: extraSpeed}
 }
 function updateSpeed() {

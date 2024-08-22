@@ -350,12 +350,12 @@ const recipes = {
     },
     "gear36": {
         name: "Lightspeed Emulator",
-        recipe: [{"ore":"✏️","amt":61500000},{"ore":"🧠","amt":32500000},{"ore":"📖","amt":31500000},{"ore":"📐","amt":14800000},{"ore":"📚","amt":10400000},{"ore":"🖊️","amt":3050000},{"ore":"🔎","amt":696000},{"ore":"📌","amt":410000},{"ore":"📍","amt":116000},{"ore":"🎓","amt":63800},{"ore":"🌱","amt":6080},{"ore":"⚖️","amt":4090}],
+        recipe: [{"ore":"✏️","amt":32700000},{"ore":"🧠","amt":17300000},{"ore":"📖","amt":16800000},{"ore":"📐","amt":7900000},{"ore":"📚","amt":5580000},{"ore":"🖊️","amt":1620000},{"ore":"🔎","amt":370000},{"ore":"📌","amt":218000},{"ore":"📍","amt":62200},{"ore":"🎓","amt":34000},{"ore":"🌱","amt":3230},{"ore":"⚖️","amt":2180}],
         active : [0.9, 1, 1.2, 2]
     },
     "gear37": {
         name: "Increased Exponentiality",
-        recipe: [{"ore":"🎐","amt":675000000},{"ore":"🌧️","amt":540000000},{"ore":"🌤️","amt":485000000},{"ore":"🌥️","amt":262000000},{"ore":"🌨️","amt":151000000},{"ore":"🪂","amt":126000000},{"ore":"🪁","amt":83100000},{"ore":"⛈️","amt":51100000},{"ore":"🌩️","amt":21600000},{"ore":"🌦️","amt":13700000},{"ore":"starglint","amt":5650000},{"ore":"🪶","amt":1830000},{"ore":"🍃","amt":280000},{"ore":"⚡","amt":39400},{"ore":"🪽","amt":14500}],
+        recipe: [{"ore":"🎐","amt":215000000},{"ore":"🌧️","amt":215000000},{"ore":"🌤️","amt":215000000},{"ore":"🌥️","amt":215000000},{"ore":"🌨️","amt":152000000},{"ore":"🪂","amt":127000000},{"ore":"🪁","amt":84000000},{"ore":"⛈️","amt":51600000},{"ore":"🌩️","amt":21800000},{"ore":"🌦️","amt":13800000},{"ore":"starglint","amt":5700000},{"ore":"🪶","amt":1850000},{"ore":"🍃","amt":283000},{"ore":"⚡","amt":39800},{"ore":"🪽","amt":14700}],
         active : [0.9, 1, 1.2, 2]
     }
 }
@@ -449,7 +449,7 @@ function unlockRecipe(id) {
         if (!showOrders[`g${currentWorld}`].includes(id) || galDis) {displayRecipe(id); getButtonByName(id).style.display = "none";}
     if (id.indexOf("pickaxe") > -1) 
         if (!showOrders[`p${currentWorld}`].includes(id) || galDis) {displayRecipe(id); getButtonByName(id).style.display = "none";}
-    
+    if (id === "pickaxe26") {displayRecipe("pickaxe26"); switchWorldCraftables(); m88 = 0;}
     get("recipeLock").style.backgroundColor = "#FF3D3D";
 }
 function idFromName(name) {
@@ -784,7 +784,7 @@ function showPickaxes() {
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
-            document.getElementById("nullChroma").style.display = "block";
+            if (document.getElementsByClassName("lockedRecipe").length === 0) document.getElementById("nullChroma").style.display = "block";
         } else m88 = 0;
     }
     let list = showOrders[`g${currentWorld}`];
@@ -806,7 +806,7 @@ function showGears() {
     if (!galDis) for (let i = 0; i < list.length; i++) {
         getButtonByName(list[i]).style.display = "block";
     }
-    document.getElementById("nullChroma").style.display = "none";
+    if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
 }
 function switchWorldCraftables() {
     let gearList;
@@ -825,7 +825,7 @@ function switchWorldCraftables() {
     }
     for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "flex";
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
-    document.getElementById("nullChroma").style.display = "none";
+    if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
     if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "flex";
     else document.getElementById("sillyRecipe").style.display = "none";
