@@ -151,27 +151,32 @@ const recipes = {
     "pickaxe27" : {
         name: "The Tree of Life",
         recipe : [],
-        active : []
+        active : [],
+        pUnob: true
     },
     "pickaxe31" : {
         name: "Undersea Eviscerator",
         recipe : [{ore:"🌊", amt:500000000000},{"ore":"⛵","amt":336000000},{"ore":"🎣","amt":322000000},{"ore":"🤿","amt":306000000},{"ore":"🫧","amt":303000000},{"ore":"🐟","amt":102000000},{"ore":"👑","amt":40800000},{"ore":"🔱","amt":37900000},{"ore":"🌀","amt":4290000},{"ore":"👿","amt":3540000},{"ore":"🪩","amt":2650000},{"ore":"💫","amt":1320000},{"ore":"🐋","amt":331000},{"ore":"⚓","amt":3540},{ore:"🪸", amt:1000},{ore:"HD 160529", amt:1}],
-        active : []
+        active : [],
+        pUnob: true
     },
     "pickaxe32" : {
         name: "Dimensional Slicer",
         recipe : [{ore:"australiumIngot", amt:7500000},{ore: "⚠️", amt:175000},{ore: "🐪", amt:150000},{ore: "🐋", amt:145000},{ore: "🏰", amt:131500},{ore: "💵", amt:131500},{ore: "🌳", amt:125000},{ore: "🦴", amt:6700},{ore: "🦚", amt:4800},{ore: "🎩", amt:3900},{ore: "🏯", amt:2725},{ore: "🍓", amt:2095},{ore: "🤖", amt:1830},{ore: "Bismuth", amt:1140},{ore: "mutatedGrowth", amt:320},{ore: "godOfTheMine", amt:5},{ore: "unstableCore", amt:1}],
-        active : []
+        active : [],
+        pUnob: true
     },
     "pickaxe33" : {
         name: "Wormhole Exterminator",
         recipe : [{ore:"australiumIngot", amt:66000000},{"ore":"⚙️","amt":250000000},{"ore":"🃏","amt":250000000},{"ore":"🖍️","amt":250000000},{"ore":"✂️","amt":250000000},{"ore":"⚱️","amt":250000000},{"ore":"🎲","amt":250000000},{"ore":"📟","amt":250000000},{"ore":"🗡️","amt":250000000},{"ore":"🎀","amt":250000000},{"ore":"🏆","amt":250000000},{"ore":"🗜️","amt":250000000},{"ore":"⌚","amt":206000000},{"ore":"⭐","amt":152000000},{"ore":"🔆","amt":143000000},{"ore":"🔥","amt":67200000},{"ore":"📝","amt":53800000},{"ore":"🌟","amt":41800000},{"ore":"💥","amt":28600000},{"ore":"🪐","amt":15100000},{"ore":"👀","amt":11200000},{"ore":"🏵️","amt":4130000},{"ore":"🪅","amt":3310000},{"ore":"🐪","amt":1370000},{"ore":"💵","amt":1200000},{"ore":"🦴","amt":61400},{"ore":"🎩","amt":35800},{"ore":"J1407b","amt":1},{"ore":"ascendedArtifact","amt":1}],
-        active : []
+        active : [],
+        pUnob: true
     },
     "pickaxe34" : {
         name: "Supercluster Capsizer",
         recipe : [{"ore":"🎮","amt":1250000000},{"ore":"🎫","amt":1250000000},{"ore":"🚗","amt":1250000000},{"ore":"📢","amt":1250000000},{"ore":"🎑","amt":1010000000},{"ore":"📿","amt":336000000},{"ore":"🎎","amt":159000000},{"ore":"🗳️","amt":113000000},{"ore":"⚛️","amt":28100000},{"ore":"🛢️","amt":8200000},{"ore":"💽","amt":323000},{"ore":"🍭","amt":37500},{"ore":"singularityEgg","amt":1}],
-        active : []
+        active : [],
+        pUnob: true
     },
     "gear0" : {
         name : "Ore Tracker",
@@ -366,12 +371,14 @@ const recipes = {
     "gear38": {
         name: "",
         recipe: [{"ore":"🔕","amt":464000000},{"ore":"⭕","amt":174000000},{"ore":"🛑","amt":104000000},{"ore":"🔇","amt":31600000},{"ore":"💢","amt":4010000},{"ore":"⛔","amt":408000},{"ore":"🔈","amt":156000},{"ore":"🚫","amt":62900},{"ore":"♨️","amt":15500},{"ore":"🩸","amt":8030}],
-        active : [0.9, 1, 1.2, 1.1, 2]
+        active : [0.9, 1, 1.2, 1.1, 2],
+        pUnob: true
     },
     "gear39": {
         name: "",
         recipe: [{"ore":"💻","amt":2750000000},{"ore":"⌨️","amt":2750000000},{"ore":"🖱️","amt":2750000000},{"ore":"🍆","amt":1640000000},{"ore":"💔","amt":741000000},{"ore":"🔪","amt":181000000},{"ore":"matrix","amt":113000000},{"ore":"🧂","amt":85900000},{"ore":"📽️","amt":30400000},{"ore":"🚽","amt":5670000},{"ore":"💘","amt":3280000},{"ore":"💞","amt":1190000},{"ore":"💰","amt":134000},{"ore":"☘️","amt":5940},{"ore":"🍀","amt":300}],
-        active : [0.9, 1, 1.2, 1.1, 2]
+        active : [0.9, 1, 1.2, 1.1, 2],
+        pUnob: true
     },
     "gear40": {
         name: "Ring of Life",
@@ -379,7 +386,8 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2],
         req: function() {
             return player.p.orbOfLife;
-        }
+        },
+        pUnob: true
     },
     "gear41": {
         name: "Ring of Intelligence",
@@ -387,7 +395,8 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2],
         req: function() {
             return player.p.orbOfIntelligence;
-        }
+        },
+        pUnob: true
     },
     "gear42": {
         name: "Ring of Sound",
@@ -395,7 +404,8 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2],
         req: function() {
             return player.p.orbOfSound;
-        }
+        },
+        pUnob: true
     },
     "gear43": {
         name: "Ring of The Unknown",
@@ -403,7 +413,8 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2],
         req: function() {
             return player.p.orbOfTheUnknown;
-        }
+        },
+        pUnob: true
     },
     "gear44": {
         name: "Ring of Creation",
@@ -411,7 +422,8 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2],
         req: function() {
             return player.p.orbOfCreation;
-        }
+        },
+        pUnob: true
     },
 }
 function calcLayerEstimates(obj/*l: [layers], e: [excluded tiers], a: layer amount, v: luck, c: search for celestial*/) {
@@ -1811,7 +1823,7 @@ const pickaxeStats = {
         doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
-        isDimensional: true
+        isDimensional: true,
     },
     
 }
