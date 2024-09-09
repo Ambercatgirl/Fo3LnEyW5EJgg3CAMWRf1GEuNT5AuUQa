@@ -505,7 +505,7 @@ const calcSpeed = function() {
     if (randBuff.reps) reps += 25;
     if (player.gears["gear44"]) reps += 50;
     if (player.gears["gear36"]) reps = Math.round(reps*1.75)
-    //if (debug) return {speed: 5, reps: devReps, extra:0}
+    if (debug) return {speed: 5, reps: devReps, extra:0}
     return {speed: miningSpeed, reps: reps, extra: extraSpeed}
 }
 function updateSpeed() {
