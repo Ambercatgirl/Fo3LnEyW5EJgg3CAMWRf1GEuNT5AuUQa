@@ -152,6 +152,7 @@
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe31`)" id="underseaEviscerator" style="display: none;"><span>Undersea Eviscerator</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe32`)" id="dimensionalSlicer" style="display: none;"><span>Dimensional Slicer</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe33`)" id="wormholeExterminator" style="display: none;"><span>Wormhole Exterminator</span></button>
+                    <button class="craftingButton" onclick="displayRecipe(`pickaxe34`)" id="superclusterCapsizer" style="display: none;"><span>Supercluster Capsizer</span></button>
                 
                 </div>
                 <div id="gearCrafts" class="hidden">
@@ -193,6 +194,13 @@
                     <button class="craftingButton" onclick="displayRecipe('gear35')" style="display: none;" id="electrifyingPropagator"><span>Electrifying Propagator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear36')" style="display: none;" id="lightspeedEmulator"><span>Lightspeed Emulator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear37')" style="display: none;" id="increasedExponentiality"><span>Increased Exponentiality</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear38')" style="display: none;" id="forgottenRoseQuartzShell"><span>Forgotten Rose Quartz Shell</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear39')" style="display: none;" id="armbandOfEndlessDreams"><span>Armband of Endless Dreams</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear40')" style="display: none;" id="ringOfLife"><span>Ring of Life</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear41')" style="display: none;" id="ringOfIntelligence"><span>Ring of Intelligence</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear42')" style="display: none;" id="ringOfSound"><span>Ring of Sound</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear43')" style="display: none;" id="ringOfTheUnknown"><span>Ring of The Unknown</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear44')" style="display: none;" id="ringOfCreation"><span>Ring of Creation</span></button>
                 </div>
                 
             </div>
@@ -234,6 +242,7 @@
                 <button id="pickaxe27Craft" class="craftPickaxeButton" onclick="craftPickaxe('pickaxe27')" style="display:none; width: 100%; background-image:linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B);">Equip!</button>
                 <p class="itemDescription" id="pickaxe32Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 75,000 blocks.<br></i><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
                 <p class="itemDescription" id="pickaxe33Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 50,000 blocks.<br></i><span>Has 2.25x special cave type boost, +1.5x cave luck, ~3x cave size boost.<br></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
+                <p class="itemDescription" id="pickaxe34Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 180,000 blocks.<br>An ore in the Nebula layer might be of importance for your journey...<br></i><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
                 
                 <!--
                     Pickaxes above
@@ -268,7 +277,7 @@
                 <p class="itemDescription" id="gear26Description" style="display: none;">5% chance to give 30x more layer blocks on mining a layer block.</p>
                 <p class="itemDescription" id="gear27Description" style="display: none;">1.75x cave type boost.</p>
                 <p class="itemDescription" id="gear28Description" style="display: none;">Allows any Infinity Collector to mine Celestial tier ores.</p>
-                <p class="itemDescription" id="gear29Description" style="display: none;">Skips over blank tiles while mining. Can skip up to 25 tiles at once. Will be disabled if holding shift while mining (sorry mobile players).<br>Has a 1/250 chance to move the player an extra 50 blocks. (Increased chance with Simulated RNG)</p>
+                <p class="itemDescription" id="gear29Description" style="display: none;">Skips over blank tiles while mining. Can skip up to 25 tiles at once. Will be disabled if holding shift while mining (sorry mobile players).<br>Has a 1/250 chance to move the player an extra 50 blocks. (1/175 chance with Simulated RNG)</p>
                 <p class="itemDescription" id="gear30Description" style="display: none;">+0.3x Base Luck.</p>
                 <p class="itemDescription" id="gear31Description" style="display: none;">Sets mining speed delay to 20ms from 25ms.</p>
                 <p class="itemDescription" id="gear32Description" style="display: none;">Adds ~25 blocks per second to your speed.</p>
@@ -276,7 +285,14 @@
                 <p class="itemDescription" id="gear34Description" style="display: none;">Multiplies normal ability size by 4x and simulted ability size by 2x.</p>
                 <p class="itemDescription" id="gear35Description" style="display: none;">+50% ability activation rate.</p>
                 <p class="itemDescription" id="gear36Description" style="display: none;">1.75x Movement repetitions (rounded up)</p>
-                <p class="itemDescription" id="gear37Description" style="display: none;">Luck ^1.035</p>
+                <p class="itemDescription" id="gear37Description" style="display: none;">:Luck ^1.035</p>
+                <p class="itemDescription" id="gear38Description" style="display: none;">Gives a random buff that changes every minute.<br>Choices: 1.4x Luck, 2x Proc Rate, +25 Movement Repetitions</p>
+                <p class="itemDescription" id="gear39Description" style="display: none;">1/2 Proc Rate, 3x Simulated Generation Amount</p>
+                <p class="itemDescription" id="gear40Description" style="display: none;">1.5x Base Luck</p>
+                <p class="itemDescription" id="gear41Description" style="display: none;">10% Chance for +500,000 Simulated Ability Amount</p>
+                <p class="itemDescription" id="gear42Description" style="display: none;">Guaranteed 2x of every tier until Hyperdimensional</p>
+                <p class="itemDescription" id="gear43Description" style="display: none;">Allows use of Wormhole Exterminator in Subrealm 1</p>
+                <p class="itemDescription" id="gear44Description" style="display: none;">+50 Movement Repetitions, ??????????????????</p>
             </div>
         </div>
         </div>
@@ -591,6 +607,17 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="spawnSoundSettings">
+                            <div class="soundMuteButtonHolder">
+                                <button class="muteButton" onclick="changeCanPlay('Polychromatical', this)"id="mutePolychromatical">Mute Polychromaticals</button>
+                                <button class="testButton" onclick="testSound('Polychromatical', this)">Preview</button>
+                            </div>
+                            <div class="soundSliderHolder">
+                                <label class="spawnSoundContainer">
+                                    <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Polychromatical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5bc97e 50%);">
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
@@ -663,37 +690,39 @@
                         <button class="stopOnRareButton roundedLeft" onclick="changeStopOnRare(this)" id="stopOnRare" style="background-color: #6BC267;">Stop On Rare</button>
                         <button class="stopOnRareSelector roundedRight" onclick="toggleStopRareList()" id="stopOnRareDisplay">Show Tiers</button>
                         <div id="stopOnRareList" style="display: none;">
+                            <span class="stopOnRareTierDivider"></span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Antique</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Mystical</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Divine</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Flawless</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Interstellar</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Metaversal</span>
-                            <span class="stopOnRareTierDivider"></span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Sacred</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Ethereal</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Imaginary</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Celestial</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Hyperdimensional</span>
                             <span class="stopOnRareTier" onclick="allowList(this.textContent)">Infinitesimal</span>
+                            <span class="stopOnRareTier" onclick="allowList(this.textContent)">Polychromatical</span>
                         </div>
                       </div>
                       <div class="inputAndButton" id="spawnMessageHolder">
                         <button class="fullyRounded" onclick="toggleSpawnMessageList()" id="changeSMrarityDisplay">Show Spawn Message Tiers</button>
                         <div id="spawnTierList" style="display: none;">
+                            <span class="spawnMessageTierDivider"></span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Antique</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Mystical</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Divine</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Flawless</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Interstellar</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Metaversal</span>
-                            <span class="spawnMessageTierDivider"></span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Sacred</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Ethereal</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Imaginary</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Celestial</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Hyperdimensional</span>
                             <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Infinitesimal</span>
+                            <span class="spawnMessageTier" onclick="allowMessage(this.textContent)">Polychromatical</span>
                         </div>
                     </div>
                         <div class="inputAndButton">
@@ -712,7 +741,9 @@
                       <div class="inputAndButton">
                         <button class="toggleDisplay fullyRounded" onclick="changeCanDisplay(this)" id="blockUpdates">Toggle Block Updates</button>
                       </div>
-
+                      <div class="inputAndButton">
+                        <button class="toggleDisplay fullyRounded" onclick="toggleHideCompleted(this)" id="hideCompleted" style="background-color: #FF3D3D;">Hide Completed Recipe Ores</button>
+                      </div>
                       <div class="inputAndButton">
                         <button class="toggleDisplay fullyRounded" style="background-color: #FF3D3D;" onclick="changeUseNumbers(this)" id="useNumbers">Use Numbers for Pickaxe Names</button>
                       </div>
@@ -912,6 +943,7 @@
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('brownCraft')">Craft <span class="forgeOreDisplay">🤎</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('blackCraft')">Craft <span class="forgeOreDisplay">🖤</span></button>
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteCraft')">Craft <span class="forgeOreDisplay">🤍</span></button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('wtfCraft')">Craft <span class="forgeOreDisplay">why</span></button>
                     </div>
                     <div class="craftingSelections" id="forgeFission" style="display: none;">
                         <button class="forgeCraftingButton" onclick="displayOreRecipe('idoliumFission')">Fission <span class="forgeOreDisplay">💎</span></button>
@@ -938,7 +970,7 @@
                                 <button id="setForgeAmount" onclick="multiplyRecipe(document.getElementById('amountInputText').value)">Set Multiplier</button>
                                 <br>
                                 <form id="amountInput">
-                                    <input type="text" placeholder="Amount" id="amountInputText" autocomplete="off" maxlength="3">
+                                    <input type="text" placeholder="Amount" id="amountInputText" autocomplete="off" maxlength="3" onkeydown="preventCrash(event)">
                                 </form>
                                 <button id="craftOreButton" onclick="craftOre(currentOreRecipe)"></button>
                         </div>

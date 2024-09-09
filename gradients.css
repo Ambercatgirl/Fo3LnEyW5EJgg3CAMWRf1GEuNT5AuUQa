@@ -502,6 +502,62 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#forgottenRoseQuartzShell span{
+    background: linear-gradient(to right, #f7cac9, #ffdcdb, #ffffff, #b4c8ea, #91a8d0);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#armbandOfEndlessDreams span{
+    background: linear-gradient(to right, #c4c5ff, #e1d3ff, #fce9ff, #e1d3ff, #c4c5ff);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#ringOfLife span{
+    background: linear-gradient(to right,#403330 5%, #9A2910, #403330 95%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#ringOfIntelligence span{
+    background: linear-gradient(to right,#403330 5%, #1662A4, #403330 95%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#ringOfSound span{
+    background: linear-gradient(to right,#403330 5%, #0A9420, #403330 95%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#ringOfTheUnknown span{
+    background: linear-gradient(to right,#403330 5%, #000000, #403330 95%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#ringOfCreation span{
+    background: linear-gradient(to right,#403330 5%, #C6D224, #403330 95%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#superclusterCapsizer span{
+    background: linear-gradient(to right,#2c8769, #085e7e, #2b1660, #520276, #920042, #520276, #2b1660, #085e7e, #2c8769);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #text span{
     background: linear-gradient(to right,);
     -webkit-background-clip: text;

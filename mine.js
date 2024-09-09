@@ -201,8 +201,8 @@ const generateBlock = function(location) {
 const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
     player.stats.blocksMined += (caveInfo === undefined ? amt : 0);
     const originAmt = amt;
-    const generationInfo = getLayer(y);
-    if (y === player.luna.layer) {let lunaLayer = addLuna([...generationInfo.layer], [...generationInfo.probabilities]); generationInfo.layer = lunaLayer[0]; generationInfo.probabilities = lunaLayer[1];}
+    const layer = getLayer(y);
+    let generationInfo = {layer: [...layer.layer], probabilities: [...layer.probabilities], layerMat: layer.layerMat};
     const thisTable = (caveInfo !== undefined && caveInfo.type !== "currentLayer") ? [...caveList[caveInfo.type]] : [...generationInfo.layer];
     if (fromOffline) for (let i = thisTable.length - 1; i >= 0; i--) if (oreList[thisTable[i]]["oreTier"] === "Celestial") thisTable.splice(i, 1);
     const sm = (caveInfo !== undefined && caveInfo.type === "currentLayer");
@@ -263,7 +263,6 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             let wasDuped = false;
             if (results[blockToGive].rand >= 1 && !isCave) rng = 1;
             let variantDivide = player.gears["gear25"] ? 2 : 1;
-            let variantSubtract = 0;
             let totalVariants = 0;
             //do silly stuff here
             playerInventory[blockToGive]["foundAt"] ??= Date.now();
@@ -286,13 +285,12 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                 playSound(oreList[blockToGive]["oreTier"], blockToGive);
             }
             for (let i = 3; i > 0; i--) {
-                variantSubtract = 0;
-                let estVariantAmt = (results[blockToGive].est-variantSubtract)/(multis[i]/variantDivide);
+                let estVariantAmt = (results[blockToGive].est)/(multis[i]/variantDivide);
                 if (estVariantAmt < 1 && Math.random() < estVariantAmt) estVariantAmt++;
                 estVariantAmt = Math.floor(estVariantAmt);
                 totalVariants += estVariantAmt;
                 if (estVariantAmt > 0) {
-                    variantSubtract += estVariantAmt;
+                    results[blockToGive].est -= estVariantAmt;
                     if (player.gears["gear22"] && oreList[blockToGive]["numRarity"] >= 750000) {
                         if (estVariantAmt >= 10) estVariantAmt *= 1.1; 
                         else if (Math.random() < 1/10) {estVariantAmt++; wasDuped = true;}
@@ -326,8 +324,9 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                     });
                 }
             }
-            let toGive = results[blockToGive].est - totalVariants;
+            let toGive = results[blockToGive].est;
             if (toGive > 0) {
+                if (player.gears["gear42"] && !oreInformation.tierGrOrEqTo({"tier1": oreList[blockToGive]["oreTier"], "tier2": "Hyperdimensional"})) toGive *= 2;
                 wasDuped = false;
                 if (oreList[blockToGive]["numRarity"] >= 750000) {
                     if (player.gears["gear7"] && currentWorld < 2) gearAbility1();
@@ -533,7 +532,7 @@ function switchDistance(num) {
         const specialTeleportLayer = specialLayerLocations[layersToIndex[decidingNum]];
         if (layersToIndex[decidingNum] === "lastLayer") layerDistanceY = specialTeleportLayer.y + 5000;
         else layerDistanceY = specialTeleportLayer + 5000;
-        if (layerDistanceY === lastLayerInfo[1]) switchDistance(num)
+        if (layerDistanceY === lastLayerInfo[1]) switchDistance(num);
     } else {
         layerDistanceY = 1000 + (2000 * distanceMulti);
     }
@@ -803,7 +802,11 @@ function removeParadoxical() {
     if (player.powerupVariables.fakeEquipped.item !== undefined) {
         if (player.gears[player.powerupVariables.fakeEquipped.item] !== undefined) {
             if (player.powerupVariables.fakeEquipped.item === "gear0") document.getElementById("trackerLock").style.display = "inline-flex";
-            if (player.powerupVariables.fakeEquipped.item === "gear9") document.getElementById("sillyRecipe").style.display = "none";
+            
+            if (player.powerupVariables.fakeEquipped.item === "gear9") {
+                if (get("sillyRecipe").classList.contains("lockedRecipe")) get("sillyRecipe").classList.remove("lockedRecipe")
+                document.getElementById("sillyRecipe").style.display = "none";
+            }
             if (player.powerupVariables.fakeEquipped.item === "gear24") get("allowAutoPowerup").style.display = "none";
             player.gears[player.powerupVariables.fakeEquipped.item] = false;
             player.powerupVariables.fakeEquipped.item = undefined;
@@ -821,6 +824,7 @@ function removeParadoxical() {
         player.powerupVariables.fakeTreeLevel.level = undefined;
         player.powerupVariables.fakeTreeLevel.originalState = undefined;
         player.powerupVariables.fakeTreeLevel.removeAt = Infinity;
+        utilitySwitchActions();
     }
     updateSpeed();
     saveNewData({override: undefined, return: false});
