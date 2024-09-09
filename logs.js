@@ -213,11 +213,13 @@ class secureLogs {
         baseLuck += player.gears["gear30"] ? 0.3 : 0;
         baseLuck += getRewardTypes("luck", "add");
         baseLuck *= getRewardTypes("luck", "multiply");
+        if (player.gears["gear40"]) baseLuck *= 1.5;
         let luck = baseLuck;
         if (currentWorld === 1.1) {
             if (player.gears["gear20"]) luck *= ((baseLuck * 0.05) + 1);
             if (player.gears["gear37"]) luck = luck ** 1.035;
             luck *= 1.2;
+            if (randBuff.luck) luck *= 1.4;
             if (isNaN(luck)) return 1;
             else return luck;
         }
@@ -227,6 +229,7 @@ class secureLogs {
         if (player.gears["gear20"]) luck *= (baseLuck * 0.05) + 1;
         if (player.gears["gear37"]) luck = luck ** 1.035;
         luck *= 1.2;
+        if (randBuff.luck) luck *= 1.4;
         if (isNaN(luck)) return 1;
         else return luck;
     }
@@ -271,8 +274,10 @@ class secureLogs {
 const ignoreProperties = ["output", "x", "y"]
 function encryptLogData(log) {
     const newObj = {};
+    let i = 0;
     for (let property in log) {
-        if (property !== "output") newObj[property] = log[property];
+        if (ignoreProperties.indexOf(property) === -1) newObj[i] = log[property];
+        i++;
     }
     return toBinary(JSON.stringify(newObj));
 }

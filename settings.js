@@ -354,7 +354,7 @@ function updateAutomineUpdateSpeed(element) {
     }
 }
 const indexOrder = {
-    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave", "eventLayer"],
+    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "giftLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave", "eventLayer"],
     "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"],
     "subrealmOne" : ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer", "ccCave", "moCave", "foCave", "axCave", "ioCave", "ggCave"],
     "waterWorld" : ["waterLayer", "watrCave"],
@@ -998,7 +998,7 @@ const conversionRates = [5, 10, 30];
 let hasConverted = false;
 function convertVariants() {
     let ore = document.getElementById("oreInput").value;
-    ore = ore.replaceAll(" ", "");
+    if (oreList[ore] === undefined) ore = ore.replaceAll(" ", "");
     let variant = document.getElementById("currentSelectedVariant").innerText;
     let amt = document.getElementById("amtInput").value;
     document.getElementById("amtInput").value = "";
@@ -1106,6 +1106,7 @@ function toggleSimulatedRng(button) {
         button.style.backgroundColor = "#6BC267";
         player.settings.simulatedRng = true;
     }
+    updateAllLayers();
 }
 function togglePlacement() {
     const placer = get("toggleOrePlacer");
@@ -1306,5 +1307,14 @@ function sillyKittyCat(text) {
         curCatStep = 0;
         get("catText").value = "";
         get("catStuff").style.display = "none";
+    }
+}
+function toggleHideCompleted() {
+    if (player.settings.hideCompleted) {
+        player.settings.hideCompleted = false;
+        get("hideCompleted").style.backgroundColor = "#FF3D3D";
+    } else {
+        player.settings.hideCompleted = true;
+        get("hideCompleted").style.backgroundColor = "#6BC267";
     }
 }

@@ -188,6 +188,9 @@ let celestial;
 let imaginary;
 let keepRunningAudio;
 let eventSpawn;
+let hyperdimensional;
+let infinitesimal;
+let polychromatical;
 let allAudios = {
     "Antique" : undefined,
     "Mystical" : undefined,
@@ -200,6 +203,7 @@ let allAudios = {
     "Celestial" : undefined,
     "Imaginary" : undefined,
     "Hyperdimensional" : undefined,
+    "Polychromatical" : undefined,
     "Infinitesimal" : undefined
 };
 let osaka;
@@ -220,6 +224,7 @@ function loadContent() {
     imaginary = new Audio("audios/imaginary.mp3");
     hyperdimensional = new Audio("audios/hyperdimensional.mp3");
     infinitesimal = new Audio("audios/infinitesimal.mp3");
+    polychromatical = new Audio("audios/polychromatical.mp3");
     osaka = new Audio("audios/lol.mp3");
     allAudios["Antique"] = chill;
     allAudios["Mystical"] = mystical;
@@ -233,6 +238,7 @@ function loadContent() {
     allAudios["Imaginary"] = imaginary;
     allAudios["Hyperdimensional"] = hyperdimensional;
     allAudios["Infinitesimal"] = infinitesimal;
+    allAudios["Polychromatical"] = polychromatical;
     for (let property in allAudios) allAudios[property].load();
     musicPlayer.songs["song1"].src = new Audio("audios/ely_audio_1.mp3");
     musicPlayer.songs["song2"].src = new Audio("audios/ely_audio_2.mp3");
@@ -496,6 +502,8 @@ const calcSpeed = function() {
         if (sr1Level < 4) return {speed: 10 - sr1Level, reps: 1, extra:extraSpeed}
         else return {speed: 7, reps: Math.round((-2 + sr1Level)*(player.gears["gear36"] ? 1.75 : 1)), extra:extraSpeed}
     }
+    if (randBuff.reps) reps += 25;
+    if (player.gears["gear44"]) reps += 50;
     if (player.gears["gear36"]) reps = Math.round(reps*1.75)
     //if (debug) return {speed: 5, reps: devReps, extra:0}
     return {speed: miningSpeed, reps: reps, extra: extraSpeed}
@@ -565,9 +573,9 @@ function checkDisplayVariant(location) {
     const tier = oreList[ore]["oreTier"];
     let isRare = (tier !== "Layer" && commons.indexOf(tier) === -1);
     if (oreList[ore]["hasImage"]) {
-        //if (tier === "Layer") return "⠀";
         let isLarge = tier === "Hyperdimensional" || tier === "Infinitesimal" || oreList[ore]["numRarity"] >= 1000000000000000;
-        if (isRare) oreToAdd = `<img class="${isLarge ? 'largeMineImage' : 'mineOre'}" src="${oreList[ore]["src"]}"></img>`;
+        let isMassive = ore === "noradrenaline"
+        if (isRare) oreToAdd = `<img class="${isMassive ? "hugeMineImage" : isLarge ? 'largeMineImage' : 'mineOre'}" src="${oreList[ore]["src"]}"></img>`;
         else return `<span class="mineSpan"><img class="mineImage" src="${oreList[ore]["src"]}"></img></span>`;
         includeSize = "";
         specialVariant = "Img";
@@ -746,8 +754,8 @@ function updateInventory() {
             p33CL = false;
         }
     }
-    if (currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") player.stats.currentPickaxe = "pickaxe27";
-    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.stats.currentPickaxe = "pickaxe0";
+    if ((currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") && !(player.gears["gear43"] && player.stats.currentPickaxe === "pickaxe33")) {player.stats.currentPickaxe = "pickaxe27"; utilitySwitchActions();}
+    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions();}
     updatePowerupCooldowns();
     updateDisplayedUpgrade();
     displayNearbyCooldowns();
@@ -776,11 +784,34 @@ function updateInventory() {
     player.lastOnline = Date.now();
     updateOfflineProgress();
     if (ca && pickaxeStats[player.stats.currentPickaxe].isDimensional) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions()}
+    
     const aud = player.settings.audioSettings["Hyperdimensional"];
     const oH  = aud.canPlay;
     if (!oH) aud.canPlay = true;
     if (Math.random() < 1/100000000) playSound("Hyperdimensional");
     if (!oH) aud.canPlay = false;
+
+    checkPolys();
+
+    if (player.gears["gear38"]) {
+        randBuff.count--;
+        if (randBuff.count <= 0) {
+            randBuff.luck = false;
+            randBuff.proc = false;
+            randBuff.reps = false;
+            const give = Math.round(Math.random() * 2);
+            if (give === 0) randBuff.luck = true;
+            else if (give === 1) randBuff.proc = true;
+            else if (give === 2) randBuff.reps = true;
+            utilitySwitchActions();
+            randBuff.count = 240;
+        }
+    } else {
+        randBuff.count = 240;
+        randBuff.luck = false;
+        randBuff.proc = false;
+        randBuff.reps = false;
+    }
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
@@ -1657,6 +1688,46 @@ function updateOfflineProgress() {
 function generateOfflineProgress() {
     const offlineAmt = updateOfflineProgress();
     if (offlineAmt > 0) {bulkGenerate(curY, offlineAmt, undefined, true); player.offlineProgress = 0; updateOfflineProgress();}
+}
+function preventCrash(event) {
+    if (event.key === "Enter") event.preventDefault();
+}
+const polyLocations = {
+    "orbOfLife" : "dirtLayer",
+    "orbOfIntelligence" : "chessLayer",
+    "orbOfSound" : "fluteLayer",
+    "orbOfTheUnknown" : "borderLayer",
+    "orbOfCreation" : "nebulaLayer",
+}
+const polyIds = {
+    "orbOfLife" : "gear40",
+    "orbOfIntelligence" : "gear41",
+    "orbOfSound" : "gear42",
+    "orbOfTheUnknown" : "gear43",
+    "orbOfCreation" : "gear44",
+}
+function checkPolys() {
+    const polys = Object.keys(polyLocations);
+    for (let i = 0; i < polys.length; i++) {
+        const poly = polys[i];
+        if (player.p[poly]) {
+            insertIntoLayers({"ore":`${poly}`, "layers":[polyLocations[`${poly}`]], "useLuck":true});
+            showItem(polyIds[`${poly}`]);
+        }
+        else {
+            if (i > 1) {
+                if (indexHasOre(`${poly}`) > 0) {
+                    insertIntoLayers({"ore":`${polys[i - 1]}`, "layers":[polyLocations[`${polys[i - 1]}`]], "useLuck":true});
+                    player.p[poly] = true;
+                }
+            } else {
+                if (indexHasOre("noradrenaline") > 0) {
+                    player.p["orbOfLife"] = true;
+                    insertIntoLayers({"ore":"orbOfLife", "layers":["dirtLayer"], "useLuck":true});
+                }
+            }
+        }
+    }
 }
 //TY @marbelynrye FOR MAKING THESE IMAGE DATA GATHERERS UR SO COOL FOR THAT
 //IT WORKS SO WELL!!!!

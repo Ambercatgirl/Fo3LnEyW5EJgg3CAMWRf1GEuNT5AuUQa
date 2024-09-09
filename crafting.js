@@ -155,7 +155,7 @@ const recipes = {
     },
     "pickaxe31" : {
         name: "Undersea Eviscerator",
-        recipe : [{ore:"🌊", amt:500000000000},{ore:"⛵", amt:352000000},{ore:"🎣", amt:340000000},{ore:"🤿", amt:323200000},{ore:"🫧", amt:320000000},{ore:"🐟", amt:107200000},{ore:"👑", amt:42400000},{ore:"🔱", amt:40000000},{ore:"🌀", amt:4480000},{ore:"👿", amt:3720000},{ore:"🪩", amt:2800000},{ore:"💫", amt:1400000},{ore:"🐋", amt:348000},{ore:"⚓", amt:3680},{ore:"🪸", amt:1000},{ore:"HD 160529", amt:1}],
+        recipe : [{ore:"🌊", amt:500000000000},{"ore":"⛵","amt":336000000},{"ore":"🎣","amt":322000000},{"ore":"🤿","amt":306000000},{"ore":"🫧","amt":303000000},{"ore":"🐟","amt":102000000},{"ore":"👑","amt":40800000},{"ore":"🔱","amt":37900000},{"ore":"🌀","amt":4290000},{"ore":"👿","amt":3540000},{"ore":"🪩","amt":2650000},{"ore":"💫","amt":1320000},{"ore":"🐋","amt":331000},{"ore":"⚓","amt":3540},{ore:"🪸", amt:1000},{ore:"HD 160529", amt:1}],
         active : []
     },
     "pickaxe32" : {
@@ -166,6 +166,11 @@ const recipes = {
     "pickaxe33" : {
         name: "Wormhole Exterminator",
         recipe : [{ore:"australiumIngot", amt:66000000},{"ore":"⚙️","amt":250000000},{"ore":"🃏","amt":250000000},{"ore":"🖍️","amt":250000000},{"ore":"✂️","amt":250000000},{"ore":"⚱️","amt":250000000},{"ore":"🎲","amt":250000000},{"ore":"📟","amt":250000000},{"ore":"🗡️","amt":250000000},{"ore":"🎀","amt":250000000},{"ore":"🏆","amt":250000000},{"ore":"🗜️","amt":250000000},{"ore":"⌚","amt":206000000},{"ore":"⭐","amt":152000000},{"ore":"🔆","amt":143000000},{"ore":"🔥","amt":67200000},{"ore":"📝","amt":53800000},{"ore":"🌟","amt":41800000},{"ore":"💥","amt":28600000},{"ore":"🪐","amt":15100000},{"ore":"👀","amt":11200000},{"ore":"🏵️","amt":4130000},{"ore":"🪅","amt":3310000},{"ore":"🐪","amt":1370000},{"ore":"💵","amt":1200000},{"ore":"🦴","amt":61400},{"ore":"🎩","amt":35800},{"ore":"J1407b","amt":1},{"ore":"ascendedArtifact","amt":1}],
+        active : []
+    },
+    "pickaxe34" : {
+        name: "Supercluster Capsizer",
+        recipe : [{"ore":"🎮","amt":1250000000},{"ore":"🎫","amt":1250000000},{"ore":"🚗","amt":1250000000},{"ore":"📢","amt":1250000000},{"ore":"🎑","amt":1010000000},{"ore":"📿","amt":336000000},{"ore":"🎎","amt":159000000},{"ore":"🗳️","amt":113000000},{"ore":"⚛️","amt":28100000},{"ore":"🛢️","amt":8200000},{"ore":"💽","amt":323000},{"ore":"🍭","amt":37500},{"ore":"singularityEgg","amt":1}],
         active : []
     },
     "gear0" : {
@@ -351,13 +356,63 @@ const recipes = {
     "gear36": {
         name: "Lightspeed Emulator",
         recipe: [{"ore":"✏️","amt":32700000},{"ore":"🧠","amt":17300000},{"ore":"📖","amt":16800000},{"ore":"📐","amt":7900000},{"ore":"📚","amt":5580000},{"ore":"🖊️","amt":1620000},{"ore":"🔎","amt":370000},{"ore":"📌","amt":218000},{"ore":"📍","amt":62200},{"ore":"🎓","amt":34000},{"ore":"🌱","amt":3230},{"ore":"⚖️","amt":2180}],
-        active : [0.9, 1, 1.2, 2]
+        active : [0.9, 1, 1.2, 1.1, 2]
     },
     "gear37": {
         name: "Increased Exponentiality",
         recipe: [{"ore":"🎐","amt":215000000},{"ore":"🌧️","amt":215000000},{"ore":"🌤️","amt":215000000},{"ore":"🌥️","amt":215000000},{"ore":"🌨️","amt":152000000},{"ore":"🪂","amt":127000000},{"ore":"🪁","amt":84000000},{"ore":"⛈️","amt":51600000},{"ore":"🌩️","amt":21800000},{"ore":"🌦️","amt":13800000},{"ore":"starglint","amt":5700000},{"ore":"🪶","amt":1850000},{"ore":"🍃","amt":283000},{"ore":"⚡","amt":39800},{"ore":"🪽","amt":14700}],
-        active : [0.9, 1, 1.2, 2]
-    }
+        active : [0.9, 1, 1.2, 1.1, 2]
+    },
+    "gear38": {
+        name: "",
+        recipe: [{"ore":"🔕","amt":464000000},{"ore":"⭕","amt":174000000},{"ore":"🛑","amt":104000000},{"ore":"🔇","amt":31600000},{"ore":"💢","amt":4010000},{"ore":"⛔","amt":408000},{"ore":"🔈","amt":156000},{"ore":"🚫","amt":62900},{"ore":"♨️","amt":15500},{"ore":"🩸","amt":8030}],
+        active : [0.9, 1, 1.2, 1.1, 2]
+    },
+    "gear39": {
+        name: "",
+        recipe: [{"ore":"💻","amt":2750000000},{"ore":"⌨️","amt":2750000000},{"ore":"🖱️","amt":2750000000},{"ore":"🍆","amt":1640000000},{"ore":"💔","amt":741000000},{"ore":"🔪","amt":181000000},{"ore":"matrix","amt":113000000},{"ore":"🧂","amt":85900000},{"ore":"📽️","amt":30400000},{"ore":"🚽","amt":5670000},{"ore":"💘","amt":3280000},{"ore":"💞","amt":1190000},{"ore":"💰","amt":134000},{"ore":"☘️","amt":5940},{"ore":"🍀","amt":300}],
+        active : [0.9, 1, 1.2, 1.1, 2]
+    },
+    "gear40": {
+        name: "Ring of Life",
+        recipe: [{"ore": "orbOfLife", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+        req: function() {
+            return player.p.orbOfLife;
+        }
+    },
+    "gear41": {
+        name: "Ring of Intelligence",
+        recipe: [{"ore": "orbOfIntelligence", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+        req: function() {
+            return player.p.orbOfIntelligence;
+        }
+    },
+    "gear42": {
+        name: "Ring of Sound",
+        recipe: [{"ore": "orbOfSound", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+        req: function() {
+            return player.p.orbOfSound;
+        }
+    },
+    "gear43": {
+        name: "Ring of The Unknown",
+        recipe: [{"ore": "orbOfTheUnknown", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+        req: function() {
+            return player.p.orbOfTheUnknown;
+        }
+    },
+    "gear44": {
+        name: "Ring of Creation",
+        recipe: [{"ore": "orbOfCreation", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+        req: function() {
+            return player.p.orbOfCreation;
+        }
+    },
 }
 function calcLayerEstimates(obj/*l: [layers], e: [excluded tiers], a: layer amount, v: luck, c: search for celestial*/) {
     let layer = [];
@@ -435,7 +490,6 @@ function lockRecipe(id) {
     if (document.getElementsByClassName("lockedRecipe").length > 0) {
         const elems = document.getElementsByClassName("lockedRecipe");
         for (let i = 0; i < elems.length; i++) {
-            const id = elems[i].id
             unlockRecipe(idFromName(elems[i].id))
         }
     } else {
@@ -484,13 +538,20 @@ function updateActiveRecipe() {
                         toChange.innerHTML = `<span style="filter: drop-shadow(0 0 0.2vw white)">${ore}</span><span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${amtOwned.toLocaleString()}/${needed.toLocaleString()}</span>`;
                     }
                     if(amtOwned >= needed) {
-                        count++;
+                        if (oreList[ore]["oreTier"] !== "Infinitesimal") {
+                            count++;
+                            currentRarity += oreList[ore]["numRarity"] * needed;
+                        }
                         toChange.style.color = "#6BC267";
-                        currentRarity += oreList[ore]["numRarity"] * needed;
+                        if (player.settings.hideCompleted) toChange.style.display = "none";
+                        else toChange.style.display = "block";
                     }
                     else {
+                        if (oreList[ore]["oreTier"] !== "Infinitesimal") {
+                            currentRarity += oreList[ore]["numRarity"] * amtOwned;
+                        }
                         toChange.style.color = "#FF3D3D";
-                        currentRarity += oreList[ore]["numRarity"] * amtOwned;
+                        toChange.style.display = "block";
                     }  
                 }
             }
@@ -614,6 +675,7 @@ const buttonGradients = {
     "pickaxe31Craft" : {"gradient" : "linear-gradient(to right, #feda84, #976393, #43457f, #ff9b83)","applied" : false},
     "pickaxe32Craft" : {"gradient" : "linear-gradient(to right, #000000, #FF4191, #E90074, #FFF078, #FFF078, #E90074, #FF4191, #000000)","applied" : false},
     "pickaxe33Craft" : {"gradient" : "linear-gradient(to right, #0d3dc3, #aafd0a, #c96709, #aafd0a, #0d3dc3)","applied" : false},
+    "pickaxe34Craft" : {"gradient" : "linear-gradient(to right, #2c8769, #085e7e, #2b1660, #520276, #920042, #520276, #2b1660, #085e7e, #2c8769)","applied" : false},
     
 
     "gear0Craft" : {"gradient" : "linear-gradient(to right, #005820, #00FF23","applied" : false},
@@ -654,7 +716,13 @@ const buttonGradients = {
     "gear35Craft" : {"gradient" : "linear-gradient(to right, #850F8D, #E49BFF, #F8F9D7, #180161, #F8F9D7, #E49BFF, #850F8D)","applied" : false},
     "gear36Craft" : {"gradient" : "linear-gradient(to right, #121e1d, #345652, #5c9891, #e3eeec, #5c9891, #345652, #121e1d)","applied" : false},
     "gear37Craft" : {"gradient" : "linear-gradient(to right, #ccff33, #70e000, #008000, #004b23, #007200, #38b000, #9ef01a)","applied" : false},
-
+    "gear38Craft" : {"gradient" : "linear-gradient(to right, #f7cac9, #ffdcdb, #ffffff, #b4c8ea, #91a8d0)","applied" : false},
+    "gear39Craft" : {"gradient" : "linear-gradient(to right, #c4c5ff, #e1d3ff, #fce9ff, #e1d3ff, #c4c5ff)","applied" : false},
+    "gear40Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #9A2910, #403330 95%)","applied" : false},
+    "gear41Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #1662A4, #403330 95%)","applied" : false},
+    "gear42Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #0A9420, #403330 95%)","applied" : false},
+    "gear43Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #000000, #403330 95%)","applied" : false},
+    "gear44Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #C6D224, #403330 95%)","applied" : false},
 }
 function craftPickaxe(item) {
     const recipe = recipes[item].recipe;
@@ -728,20 +796,21 @@ const showOrders = {
     "p2" : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
     "g1" : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
     "g2" : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
-    "p1.1" : ["pickaxe27"],
+    "p1.1" : ["pickaxe27", "pickaxe33"],
     "g1.1" : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],
     "p1.2" : ["pickaxe31"],
     "g1.2" : ["gear36", "gear37"],
-    "p0.9": ["pickaxe32", "pickaxe33"],
-    "g0.9": ["gear34", "gear35"]
+    "p0.9": ["pickaxe32", "pickaxe33", "pickaxe34"],
+    "g0.9": ["gear34", "gear35", "gear38", "gear39", "gear40", "gear41", "gear42", "gear43", "gear44"]
 }
 let galDis = false;
 function replaceWithGalactica() {
     if (currentWorld !== 1.1) {
         for (let item in recipes) {
             const button = getButtonByName(item)
-            if (button && !button.classList.contains("lockedRecipe")) button.style.display = "none";
+            if (button && !button.classList.contains("lockedRecipe")) button.style.display = "none"; 
         }
+        if (currentRecipe !== undefined && !get(currentRecipe).classList.contains("lockedRecipe")) if (get("displayRecipe") !== null) displayRecipe(currentRecipe);
         if (galDis) {
             galDis = false;
             removeGalactica();
@@ -749,8 +818,8 @@ function replaceWithGalactica() {
             showPickaxes();
         } else {
             galDis = true;
-            for (let i = 0; i < showOrders["p0.9"].length; i++) getButtonByName(showOrders["p0.9"][i]).style.display = "block";
-            for (let i = 0; i < showOrders["g0.9"].length; i++) getButtonByName(showOrders["g0.9"][i]).style.display = "block";
+            for (let i = 0; i < showOrders["p0.9"].length; i++) showItem(showOrders["p0.9"][i]);
+            for (let i = 0; i < showOrders["g0.9"].length; i++) showItem(showOrders["g0.9"][i]);
         }
 
     }
@@ -760,11 +829,11 @@ function removeGalactica() {
     for (let i = 0; i < showOrders["g0.9"].length; i++) if (!getButtonByName(showOrders["g0.9"][i]).classList.contains("lockedRecipe")) getButtonByName(showOrders["g0.9"][i]).style.display = "none";
     let list = showOrders[`g${currentWorld}`]
     for (let i = 0; i < list.length; i++) {
-        getButtonByName(list[i]).style.display = "block";
+        showItem(list[i]);
     }
     list = showOrders[`p${currentWorld}`]
     for (let i = 0; i < list.length; i++) {
-        getButtonByName(list[i]).style.display = "block";
+        showItem(list[i]);
     }
     galDis = false;
 }
@@ -776,24 +845,25 @@ function showPickaxes() {
     disappear(document.getElementById("gearCrafts"));
     m87 = 0;
     m88++;
-    if (m88 === 6 && !galDis) {
+    if (m88 >= 6 && !galDis && document.getElementById("nullChroma").style.display === "none") {
         let show = true;
         if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) show = false;
         if (!player.trophyProgress["worldOneCompletion"].trophyOwned) show = false;
         if (!player.trophyProgress["worldTwoCompletion"].trophyOwned) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
-            for (let i = 0; i < children.length; i++) children[i].style.display = "none";
+            for (let i = 0; i < children.length; i++) if (!children[i].classList.contains("lockedRecipe")) children[i].style.display = "none";
             if (document.getElementsByClassName("lockedRecipe").length === 0) document.getElementById("nullChroma").style.display = "block";
         } else m88 = 0;
     }
     let list = showOrders[`g${currentWorld}`];
     if (!galDis) for (let i = 0; i < list.length; i++) {
-        getButtonByName(list[i]).style.display = "block";
+        showItem(list[i]);
     }
     if (indexHasOre("🎂") && currentWorld === 1 && !galDis) document.getElementById("sillyRecipe").style.display = "flex";
-    else document.getElementById("sillyRecipe").style.display = "none";
-    document.getElementById("oblivionFracturer").style.display = "none";
+    else if (!get("sillyRecipe").classList.contains("lockedRecipe")) document.getElementById("sillyRecipe").style.display = "none";
+    if (!get("oblivionFracturer").classList.contains("lockedRecipe")) document.getElementById("oblivionFracturer").style.display = "none";
+    if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
 }
 function showGears() {
     disappear(document.getElementById("pickaxeCrafts"));
@@ -807,6 +877,17 @@ function showGears() {
         getButtonByName(list[i]).style.display = "block";
     }
     if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
+}
+function showItem(id) {
+    let canCont = true;
+    if (recipes[id].req !== undefined) {
+        if (!recipes[id].req()) canCont = false;
+    }
+    if (canCont) {
+        getButtonByName(id).style.display = "flex";
+    } else {
+        getButtonByName(id).style.display = "none";
+    }
 }
 function switchWorldCraftables() {
     let gearList;
@@ -823,12 +904,13 @@ function switchWorldCraftables() {
         pickaxeList = showOrders[`p${currentWorld}`];
         gearList = showOrders[`g${currentWorld}`];
     }
-    for (let i = 0; i < gearList.length; i++) getButtonByName(gearList[i]).style.display = "flex";
+    for (let i = 0; i < gearList.length; i++) showItem(gearList[i]);
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
     if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
-    document.getElementById("oblivionFracturer").style.display = "none";
+    if (!get("oblivionFracturer").classList.contains("lockedRecipe")) document.getElementById("oblivionFracturer").style.display = "none";
     if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "flex";
-    else document.getElementById("sillyRecipe").style.display = "none";
+    else if (!get("sillyRecipe").classList.contains("lockedRecipe")) document.getElementById("sillyRecipe").style.display = "none";
+    if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
 }
 function toggleOreForge() {
     let element = document.getElementById("forgeContainer")
@@ -990,6 +1072,11 @@ const oreRecipes = {
         "result" : [{"ore":"🚧", "amt":5}, {"ore":"⛓️", "amt":10}, {"ore":"🖇️", "amt":200}, {"ore":"🔒", "amt":500}, {"ore":"🚪", "amt":250000000}],
         "multiplier" : 1
     },
+    "wtfCraft" : {
+        "cost" : [{"ore":"⚙️","amt":250000000},{"ore":"🃏","amt":250000000},{"ore":"💠","amt":250000000},{"ore":"⚜️","amt":250000000},{"ore":"🖍️","amt":250000000},{"ore":"✂️","amt":250000000},{"ore":"⚱️","amt":250000000},{"ore":"🧪","amt":250000000},{"ore":"🎭","amt":250000000},{"ore":"🎲","amt":250000000},{"ore":"⛵","amt":250000000},{"ore":"🪜","amt":250000000},{"ore":"🥏","amt":250000000},{"ore":"🎣","amt":250000000},{"ore":"🤿","amt":250000000},{"ore":"🫧","amt":250000000},{"ore":"📟","amt":250000000},{"ore":"🍁","amt":250000000},{"ore":"🪄","amt":250000000},{"ore":"🌻","amt":250000000},{"ore":"🪚","amt":250000000},{"ore":"⚗️","amt":250000000},{"ore":"🪵","amt":250000000},{"ore":"🗿","amt":250000000},{"ore":"🔔","amt":250000000},{"ore":"🥽","amt":250000000},{"ore":"🎄","amt":250000000},{"ore":"🗡️","amt":250000000},{"ore":"🎴","amt":250000000},{"ore":"🧩","amt":250000000},{"ore":"💍","amt":250000000},{"ore":"🪙","amt":250000000},{"ore":"🔗","amt":250000000},{"ore":"🐟","amt":250000000},{"ore":"⏹️","amt":250000000},{"ore":"🎀","amt":250000000},{"ore":"🧨","amt":250000000},{"ore":"🎍","amt":250000000},{"ore":"🔋","amt":250000000},{"ore":"🪬","amt":250000000},{"ore":"🏆","amt":250000000},{"ore":"🗜️","amt":250000000},{"ore":"🧲","amt":250000000},{"ore":"🎨","amt":250000000},{"ore":"🔳","amt":250000000},{"ore":"⌚","amt":250000000},{"ore":"🕋","amt":250000000},{"ore":"🔮","amt":250000000},{"ore":"🕯️","amt":250000000},{"ore":"👑","amt":250000000},{"ore":"🎇","amt":250000000},{"ore":"🎃","amt":250000000},{"ore":"🔱","amt":250000000},{"ore":"⭐","amt":250000000},{"ore":"🌲","amt":250000000},{"ore":"☄️","amt":250000000},{"ore":"🔆","amt":250000000},{"ore":"🔥","amt":117000000},{"ore":"💎","amt":110000000},{"ore":"📝","amt":93800000},{"ore":"🧵","amt":93300000},{"ore":"🌏","amt":87900000},{"ore":"🌪️","amt":75900000},{"ore":"🌟","amt":72900000},{"ore":"💥","amt":50000000},{"ore":"❄️","amt":48500000},{"ore":"🔩","amt":44500000},{"ore":"🪞","amt":43900000},{"ore":"🥉","amt":42200000},{"ore":"🥀","amt":34800000},{"ore":"🌌","amt":34100000},{"ore":"🧊","amt":32100000},{"ore":"🧀","amt":30300000},{"ore":"🌀","amt":30300000},{"ore":"🪐","amt":26400000},{"ore":"👿","amt":25000000},{"ore":"⌛","amt":25000000},{"ore":"💸","amt":24800000},{"ore":"🥗","amt":23400000},{"ore":"👀","amt":19600000},{"ore":"🪩","amt":18700000},{"ore":"👁️","amt":9770000},{"ore":"💫","amt":9380000},{"ore":"🏵️","amt":7210000},{"ore":"🌈","amt":6820000},{"ore":"🎆","amt":6250000},{"ore":"apatite","amt":5770000},{"ore":"🪅","amt":5770000},{"ore":"💐","amt":5000000},{"ore":"🌇","amt":4360000},{"ore":"🏔️","amt":3410000},{"ore":"🚿","amt":3120000},{"ore":"⚠️","amt":2810000},{"ore":"🐪","amt":2400000},{"ore":"🐋","amt":2340000},{"ore":"🏰","amt":2110000},{"ore":"💵","amt":2100000},{"ore":"🌳","amt":2020000},{"ore":"🦴","amt":107000},{"ore":"🦚","amt":76500},{"ore":"🎩","amt":62400},{"ore":"🏯","amt":43600},{"ore":"🍓","amt":33500},{"ore":"🤖","amt":29300},{"ore":"⚓","amt":25000},{"ore":"🪤","amt":23400},{"ore":"Bismuth","amt":22500},{"ore":"variousMinerals","amt":9160},{"ore":"mutatedGrowth","amt":5110}],
+        "result" : [{"ore":"singularityEgg", "amt":1}],
+        "multiplier" : 1
+    }
 }
 function getRecipeById(id) {
     return oreRecipes[id];
@@ -1008,15 +1095,20 @@ function displayOreRecipe(id) {
         document.getElementById("forgeSettings").style.display = "block";
         currentOreRecipe = id;
         let recipe = getRecipeById(id);
-        recipe["multiplier"] = 1;
-        document.getElementById("forgeCraftingAmount").innerText = "1x";
+        document.getElementById("forgeCraftingAmount").innerText = `${recipe["multiplier"].toLocaleString()}x`;
         for (let i = 0; i < recipe["cost"].length; i++) {
             let ore = recipe["cost"][i]["ore"];
             let amt = recipe["cost"][i]["amt"];
+            amt *= recipe["multiplier"];
             let element = document.createElement("p");
             let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
             element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
-            element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${playerInventory[ore]["normalAmt"].toLocaleString()}/${amt.toLocaleString()}</span>`;
+            if (oreList[ore]["hasImage"]) {
+                element.innerHTML = `<span class="craftingImage"><img src="${oreList[ore]["src"]}"></img></span>`
+            } else {
+                element.innerHTML = ore;
+            }
+            element.innerHTML += ` <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${playerInventory[ore]["normalAmt"].toLocaleString()}/${amt.toLocaleString()}</span>`;
             element.classList = "recipeOreDisplay";
             if (playerInventory[ore]["normalAmt"] >= amt)
                 element.style.color = "#6BC267";
@@ -1033,7 +1125,12 @@ function displayOreRecipe(id) {
             element.style.color = colors["textColor"];
             if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
             else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
-            element.innerText = `${ore} x${(oreRecipes[id]["result"][i]["amt"] * oreRecipes[id]["multiplier"]).toLocaleString()}`;
+            if (oreList[ore]["hasImage"]) {
+                element.innerHTML = `<span class="craftingImage"><img src="${oreList[ore]["src"]}"></img></span>`
+            } else {
+                element.innerHTML = ore;
+            }
+            element.innerHTML += ` x${(oreRecipes[id]["result"][i]["amt"] * oreRecipes[id]["multiplier"]).toLocaleString()}`;
             element.classList = "recipeOreDisplay";
             parent.appendChild(element);
         }
@@ -1044,39 +1141,13 @@ function multiplyRecipe(amt) {
     if (isNaN(amt)) return;
     if (amt < 1) amt = 1;
     amt = Math.floor(amt);
+    const recipe = getRecipeById(currentOreRecipe);
+    recipe["multiplier"] = amt;
+    const oldRec = currentOreRecipe;
+    currentOreRecipe = "";
+    displayOreRecipe(oldRec)
     document.getElementById("forgeCraftingAmount").innerText = `${amt.toLocaleString()}x`;
     document.getElementById('amountInputText').value = "";
-    let recipe = getRecipeById(currentOreRecipe);
-    recipe["multiplier"] = amt;
-    let parent = document.getElementById("forgeRecipeDisplay");
-    while (parent.firstChild) parent.removeChild(parent.firstChild);
-    for (let i = 0; i < recipe["cost"].length; i++) {
-        let ore = recipe["cost"][i]["ore"];
-        let amt = recipe["cost"][i]["amt"] * recipe["multiplier"];
-        let element = document.createElement("p");
-        let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
-        element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
-        element.innerHTML = `${ore} <span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${playerInventory[ore]["normalAmt"].toLocaleString()}/${amt.toLocaleString()}</span>`;
-        element.classList = "recipeOreDisplay";
-        if (playerInventory[ore]["normalAmt"] >= amt)
-            element.style.color = "#6BC267";
-        else
-            element.style.color = "#FF3D3D";
-        parent.appendChild(element);
-    }
-    for (let i = 0; i < recipe["result"].length; i++) {
-        let ore = recipe["result"][i]["ore"];
-        let element = document.createElement("p");
-        if (i === 0) element.style.borderTop = "1px solid white";
-        let colors = oreInformation.getColors(oreList[ore]["oreTier"]);
-        element.style.backgroundImage = "linear-gradient(to right, black, " + colors["backgroundColor"] + ", black)";
-        element.style.color = colors["textColor"];
-        if (colors["textColor"] === "#ffffff") element.style.textShadow = "-0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000";
-        else element.style.textShadow = "-0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff";
-        element.innerText = `${ore} x${(recipe["result"][i]["amt"] * recipe["multiplier"]).toLocaleString()}`;
-        element.classList = "recipeOreDisplay";
-        parent.appendChild(element);
-    }
 }
 function craftOre(id) {
     let recipe = getRecipeById(id);
@@ -1711,9 +1782,9 @@ const pickaxeStats = {
         revealed: 1,
         luck: 500,
         rate: 200,
-        src : `⛏️`,
+        src : `<img class="mineImage" src="media/dimensionalSlicerIcon.png"></img>`,
         ability: "",
-        doAbility: function(x, y) {pickaxeAbility32(x, y)},
+        doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
         isDimensional: true
@@ -1725,7 +1796,19 @@ const pickaxeStats = {
         rate: 275,
         src : `⛏️`,
         ability: "",
-        doAbility: function(x, y) {pickaxeAbility33(x, y)},
+        doAbility: function(x, y) {},
+        canSpawnCaves:[1, 1.1, 1.2, 2, 0.9],
+        canMineIn:[1, 1.1, 1.2, 2, 0.9],
+        isDimensional: true
+    },
+    "pickaxe34" : {
+        mined: 180000,
+        revealed: 1,
+        luck: 500,
+        rate: 200,
+        src : `⛏️`,
+        ability: "",
+        doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
         isDimensional: true
@@ -1741,13 +1824,20 @@ function ct() {
     nums.speed = nums.speed < 1 ? 0 : nums.speed;
     const speed = (1000 / nums.speed) * nums.reps + nums.extra;
     const pickaxeUsing = player.stats.currentPickaxe;
-    const abilityMined = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].mined : pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
+    let abilityMined = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].mined : pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
+    if (player.settings.simulatedRng || pickaxeStats[pickaxeUsing].isDimensional) {
+        if (player.gears["gear41"]) abilityMined += 50000;
+        if (player.gears["gear34"]) abilityMined = Math.floor(abilityMined*2);
+        if (player.gears["gear39"]) abilityMined = Math.floor(abilityMined*3);
+    }
     const abilityRevealed = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].revealed : pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].revealed;
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
     if (player.gears["gear23"]) m += 0.15;
     if (player.gears["gear35"]) m += 0.5;
     if (batteryEvent) m += 0.1;
+    if (randBuff.proc) m *= 2;
+    if (player.gears["gear39"]) m *= 0.5;
     const abilityRate = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].rate/m : 500/m;
     const recipe = !overUpgrade ? recipes[currentRecipe].recipe : player.upgrades["pickaxe27"].level === player.upgrades["pickaxe27"].maxLevel ? "RETURN" : upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].recipe;
     if (recipe === "RETURN") return;

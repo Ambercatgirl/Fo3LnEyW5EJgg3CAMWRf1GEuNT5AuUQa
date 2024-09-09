@@ -5,7 +5,10 @@ async function rollAbilities(force) {
     let m = 1;
     if (currentWorld < 2 && player.gears["gear8"]) m += 0.2;
     if (player.gears["gear23"]) m += 0.15;
+	if (player.gears["gear35"]) m += 0.5;
     if (batteryEvent) m += 0.1;
+    if (randBuff.proc) m *= 2;
+    if (player.gears["gear39"]) m *= 0.5;
     if (verifiedOres.canGenerateCaves()) {
         const caveRate = player.powerupVariables.caveBoosts.active ? 1/250 : 1/500;
         if (Math.random() <= caveRate && player.settings.cavesEnabled) {
@@ -16,11 +19,13 @@ async function rollAbilities(force) {
     if (debug && force) m = 10000000;
     const pickaxe = pickaxeStats[player.stats.currentPickaxe]
     if (Math.random() <= (m/pickaxe.rate)) {
-        if (player.settings.simulatedRng && !ca) {
+        if ((player.settings.simulatedRng || pickaxeStats[player.stats.currentPickaxe].isDimensional) && !ca) {
             let bulkAmt = 0;
             if (player.stats.currentPickaxe === "pickaxe27") bulkAmt = pickaxe[player.upgrades["pickaxe27"].level].mined;
             else bulkAmt = pickaxe.mined;
+            if (player.gears["gear41"] && Math.random() < 1/10) bulkAmt += 500000;
             if (player.gears["gear34"]) bulkAmt = Math.floor(bulkAmt*2);
+            if (player.gears["gear39"]) bulkAmt = Math.floor(bulkAmt*3);
             bulkGenerate(curY, bulkAmt, undefined, false)
         } else {
             pickaxe.doAbility(curX, curY);
@@ -42,7 +47,7 @@ function powerup1(x, y) {
     if (Date.now() >= player.powerupCooldowns["powerup1"].cooldown && player.powerupCooldowns["powerup1"].unlocked) {
         const multiplier = Math.floor(Math.log(player.stats.blocksMined/500000)/Math.log(10)) + 1;
         const amt = (101*multiplier)*(101*multiplier)
-        if (amt > 1000000) bulkGenerate(curY, amt, undefined, false);
+        if (amt > 1000000 || player.settings.simulatedRng) bulkGenerate(curY, amt, undefined, false);
         else {
             for (let r = y - (50 * multiplier); r < y + (50 * multiplier); r++) {
                 for (let c = x - (50 * multiplier); c < x + (50 * multiplier); c++) {
@@ -184,7 +189,7 @@ function gearAbility2() {
         }
         const forceKorone = Math.random() < 1/56 ? "KORONE" : false;
         repeatingLayers[reps] = {layer: 7777, force: forceKorone};
-        specialLayerLocations["sillyLayer"] ??= 16000 + (10000 * reps);
+        specialLayerLocations["sillyLayer"] ??= 18000 + (10000 * reps);
     }
 }
 
