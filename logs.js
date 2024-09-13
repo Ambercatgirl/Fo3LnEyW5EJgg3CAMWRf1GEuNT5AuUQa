@@ -1,4 +1,4 @@
-const debug = (document.location.href.includes("testing")) || (document.location.href.includes('http://127.0.0.1:5500/'));
+const debug = (document.location.href.includes("W5EJ")) || (document.location.href.includes('http://127.0.0.1:5500/'));
 const logCreated = {}
 class secureLogs {
     #spawnLogs;
