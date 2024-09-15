@@ -793,6 +793,9 @@ function updateInventory() {
 
     checkPolys();
     updateEventActions();
+    if (currentActiveEvent === undefined) {
+        get("eventMessages").textContent = "Event Messages Appear Here!";
+    }
     if (player.gears["gear38"]) {
         randBuff.count--;
         if (randBuff.count <= 0) {
@@ -1574,8 +1577,10 @@ function eventActions(input) {
     if (input === "c") {
         endEvent();
         const toChoose = collectWorldEvents(currentWorld);
+        toChoose.splice(toChoose.indexOf("event10"), 1)
         const selector = Math.round(Math.random() * (toChoose.length - 1));
         const chosen = toChoose[selector];
+        if (chosen === undefined) return;
         activateEvent(chosen);
         player.eventManager.cooldown = Date.now() + 1800000;
         wasUsed = true;
@@ -1611,7 +1616,7 @@ function hideEventOptions() {
 function updateEventActions() {
     const cooldown = player.eventManager.cooldown - Date.now();
     get("actionCooldown").textContent = `Can use in ${msToTime(cooldown)}`;
-    if (!player.gears["gear45"]) get("actionCooldown").textContent = "Craft x To Use Buttons!";
+    if (!player.gears["gear45"]) get("actionCooldown").textContent = "Craft Event Manager To Use Buttons!";
     if (currentActiveEvent !== undefined) {
         get("eventStats").textContent = `${Math.round(events[currentActiveEvent.name].boost*100)/100}x Boost, ${msToTime(currentActiveEvent.removeAt - Date.now())} Duration`
     } else {
