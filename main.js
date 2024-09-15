@@ -792,7 +792,7 @@ function updateInventory() {
     if (!oH) aud.canPlay = false;
 
     checkPolys();
-
+    updateEventActions();
     if (player.gears["gear38"]) {
         randBuff.count--;
         if (randBuff.count <= 0) {
@@ -1493,6 +1493,21 @@ const events = {
         specialText: "watr",
         specialEffect: function(state) {
             if (state) {
+                return;
+            }
+            else return;
+        }
+    },
+    "event17" : {
+        rate: 1/5000,
+        duration: 3600000,
+        boost: 2.75,
+        ore: "HD 160529",
+        message: `<i>A mysterious object pulses brightly in the depths below you...</i>`,
+        world: 1.2,
+        specialText: "N/A",
+        specialEffect: function(state) {
+            if (state) {
                 insertIntoLayers({"ore":"🪸", "layers":["waterLayer"], "useLuck":true});
             }
             else removeFromLayers({"ore":"🪸", "layers":["waterLayer"]});
@@ -1501,7 +1516,7 @@ const events = {
 }
 function activateEvent(name) {
     if (name === undefined) return;
-    currentActiveEvent = {name: name, removeAt: Date.now() + events[name].duration}
+    currentActiveEvent = {name: name, removeAt: Date.now() + events[name].duration, extraBoost: 0}
     events[name].specialEffect(true);
     const text = events[name].message;
     typeWriter(text, eventElement);
@@ -1510,6 +1525,7 @@ function activateEvent(name) {
 function endEvent() {
     if (currentActiveEvent === undefined) return;
     events[currentActiveEvent.name].specialEffect(false);
+    events[currentActiveEvent.name].boost -= currentActiveEvent.extraBoost;
     currentActiveEvent = undefined;
     eventElement.textContent = "Event Messages Appear Here!";
     updateAllLayers();
@@ -1551,6 +1567,65 @@ function formatEventText() {
         output += `<br>`;
     }
     element.innerHTML = output;
+}
+function eventActions(input) {
+    if (Date.now() < player.eventManager.cooldown && !debug) return;
+    let wasUsed = false;
+    if (input === "c") {
+        endEvent();
+        const toChoose = collectWorldEvents(currentWorld);
+        const selector = Math.round(Math.random() * (toChoose.length - 1));
+        const chosen = toChoose[selector];
+        activateEvent(chosen);
+        player.eventManager.cooldown = Date.now() + 1800000;
+        wasUsed = true;
+    } else if (input === "t") {
+        if (currentActiveEvent !== undefined) {
+            const current = currentActiveEvent;
+            const endTime = current.removeAt;
+            const durationLeft = endTime - Date.now();
+            currentActiveEvent.removeAt += (durationLeft * 0.25);
+            player.eventManager.cooldown = Date.now() + 1800000;
+            wasUsed = true;
+        }
+    } else if (input === "b") {
+        if (currentActiveEvent !== undefined) {
+            const baseBoost = events[currentActiveEvent.name].boost - currentActiveEvent.extraBoost;
+            const thisBoost = Math.round(baseBoost * 0.15 * 100) / 100;
+            events[currentActiveEvent.name].boost += thisBoost;
+            currentActiveEvent.extraBoost += thisBoost;
+            updateAllLayers();
+            player.eventManager.cooldown = Date.now() + 1800000;
+            wasUsed = true;
+        }
+    }
+}
+function showEventOptions() {
+    const elems = document.getElementsByClassName("eventActionButton");
+    for (let i = 0; i < elems.length; i++) elems[i].disabled = false;
+}
+function hideEventOptions() {
+    const elems = document.getElementsByClassName("eventActionButton");
+    for (let i = 0; i < elems.length; i++) elems[i].disabled = true;
+}
+function updateEventActions() {
+    const cooldown = player.eventManager.cooldown - Date.now();
+    get("actionCooldown").textContent = `Can use in ${msToTime(cooldown)}`;
+    if (!player.gears["gear45"]) get("actionCooldown").textContent = "Craft x To Use Buttons!";
+    if (currentActiveEvent !== undefined) {
+        get("eventStats").textContent = `${Math.round(events[currentActiveEvent.name].boost*100)/100}x Boost, ${msToTime(currentActiveEvent.removeAt - Date.now())} Duration`
+    } else {
+        get("eventStats").textContent = "No Active Event!";
+    }
+}
+function collectWorldEvents(world) {
+    const inWorld = [];
+    for (e in events) {
+        if (events[e].world === world) {
+            inWorld.push(e)
+        }
+    }
+    return inWorld;
 }
 function get(id) {
     return document.getElementById(`${id}`)
@@ -1607,62 +1682,44 @@ function createCustomColorInput() {
     const text = window.prompt("Enter Color");
     setTextColor(text);
 }
-let trackerDisplayed = false;
-function toggleTracker() {
-    const tracker = get("oreTrackerHolder");
-    if (tracker.style.animation !== "") return;
-    if (trackerDisplayed) {
-        tracker.style.animation = "retractTracker 0.5s linear 1";
-        tracker.onanimationend = () => {
-            tracker.style.display = "none";
-            tracker.style.right = "-7vw";
-            tracker.style.animation = "";
-            trackerDisplayed = false;
-            tracker.onanimationend = undefined;
-        };
-    } else {
-        tracker.style.display = "flex";
-        tracker.style.animation = "extendTracker 0.5s linear 1";
-        tracker.onanimationend = () => {
-            tracker.style.right = "2.5vw";
-            tracker.style.animation = "";
-            trackerDisplayed = true;
-            tracker.onanimationend = undefined;
+function toggleSideMenu(id) {
+    const menu = get(id);
+    const isOpenAlready = menu.classList.contains("displayedSideMenu");
+    const close = document.getElementsByClassName("displayedSideMenu");
+    const animations = {
+        "oreTrackerHolder" : "Tracker",
+        "offlineHolder" : "Offline",
+        "eventActionHolder" : "EventActions"
+    }
+    const thisAnimation = animations[id];
+    if (thisAnimation === undefined) return;
+    for (let i = 0; i < close.length; i++) {
+        const elem = close[i];
+        elem.classList.remove("displayedSideMenu");
+        const elemAnimation = animations[elem.id];
+        elem.style.animation = `retract${elemAnimation} 0.5s linear 1`;
+        elem.onanimationend = () => {
+            elem.style.display = "none";
+            const width = elem.style.width;
+            elem.style.right = `${width}px`;
+            elem.style.animation = "";
+            elem.onanimationend = undefined;
         };
     }
-}
-let offlineDisplayed = false;
-function toggleOffline() {
-    if (trackerDisplayed) {
-        const tracker = get("oreTrackerHolder");
-        tracker.style.display = "none";
-        tracker.style.right = "-7vw";
-        trackerDisplayed = false;
-    }
-    const offlineDisplay = get("offlineHolder")
-    if (offlineDisplayed) {
-        offlineDisplay.style.animation = "retractOffline 0.5s linear 1";
-        offlineDisplay.onanimationend = () => {
-            offlineDisplay.style.display = "none";
-            offlineDisplay.style.right = "-7vw";
-            offlineDisplay.style.animation = "";
-            offlineDisplayed = false;
-            offlineDisplay.onanimationend = undefined;
-        };
-    } else {
-        offlineDisplay.style.display = "block";
-        offlineDisplay.style.animation = "extendOffline 0.5s linear 1";
-        offlineDisplayed = true;
+    if (!isOpenAlready) {
+        menu.classList.add("displayedSideMenu");
+        menu.style.display = "block";
+        menu.style.animation = `extend${thisAnimation} 0.5s linear 1`;
         updateOfflineProgress();
-        offlineDisplay.onanimationend = () => {
-            offlineDisplay.style.right = "2.5vw";
-            offlineDisplay.style.animation = "";
-            offlineDisplay.onanimationend = undefined;
+        menu.onanimationend = () => {
+            menu.style.right = "2.5vw";
+            menu.style.animation = "";
+            menu.onanimationend = undefined;
         };
     }
 }
 function updateOfflineProgress() {
-    if (offlineDisplayed) {
+    if (get("offlineHolder").classList.contains("displayedSideMenu")) {
         let output = "";
         const layer = getLayer(curY).layer;
         let m = 1;
@@ -1678,7 +1735,10 @@ function updateOfflineProgress() {
         let pickaxeMined;
         if (player.stats.currentPickaxe === "pickaxe27") pickaxeMined = pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
         else pickaxeMined = pickaxeStats[player.stats.currentPickaxe].mined
-        let willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeMined/pickaxeStats[player.stats.currentPickaxe].rate)/10) : 0;
+        let amtMulti = 0.1;
+        if (player.gears["gear46"]) amtMulti += 0.2;
+        if (player.gears["gear47"]) amtMulti += 0.45;
+        let willGen = player.offlineProgress > 0 ? Math.floor((speed * (player.offlineProgress/1000))*(pickaxeMined/pickaxeStats[player.stats.currentPickaxe].rate)*amtMulti) : 0;
         if (player.powerupVariables.fakeEquipped.item !== undefined || player.powerupVariables.fakeTreeLevel.level !== undefined) {get("offlineActivate").textContent = "Cant Gen: Paradoxical Active!"; willGen = 0;}
         else if (!verifiedOres.isRightPickaxe()) {get("offlineActivate").textContent = "Cant Gen: Wrong Pickaxe!"; willGen = 0;}
         else get("offlineActivate").textContent = `Gen ${willGen > 1000000000 ? formatNumber(willGen, 2) : willGen.toLocaleString()} Blocks.`;
@@ -1712,18 +1772,18 @@ function checkPolys() {
         const poly = polys[i];
         if (player.p[poly]) {
             insertIntoLayers({"ore":`${poly}`, "layers":[polyLocations[`${poly}`]], "useLuck":true});
-            showItem(polyIds[`${poly}`]);
+            if (currentWorld === 0.9 || galDis) showItem(polyIds[`${poly}`]);
         }
         else {
-            if (i > 1) {
-                if (indexHasOre(`${poly}`) > 0) {
+            if (!player.p["orbOfLife"] && indexHasOre("noradrenaline") > 0) {
+                player.p["orbOfLife"] = true;
+                insertIntoLayers({"ore":"orbOfLife", "layers":["dirtLayer"], "useLuck":true});
+            }
+            if (i > 0) {
+                if (indexHasOre(polys[i - 1]) > 0) {
                     insertIntoLayers({"ore":`${polys[i - 1]}`, "layers":[polyLocations[`${polys[i - 1]}`]], "useLuck":true});
                     player.p[poly] = true;
-                }
-            } else {
-                if (indexHasOre("noradrenaline") > 0) {
-                    player.p["orbOfLife"] = true;
-                    insertIntoLayers({"ore":"orbOfLife", "layers":["dirtLayer"], "useLuck":true});
+                    switchWorldCraftables();
                 }
             }
         }

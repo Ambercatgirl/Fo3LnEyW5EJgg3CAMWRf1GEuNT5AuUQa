@@ -219,7 +219,8 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             estAmt = amt*generationInfo.probabilities[generationInfo.layer.indexOf(thisTable[i])];
         }
         let oldEst = estAmt;
-        if (estAmt < 1 && Math.random() < estAmt) {estAmt += 1;}
+        if (estAmt < 1 && Math.random() < estAmt) estAmt += 1; 
+        else if (Math.random() < estAmt%1) {estAmt += 1; oldEst = estAmt%1;}
         estAmt = Math.floor(estAmt);
         results[thisTable[i]] = {est: estAmt, rand: oldEst}
         amt -= estAmt;
@@ -808,6 +809,7 @@ function removeParadoxical() {
                 document.getElementById("sillyRecipe").style.display = "none";
             }
             if (player.powerupVariables.fakeEquipped.item === "gear24") get("allowAutoPowerup").style.display = "none";
+            if (player.powerupVariables.fakeEquipped.item === "gear45") hideEventOptions();
             player.gears[player.powerupVariables.fakeEquipped.item] = false;
             player.powerupVariables.fakeEquipped.item = undefined;
         }
@@ -829,4 +831,3 @@ function removeParadoxical() {
     updateSpeed();
     saveNewData({override: undefined, return: false});
 }
-

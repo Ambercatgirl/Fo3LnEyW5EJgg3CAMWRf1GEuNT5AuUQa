@@ -269,7 +269,7 @@ const recipes = {
         active : [0.9, 1, 1.2, 2]
     },
     "gear18" : {
-        name : "Clover's Undoing",
+        name : "Clovers Undoing",
         recipe : [{ore:"📺", amt:250000000},{ore:"🔀", amt:1650000},{ore:"⬅️", amt:470000},{ore:"⏩", amt:8750},{ore:"⏮️", amt:11225},{ore:"⏸️", amt:2200},{ore:"🛡️", amt:275},{ore:"🪃", amt:235},{ore:"🪓", amt:35},{ore:"🔨", amt:5},{ore:"💣", amt:3},],
         active : [0.9, 1, 1.2, 2]
     },
@@ -425,6 +425,21 @@ const recipes = {
         },
         pUnob: true
     },
+    "gear45": {
+        name: "Event Manager",
+        recipe: [{"ore":"🎁","amt":60000000},{"ore":"🎮","amt":65},{"ore":"🎫","amt":55},{"ore":"🚗","amt":35},{"ore":"📢","amt":6},{"ore":"🎑","amt":5}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+    },
+    "gear46": {
+        name: "Time Destabilizer",
+        recipe: [{"ore": "🎁", "amt": 750000},{"ore": "🟥", "amt": 750},{"ore": "🟦", "amt": 45},{"ore": "🔶", "amt": 2},{"ore": "💚", "amt": 3},{"ore": "🎮", "amt": 1}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+    },
+    "gear47": {
+        name: "Disengaged Incrementer",
+        recipe: [{"ore":"🎁","amt":2500000000},{"ore":"🎮","amt":53100},{"ore":"🎫","amt":44400},{"ore":"🚗","amt":28800},{"ore":"📢","amt":5310},{"ore":"🎑","amt":3960},{"ore":"📿","amt":1310},{"ore":"🎎","amt":600},{"ore":"🗳️","amt":400},{"ore":"⚛️","amt":100},{"ore":"🛢️","amt":30}],
+        active : [0.9, 1, 1.2, 1.1, 2],
+    },
 }
 function calcLayerEstimates(obj/*l: [layers], e: [excluded tiers], a: layer amount, v: luck, c: search for celestial*/) {
     let layer = [];
@@ -439,6 +454,7 @@ function calcLayerEstimates(obj/*l: [layers], e: [excluded tiers], a: layer amou
         if (!obj.e.includes(oreList[layer[i]]["oreTier"])) {
             let rarity = oreList[layer[i]]["numRarity"]/luck;
             if (rarity < 1000) rarity = 1000;
+            if (oreList[layer[i]]["oreTier"] === "Layer") rarity = 1;
             let oreAmt = Math.floor(obj.a/rarity);
             if (oreAmt > 1000) {
                 const logMod = Math.floor(Math.log10(oreAmt));
@@ -735,6 +751,10 @@ const buttonGradients = {
     "gear42Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #0A9420, #403330 95%)","applied" : false},
     "gear43Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #000000, #403330 95%)","applied" : false},
     "gear44Craft" : {"gradient" : "linear-gradient(to right, #403330 5%, #C6D224, #403330 95%)","applied" : false},
+    "gear45Craft" : {"gradient" : "linear-gradient(to right, #D67AB1, #9E643C, #C2F8CB)","applied" : false},
+    "gear46Craft" : {"gradient" : "linear-gradient(to right, #FB6376, #6DD6DA, #EFD6AC)","applied" : false},
+    "gear47Craft" : {"gradient" : "linear-gradient(to right, #555B6E, #679436, #FFED65)","applied" : false},
+
 }
 function craftPickaxe(item) {
     const recipe = recipes[item].recipe;
@@ -766,6 +786,8 @@ function craftPickaxe(item) {
         gearAbility2();
     if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
     if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
+    if (player.gears["gear45"]) showEventOptions();
+    else hideEventOptions();
     updateActiveRecipe();
     utilitySwitchActions();
 }
@@ -806,7 +828,7 @@ let m88 = 0;
 const showOrders = {
     "p1" : ["pickaxe1", "pickaxe2", "pickaxe3", "pickaxe29", "pickaxe30", "pickaxe28", "pickaxe4", "pickaxe5", "pickaxe6", "pickaxe7", "pickaxe8", "pickaxe9", "pickaxe10", "pickaxe11", "pickaxe12", "pickaxe13"],
     "p2" : ["pickaxe13", "pickaxe14", "pickaxe15", "pickaxe16", "pickaxe17", "pickaxe18", "pickaxe19", "pickaxe20", "pickaxe21", "pickaxe22", "pickaxe23", "pickaxe24", "pickaxe25", "pickaxe26"],
-    "g1" : ["gear30", "gear31", "gear0", "gear1", "gear2", "gear7", "gear8", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29"],
+    "g1" : ["gear30", "gear31", "gear46", "gear0", "gear1", "gear2", "gear7", "gear8", "gear45", "gear3", "gear4", "gear5", "gear6", "gear9", "gear29", "gear47"],
     "g2" : ["gear32", "gear10", "gear11", "gear12", "gear33", "gear13", "gear14", "gear15", "gear16", "gear17", "gear18", "gear19", "gear20", "gear21"],
     "p1.1" : ["pickaxe27", "pickaxe33"],
     "g1.1" : ["gear22", "gear23", "gear24", "gear25", "gear26", "gear27", "gear28"],

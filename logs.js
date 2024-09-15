@@ -1,3 +1,4 @@
+
 const debug = (document.location.href.includes("W5EJ")) || (document.location.href.includes('http://127.0.0.1:5500/'));
 const logCreated = {}
 class secureLogs {
@@ -185,7 +186,7 @@ class secureLogs {
                     if (list[i - 1] !== undefined) times = list[i].genAt - list[i - 1].genAt;
                     else times = list[i].genAt;
                     if (times === 0) times = 1;
-                    output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this);">Click Me To Copy Verification</span></span><br>`
+                    output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this);" oncontextmenu="saveLogToStorage(decryptLogData(this.parentElement.children[0].textContent)); return false;">Left Click Me To Copy Verification | Right Click Me To Save Me</span></span><br>`
                 }
                 if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
         } else {
@@ -269,6 +270,21 @@ class secureLogs {
     isLoaded() {
         return this.#isLoaded;
     }
+    displaySavedLogs() {
+        this.#clearLogs();
+        let element = document.createElement("p");
+        if (document.getElementById("generatedLogs") !== null)
+            document.getElementById("generatedLogs").remove();
+        element.id = "generatedLogs";
+        document.getElementById("logHolder").appendChild(element);
+        const toDisplay = JSON.parse(localStorage.getItem("SillyCavernsLogStorage"));
+        let output = "";
+        for (let log in toDisplay) {
+            const data = decryptLogData(toDisplay[log])
+            output += `<span onclick="navigator.clipboard.writeText('${toDisplay[log]}'); copiedLog(this);" oncontextmenu="removeLogFromStorage('${log}', this); return false;">SAVED LOG ${namesemojis[data[2] - 1]}${data[0]}, 1/${Math.round(1/data[4]).toLocaleString()}: Left Click To Copy Verification | Right Click To Delete</span><br>`
+        }
+        if (document.getElementById("generatedLogs") !== null) document.getElementById("generatedLogs").innerHTML = output;
+    }
 }
 //i lost the original code for this so gl :3c
 const ignoreProperties = ["output", "x", "y"]
@@ -282,6 +298,7 @@ function encryptLogData(log) {
     return toBinary(JSON.stringify(newObj));
 }
 function decryptLogData(log) {
+    console.log(log)
     return JSON.parse(fromBinary(log));
 }
 function roundNumberToMillionth(num) {
@@ -439,6 +456,21 @@ function copiedLog(element) {
     setTimeout(() => {
         element.style.animation = "textGreen 1s linear 1";
     }, 25);
+}
+function saveLogToStorage(log) {
+    let curObj = localStorage.getItem("SillyCavernsLogStorage");
+    if (curObj === null) curObj = {};
+    else curObj = JSON.parse(curObj);
+    const identifier = `${log[0]}+${new Date(log[1]).getTime()}`;
+    curObj[identifier] ??= encryptLogData(log);
+    localStorage.setItem("SillyCavernsLogStorage", JSON.stringify(curObj));
+}
+function removeLogFromStorage(identifier, element) {
+    let curObj = JSON.parse(localStorage.getItem("SillyCavernsLogStorage"));
+    if (curObj === null) return;
+    delete curObj[identifier];
+    localStorage.setItem("SillyCavernsLogStorage", JSON.stringify(curObj));
+    element.style.color = "red";
 }
 const verifiedOres = new secureLogs();
 Object.preventExtensions(verifiedOres);

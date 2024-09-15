@@ -201,6 +201,13 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+#infinityCollectorII span{
+    background: linear-gradient(to right,#2E2486, #45FFF2, #45A5FF);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 #layerMaterializer span{
     background: linear-gradient(to right,#AEAEAE, #AEAEAE, #49C6FF, #6DD700, #F7F7F7, #AD7F57, #FF6312);
     -webkit-background-clip: text;
@@ -553,6 +560,27 @@
 }
 #superclusterCapsizer span{
     background: linear-gradient(to right,#2c8769, #085e7e, #2b1660, #520276, #920042, #520276, #2b1660, #085e7e, #2c8769);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#timeDestabilizer span{
+    background: linear-gradient(to right,#FB6376, #6DD6DA, #EFD6AC);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#eventManager span{
+    background: linear-gradient(to right,#D67AB1, #9E643C, #C2F8CB);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#disengagedIncrementer span{
+    background: linear-gradient(to right,#555B6E, #679436, #FFED65);
     -webkit-background-clip: text;
     color: transparent;
     background-clip: text;
