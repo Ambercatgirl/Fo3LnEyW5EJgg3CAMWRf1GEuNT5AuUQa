@@ -46,6 +46,9 @@ class playerTemplate {
             "gear42": false, //poly 3, guaranteed x2 normal amount of every tier until hyperdimensional, applies before the 1/10 for x2
             "gear43": false, //poly 4, allows use of wormhole in sr1
             "gear44": false, //poly 5, +50 reps, maybe unlock something new im not sure
+            "gear45": false, //change event, start event, increase event time 
+            "gear46": false, //gain +0.2x of total offline time as ores (base: 0.1x)
+            "gear47": false, //gain +0.45x of total offline time as ores (base: 0.1x)
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -218,6 +221,9 @@ class playerTemplate {
             "orbOfSound": false,
             "orbOfTheUnknown": false,
             "orbOfCreation": false
+        }
+        this.eventManager = {
+            cooldown: Date.now()
         }
     }
 }
@@ -778,6 +784,8 @@ function loadNewData(data) {
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";
         if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
         else get("allowAutoPowerup").style.display = "none";
+        if (player.gears["gear45"]) showEventOptions();
+        else hideEventOptions();
         if (data.webHook !== undefined) {
             if (data.webHook.ids !== undefined) {
                 for (let id in data.webHook.ids) {
@@ -795,6 +803,9 @@ function loadNewData(data) {
             for (let poly in polys) {
                 if (player.p[poly] !== undefined) player.p[poly] = data.p[poly]
             }
+        }
+        if (data.eventManager !== undefined) {
+            player.eventManager.cooldown = data.eventManager.cooldown;
         }
         if (player.galacticaUnlocked && player.lastWorld !== 0.9) galacticaShortcut();
         if (data.serverHook !== undefined) player.serverHook = data.serverHook;

@@ -108,7 +108,6 @@ function powerup5() {
             for (let i = toChooseFrom.length - 1; i >= 0; i--) {
                 if (player.pickaxes[toChooseFrom[i]] || player.gears[toChooseFrom[i]] || recipes[toChooseFrom[i]].pUnob) toChooseFrom.splice(i, 1);
             }
-            console.log(toChooseFrom)
             if (toChooseFrom.length > 0) {
                 let toGive = toChooseFrom[Math.round(Math.random() * (toChooseFrom.length - 1))];
                 player.powerupVariables.fakeEquipped.item = toGive;
@@ -122,6 +121,7 @@ function powerup5() {
                     if (toGive === "gear0") document.getElementById("trackerLock").style.display = "none";
                     if (toGive === "gear9") document.getElementById("sillyRecipe").style.display = "block";
                     if (toGive === "gear24") get("allowAutoPowerup").style.display = "block";
+                    if (toGive === "gear45") showEventOptions();
                 }
                 updateAllLayers();
                 updateSpeed();
