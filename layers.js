@@ -591,6 +591,7 @@ let oreList = {
     'orbOfSound':{ 'decimalRarity': 1 / 16850000000000000000, 'numRarity': 16850000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'meowww :3', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/ore5.gif", "oreName" : "Orb of Sound",},
     'orbOfTheUnknown':{ 'decimalRarity': 1 / 35000000000000000000, 'numRarity': 35000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'meowww :3', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/ore1.gif", "oreName" : "Orb of The Unknown",},
     'orbOfCreation':{ 'decimalRarity': 1 / 100000000000000000000, 'numRarity': 100000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'meowww :3', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/ore2.gif", "oreName" : "Orb of Creation",},
+    'ah!SoSorgy!':{ 'decimalRarity': 1 / 1000000000000000000000, 'numRarity': 1000000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'CAPITALISM WILL NOT STOP MY NEED FOR SOUR PATCH KIDS!...', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/HEHEHEHEHE.png", "oreName" : "mmmm yummers chat",},
     
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
     "⛏️": { 'decimalRarity': 1 / 10000000, 'numRarity': 10000000, 'hasLog': false, 'isBreakable': false, 'caveExclusive': false, 'spawnMessage': 'Thoughts of what lies on the other side cloud your mind until.. a mirror image appears..?', 'oreTier': 'Celestial',  },
@@ -617,7 +618,7 @@ const layerList = {
 "paperLayer" : ["sillyMiner", "🎩", "💵", "🪅", "👀", "🌟", "📝", "⌚", "🗜️", "🏆", "🎲", "✂️", "🃏", "⚙️", "📰"],
 "giftLayer": ["sillyMiner", "🍭", "💽", "🛢️", "⚛️", "🗳️", "🎎", "📿", "🎑", "📢", "🚗", "🎫", "🎮", "🎁"],
 "worldOneCommons" : ["godOfTheMine", "🤍", "🖤", "🤎", "💜", "❤️", "🧡", "💛", "💙", "💚", "🔶", "🔷", "🔸", "🔹", "🔺", "🔻", "🔘", "🔲", "🟨", "🟦", "⬛", "⬜", "🧧", "◾", "◽", "⚫", "🟤", "🟣", "🔴", "🟠", "🟡", "🔵", "🟢", "🟪", "🟥", "🟧"],
-"sillyLayer" : ["sillyMiner", "UHD", "qrCode", "kaleidoscope", "🎉", "🧌", "Nyerd", "Fox", "♾️", "💅", "😁", "🪢", "🎂"],
+"sillyLayer" : ["ah!SoSorgy!", "sillyMiner", "UHD", "qrCode", "kaleidoscope", "🎉", "🧌", "Nyerd", "Fox", "♾️", "💅", "😁", "🪢", "🎂"],
 "fluteLayer" : ["sillyMiner", "mushroomCats", "🫶", "🪈"],
 "cloudLayer" : ["starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],
 "cloudLayer2" : ["🖐", "starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],

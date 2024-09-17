@@ -1026,6 +1026,11 @@ const oreRecipes = {
         "result" : [{"ore":"🤍", "amt":1}],
         "multiplier" : 1
     },
+    "hotspringCraft" : {
+        "cost" : [{"ore":"❌","amt":33333333333}, {"ore":"💢","amt":333}, {"ore":"⛔","amt":33}, {"ore":"🚫","amt":3}],
+        "result" : [{"ore":"♨️", "amt":1}],
+        "multiplier" : 1
+    },
     "greenFission" : {
         "cost" : [{"ore":"💚", "amt":1}],
         "result" : [{"ore":"🟢","amt":25000}],
@@ -1828,7 +1833,7 @@ const pickaxeStats = {
         revealed: 1,
         luck: 575,
         rate: 275,
-        src : `⛏️`,
+        src : `<img class="mineImage" src="media/wormholeExterminatorIcon.png"></img>`,
         ability: "",
         doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.1, 1.2, 2, 0.9],
@@ -1840,7 +1845,7 @@ const pickaxeStats = {
         revealed: 1,
         luck: 500,
         rate: 200,
-        src : `⛏️`,
+        src : `<img class="mineImage" src="media/superclusterCapsizerIcon.png"></img>`,
         ability: "",
         doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.2, 2, 0.9],
@@ -1879,7 +1884,7 @@ function ct() {
     }
     for (let i = 0; i < recipe.length; i++) {
         const ore = recipe[i].ore;
-        if (!oreList[ore]["caveExclusive"]) {
+        if (!oreList[ore]["caveExclusive"] && !(oreList[ore]["oreTier"] === "Infinitesimal")) {
             let currentOreLayer;
             if (oreInformation.isCommon(oreList[ore]["oreTier"]) && oreList[ore]["oreTier"] !== "Layer") {
                 recipeLayers.commons ??= {ore: ore, highestProcs : 0, amt:0}

@@ -1496,9 +1496,9 @@ const events = {
         specialText: "watr",
         specialEffect: function(state) {
             if (state) {
-                return;
+                insertIntoLayers({"ore":"🪸", "layers":["waterLayer"], "useLuck":true});
             }
-            else return;
+            else removeFromLayers({"ore":"🪸", "layers":["waterLayer"]});
         }
     },
     "event17" : {
@@ -1511,9 +1511,24 @@ const events = {
         specialText: "N/A",
         specialEffect: function(state) {
             if (state) {
-                insertIntoLayers({"ore":"🪸", "layers":["waterLayer"], "useLuck":true});
+                return;
             }
-            else removeFromLayers({"ore":"🪸", "layers":["waterLayer"]});
+            else return;
+        }
+    },
+    "event18" : {
+        rate: 1/19000,
+        duration: 2700000,
+        boost: 2,
+        ore: "unstableCore",
+        message: `<i>Vibrant, geometric shapes materialize in the mine, unleashing a massive burst of energy warping the space around you...</i>`,
+        world: 0.9,
+        specialText: "N/A",
+        specialEffect: function(state) {
+            if (state) {
+                return;
+            }
+            else return;
         }
     },
 }
@@ -1577,12 +1592,12 @@ function eventActions(input) {
     if (input === "c") {
         endEvent();
         const toChoose = collectWorldEvents(currentWorld);
-        toChoose.splice(toChoose.indexOf("event10"), 1)
+        if (toChoose.indexOf("event10") > -1) toChoose.splice(toChoose.indexOf("event10"), 1)
         const selector = Math.round(Math.random() * (toChoose.length - 1));
         const chosen = toChoose[selector];
         if (chosen === undefined) return;
         activateEvent(chosen);
-        player.eventManager.cooldown = Date.now() + 1800000;
+        player.eventManager.cooldown = Date.now() + 900000;
         wasUsed = true;
     } else if (input === "t") {
         if (currentActiveEvent !== undefined) {
@@ -1590,7 +1605,7 @@ function eventActions(input) {
             const endTime = current.removeAt;
             const durationLeft = endTime - Date.now();
             currentActiveEvent.removeAt += (durationLeft * 0.25);
-            player.eventManager.cooldown = Date.now() + 1800000;
+            player.eventManager.cooldown = Date.now() + 900000;
             wasUsed = true;
         }
     } else if (input === "b") {
@@ -1600,7 +1615,7 @@ function eventActions(input) {
             events[currentActiveEvent.name].boost += thisBoost;
             currentActiveEvent.extraBoost += thisBoost;
             updateAllLayers();
-            player.eventManager.cooldown = Date.now() + 1800000;
+            player.eventManager.cooldown = Date.now() + 900000;
             wasUsed = true;
         }
     }
