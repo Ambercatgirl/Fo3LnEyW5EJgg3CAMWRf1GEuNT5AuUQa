@@ -594,6 +594,7 @@ let oreList = {
     'ah!SoSorgy!':{ 'decimalRarity': 1 / 1000000000000000000000, 'numRarity': 1000000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'CAPITALISM WILL NOT STOP MY NEED FOR SOUR PATCH KIDS!...', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/HEHEHEHEHE.png", "oreName" : "mmmm yummers chat",},
     'estrogen???':{ 'decimalRarity': 1 / 500000000000, 'numRarity': 500000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': true, 'spawnMessage': 'this shit soooo tasty i need more i need more i need more', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/estrogen.gif", "oreName" : "Estrogen",},
     'YourReward':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/thankyou.png", "oreName" : "Your Reward!",},
+    'luna2':{ 'decimalRarity': 1 / 1000000000000000, 'numRarity': 1000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'crunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunch', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/luna2.gif", "oreName" : "Luna 2",},
     
     
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
@@ -1020,6 +1021,7 @@ function applyLuckToLayer(layer, luck) {
 }
 
 function changeLayerOres() {
+    console.log("meow")
     if (player.stats.currentPickaxe === "pickaxe13" && currentWorld === 2) {
         insertIntoLayers({"ore":"☯️", "layers":undefined, "useLuck":true})
     } else {

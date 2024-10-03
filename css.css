@@ -3,23 +3,61 @@
 .emoji {
   font-family: "Noto Color Emoji", sans-serif!important; 
 }
-
 #mainContent {
   display: none;
   position: fixed;
 }
-
+:root {
+  --main-bg-color:#16171f;
+  --main-lbg-color:#15151b;
+  --main-border-color:#2b2c34;
+  --main-hl-color:#8e8e93;
+  --main-shadow-color:#42434a;
+}
+#topMessages {
+  height: 3vw;
+  width: 100%;
+  color:white;
+  line-height: 1vw;
+  font-size: 1.25vw;
+  font-weight: 1000;
+  background-color: var(--main-lbg-color);
+  border: 0.1vw solid var(--main-border-color);
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
+}
+#topMessageHolder {
+  position: relative;
+  height: 3vw;
+  width: 100%;
+}
+#isOre {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+#isEvent {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+.selectedIndicator {
+  box-shadow: 0px 0px 0.5vw white;
+  color: white;
+}
 #inventoryDisplay {
   overflow-y: scroll;
   min-height: 75vh;
   max-height: 75vh;
   border-style: solid;
-  border-color: rgb(49, 49, 49);
+  border-color: var(--main-border-color);
   border-left: none;
   border-right: none;
-  background-color: #1a1a1a;
+  background-color: var(--main-lbg-color);
 }
-
 #inventoryDisplay > * {
   font-size: 1vw;
   height: 10%;
@@ -49,22 +87,434 @@
   width:20%;
   height:50%;
   font-size: 1vw!important;
-  background: none;
-  border: none;
   margin-right: 0px;
   padding: 0%;
   float: left;
-  border:0.1vw solid #2e2e2e;
+  border:0.1vw solid var(--main-border-color);
+  background-color: var(--main-bg-color);
   z-index: 9999;
+  border-radius: 0px;
 }
 .movementButton:hover {
-  background-color: gray;
+  background-color: var(--main-border-color);
 }
-.latestFind {
-  margin: 0;
-  font-size: 100%;
+#toggleMainDisplay:hover {
+  background-color: var(--main-border-color);
+}
+#switchMovementType:hover {
+  background-color: var(--main-border-color);
+}
+.secondaryButton {
+  width:20%;
+  height:50%;
+  font-size: 1vw!important;
   font-weight: 750;
-  height: 1.25vw;
+  margin-right: 0px;
+  padding: 0%;
+  float: left;
+  border:0.1vw solid var(--main-border-color);
+  background-color: var(--main-bg-color);
+  z-index: 9999;
+  border-radius: 0px;
+}
+#messageType {
+  width: 40%;
+}
+.mobile {
+  display: inline-block;
+  cursor:default;
+  width: 100%;
+  height: 4vw;
+  vertical-align: middle;
+  box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
+}
+#latestOres {
+  width: 100%;
+  height: auto;
+}
+.latestHolder {
+  width: 100%;
+  height: 2vw;
+  border-width: 0.15vw 0;
+  border-style: solid;
+  border-color: var(--main-border-color);
+  color: white;
+  font-weight: 750;
+  font-size: 0.85vw;
+  
+}
+.latestSection {
+  width: 15%;
+}
+.minedLatestOre {
+  box-shadow: inset 0px 0px 0.3vw #00FF23;
+}
+.notMinedLatestOre {
+  box-shadow: inset 0px 0px 0.3vw #FF3D3D;
+}
+.voidedLatestOre {
+  box-shadow: inset 0px 0px 0.3vw #000000;
+}
+.latestWasMined {
+  width: 15%;
+}
+#newCraftingHolder {
+  margin-top: 8vw;
+  width: 25vw;
+  height: 41.7vw;
+  border-radius: 1vw;
+  border: 0.25vw solid var(--main-border-color);
+  background-color: var(--main-lbg-color);
+  display: inline-flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  pointer-events: all;
+  position: relative;
+}
+#scrollableCraft {
+  width: 50vw;
+  height: 100%;
+  z-index: 9999999999;
+  position: absolute;
+  top: 0px;
+  left: 26vw;
+  display: none;
+  overflow-y: scroll;
+  pointer-events: none;
+}
+#pinnedRecipeHolder {
+  position: absolute;
+  top: 1vw;
+  left: 1vw;
+  width: 25vw;
+  height: 17.6vw;
+  border-radius: 1vw;
+  border: 0.25vw solid var(--main-border-color);
+  background-color: var(--main-lbg-color);
+  display: inline-flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+.newCraftingText {
+  margin: 0px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+#newCraftingName {
+  width: 100%;
+  height: 2vw;
+  font-size: 1.5vw;
+}
+#newCraftingTier {
+  width: 100%;
+  height: 2vw;
+  font-size: 1.25vw;
+}
+#newCraftingImageHolder {
+  height: 12.5vw;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#newCraftingAbilityImage {
+  padding: 0.2vw;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border: 0.25vw solid var(--main-border-color);
+}
+#newCraftingPickaxeIcon {
+  padding: 0.2vw;
+  object-fit: contain;
+  image-rendering: pixelated;
+  border: 0.25vw solid var(--main-border-color);
+}
+#newCraftingStatTitle {
+  height: 2vw;
+  font-size: 1.5vw;
+  width: 100%;
+}
+#newCraftingGearDescription {
+  height: 4vw;
+  font-size: 1.5vw;
+  width: 100%;
+  text-align: center;
+}
+#newCraftingGearEffect {
+  height: 6vw;
+  font-size: 1vw;
+  line-height: 1vw;
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+#newCraftingMined {
+  height: 1.5vw;
+  font-size: 1vw;
+  width: 100%;
+}
+#newCraftingRevealed {
+  height: 1.5vw;
+  font-size: 1vw;
+  width: 100%;
+}
+#newCraftingRate {
+  height: 1.5vw;
+  font-size: 1vw;
+  width: 100%;
+}
+#newCraftingLuck {
+  height: 1.5vw;
+  font-size: 1vw;
+  width: 100%;
+}
+#newCraftingCons {
+  height: 1.5vw;
+  font-size: 1vw;
+  width: 100%;
+}
+#newCraftingRecipeHolder {
+  width: 100%;
+  height: 14vw;
+  overflow: scroll;
+  line-height: 100%;
+  padding-bottom: 0.6vw;
+  border-top: 0.2vw solid var(--main-border-color);
+}
+#pinAndCraft {
+  width: 100%;
+  height: 2vw;
+  border-top: 0.2vw solid var(--main-border-color);
+  display: flex;
+  justify-content: center;
+}
+.recipePin {
+  width: 50%;
+  height: 2vw;
+  border: none;
+  background: none;
+  border-right: 0.1vw solid var(--main-border-color);
+
+}
+#pinRecipe {
+  background-image: url(media/craftingPin.png);
+  background-size: 1.5vw;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#unpinRecipe {
+  width: 25%;
+}
+#newCraftingHolderheader {
+  background-image: url(media/dragIcon.png);
+  background-size: 1.4vw;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 25%;
+}
+#newCraftingHolderheader:hover {
+  background-color: var(--main-hl-color);
+}
+#unpinRecipe {
+  background-image: url(media/returnIcon.png);
+  background-size: 1.4vw;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 25%;
+}
+#unpinRecipe:hover {
+  background-color: var(--main-hl-color);
+}
+#newCraftItem {
+  width: 50%;
+  height: 1.8vw;
+  border: none;
+  background: none;
+  border-left: 0.1vw solid var(--main-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#pinRecipe:hover {
+  background-color: var(--main-hl-color);
+}
+#newCraftItem:hover {
+  background-color: var(--main-hl-color);
+}
+.newCraftingImage {
+  width: 12.5vw;
+  height: 12.5vw;
+  margin: 0px;
+}
+#collapseRecipe {
+  height: 2vw;
+  width: 50%;
+  font-size: 1.25vw;
+  color: white;
+  font-weight: 800;
+  display: none;
+  background-color: var(--main-bg-color);
+  border: none;
+  border-right: 0.2vw solid var(--main-border-color);
+}
+#lockRecipe {
+
+}
+#collapseRecipe span span{
+  background-image: url(media/pointUp.png);
+  background-position: right;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 0;
+  background-size: 3vw;
+  width: 50%;
+  height: 2vw;
+  
+}
+#collapseRecipe span{
+  height: 2vw;
+}
+#lockRecipe {
+  background: none;
+  border: none;
+  display: none;
+  width: 50%;
+  height: 2vw;
+  font-size: 1.25vw;
+  color:#FF3D3D;
+  font-weight: 800;
+  border-left: 0.2vw solid var(--main-border-color);
+}
+#lockRecipe:hover, #collapseRecipe:hover {
+  background-color: var(--main-hl-color);
+}
+#extraPickaxeInformation {
+  position: absolute;
+  top: 12.21vw;
+  left:3vw;
+  width: 25vw;
+  height: 5.5vw;
+  border-radius: 0.5vw;
+  background-color: var(--main-lbg-color);
+  border: 0.25vw solid var(--main-border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+#extraInformationText {
+  margin: 0px;
+  padding-left: 1vw;
+  padding-right: 3vw;
+  width: 25vw;
+  height: 3vw;
+}
+#extraInformationIcon {
+  margin: 0px;
+  padding-left: 1vw;
+  padding-right: 3vw;
+  width: 25vw;
+  height: 2vw;
+}
+.extraInfoText {
+  font-size: 0.8vw;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0.8vw;
+}
+#toggleExtraInformation {
+  position: absolute;
+  width: 3vw;
+  height: 5.2vw;
+  right: 0px;
+  bottom:-0.1vw;
+  background: none;
+  border: 0.1vw solid var(--main-border-color);
+  pointer-events: all;
+  background-image: url(media/pointRight.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  rotate: 0deg;
+}
+@keyframes extendExtra {
+  0% {left: 3vw;}
+  20% {left: 7vw;}
+  40% {left: 11vw;}
+  60% {left: 15vw;}
+  80% {left: 19vw;}
+  100% {left: 24vw;}
+}
+@keyframes retractExtra {
+  0% {left: 24vw;}
+  20% {left: 19vw;}
+  40% {left: 15vw;}
+  60% {left: 11vw;}
+  80% {left: 7vw;}
+  100% {left: 3vw;}
+}
+#pickaxeHolder {
+  width: 100%;
+}
+#gearHolder {
+  width: 100%;
+}
+#toggleExtraInformation:hover {
+  background-color: var(--main-hl-color);
+}
+#craftingWorldSelect {
+  height: 3vw;
+  width: 100%;
+  position: relative;
+  user-select: none;
+}
+#craftingWorldSelect:hover {
+  background-color: var(--main-hl-color);
+}
+#worldSelectables {
+  position: absolute;
+  left: auto;
+  top: 3vw;
+  height: auto;
+  width: auto;
+  display: none;
+  border: none;
+}
+.worldCraftSelector {
+  width: 3.5vw;
+  height: 3.5vw;
+  background-color: var(--main-lbg-color);
+  border: 0.1vw solid var(--main-border-color);
+  font-size: 1.5vw;
+  font-weight: 800;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.worldCraftSelector:hover {
+  background-color: var(--main-hl-color);
+}
+.worldSelectStyles {
+  border-width: 0.2vw 0;
+  border-style: solid;
+  border-top: none;
+  border-color: var(--main-border-color);
+  background-color: var(--main-bg-color);
+  color: white;
+  font-size: 1.5vw;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.currentCraftingWorld {
+  box-shadow: inset 0px 0px 0.25vw #00FF23;
 }
 .latestImage img {
   width: 1vw;
@@ -290,7 +740,6 @@
 }
 .dailyText {
   font-size: 1.5vw;
-  margin-bottom: 5vw;
   margin-top: 1vw;
 }
 .closeDailyMessage {
@@ -372,7 +821,7 @@
   font-size: 1.25vw;
 }
 .selectedOutline {
-  border: 0.2vw solid #494949!important;
+  border: 0.2vw solid var(--main-border-color)!important;
 }
 .equippedOutline {
   box-shadow: 0 0 10px #00FF23;
@@ -383,14 +832,6 @@
   font-size: 1vw;
   border-bottom:3px solid #333; 
   margin-bottom: 0px;
-}
-.mobile {
-  display: inline-block;
-  cursor:default;
-  width: 100%;
-  height: 4vw;
-  vertical-align: middle;
-  
 }
 #craftingClick {
   overflow-y: visible;
@@ -412,6 +853,10 @@
   align-self: center;
   font-size: 1.25vw;
   font-weight: 1000;
+  height: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   margin: 0;
 }
@@ -423,36 +868,17 @@
   border-bottom: 0.25vw solid #333;
 }
 
-.latestDisplay {
-  text-align: center !important;
-  float: left;
-  width: 50%;
-  font-size: 0.8vw;
-  background-color: #1a1a1a;
-  position: relative;
-}
 .itemDescription {
   font-size:1.5vw;
   position: relative;
   margin-bottom: 0.25vw;
 }
-#gearCrafts {
+.craftingList {
   display:flex;
   flex-flow:column;
   align-items:center;
-  gap:1vh;
+  gap:0.45vw;
   width: 100%;
-  border-top:1px solid #333;
-  padding-top: 0.5vw;
-  padding-bottom: 0.5vw;
-}
-#pickaxeCrafts {
-  display:flex;
-  flex-flow:column;
-  align-items:center;
-  gap:0.5vw;
-  width: 100%;
-  border-top:1px solid #333;
   padding-top: 0.5vw;
   padding-bottom: 0.5vw;
   border-bottom: none;
@@ -461,13 +887,12 @@
 .craftPickaxeButton {
   background: none;
   border: none;
-  border-top:3px solid #333;
-  height: 3vw;
-  font-size: 1.6vw;
+  height: 2vw;
+  font-size: 1.4vw;
   color: white;
   font-weight: 1000;
-  padding-bottom: 10%;
   text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
+  padding: 0;
 }
 .craftPickaxeButton:hover {
   background-color: gray;
@@ -477,42 +902,37 @@
   height: 100%;
   float: left;
   background:none;
-  border-bottom: none;
-  border-color: #333;
+  border:none;
+  border-bottom: 0.2vw solid var(--main-border-color);
+  font-size: 1.5vw;
+  font-weight: 600;
 }
 #craftingSelectionContainer {
+  height: 3vw;
+}
+.inventoryVariantButton {
+  width: 25%;
   height: 2vw;
+  background-color: var(--main-bg-color);
+  border: 0.1vw solid var(--main-border-color);
+  border-radius: 0px;
 }
-#switchInventory {
-  width: 70%;
-  float: left;
+.selectedInventory {
+  box-shadow: inset 0px 0px 0.5vw #6BC267;
+}
+.inventoryVariantButton:hover {
+  background-color: var(--main-hl-color);
+}
+#invVariantHolder {
+  height: 2vw; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
   background: none;
-  cursor: default;
 }
-#inventoryLeft {
-  width: 15%;
-  float: left;
-  background: none;
-}
-#inventoryRight {
-  width: 15%;
-  float: left;
-  background: none;
-}
-.inventoryButtons {
-  height: 2vw;
-  font-weight: 750;
-  font-size: 100%;
-  margin: 0;
-}
-#inventoryRight:hover {
-  background-color: gray;
-}
-#inventoryLeft:hover {
-  background-color: gray;
-}
+
 .craftingSelector:hover {
-  background-color: gray;
+  background-color: var(--main-hl-color);
 }
 .craftingButton {
   width: 100%;
@@ -531,10 +951,17 @@
   background-color: gray;
 }
 #crafting {
-  padding-bottom: 5%;
   font-size: 2.5vw;
   position: relative;
   z-index: 8;
+  border-width: 0.2vw 0;
+  border-style: solid;
+  border-color: var(--main-border-color);
+  letter-spacing: 0.1vw;
+  font-weight: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #craftingRecipeTitle {
   font-size: 2.5vw;
@@ -551,10 +978,8 @@
   height: 2vw;
   float: left;
   background: none;
-  border:0.2vw solid #333;
-  border-top: 1px solid #333;
-  margin-bottom: 2%;
-  margin-top: 0;
+  border:0.1vw solid var(--main-border-color);
+  border-radius: 0px;
 }
 #settings {
   width: 30%;
@@ -604,29 +1029,62 @@
 #mineResetProgress {
   font-size: 1vw;
   width: 100%;
-  height: 3vw;
+  height: 5vw;
   display: flex;
   flex-wrap: wrap;
+  background-color: var(--main-bg-color);
 }
 #resetNumber {
   width: 100%;
   color: white;
-  height: 1.5vw;
+  height: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5vw;
+  font-weight: 750;
+  border: 0.1vw solid var(--main-border-color);
+  border-right: none;
+  border-left: none;
+  box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
 }
 #resetPercent {
   width: 100%;
   font-weight: 750;
-  height: 1.5vw;
+  height: 2.9vw;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  font-size: 1.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0px 0px 0.05vw black;
 }
-#blocksMined {
-  margin: 0.5vw;
-  font-size: 1vw;
+#resetProgressBar {
+  width: 100%;
+  height: 3vw;
+  position: relative;
+  border-width: 0.1vw 0px;
+  border-style:solid;
+  border-color: var(--main-border-color);
+  border-top: none;
+  background-color: var(--main-lbg-color);
+  box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
 }
-#location {
-  margin: 0.5vw;
-  font-size: 1vw;
+.resetBarPart {
+  width: 10%;
+  height: 100%;
+  border: 0.1vw solid black;
+  display: block;
+  float:left;
 }
-
+.blackShadow {
+  text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
+}
+.whiteShadow {
+  text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;
+}
 .col-5 {
   left: 50%;
   top: 50%;
@@ -665,7 +1123,7 @@
   cursor: pointer;
 }
 body {
-  background-color: #1a1a1a;
+  background-color: var(--main-bg-color);
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -858,19 +1316,21 @@ img.roundcat {
 
 #blockDisplay {
   position: absolute;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  width: 31.75vw;
+  width: 100%;
   height: 100%;
   display: inline-flex;
   flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-left: -0.35em;
 }
 .blockDisplayRow {
-  width: 1.15em;
-  height: 100%;
-  line-height: 1.4vw;
+  width: 1em;
+  height: 19em;
+  line-height: 1em;
   text-wrap: wrap;
   overflow-wrap: break-word;
+  text-align: center;
 }
 .teleportImage {
   width: 1.6vw;
@@ -883,7 +1343,7 @@ img.roundcat {
   margin-top: 0;
   padding: 0;
   width: 100%;
-  height: 27vw;
+  height: 29vw;
   line-height: 1.4vw;
   font-size: 1.5vw;
   user-select: none;
@@ -892,19 +1352,6 @@ img.roundcat {
   display: inline-flex;
   flex-wrap: nowrap;
   justify-content: center;
-}
-#eventMessages {
-height: 3vw;
-width: 100%;
-color:white;
-text-align: center;
-line-height: 1vw;
-font-size: 1vw;
-padding: 0.2vw;
-border-bottom: 0.2vw solid #333;
-font-weight: 1000;
-position: relative;
-z-index: 20;
 }
 #webhookSettings {
   display: flex;
@@ -1746,11 +2193,6 @@ p {
 
 button, .col-3 > div > button {
   font-size: 1vw;
-  background-color: #494949;
-  border-style: solid;
-  border-color: white;
-  border-width: 1px;
-  border-radius: 2px;
   color: white;
   text-align: center;
 }
@@ -1770,7 +2212,7 @@ button, .col-3 > div > button {
 
 .col-7 {
   overscroll-behavior-y: contain;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
   height: 100vh;
   max-height: 100vh;
@@ -1780,9 +2222,8 @@ button, .col-3 > div > button {
   padding-right: 0;
   padding-left: 0;
   padding-bottom: 0!important;
-  background-color: #1a1a1a;
-  border-right:0.2vw solid #333;
-  border-left:0.2vw solid #333;
+  background-color: var(--main-bg-color);
+  border: 0.1vw solid var(--main-border-color);
 }
 #mainSticky {
   position: sticky;
@@ -1790,8 +2231,8 @@ button, .col-3 > div > button {
   width: 100%;
   top:0px;
   z-index: 99999;
-  background-color: #1a1a1a;
-  border-bottom:0.2vw solid #333;
+  background-color: var(--main-lbg-color);
+  border-bottom:0.2vw solid var(--main-border-color);
   margin-bottom: 0px;
 }
 
@@ -1803,20 +2244,28 @@ button, .col-3 > div > button {
   width: 25%;
   height: 100vh;
   max-height: 100vh;
-  background-color: #1a1a1a;
+  background-color: var(--main-bg-color);
   border-top: 0;
   border-bottom: 0;
   padding-left: 0%;
   padding-right: 0%;
+  border: 0.1vw solid var(--main-border-color);
 }
 #mainTop {
   width: 100%;
-  height: auto;
-  border-bottom:1px solid #333; 
+  height: 13vw;
+  border-bottom:1px solid var(--main-border-color);; 
   position: sticky;
-  background-color: #1a1a1a;
+  background-color: var(--main-bg-color);
   top:0px;
   z-index: 10;
+}
+.mainStat {
+  margin: 0px;
+  height: 2vw;
+  width: 100%;
+  font-size: 1.25vw;
+  font-weight: 800;
 }
 #mainLower {
   overflow-y: auto;
@@ -1845,7 +2294,7 @@ button, .col-3 > div > button {
   height: 100%;
   max-height: 100vh;
   padding: 0px;
-  background-color: #1a1a1a;
+  background-color: var(--main-bg-color);
 }
 
 #musicStuff > label {
@@ -1879,31 +2328,31 @@ button, .col-3 > div > button {
 }
 #patreonHolder {
   width: 100%;
-  height: 2vw;
-  font-size: 1vw;
-  border-top: 0.15vw solid #2e2e2e;
-  border-bottom: 0.15vw solid #2e2e2e;
+  height: 3vw;
+  font-size: 1.25vw;
+  border-top: 0.15vw solid var(--main-border-color);
+  border-bottom: 0.15vw solid var(--main-border-color);
 }
 #patreon {
   text-decoration: none;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0px 0px 0.3vw white);
+  font-weight: 750;
+  margin: 0px;
 }
-
-#latestSpawns {
-  color: white;
+.patreonText {
+  height: 100%;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#latestFinds {
-  color: white;
+.patreonText:hover {
+  background-color: var(--main-hl-color);
 }
 .tempOreDisplay {
   color: white;
 }
-.latestSpawnHolder td{
-  font-weight: 500;
-}
-
 .container-fluid {
   height: 100%;
 }
@@ -2221,6 +2670,8 @@ button, .col-3 > div > button {
 #lastAutoSave {
   font-size: 0.5vw;
   width: 40%;
+  border-right: 0px;
+  margin-bottom: 0px;
 }
 #indexSwitchButton {
   width: 50%;
@@ -2755,7 +3206,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.4vw;
+  height: 1.5vw;
   width: 100%;
   margin-left: 0.2vw;
 }
@@ -2792,6 +3243,9 @@ button {
   position: relative;
   z-index: 99999;
   filter: drop-shadow(0px 0px 2vw #ff4b33);
+}
+.normalSpawnMessage {
+  text-shadow: 0px 0px 0.1vw #ffffff;
 }
 .electrifiedSpawnMessage {
   text-shadow: 0px 0px 1vw #e365fc, 0px 0px 1vw #e365fc;
@@ -3314,7 +3768,7 @@ background-size: 100%;
 #catStuff {
   position: absolute;
   width: 30vw;
-  height: 3vw;
+  height: 6vw;
   left:0;
   right:0;
   margin-left:auto;
@@ -3323,16 +3777,41 @@ background-size: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: nowrap;
-  background-color: #212121;
+  flex-wrap: wrap;
+  background-color: var(--main-lbg-color);
+  border: 0.1vw solid var(--main-border-color);
   display: none;
   z-index: 99999999999;
+  box-shadow: 0px 0px 0.5vw white;
 }
 #catSubmit {
   width: 20%;
-  height: 100%;
+  height: 50%;
+  background-color: var(--main-bg-color);
+  border: 0.1vw solid var(--main-border-color);
+  color: white;
+}
+#catSubmit:hover {
+  background-color: var(--main-hl-color);
 }
 #catText {
   width: 80%;
-  height: 100%;
+  height: 50%;
+  background-color: var(--main-bg-color);
+  color: white;
+  font-size: 1.1vw;
+  font-weight: 750;
+  outline: none;
+  border: 0.1vw solid var(--main-border-color);
+}
+#catDescriptions {
+  width: 30vw;
+  height: 50%;
+  color:white;
+  font-size: 0.9vw;
+  font-weight: 1000;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

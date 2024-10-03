@@ -1,4 +1,4 @@
-const achievementList = {
+const trophyList = {
     "worldOneCompletion" : {
         name : "World One Completionist",
         requirement: function(get) {
@@ -49,22 +49,22 @@ const achievementList = {
 }
 function getUnownedTrophies() {
     const list = [];
-    for (let trophy in achievementList) if (!player.trophyProgress[trophy].trophyOwned) list.push(trophy);
+    for (let trophy in trophyList) if (!player.trophyProgress[trophy].trophyOwned) list.push(trophy);
     return list;
 }
 function checkUnlockConditions() {
     updateRequirementAtLocation();
     const trophiesToCheck = getUnownedTrophies();
     for (let i = 0; i < trophiesToCheck.length; i++) {
-        const trophy = achievementList[trophiesToCheck[i]];
+        const trophy = trophyList[trophiesToCheck[i]];
         if (trophy.requirement()) {
             player.trophyProgress[trophiesToCheck[i]].trophyOwned = true;
             get(`${trophiesToCheck[i]}`).classList.remove("unownedTrophy");
         }
     }
 }
-function getAchievementRequirement(id) {
-    return achievementList[id].requirement(true);
+function getTrophyRequirement(id) {
+    return trophyList[id].requirement(true);
 }
 let currentInsertedElement;
 function displayRequirementAtLocation(child) {
@@ -77,7 +77,7 @@ function displayRequirementAtLocation(child) {
     const areaToInsert = child.parentElement;
     const elementToInsert = get("requirementTextArea").cloneNode(true);
     elementToInsert.style.display = "flex";
-    elementToInsert.children[0].innerHTML = `<span class="trophyRequirements">${getAchievementRequirement(child.id)}</span><span class="trophyReward">${formatReward(achievementList[child.id].reward)}</span>${achievementList[child.id].icon}`;
+    elementToInsert.children[0].innerHTML = `<span class="trophyRequirements">${getTrophyRequirement(child.id)}</span><span class="trophyReward">${formatReward(trophyList[child.id].reward)}</span>${trophyList[child.id].icon}`;
     elementToInsert.setAttribute("onclick", 'displayRequirementAtLocation(this.parentElement)')
     currentInsertedElement = elementToInsert;
     areaToInsert.appendChild(elementToInsert);
@@ -85,11 +85,11 @@ function displayRequirementAtLocation(child) {
 function updateRequirementAtLocation() {
     if (currentInsertedElement !== undefined) {
         const id = currentInsertedElement.parentElement.children[0].id;
-        currentInsertedElement.children[0].innerHTML = `<span class="trophyRequirements">${getAchievementRequirement(id)}</span><span class="trophyReward">${formatReward(achievementList[id].reward)}</span>${achievementList[id].icon}`;
+        currentInsertedElement.children[0].innerHTML = `<span class="trophyRequirements">${getTrophyRequirement(id)}</span><span class="trophyReward">${formatReward(trophyList[id].reward)}</span>${trophyList[id].icon}`;
     }
 }
 function checkAllTrophies() {
-    for (let trophy in achievementList) {
+    for (let trophy in trophyList) {
         if (player.trophyProgress[trophy].trophyOwned) {
             if (get(`${trophy}`) !== null) {
                 get(`${trophy}`).classList.remove("unownedTrophy");
@@ -111,8 +111,8 @@ function formatReward(reward) {
 }
 function getRewardTypes(affects, type) {
     let num = type === "add" ? 0 : 1;
-    for (let trophy in achievementList) {
-        const reward = achievementList[trophy].reward;
+    for (let trophy in trophyList) {
+        const reward = trophyList[trophy].reward;
         if (reward.type === affects && reward.do === type && player.trophyProgress[trophy].trophyOwned) {
             if (type === "add") {
                 num += reward.amt;

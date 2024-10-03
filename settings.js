@@ -67,18 +67,31 @@ function openFrame(frameId) {
 }
 
 
-function changeCanDisplay(button) {
-    if (player.settings.canDisplay) {
-        button.style.backgroundColor = "#FF3D3D";
-        document.getElementById("blockDisplay").style.display = "none";
-        document.getElementById("displayDisabled").style.display = "block";
-        player.settings.canDisplay = false;
+function toggleMainDisplay() {
+    if (gameInfo.display) {
+        gameInfo.display = false;
+        get("blockDisplay").style.display = "none";
+        get("displayDisabled").style.display = "block";
     } else {
-        button.style.backgroundColor = "#6BC267";
-        player.settings.canDisplay = true;
-        document.getElementById("blockDisplay").style.display = "inline-flex";
-        document.getElementById("displayDisabled").style.display = "none";
-        displayArea();
+        gameInfo.display = true;
+        get("blockDisplay").style.display = "flex";
+        get("displayDisabled").style.display = "none";
+    }
+    get("toggleMainDisplay").textContent = "Display: " + (gameInfo.display ? "Enabled" : "Disabled");
+}
+function switchMovementType() {
+    if (gameInfo.movementType === "auto") {
+        gameInfo.movementType = "single";
+        get("switchMovementType").textContent = "Mining: Single";
+    } else {
+        gameInfo.movementType = "auto";
+        get("switchMovementType").textContent = "Mining: Auto";
+    }
+    const buttons = document.getElementsByClassName("movementButton");
+    const order = ["left", "down", "up", "right"];
+    for (let i = 0; i < buttons.length; i++) {
+        if (gameInfo.movementType === "auto") buttons[i].style.backgroundImage = `url("media/${order[i]}automine.png")`;
+        else buttons[i].style.backgroundImage = `url("media/${order[i]}one.png")`;
     }
 }
 let useNumbers = false;
@@ -341,7 +354,8 @@ function updateCapacity(element) {
     } else {
         flashRed(element);
     }        
-    document.getElementById("resetNumber").innerText = `${blocksRevealedThisReset}/${mineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
+    document.getElementById("resetNumber").innerText = `${blocksRevealedThisReset} Revealed.`;
+    displayArea();
 }
 function updateAutomineUpdateSpeed(element) {
     let speed = element.value;
@@ -602,7 +616,7 @@ function addIndexColors(element, blackOut, property) {
 }
 let isPlacing = false;
 function randomFunction(ore, cause, elem) {
-    if (elem.srcElement.classList.contains("inventoryElement4")) return;
+    if (elem && elem.srcElement.classList.contains("inventoryElement4")) return;
     if (isPlacing) {
         mine[curY][curX + 1] = {ore: ore, variant:1, isPlaced: true};
         displayArea();
@@ -1269,6 +1283,7 @@ function showCatText() {
     get("catStuff").style.display = "flex";
 }
 let curCatStep = 0;
+let curCatMode = undefined;
 function sillyKittyCat(text) {
     const catFaceOrder = [
         "ᓚᘏᗢ",
@@ -1285,23 +1300,84 @@ function sillyKittyCat(text) {
         "I LOVE CATLAND CENTRAL",
         "◕⩊◕"
     ]
-    if (text === catFaceOrder[curCatStep]) {
-        get("catText").value = "";
-        curCatStep++;
-        new Audio("audios/meow-1.mp3").play();
-        if (curCatStep === catFaceOrder.length) {
-            typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", get("spawnMessage"));
+    if (curCatMode === undefined) {
+        if (text === catFaceOrder[0]) curCatMode = "goober";
+        else if (text === "crunchycat") curCatMode = "luna2";
+    }
+    if (curCatMode === "goober") {
+        if (text === catFaceOrder[curCatStep]) {
+            get("catText").value = "";
+            curCatStep++;
+            new Audio("audios/meow-1.mp3").play();
+            if (curCatStep === catFaceOrder.length) {
+                typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", get("spawnMessage"));
+                get("catStuff").style.display = "none";
+                catstuff.layer = currentLayer;
+                insertIntoLayers({ore: "Goober", layers:[currentLayer], "useLuck": true})
+            }
+        } else {
+            new Audio("audios/meow-2.mp3").play();
+            curCatStep = 0;
+            get("catText").value = "";
             get("catStuff").style.display = "none";
-            catstuff.layer = currentLayer;
-            insertIntoLayers({ore: "Goober", layers:[currentLayer], "useLuck": true})
+            curCatMode = undefined;
         }
-    } else {
-        new Audio("audios/meow-2.mp3").play();
-        curCatStep = 0;
+    } else if (curCatMode === "luna2") {
+        const questions = [
+            "Q: What is luna best at doing?",
+            "Q: What does luna love crunching on?",
+            "Q: How old is luna?",
+            "Q: Where is luna from?",
+            "Q: How many sauces tall is luna?",
+        ]
+        const answers = {
+            0: {correct: "crunching", incorrect: "eeping, loafing, yammering"},
+            1: {correct: "uranium", incorrect: "dog food, tree bark, car"},
+            2: {correct: "5 years old", incorrect: "2 years old, 3 years old, 4 years old"},
+            3: {correct: "Greece", incorrect: "United States, United Kingdom, Uganda"},
+            4: {correct: "4 sauces", incorrect: "7 sauces, 3 sauces, 5 sauces"},
+        }
         get("catText").value = "";
-        get("catStuff").style.display = "none";
+        if (text !== "crunchycat") {
+            if (sillyKittyCat.lunaType === "C") {
+                if (text === answers[sillyKittyCat.lunaNum].correct) {
+                    new Audio("audios/meow-1.mp3").play();
+                    sillyKittyCat.lunaType = "I";
+                    get("catText").value = "";
+                } else {
+                    new Audio("audios/meow-2.mp3").play();
+                    get("catText").value = "";
+                    get("catStuff").style.display = "none";
+                    curCatMode = undefined;
+                }
+            } else if (sillyKittyCat.lunaType === "I") {
+                if (text === answers[sillyKittyCat.lunaNum].incorrect) {
+                    sillyKittyCat.lunaNum++;
+                    sillyKittyCat.lunaType = "C";
+                    get("catText").value = "";
+                    if (sillyKittyCat.lunaNum > 4) {
+                        insertIntoLayers({ore: "luna2", layers:[currentLayer], "useLuck": true})
+                        new Audio("audios/meow-1.mp3").play();
+                        sillyKittyCat.lunaNum = 0;
+                        get("catDescriptions").textContent = `I have nothing to say to you.`;
+                        curCatMode = undefined;
+                        get("catText").value = "";
+                        get("catStuff").style.display = "none";
+                        return;
+                    }
+                } else {
+                    new Audio("audios/meow-2.mp3").play();
+                    get("catText").value = "";
+                    get("catStuff").style.display = "none";
+                    curCatMode = undefined;
+                }
+            }
+        }
+        get("catDescriptions").textContent = `${questions[sillyKittyCat.lunaNum]} ${sillyKittyCat.lunaType === "C" ? "Enter correct answers:" : "Enter incorrect answers:"}`;
     }
 }
+sillyKittyCat.lunaNum = 0;
+sillyKittyCat.lunaType = "C";
 function toggleHideCompleted() {
     if (player.settings.hideCompleted) {
         player.settings.hideCompleted = false;

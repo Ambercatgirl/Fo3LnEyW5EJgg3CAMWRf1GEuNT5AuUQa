@@ -236,7 +236,7 @@ class secureLogs {
         if (currentWorld === 1.1) {
             if (player.gears["gear20"]) luck *= ((baseLuck * 0.05) + 1);
             if (player.gears["gear37"]) luck = luck ** 1.035;
-            luck *= 1.2;
+            luck *= 1.5;
             if (randBuff.luck) luck *= 1.4;
             if (isNaN(luck)) return 1;
             else return luck;
@@ -246,7 +246,7 @@ class secureLogs {
         if (currentWorld < 2) luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         if (player.gears["gear20"]) luck *= (baseLuck * 0.05) + 1;
         if (player.gears["gear37"]) luck = luck ** 1.035;
-        luck *= 1.2;
+        luck *= 1.5;
         if (randBuff.luck) luck *= 1.4;
         if (isNaN(luck)) return 1;
         else return luck;
@@ -308,7 +308,7 @@ class secureLogs {
     }
     getCaveLuck() {
         let tempLuck = 1;
-        if (player.powerupVariables.caveBoosts.active = true) tempLuck++;
+        if (player.powerupVariables.caveBoosts.active) tempLuck++;
         if (player.stats.currentPickaxe === "pickaxe33") tempLuck += 1.5;
         return tempLuck;
     }

@@ -198,6 +198,8 @@ const generateBlock = function(location) {
     }
 }
 const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
+    const p = player.stats.currentPickaxe;
+    if ((p === "pickaxe0" || p === "pickaxe13") && !fromOffline && caveInfo === undefined) return;
     player.stats.blocksMined += (caveInfo === undefined ? amt : 0);
     const originAmt = amt;
     const layer = getLayer(y);
@@ -219,7 +221,7 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             estAmt = amt*generationInfo.probabilities[generationInfo.layer.indexOf(thisTable[i])];
         }
         let oldEst = estAmt;
-        if (Math.random() < estAmt%1) estAmt += 1; 
+        if (Math.random() < estAmt%1) estAmt++;
         estAmt = Math.floor(estAmt);
         results[thisTable[i]] = {est: estAmt, rand: oldEst}
         amt -= estAmt;
@@ -643,7 +645,7 @@ function switchWorld(to, skipAnim) {
         if (currentWorld === 1.1) sr1Helper(false);
         currentWorld = to;
         if (currentWorld !== 0.9 && player.galacticaUnlocked) galacticaShortcut();
-        else get("galacticaCrafts").style.display = "none";
+        //else get("galacticaCrafts").style.display = "none";
         if (currentWorld === 2) {
             prepareWorldTwo();
         } else if (currentWorld < 2) {
@@ -705,7 +707,7 @@ function prepareWorldOne() {
         if (Math.random() < 1/10000) {
             mine[curY + 1][curX] = "🩶";
             playSound(oreList["🩶"]["oreTier"]);
-            document.getElementById("spawnMessage").innerHTML = "🩶 Has Spawned!";
+            typeWriter("<i>🩶 Has Spawned!</i>", "spawn");
         } else {
             mine[curY + 1][curX] = "🟫";
         }
@@ -756,7 +758,7 @@ function prepareWorldTwo() {
         if (Math.random() < 1/10000) {
             mine[curY + 1][curX] = "🩷";
             playSound(oreList["🩷"]["oreTier"]);
-            document.getElementById("spawnMessage").innerHTML = "🩷 Has Spawned!";
+            typeWriter("<i>🩷 Has Spawned!</i>", "spawn");
         } else {
             mine[curY + 1][curX] = "📺";
         }
