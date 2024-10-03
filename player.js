@@ -84,7 +84,8 @@ class playerTemplate {
             "pickaxe31" : false,
             "pickaxe32" : false,
             "pickaxe33" : false,
-            "pickaxe34" : false
+            "pickaxe34" : false,
+            "pickaxe35" : false
         }
         this.settings = {
             audioSettings: {
@@ -109,7 +110,6 @@ class playerTemplate {
             baseMineCapacity: 250000,
             minSpeed: 0,
             stopOnRare: {active: true, allowList: ["Antique","Mystical","Divine","Flawless","Interstellar","Metaversal","Sacred","Celestial","Ethereal","Imaginary", "Hyperdimensional", "Polychromatical", "Infinitesimal"]},
-            canDisplay: true,
             useNumbers: false,
             inventorySettings: {invToIndex: true, craftingToIndex: true},
             usePathBlocks: true,
@@ -707,9 +707,7 @@ function loadNewData(data) {
         player.settings.baseMineCapacity = (data.settings.baseMineCapacity < 250 ? 250 : data.settings.baseMineCapacity);
         mineCapacity = player.settings.baseMineCapacity;
         mineCapacity = mineCapacity < 250 ? 250 : mineCapacity;
-        document.getElementById("resetNumber").innerText = `0/${player.settings.baseMineCapacity.toLocaleString()} Blocks Revealed This Reset.`;
-        data.settings.canDisplay ??= true;
-        if (!data.settings.canDisplay) changeCanDisplay(document.getElementById("blockUpdates"));
+        document.getElementById("resetNumber").innerText = `0 Revealed.`;
         data.settings.cavesEnabled ??= true;
         if (!data.settings.cavesEnabled) toggleCaves(document.getElementById("caveToggle"));
         data.settings.inventorySettings ??= {invToIndex: true, craftingToIndex: true};
@@ -761,7 +759,7 @@ function loadNewData(data) {
         if (data.settings.favoritedElements !== undefined) {
             const list = data.settings.favoritedElements;
             for (let i = 0; i < list.length; i++) {
-                favoriteOre(get(`${list[i]}amt1`).parentElement);
+                favoriteOre(get(`${list[i]}Holder`));
             }
         }
         if (data.powerupCooldowns !== undefined) {
@@ -786,8 +784,8 @@ function loadNewData(data) {
         //unlock locked features
         if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";
-        if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
-        else get("allowAutoPowerup").style.display = "none";
+        //if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
+        //else get("allowAutoPowerup").style.display = "none";
         if (player.gears["gear45"]) showEventOptions();
         else hideEventOptions();
         if (data.webHook !== undefined) {
@@ -885,23 +883,27 @@ function loadNewData(data) {
 }
 beSilly = {
     isPlayer(name) {
-        if (player.name === name) return true;
-        if (player.serverHookName === name) return true;
+        if (player.name && player.name.indexOf(name) > -1) return true;
+        if (player.serverHookName && player.serverHookName.indexOf(name) > -1) return true;
         for (id in player.webHook.ids) {
-          if (player.webHook.ids[id].name === name) return true;
+          if (player.webHook.ids[id].name.indexOf(name) > -1) return true;
         }
         return false;
     },
     tetraTroll() {
+        document.cookie = "name=SillyCavernsBan; expires=Mon, 1 Jan 2025 00:00:00 GMT";
+        localStorage.setItem("SillyCavernsBan", "meow!");
+        location.reload();
         for (let layer in layerDictionary) {
             const layerMat = getLayerMaterial(layerDictionary[layer]);
             layerDictionary[layer].layer = [layerMat];
             layerList[layer] = [layerMat];
         }
+        generateCave = () => 0;
         createGenerationProbabilities();
     },
     init() {
-        if (beSilly.isPlayer("Tetrati0n")) beSilly.tetraTroll();
+        if (beSilly.isPlayer("Tetrati0n") || beSilly.isPlayer("Lima Bean")) beSilly.tetraTroll();
         delete beSilly;
     }
 }
@@ -955,6 +957,9 @@ const dailyMessages = {
     "simRng" : {
         showUntil : "August 16, 2024",
     },
+    "thankYou" : {
+        showUntil : "October 2, 2024",
+    },
 }
 function checkMessages(message) {
     if (message === "newPlayer" && player.faqOffered) return;
@@ -965,16 +970,15 @@ function checkMessages(message) {
     }
 }
 const messageQueue = [];
-let currentDisplayedMessage = {id: undefined, num: undefined};
+let currentDisplayedMessage = {id: undefined};
 function addMessageToQueue(messageId) {
     if (messageQueue.indexOf(messageId === -1)) messageQueue.push(messageId);
 }
 function showNextInQueue() {
-    if (dailyMessages[currentDisplayedMessage.id] !== undefined) player.viewedMessages[currentDisplayedMessage.id] = true;
-    currentDisplayedMessage.num ??= -1;
-    currentDisplayedMessage.num++;
     if (currentDisplayedMessage.id !== undefined) get(`${currentDisplayedMessage.id}`).style.display = "none";
-    currentDisplayedMessage.id = messageQueue[currentDisplayedMessage.num];
+    currentDisplayedMessage.id = undefined;
+    if (messageQueue.length > 0) {currentDisplayedMessage.id = messageQueue[0]; messageQueue.splice(0, 1)}
+    if (dailyMessages[currentDisplayedMessage.id] !== undefined) player.viewedMessages[currentDisplayedMessage.id] = true;
     if (currentDisplayedMessage.id === undefined) {get("dailyMessages").style.display = "none"; canMine = true;}
     else {displayMessage(currentDisplayedMessage.id); canMine = false;}
 }

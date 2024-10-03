@@ -55,5 +55,16 @@ function mineReset() {
     curX = 1000000;
     checkAllAround(curX, curY, 1);
     mine[curY][curX] = "⛏️";
+    for (let i = spawnsToSearch.length - 1; i >= 0; i--) {
+        if (spawnsToSearch[i].element) {
+            const e = spawnsToSearch[i].element;
+            e.children[2].textContent = "MINED: VOIDED";
+            e.classList.add("voidedLatestOre");
+            e.classList.remove("notMinedLatestOre");
+        }
+        spawnsToSearch.splice(i, 1);
+    }
+    removeProgressBar();
+    displayArea.lastPercent = -10;
     canMine = true;
 }

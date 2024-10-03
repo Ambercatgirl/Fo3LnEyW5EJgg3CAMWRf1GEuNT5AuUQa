@@ -179,7 +179,7 @@ const recipes = {
         pUnob: true
     },
     "pickaxe35" : {
-        name: "Supercluster Capsizer",
+        name: "Galactic Engulfer",
         recipe : [{"ore":"nebula","amt":25000000000000},{"ore":"J1407b","amt":45},{"ore":"ascendedArtifact","amt":33},{"ore":"otherside","amt":17},{"ore":"noradrenaline","amt":1}],
         active : [],
         pUnob: true
@@ -375,17 +375,18 @@ const recipes = {
         active : [0.9, 1, 1.2, 1.1, 2]
     },
     "gear38": {
-        name: "",
+        name: "Forgotten Rose Quartz Shell",
         recipe: [{"ore":"🔕","amt":464000000},{"ore":"⭕","amt":174000000},{"ore":"🛑","amt":104000000},{"ore":"🔇","amt":31600000},{"ore":"💢","amt":4010000},{"ore":"⛔","amt":408000},{"ore":"🔈","amt":156000},{"ore":"🚫","amt":62900},{"ore":"♨️","amt":15500},{"ore":"🩸","amt":8030}],
         active : [0.9, 1, 1.2, 1.1, 2],
         pUnob: true
     },
     "gear39": {
-        name: "",
+        name: "Armband of Endless Dreams",
         recipe: [{"ore":"💻","amt":2750000000},{"ore":"⌨️","amt":2750000000},{"ore":"🖱️","amt":2750000000},{"ore":"🍆","amt":1640000000},{"ore":"💔","amt":741000000},{"ore":"🔪","amt":181000000},{"ore":"matrix","amt":113000000},{"ore":"🧂","amt":85900000},{"ore":"📽️","amt":30400000},{"ore":"🚽","amt":5670000},{"ore":"💘","amt":3280000},{"ore":"💞","amt":1190000},{"ore":"💰","amt":134000},{"ore":"☘️","amt":5940},{"ore":"🍀","amt":300}],
         active : [0.9, 1, 1.2, 1.1, 2],
         pUnob: true
     },
+    //1.044e17
     "gear40": {
         name: "Ring of Life",
         recipe: [{"ore": "orbOfLife", "amt": 1}],
@@ -478,67 +479,308 @@ function calcLayerEstimates(obj/*l: [layers], e: [excluded tiers], a: layer amou
     return results.reverse();
 }
 recipeElements = {};
-let currentRecipe = undefined;
+let currentRecipeId = undefined;
 function displayRecipe(recipe) {
-    if (document.getElementsByClassName("lockedRecipe").length > 0) return;
-    removePolygon();
-    const oldElement = get("displayRecipe");
-    if (oldElement) oldElement.remove();
-    const parentElement = document.createElement("div");
-    parentElement.id = "displayRecipe";
-    if (currentRecipe !== undefined) getButtonByName(currentRecipe).classList.remove("selectedOutline");
-    while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
-    if (currentRecipe === undefined || currentRecipe !== recipe) {
-        recipeElements[recipe].style.display = "block";
-        parentElement.appendChild(recipeElements[recipe]);
-        const description = document.getElementById(`${recipe}Description`).cloneNode(true);
-        description.style.display = "block";
-        let equippedButton;
-        if (recipe !== "pickaxe27") {
-            let time = get("craftingTimeDisplay").cloneNode(true);
-            time.style.display = "block";
-            parentElement.appendChild(time);
-        } else if (currentWorld !== 1.1) {
-            equippedButton = get("pickaxe27Craft").cloneNode(true);
-            equippedButton.id = "pickaxe27TempCraft";
-            equippedButton.style.display = "block";
-        }
-        let title = document.getElementById("descriptionTitle").cloneNode(true);
-        title.style.display = "block";
-        parentElement.appendChild(title);
-        parentElement.appendChild(description);
-        if (equippedButton !== undefined) parentElement.appendChild(equippedButton);
-        currentRecipe = recipe;
-        getButtonByName(currentRecipe).insertAdjacentElement("afterend", parentElement)
-        getButtonByName(currentRecipe).classList.add("selectedOutline");
-        get("recipeLock").onclick = function() {lockRecipe(currentRecipe)}
+    if (recipe === currentRecipeId) {
+        if (pinInformation.pinned === undefined && !pinInformation.locked) removeRecipeElements();
+        getButtonByName(currentRecipeId).classList.remove("selectedOutline");
+        currentRecipeId = undefined;
+        get("scrollableCraft").style.display = "none";
     } else {
-        recipeElements[recipe].style.display = "none";
-        while (parentElement.firstChild) parentElement.removeChild(parentElement.firstChild);
-        currentRecipe = undefined;
+        if (!pinInformation.locked) removeRecipeElements();
+        if (currentRecipeId !== undefined) {
+            buttonGradients[`${currentRecipeId}Craft`]["applied"] = false;
+            getButtonByName(currentRecipeId).classList.remove("selectedOutline");
+        }
+        else get("scrollableCraft").style.display = "inline-flex";
+        getButtonByName(recipe).classList.add("selectedOutline");
+        currentRecipeId = recipe;
+        const extraInfo = get("extraInformationText")
+        const extraIcon = get("extraInformationIcon")
+        const nameElem = get("newCraftingName");
+        const tierElem = get("newCraftingTier");
+        const minedElem = get("newCraftingMined");
+        const revealedElem = get("newCraftingRevealed");
+        const rateElem = get("newCraftingRate");
+        const luckElem = get("newCraftingLuck");
+        const consElem = get("newCraftingCons");
+        const abilityElem = get("newCraftingAbilityImage");
+        const iconElem = get("newCraftingPickaxeIcon");
+        if (recipe.indexOf("pickaxe") > -1) {
+            get("gearHolder").style.display = "none";
+            get("pickaxeHolder").style.display = "";
+            const pickaxe = pickaxeStats[recipe];
+            if (recipe !== "pickaxe27") {
+                if (pinInformation.pinned) get("newCraftingHolder").style.height = "26.45vw";
+                else get("newCraftingHolder").style.height = "41.7vw";
+                extraInfo.innerHTML = pickaxeStats[recipe].extraInformation;
+                if (extraInfo.innerHTML === "undefined") extraInfo.innerHTML = "No Extra Info!";
+                extraIcon.textContent = `${pickaxeStats[recipe].icon == "" ? "No Icon! You can make one!" : `Icon made by ${pickaxeStats[recipe].icon}!`}`;
+                nameElem.textContent = recipes[recipe].name;
+                tierElem.textContent = `Tier ${pickaxe.tier}`;
+                minedElem.textContent = `${pickaxe.mined.toLocaleString()} Ability Mined.`;
+                minedElem.style.height = "1.5vw";
+                revealedElem.textContent = `${pickaxe.revealed.toLocaleString()} Ability Revealed.`;
+                rateElem.textContent = `1/${pickaxe.rate.toLocaleString()} Ability Activation Rate.`;
+                luckElem.textContent = `${pickaxe.luck.toLocaleString()}x Luck.`;
+                let blocksUsed = (pickaxe.mined > pickaxe.revealed ? pickaxe.mined : pickaxe.revealed);
+                let cons = blocksUsed * pickaxe.luck / pickaxe.rate;
+                consElem.textContent = `${(Math.round(cons*1000)/1000).toLocaleString()} Pickaxe Consistency.`;
+                let curSrc = pickaxe.ability;
+                abilityElem.src = curSrc;
+                let stp = pickaxe.src;
+                stp  = stp.substring(stp.indexOf("src") + 5, stp.indexOf("</img>") - 2);
+                curSrc = stp;
+                if (curSrc === "⛏️") curSrc = 'media/noFile.png';
+                iconElem.src = curSrc;
+                if (!pinInformation.locked) {
+                    addRecipeInformation(currentRecipeId);
+                }
+            }
+        } else {
+            //41.7
+            if (pinInformation.pinned) get("newCraftingHolder").style.height = "14vw";
+            else get("newCraftingHolder").style.height = "29.7vw";
+            get("gearHolder").style.display = "";
+            get("pickaxeHolder").style.display = "none";
+            const gear = gearInformation[recipe];
+            extraInfo.textContent = "Gears don't have extra info!";
+            extraIcon.textContent = "Gears don't have icons!";
+            nameElem.textContent = recipes[recipe].name;
+            tierElem.textContent = `Tier ${gear.tier}`;
+            get("newCraftingGearEffect").innerHTML = gearInformation[recipe].effect;
+            if (!pinInformation.locked) {
+                addRecipeInformation(currentRecipeId);
+            }
+            
+        }
+       
     }
     updateActiveRecipe();
 }
-function lockRecipe(id) {
-    get("recipeLock").style.backgroundColor = "#00FF23";
-    if (document.getElementsByClassName("lockedRecipe").length > 0) {
-        const elems = document.getElementsByClassName("lockedRecipe");
-        for (let i = 0; i < elems.length; i++) {
-            unlockRecipe(idFromName(elems[i].id))
+function addRecipeInformation(recipe) {
+    const thisRecipe = recipes[recipe].recipe;
+    const append = get("newCraftingRecipeHolder");
+    for (let i = 0; i < thisRecipe.length; i++) {
+        const ore = thisRecipe[i].ore;
+        const have = playerInventory[ore]["normalAmt"];
+        const need = thisRecipe[i].amt;
+        append.appendChild(createOreElement(have, need, ore));
+    }
+    append.children[append.children.length - 1].style.borderBottom = "0.2vw solid var(--main-border-color)";
+    get("newCraftItem").setAttribute("onclick", `craftPickaxe('${recipe}')`);
+}
+function hideElem(elem) {
+    elem.style.display = "none";
+}
+let pinInformation = {
+    pinned: undefined,
+    collapsed: false,
+    locked: false,
+    lockedId: undefined
+}
+function pinRecipe() {
+    const newPin = document.createElement("div");
+    newPin.id = "pinnedRecipeHolder";
+    newPin.appendChild(get("collapseRecipe"));
+    newPin.appendChild(get("lockRecipe"));
+    newPin.appendChild(get("pinAndCraft"));
+    newPin.appendChild(get("newCraftingRecipeHolder"));
+    document.body.appendChild(newPin);
+    get("pinRecipe").style.display = "none";
+    get("unpinRecipe").style.display = "block";
+    get("newCraftingHolderheader").style.display = "block";
+    get("collapseRecipe").style.display = "block";
+    get("lockRecipe").style.display = "block";
+    let size;
+    if (currentRecipeId.indexOf("gear") > -1) size = currentRecipeId.substring(0, 4);
+    else size = currentRecipeId.substring(0, 7);
+    size = sizes[size]["pin"];
+    get("newCraftingHolder").style.height = size;
+    dragElement(get("pinnedRecipeHolder"));
+    const locs = get("newCraftingHolder").getBoundingClientRect();
+    newPin.style.top = (locs.y + locs.height) + "px";
+    newPin.style.left = (locs.right - locs.width) + "px";
+    pinInformation.pinned = currentRecipeId;
+}
+const sizes = {
+    "gear" : {
+        "pin" : "14vw",
+        "unpin" : "29.7vw"
+    },
+    "pickaxe" : {
+        "pin" : "26.45vw",
+        "unpin" : "41.7vw"
+    }
+}
+function unpinRecipe() {
+    if (pinInformation.locked) return;
+    if (pinInformation.collapsed) collapseRecipe();
+    const oldParent = get("newCraftingHolder");
+    oldParent.appendChild(get("collapseRecipe"));
+    oldParent.appendChild(get("lockRecipe"));
+    oldParent.appendChild(get("pinAndCraft"));
+    oldParent.appendChild(get("newCraftingRecipeHolder"));
+    get("pinRecipe").style.display = "block";
+    get("unpinRecipe").style.display = "none";
+    get("newCraftingHolderheader").style.display = "none";
+    get("collapseRecipe").style.display = "none";
+    get("lockRecipe").style.display = "none";
+    let size;
+    if (currentRecipeId.indexOf("gear") > -1) size = currentRecipeId.substring(0, 4);
+    else size = currentRecipeId.substring(0, 7);
+    size = sizes[size]["unpin"];
+    get("newCraftingHolder").style.height = size;
+    get("pinnedRecipeHolder").remove();
+    pinInformation.pinned = undefined;
+}
+function lockRecipe() {
+    if (pinInformation.locked) {
+        pinInformation.locked = false;
+        if (currentRecipeId !== pinInformation.lockedId) {
+            removeRecipeElements();
+            addRecipeInformation(currentRecipeId);
         }
+        pinInformation.lockedId = undefined;
+        get("lockRecipe").textContent = "Lock";
+        get("lockRecipe").style.color = "#FF3D3D";
     } else {
-        getButtonByName(id).classList.add("lockedRecipe");
+        const id = currentRecipeId;
+        pinInformation.locked = true;
+        pinInformation.lockedId = id;
+        get("lockRecipe").textContent = "Unlock";
+        get("lockRecipe").style.color = "#6BC267";
+    }
+
+}
+let extraToggled = false;
+function toggleExtraInformation() {
+    const extra = get("extraPickaxeInformation");
+    const cur = extra.style.animation;
+    if (extraToggled && cur === "") {
+        extra.style.animation = "retractExtra 0.25s linear 1";
+        extra.onanimationend = () => {
+            extra.style.left = "3vw";
+            extra.style.animation = "";
+            extra.onanimationend = undefined;
+            extra.children[2].style.rotate = "0deg";
+        }
+        extraToggled = false;
+    } else if (cur === "") {
+        extra.style.animation = "extendExtra 0.25s linear 1";
+        extra.onanimationend = () => {
+            extra.style.left = "24vw";
+            extra.style.animation = "";
+            extra.onanimationend = undefined;
+            extra.children[2].style.rotate = "180deg";
+        }
+        extraToggled = true;
+    }
+}
+function collapseRecipe() {
+    if (pinInformation.collapsed) {
+        pinInformation.collapsed = false;
+        get("newCraftingRecipeHolder").style.display = "block";
+        get("pinnedRecipeHolder").style.height = "17.6vw";
+        get("collapseRecipe").children[0].children[0].style.rotate = "0deg";
+        get("collapseRecipe").children[0].children[0].style.backgroundPosition = "right";
+        const textEdit = get("collapseRecipe").children[0];
+        textEdit.innerHTML = textEdit.innerHTML.replace("Expand", "Collapse");
+    } else {
+        pinInformation.collapsed = true;
+        get("newCraftingRecipeHolder").style.display = "none";
+        get("pinnedRecipeHolder").style.height = "4.5vw";
+        get("collapseRecipe").children[0].children[0].style.rotate = "180deg";
+        get("collapseRecipe").children[0].children[0].style.backgroundPosition = "left";
+        const textEdit = get("collapseRecipe").children[0];
+        textEdit.innerHTML = textEdit.innerHTML.replace("Collapse", "Expand");
     }
     
 }
-function unlockRecipe(id) {
-    getButtonByName(id).classList.remove("lockedRecipe");
-    if (id.indexOf("gear") > -1) 
-        if (!showOrders[`g${currentWorld}`].includes(id) || galDis) {displayRecipe(id); getButtonByName(id).style.display = "none";}
-    if (id.indexOf("pickaxe") > -1) 
-        if (!showOrders[`p${currentWorld}`].includes(id) || galDis) {displayRecipe(id); getButtonByName(id).style.display = "none";}
-    if (id === "pickaxe26") {displayRecipe("pickaxe26"); switchWorldCraftables(); m88 = 0;}
-    get("recipeLock").style.backgroundColor = "#FF3D3D";
+//i copy pasted all this shit lol
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+function removeRecipeElements() {
+    console.log("cat")
+    const t = get("newCraftingRecipeHolder").children;
+    for (let i = t.length - 1; i >= 0; i--) t[i].remove();
+}
+function toggleCraftingWorld(a) {
+    const vars = toggleCraftingWorld;
+    if (a) {
+        vars.skip = true;
+    } else {
+        if (vars.skip) {
+            vars.skip = false;
+            return;
+        }
+    }
+    if (vars.visible) {
+        get("worldSelectables").style.display = "none";
+        vars.visible = false;
+    } else {
+        get("worldSelectables").style.display = "flex";
+        vars.visible = true;
+    }
+    showSelectedWorld();
+    const text = getWorldText();
+    get("craftingWorldSelect").innerHTML = get("craftingWorldSelect").innerHTML.replace(text, `Items From World: ${vars.world} `);
+    switchWorldCraftables(vars.world)
+}
+function selectCraftingWorld(num) {
+    toggleCraftingWorld.world = Number(num);
+    toggleCraftingWorld(1);
+    
+}
+toggleCraftingWorld.world = 1;
+toggleCraftingWorld.visible = false;
+toggleCraftingWorld.skip = false;
+
+function showSelectedWorld() {
+    const elems = document.getElementsByClassName("worldCraftSelector");
+    for (let i = 0; i < elems.length; i++) {
+        const world = elems[i].textContent;
+        if (world === String(toggleCraftingWorld.world)) elems[i].classList.add("currentCraftingWorld");
+        else elems[i].classList.remove("currentCraftingWorld");
+    }
+}
+function getWorldText() {
+    return get("craftingWorldSelect").innerText.substring(0, get("craftingWorldSelect").textContent.indexOf(`${toggleCraftingWorld.world}`));
+}
+function formatRecipeNum(n) {
+    if (n >= 1000000000) return formatNumber(n, 2);
+    else return n.toLocaleString();
 }
 function idFromName(name) {
     name = name.toLowerCase().replaceAll(" ", "");
@@ -552,12 +794,15 @@ let lastCount = -1;
 function updateActiveRecipe() {
     let totalCount = 0;
     let count = 0;
-    if (currentRecipe !== undefined) {
+    let thisId = currentRecipeId;
+    thisId ??= pinInformation.pinned;
+    if (pinInformation.lockedId !== undefined) thisId = pinInformation.lockedId;
+    if (thisId !== undefined) {
         let totalRarity = 0;
         let currentRarity = 0;
-        if (currentRecipe !== "pickaxe27") {
-            const recipe = recipes[currentRecipe].recipe;
-            const elements = recipeElements[currentRecipe].children;
+        if (thisId !== "pickaxe27") {
+            const recipe = recipes[thisId].recipe;
+            const elements = get("newCraftingRecipeHolder").children;
             for (let i = 0; i < recipe.length; i++) {
                 let ore = recipe[i].ore;
                 const toChange = elements[i];
@@ -566,11 +811,7 @@ function updateActiveRecipe() {
                     let needed = recipe[i].amt;
                     let amtOwned = playerInventory[ore]["normalAmt"];
                     if (oreList[ore]["oreTier"] !== "Infinitesimal") totalRarity += oreList[ore]["numRarity"] * needed;
-                    if (oreList[ore]["hasImage"]) {
-                        toChange.innerHTML = `<span class="craftingImage"><img src="${oreList[ore]["src"]}"></img></span><span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${amtOwned > 1000000000000 ? formatNumber(amtOwned, 3) : amtOwned.toLocaleString()}/${needed > 1000000000000 ? formatNumber(needed, 3) : needed.toLocaleString()}</span>`
-                    } else {
-                        toChange.innerHTML = `<span style="filter: drop-shadow(0 0 0.2vw white)">${ore}</span><span style='text-shadow: -0.05em -0.05em 0 #fff, 0.05em -0.05em 0 #fff, -0.05em 0.05em 0 #fff, 0.05em 0.05em 0 #fff;'>${amtOwned > 1000000000000 ? formatNumber(amtOwned, 3) : amtOwned.toLocaleString()}/${needed > 1000000000000 ? formatNumber(needed, 3) : needed.toLocaleString()}</span>`;
-                    }
+                    toChange.textContent = `${oreList[ore]["hasImage"] ? "" : ore} ${amtOwned > 1000000000000 ? formatNumber(amtOwned, 3) : amtOwned.toLocaleString()}/${needed > 1000000000000 ? formatNumber(needed, 3) : needed.toLocaleString()}`;
                     if(amtOwned >= needed) {
                         if (oreList[ore]["oreTier"] !== "Infinitesimal") {
                             count++;
@@ -578,22 +819,21 @@ function updateActiveRecipe() {
                         }
                         toChange.style.color = "#6BC267";
                         if (player.settings.hideCompleted) toChange.style.display = "none";
-                        else toChange.style.display = "block";
+                        else toChange.style.display = "flex";
                     }
                     else {
                         if (oreList[ore]["oreTier"] !== "Infinitesimal") {
                             currentRarity += oreList[ore]["numRarity"] * amtOwned;
                         }
                         toChange.style.color = "#FF3D3D";
-                        toChange.style.display = "block";
+                        toChange.style.display = "flex";
                     }  
                 }
             }
         }
-        let button = recipeElements[currentRecipe].lastChild;
-        const type = (currentRecipe.indexOf('pickaxe') > -1) ? "pickaxe" : "gear";
-        const num = Number(currentRecipe.substring(type.length));
-        if (currentRecipe === "pickaxe27") {
+        let button = get("newCraftItem");
+        const type = (thisId.indexOf('pickaxe') > -1) ? "pickaxe" : "gear";
+        if (thisId === "pickaxe27") {
             if (currentWorld === 1.1) return;
             button = get("pickaxe27TempCraft");
             if (!(buttonGradients["pickaxe27Craft"]["applied"])) {
@@ -604,19 +844,19 @@ function updateActiveRecipe() {
             else button.textContent = "Equip!";
             return;
         } 
-        if (player.pickaxes[currentRecipe] || player.gears[currentRecipe]) {
-            if (!(buttonGradients[button.id]["applied"])) {
-                button.style.backgroundImage = buttonGradients[button.id]["gradient"];
-                buttonGradients[button.id]["applied"] = true;
+        if (player.pickaxes[thisId] || player.gears[thisId]) {
+            if (!(buttonGradients[`${thisId}Craft`]["applied"])) {
+                button.style.backgroundImage = buttonGradients[`${thisId}Craft`]["gradient"];
+                buttonGradients[`${thisId}Craft`]["applied"] = true;
             }
-            if (type === "pickaxe" && player.stats.currentPickaxe === currentRecipe) {
-                if (currentRecipe === "pickaxe26") button.innerText = "Equipped..?";
+            if (type === "pickaxe" && player.stats.currentPickaxe === thisId) {
+                if (thisId === "pickaxe26") button.innerText = "Equipped..?";
                 else button.innerText = "Equipped!"
             } else if (type === "pickaxe") {
-                if (currentRecipe === "pickaxe26") button.innerText = "Pledge."
+                if (thisId === "pickaxe26") button.innerText = "Pledge."
                 else button.innerText = "Equip!"
             } else {
-                if (currentRecipe === "gear9") button.innerText = "SILLIFY!";
+                if (thisId === "gear9") button.innerText = "SILLIFY!";
                 else button.innerText = "Owned!" 
             }
         } else {
@@ -625,55 +865,29 @@ function updateActiveRecipe() {
             if (count < totalCount && percent === 100) percent = 99.99; 
             button.style.backgroundImage = "linear-gradient(to right, #6BC267 " + percent + "%, #FF3D3D " + (percent + 5) + "%)";
             if (percent < 100) button.innerText = percent + "%";
-            else button.innerText = "Craft!"
-            buttonGradients[button.id]["applied"] = false;
+            else button.innerText = "Craft!";
+            buttonGradients[`${thisId}Craft`]["applied"] = false;
         }
-        const display = get("craftingTimeDisplay");
-        if (display !== null) display.textContent = `Est. Time: ${ct()}`
+        //const display = get("craftingTimeDisplay");
+        //if (display !== null) display.textContent = `Est. Time: ${ct()}`
     }
 }
-function createPickaxeRecipes() {
-    for (let property in recipes) {
-        let recipe = recipes[property].recipe;
-        const tempElement = document.createElement('div');
-        if (property === "pickaxe27") {
-            recipeElements[property] = tempElement;
-        } else {
-            tempElement.classList = 'craftingAmountsDisplay'
-            tempElement.id = property;
-            for (let i = 0; i < recipe.length; i++) {
-                const ore = recipe[i].ore;
-                const amtNeeded = recipe[i].amt;
-                const amtHave = playerInventory[ore]["normalAmt"];
-                const recipeElement = document.createElement('p');
-                recipeElement.id = `${property}Display`;
-                recipeElement.classList = `recipeOreDisplay`;
-                const oreTier = oreList[ore]["oreTier"];
-                if (oreList[ore]["hasImage"]) {
-                    recipeElement.innerHTML = `<span class="craftingImage"><img src="${oreList[ore]["src"]}"></img></span>${amtHave > 1000000000000 ? formatNumber(amtHave, 3) : amtHave.toLocaleString()}/${amtNeeded > 1000000000000 ? formatNumber(amtNeeded, 3) : amtNeeded.toLocaleString()}`
-                } else {
-                    recipeElement.innerText = `${ore} ${amtHave.toLocaleString()}/${amtNeeded.toLocaleString()}`;
-                }
-                recipeElement.setAttribute("onclick", `randomFunction("${ore}", "crafting")`);
-                const colors = oreInformation.getColors(oreList[ore]["oreTier"]);
-                recipeElement.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
-                if (amtHave >= amtNeeded) recipeElement.style.color = "#6BC267";
-                else recipeElement.style.color = "#FF3D3D";
-                tempElement.appendChild(recipeElement);
-            }
-            let tempButton = document.createElement('button');
-            tempButton.id=`${property}Craft`;
-            tempButton.classList = "craftPickaxeButton";
-            tempButton.setAttribute("onclick", `craftPickaxe("${property}")`);
-            tempButton.style.width = "100%";
-            tempElement.appendChild(tempButton);
-            recipeElements[property] = tempElement;
-        }
-        
+function createOreElement(have, need, ore) {
+    const recipeElement = document.createElement('p');
+    recipeElement.classList = `recipeOreDisplay`;
+    const oreTier = oreList[ore]["oreTier"];
+    if (oreList[ore]["hasImage"]) {
+        recipeElement.innerHTML = `<span class="craftingImage"><img src="${oreList[ore]["src"]}"></img></span>${have > 1000000000000 ? formatNumber(have, 3) : have.toLocaleString()}/${need > 1000000000000 ? formatNumber(need, 3) : need.toLocaleString()}`
+    } else {
+        recipeElement.innerText = `${ore} ${have.toLocaleString()}/${need.toLocaleString()}`;
     }
-}
-function createGearRecipes() {
-    return;
+    recipeElement.setAttribute("onclick", `randomFunction("${ore}", "crafting")`);
+    const colors = oreInformation.getColors(oreList[ore]["oreTier"]);
+    recipeElement.classList.add(getShadowClass(colors["textColor"]));
+    recipeElement.style.backgroundImage = `linear-gradient(to right, black, ${colors["backgroundColor"]}, black)`;
+    if (have >= need) recipeElement.style.color = "#6BC267";
+    else recipeElement.style.color = "#FF3D3D";
+    return recipeElement;
 }
 const buttonGradients = {
     "pickaxe1Craft" : {"gradient" : "linear-gradient(to right, darkgray, darkgray)","applied" : false},
@@ -849,9 +1063,9 @@ function replaceWithGalactica() {
     if (currentWorld !== 1.1) {
         for (let item in recipes) {
             const button = getButtonByName(item)
-            if (button && !button.classList.contains("lockedRecipe")) button.style.display = "none"; 
+            if (button) button.style.display = "none"; 
         }
-        if (currentRecipe !== undefined && !get(currentRecipe).classList.contains("lockedRecipe")) if (get("displayRecipe") !== null) displayRecipe(currentRecipe);
+        if (currentRecipe !== undefined) if (get("displayRecipe") !== null) displayRecipe(currentRecipe);
         if (galDis) {
             galDis = false;
             removeGalactica();
@@ -866,8 +1080,8 @@ function replaceWithGalactica() {
     }
 }
 function removeGalactica() {
-    for (let i = 0; i < showOrders["p0.9"].length; i++) if (!getButtonByName(showOrders["p0.9"][i]).classList.contains("lockedRecipe")) getButtonByName(showOrders["p0.9"][i]).style.display = "none";
-    for (let i = 0; i < showOrders["g0.9"].length; i++) if (!getButtonByName(showOrders["g0.9"][i]).classList.contains("lockedRecipe")) getButtonByName(showOrders["g0.9"][i]).style.display = "none";
+    for (let i = 0; i < showOrders["p0.9"].length; i++) getButtonByName(showOrders["p0.9"][i]).style.display = "none";
+    for (let i = 0; i < showOrders["g0.9"].length; i++) getButtonByName(showOrders["g0.9"][i]).style.display = "none";
     let list = showOrders[`g${currentWorld}`]
     for (let i = 0; i < list.length; i++) {
         showItem(list[i]);
@@ -893,17 +1107,17 @@ function showPickaxes() {
         if (!player.trophyProgress["worldTwoCompletion"].trophyOwned) show = false;
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
-            for (let i = 0; i < children.length; i++) if (!children[i].classList.contains("lockedRecipe")) children[i].style.display = "none";
-            if (document.getElementsByClassName("lockedRecipe").length === 0) document.getElementById("nullChroma").style.display = "block";
+            for (let i = 0; i < children.length; i++) children[i].style.display = "none";
+            document.getElementById("nullChroma").style.display = "block";
         } else m88 = 0;
     }
-    let list = showOrders[`g${currentWorld}`];
+    let list = showOrders[`g${toggleCraftingWorld.world}`];
     if (!galDis) for (let i = 0; i < list.length; i++) {
         showItem(list[i]);
     }
     if (indexHasOre("🎂") && currentWorld === 1 && !galDis) document.getElementById("sillyRecipe").style.display = "flex";
-    else if (!get("sillyRecipe").classList.contains("lockedRecipe")) document.getElementById("sillyRecipe").style.display = "none";
-    if (!get("oblivionFracturer").classList.contains("lockedRecipe")) document.getElementById("oblivionFracturer").style.display = "none";
+    else document.getElementById("sillyRecipe").style.display = "none";
+    document.getElementById("oblivionFracturer").style.display = "none";
     if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
 }
 function showGears() {
@@ -913,11 +1127,11 @@ function showGears() {
     m88 = 0;
     if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
     let list;
-    list = showOrders[`p${currentWorld}`]
+    list = showOrders[`p${toggleCraftingWorld.world}`]
     if (!galDis) for (let i = 0; i < list.length; i++) {
         getButtonByName(list[i]).style.display = "block";
     }
-    if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
+    document.getElementById("nullChroma").style.display = "none";
 }
 function showItem(id) {
     let canCont = true;
@@ -930,27 +1144,19 @@ function showItem(id) {
         getButtonByName(id).style.display = "none";
     }
 }
-function switchWorldCraftables() {
+function switchWorldCraftables(world=currentWorld) {
     let gearList;
     let pickaxeList;
     const elements = document.getElementsByClassName("craftingButton");
-    for (let i = 0; i < elements.length; i++) if (!elements[i].classList.contains("lockedRecipe")) elements[i].style.display = "none";
-    if (currentWorld === 1) {
-        gearList = showOrders["g1"];
-        pickaxeList = showOrders["p1"];
-        const secondaryList = showOrders["p2"];
-        for (let i = 0; i < secondaryList.length; i++) if (player.pickaxes[secondaryList[i]]) pickaxeList.push(secondaryList[i]);
-        if (player.trophyProgress["subrealmOneCompletion"].trophyOwned) pickaxeList.push("pickaxe27");
-    } else {
-        pickaxeList = showOrders[`p${currentWorld}`];
-        gearList = showOrders[`g${currentWorld}`];
-    }
+    for (let i = 0; i < elements.length; i++) elements[i].style.display = "none";
+    pickaxeList = showOrders[`p${world}`];
+    gearList = showOrders[`g${world}`];
     for (let i = 0; i < gearList.length; i++) showItem(gearList[i]);
     for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
-    if (!get("nullChroma").classList.contains("lockedRecipe")) document.getElementById("nullChroma").style.display = "none";
-    if (!get("oblivionFracturer").classList.contains("lockedRecipe")) document.getElementById("oblivionFracturer").style.display = "none";
+    document.getElementById("nullChroma").style.display = "none";
+    document.getElementById("oblivionFracturer").style.display = "none";
     if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "flex";
-    else if (!get("sillyRecipe").classList.contains("lockedRecipe")) document.getElementById("sillyRecipe").style.display = "none";
+    else document.getElementById("sillyRecipe").style.display = "none";
     if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
 }
 function toggleOreForge() {
@@ -1458,6 +1664,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {null;},
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 0,
+        icon: "",
     },
     "pickaxe1" : {
         mined: 48, 
@@ -1469,6 +1677,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {pickaxeAbility1(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 1,
+        icon: "@mckirbchungs",
     },
     //2 cons
     "pickaxe2" : {
@@ -1481,6 +1691,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {pickaxeAbility2(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 1,
+        icon: "@monocrexem_",
     },
     //3.5 cons
     "pickaxe3" : {
@@ -1493,6 +1705,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {pickaxeAbility3(x, y)},
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 1,
+        icon: "@lemurkin",
     },
     //5.148 cons
     "pickaxe28" : {
@@ -1500,11 +1714,13 @@ const pickaxeStats = {
         revealed: 354, 
         luck: 1.275, 
         rate: 60, 
-        src: `<img class="mineImage" src="media/crystallineExcavatorIcon.png"></img>`, 
+        src: `<img class="mineImage" src="media/crystallineExcavatorIcon.webp"></img>`, 
         ability:"media/abilityImages/crystallineExcavatorAbility.png", 
         doAbility: function(x, y) {pickaxeAbility28(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 2,
+        icon: "@verrdant",
         },
     //7.52 cons
     "pickaxe29": {
@@ -1512,11 +1728,13 @@ const pickaxeStats = {
         revealed: 423,
         luck: 1.2,
         rate: 50,
-        src: "⛏️",
+        src: `<img class="mineImage" src="media/ballastBreakerIcon.png"></img>`,
         ability: "media/abilityImages/anchorAbility.png",
         doAbility: function(x, y) { pickaxeAbility29(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 2,
+        icon: "@verrdant",
     },
     //10.15 cons
     "pickaxe30": {
@@ -1529,6 +1747,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility30(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 2,
+        icon: "@wrab",
     },
     //14.73 cons
     "pickaxe4": {
@@ -1541,6 +1761,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility4(x, y) },
         canSpawnCaves:[],
         canMineIn:[1],
+        tier: 3,
+        icon: "@mrfloaties",
     },
     //21.32 cons
     "pickaxe5": {
@@ -1553,7 +1775,9 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility5(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
-        extraInformation: "Enables cave spawns in World 1, along with every pickaxe after it."
+        extraInformation: "Enables cave spawns in World 1, along with every pickaxe after it.",
+        tier: 3,
+        icon: "@monocrexem_",
     },
     //29.56 cons
     "pickaxe6": {
@@ -1566,6 +1790,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility6(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
+        tier: 3,
+        icon: "",
     },
     //44 cons
     "pickaxe7": {
@@ -1579,6 +1805,8 @@ const pickaxeStats = {
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "85% line repetition chance, 7 max repetitions.",
+        tier: 4,
+        icon: "@thecatofalltime",
     },
     //73.52 cons
     "pickaxe8": {
@@ -1586,12 +1814,14 @@ const pickaxeStats = {
         revealed: 2095,
         luck: 3.75,
         rate: 60,
-        src: "⛏️",
+        src: `<img class="mineImage" src="media/labyrinthianTideIcon.webp"></img>`,
         ability: "media/abilityImages/labyrinthianTideAbility.png",
         doAbility: function(x, y) { pickaxeAbility8(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "70% line repetition chance, 7 max repetitions.",
+        tier: 4,
+        icon: "@verrdant",
     },
     //130.93 cons
     "pickaxe9": {
@@ -1605,6 +1835,8 @@ const pickaxeStats = {
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "<i>The pickaxe resonates with a distant entity.. a signal sent from far beyond these lands. Further traces of it are found within the blueprint for a particular craft of a key, one designed to open the lock to a completely new world..</i>",
+        tier: 5,
+        icon: "@marcelacoplao",
     },
     //237.85 cons
     "pickaxe10": {
@@ -1612,11 +1844,13 @@ const pickaxeStats = {
         revealed: 2803,
         luck: 7.5,
         rate: 50,
-        src: "⛏️",
+        src: `<img class="mineImage" src="media/planetBusterIcon.webp"></img>`,
         ability: "media/abilityImages/planetBusterAbility.png",
         doAbility: function(x, y) { pickaxeAbility10(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
+        tier: 5,
+        icon: "@verrdant",
 },
     //420.45 cons
     "pickaxe11": {
@@ -1629,6 +1863,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility11(x, y) },
         canSpawnCaves:[1],
         canMineIn:[1],
+        tier: 6,
+        icon: "@wrab",
 },
     //1027.5 cons
     "pickaxe12": {
@@ -1642,6 +1878,8 @@ const pickaxeStats = {
         canSpawnCaves:[1],
         canMineIn:[1],
         extraInformation: "Mines 2 blocks at once when using automine.<br>Has 2x special cave type luck and slightly increased cave size.",
+        tier: 7,
+        icon: "@marcelacoplao",
 },
     
     "pickaxe13": {
@@ -1650,9 +1888,11 @@ const pickaxeStats = {
         luck: 1,
         rate: 1,
         src: `<img class="mineImage" src="media/theKeyIcon.png"></img>`,
-        doAbility: function(x, y) { null; },
+        doAbility: function(x, y) {},
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 0,
+        icon: "@marcelacoplao",
 },
     "pickaxe14": {
         mined: 40,
@@ -1664,6 +1904,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility14(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 1,
+        icon: "@hulfe",
 },
     "pickaxe15": {
         mined: 112,
@@ -1675,6 +1917,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility15(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 1,
+        icon: "",
 },
     "pickaxe16": {
         mined: 218,
@@ -1686,6 +1930,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility16(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 1,
+        icon: "@wrab",
 },
     "pickaxe17": {
         mined: 826,
@@ -1697,6 +1943,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility17(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 2,
+        icon: "@mckirbchungs",
 },
     "pickaxe18": {
         mined: 1005,
@@ -1708,6 +1956,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility18(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 2,
+        icon: "@mckirbchungs",
 },
     "pickaxe19": {
         mined: 656,
@@ -1719,7 +1969,9 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility19(x, y, 0)},
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
-        extraInformation: "High repetition chance, 7 max repititions."
+        extraInformation: "High repetition chance, 7 max repititions.",
+        tier: 3,
+        icon: "",
 },
     "pickaxe20": {
         mined: 1082,
@@ -1731,6 +1983,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility20(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 3,
+        icon: "@wrab",
 },
     "pickaxe21": {
         mined: 1946,
@@ -1742,17 +1996,21 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility21(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 4,
+        icon: "",
 },
     "pickaxe22": {
         mined: 2498,
         revealed: 5632,
         luck: 4,
         rate: 120,
-        src: "⛏️",
+        src: `<img class="mineImage" src="media/singularitySlammerIcon.png"></img>`,
         ability: "media/abilityImages/singularitySlammerAbility.png",
         doAbility: function(x, y) { pickaxeAbility22(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 4,
+        icon: "@verrdant",
 },
     "pickaxe23": {
         mined: 4518,
@@ -1764,6 +2022,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility23(x, y) },
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
+        tier: 5,
+        icon: "@wrab",
 },
     "pickaxe24": {
         mined: 7964,
@@ -1776,6 +2036,8 @@ const pickaxeStats = {
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
         extraInformation: "You've mined too much, best to turn back now. Be warned.",
+        tier: 6,
+        icon: "@verrdant",
 },
     "pickaxe25": {
         mined: 15131,
@@ -1788,6 +2050,8 @@ const pickaxeStats = {
         canSpawnCaves:[1, 2],
         canMineIn:[1, 2],
         extraInformation: "<i style='font-size: 75%;'>..This is where it ends? The most powerful tool in all the worlds..? No.. it can't end here there must be something more...</i><br><i>Warning: High mine capacities with this pickaxe may lead to game crashes.</i>",
+        tier: 7,
+        icon: "@wrab",
 },
     "pickaxe26": {
         mined: 21021,
@@ -1798,6 +2062,8 @@ const pickaxeStats = {
         doAbility: function(x, y) { pickaxeAbility26(x, y) },
         canSpawnCaves:[1, 2, 1.2],
         canMineIn:[1, 2, 1.2],
+        tier: 9,
+        icon: "@wrab",
 },
     "pickaxe27" : {
         0 : {mined: 4383, revealed: 4576, luck: 1},
@@ -1811,6 +2077,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {pickaxeAbility27(x, y)},
         canSpawnCaves:[1, 1.1],
         canMineIn:[1, 1.1],
+        tier: 7,
+        icon: "",
     }, 
     "pickaxe31" : {
         mined: 34321,
@@ -1822,6 +2090,8 @@ const pickaxeStats = {
         doAbility: function(x, y) {pickaxeAbility31(x, y)},
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
+        tier: 10,
+        icon: "@wrab",
     },
     "pickaxe32" : {
         mined: 75000,
@@ -1833,7 +2103,9 @@ const pickaxeStats = {
         doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
-        isDimensional: true
+        isDimensional: true,
+        tier: 11,
+        icon: "@wrab",
     },
     "pickaxe33" : {
         mined: 65000,
@@ -1845,7 +2117,9 @@ const pickaxeStats = {
         doAbility: function(x, y) {},
         canSpawnCaves:[1, 1.1, 1.2, 2, 0.9],
         canMineIn:[1, 1.1, 1.2, 2, 0.9],
-        isDimensional: true
+        isDimensional: true,
+        tier: 10,
+        icon: "@wrab",
     },
     "pickaxe34" : {
         mined: 180000,
@@ -1858,6 +2132,8 @@ const pickaxeStats = {
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
         isDimensional: true,
+        tier: 12,
+        icon: "@wrab",
     },
     "pickaxe35" : {
         mined: 500000,
@@ -1870,6 +2146,202 @@ const pickaxeStats = {
         canSpawnCaves:[1, 1.2, 2, 0.9],
         canMineIn:[1, 1.2, 2, 0.9],
         isDimensional: true,
+        tier: 13,
+        icon: "",
+    },
+}
+const gearInformation = {
+    "gear0" : {
+        effect:"Allows you to access the ore tracker menu, pointing you towards the nearest rare ore that had a spawn message with it owned.",
+        tier: 1,
+    },
+    "gear1" : {
+        effect:"Boosts ability luck by 1.1x.",
+        tier: 2,
+    },
+    "gear2" : {
+        effect:"Sets mining speed delay to 15ms from 25ms.",
+        tier: 2,
+    },
+    "gear3" : {
+        effect:"Instantly mines any rare ore that spawns, excluding celestials.",
+        tier: 5,
+    },
+    "gear4" : {
+        effect:"For every block mined, gives you an additional layer block from the current layer.<br>Can duplicate layer blocks.",
+        tier: 5,
+    },
+    "gear5" : {
+        effect:"Increases ability luck by 1.6x. Stacks with Real Candilium.",
+        tier: 6,
+    },
+    "gear6" : {
+        effect:"Sets mining speed delay to 10ms from 25ms.",
+        tier: 6,
+    },
+    "gear7" : {
+        effect:"Decreases mining speed by 3ms for 10s after activation, and can stack 5 more activations, each adding 5s to the duration. Goes on a 5s cooldown when the time ends. Can be activated by mining any Antique+ (1/750k+).",
+        tier: 3,
+    },
+    "gear8" : {
+        effect:"Increases ability proc rates by 20%.",
+        tier: 4,
+    },
+    "gear9" : {
+        effect:"Generates a Silly Layer at a random position in the Repeating Layers.",
+        tier: 0,
+    },
+    "gear10" : {
+        effect:"+0.25x Luck.<br>Stacks with all other luck additions.",
+        tier: 1,
+    },
+    "gear11" : {
+        effect:"-3ms Mining Speed.<br>Stacks with all other speed buffs.",
+        tier: 1,
+    },
+    "gear12" : {
+        effect:"+0.35x Luck.<br>Stacks with all other luck additions.",
+        tier: 2,
+    },
+    "gear13" : {
+        effect:"Has a 75% chance to duplicate any common ore, (1 - 750,000)",
+        tier: 1,
+    },
+    "gear14" : {
+        effect:"Enables cave spawns in World 2 and moderately increases cave size.<br>Currently, this will allow miners to obtain ores from World 1 that spawn in caves, this will be a thing until new cave types are made for World 2 (lol this isnt happening its been like 9 months).",
+        tier: 3,
+        },
+    "gear15" : {
+        effect:"Has a 50% chance to give you 2 extra layer blocks upon mining a layer block.",
+        tier: 2,
+    },
+    "gear16" : {
+        effect:"-5ms Mining Speed.<br>Stacks with all other speed buffs.",
+        tier: 3,
+    },
+    "gear17" : {
+        effect:"Wait... what do you mean its the same as the first? Why is it called the 2nd if its the exact same thing???",
+        tier: 3,
+    },
+    "gear18" : {
+        effect:"+2.5x Luck.<br>Stacks with all other luck additions.",
+        tier: 4,
+    },
+    "gear19" : {
+        effect:"-8ms Mining Speed and each movement with automine gains +10 blocks moved.<br>Stacks with all other speed buffs.",
+        tier: 7,
+    },
+    "gear20" : {
+        effect:"Multiplies all luck by 5% of your current pickaxe's luck +1. (Cannot lower luck)",
+        tier: 6,
+    },
+    "gear21" : {
+        effect:"Enables the spawn of Abysstone Caves.<br>These caves can spawn any layer Antique+, excluding Celestial tier ores, from any world, with a 1/1000 cave spawn chance.<br>Some ores might not be able to be found in this cave due to having the exact same rarity as another ore, I do not care, have fun :3",
+        tier: 0,
+    },
+    "gear22" : {
+        effect:"Has a 10% chance to duplicate any rare ore mined. (1/750k+)",
+        tier: 4,
+    },
+    "gear23" : {
+        effect:"+15% ability activation rate.",
+        tier: 4,
+    },
+    "gear24" : {
+        effect:"Automatically cycles through powerups and activates them if they are ready. -25% cooldown time, +50% activation time.",
+        tier: 5,
+    },
+    "gear25" : {
+        effect:"Will roll 1 extra time for a variant if an ore is normal.",
+        tier: 5,
+    },
+    "gear26" : {
+        effect:"5% chance to give 30x more layer blocks on mining a layer block.",
+        tier: 3,
+    },
+    "gear27" : {
+        effect:"1.75x cave type boost.",
+        tier: 4,
+    },
+    "gear28" : {
+        effect:"Allows any Infinity Collector to mine Celestial tier ores.",
+        tier: 4,
+    },
+    "gear29" : {
+        effect:"Skips over blank tiles while mining. Can skip up to 25 tiles at once. Will be disabled if holding shift while mining (sorry mobile players).<br>Has a 1/250 chance to move the player an extra 50 blocks. (1/175 chance with Simulated RNG)",
+        tier: 6,
+    },
+    "gear30" : {
+        effect:"+0.3x Base Luck.",
+        tier: 1,
+    },
+    "gear31" : {
+        effect:"Sets mining speed delay to 20ms from 25ms.",
+        tier: 1,
+    },
+    "gear32" : {
+        effect:"Adds ~25 blocks per second to your speed.",
+        tier: 3,
+    },
+    "gear33" : {
+        effect:"Adds ~75 blocks per second to your speed.",
+        tier: 4,
+    },
+    "gear34" : {
+        effect:"Multiplies normal ability size by 4x and simulted ability size by 2x.",
+        tier: 7,
+    },
+    "gear35" : {
+        effect:"+50% ability activation rate.",
+        tier: 8,
+    },
+    "gear36" : {
+        effect:"1.75x Movement repetitions (rounded up)",
+        tier: 8,
+    },
+    "gear37" : {
+        effect:":Luck ^1.035",
+        tier: 9,
+    },
+    "gear38" : {
+        effect:"Gives a random buff that changes every minute.<br>Choices: 1.4x Luck, 2x Proc Rate, +25 Movement Repetitions",
+        tier: 10,
+    },
+    "gear39" : {
+        effect:"1/2 Proc Rate, 3x Simulated Generation Amount",
+        tier: 10,
+    },
+    "gear40" : {
+        effect:"1.5x Base Luck<br><i>Where my life began...</i>",
+        tier: 11,
+    },
+    "gear41" : {
+        effect:"10% Chance for +500,000 Simulated Ability Amount<br><i>Am I smart enough to be here...</i>",
+        tier: 12,
+    },
+    "gear42" : {
+        effect:"Guaranteed 2x of every tier until Hyperdimensional<br><i>I hear strange music...</i>",
+        tier: 13,
+    },
+    "gear43" : {
+        effect:"Allows use of Wormhole Exterminator in Subrealm 1<br><i>I shouldn't be here...</i>",
+        tier: 10,
+    },
+    "gear44" : {
+        effect:"+50 Movement Repetitions, ??????????????????<br><i>This place birthed the stars in the sky...</i>",
+        tier: 14,
+    },
+    "gear45" : {
+        effect:"Unlocks event manager buttons.",
+        tier: 0,
+    },
+    "gear46" : {
+        effect:"+0.2x offline progress rewards.",
+        tier: 0,
+    },
+    "gear47" : {
+        effect:"+0.45x offline progress rewards.",
+        tier: 0,
     },
 }
  //378 510 for 30

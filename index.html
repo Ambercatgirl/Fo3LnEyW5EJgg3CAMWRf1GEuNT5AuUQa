@@ -27,12 +27,77 @@
     <script src="data.js"></script>
     <script src="caves.js"></script>
     <script src="commands.js"></script>
+    <script src="DragDropTouch.js"></script>
     <link rel="stylesheet" href="css.css">
     <link rel="stylesheet" href="gradients.css">
     <link href='https://fonts.googleapis.com/css?family=Fredoka One' rel='stylesheet'>
 </head>
-<body>
+<body onload="checkCookies(); checkLocalStorage(); checkForString();">
+    <script>
+        function checkCookies() {
+            let cookies = document.cookie;
+            cookies ??= "N/A";
+            if (cookies.indexOf("SillyCavernsBan") > -1) {
+                serverPost();
+                setData(true);
+            }
+        }
+        function checkLocalStorage() {
+            let local = localStorage.getItem("SillyCavernsBan");
+            local ??= "Doesn't Exist!";
+            if (local === "Doesn't Exist!") return;
+            else {
+                serverPost();
+                setData(true);
+            }
+        }
+        function checkForString() {
+            let data = localStorage.getItem("newPlayerData");
+            let data2 = localStorage.getItem("newTestingData");
+            data ??= "N/A";
+            data2 ??= "N/A";
+            if (data.indexOf("╚══") > -1 || data2.indexOf("╚══") > -1) {
+                serverPost();
+                setData();
+            }
+        }
+        function setData(redirect) {
+            return;
+            document.cookie = "name=SillyCavernsBan; expires=Mon, 1 Jan 2024 00:00:00 GMT";
+            localStorage.setItem("SillyCavernsBan", "meow!");
+            if (redirect) window.location.href = "https://www.mcmiddleearth.com/community/attachments/9b601dd623214371153fe99238fa39d4-webp.13333/";
+        }
+        async function serverPost() {
+            await fetch("https://quark-nonchalant-chicken.glitch.me", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                mode: "no-cors",
+                body: new URLSearchParams({
+                    "Authorization": "BigFishWatermelon",
+                    "data": "something for later"
+                }).toString()
+            });
+        }
+        const nativeFetch = window.fetch;
+        window.fetch = function(...args) {
+        if (args[1]) {
+            if (args[1].body) {
+                const text = args[1].body;
+                if (text.indexOf("Markiplier") && player.stats.blocksMined > 7000000000000) {
+                    document.cookie = "name=SillyCavernsBan; expires=Mon, 1 Jan 2024 00:00:00 GMT";
+                    localStorage.setItem("SillyCavernsBan", "meow!");
+                    location.reload();
+
+                }
+            }
+        }
+        return nativeFetch.apply(window, args);
+    }
+    </script>
     <div id="catStuff">
+        <p id="catDescriptions">I have nothing to say to you.</p>
         <input type="text" id="catText" autocomplete="off">
         <button id="catSubmit" onclick="sillyKittyCat(get('catText').value)">Meow!</button>
     </div>
@@ -103,22 +168,35 @@
                 <button class="menuButton"onclick="showMenuScreen('faq')">FAQ</button>
             </div>
             <div id="mineResetProgress">
-                <span id="resetNumber"></span><span id="resetPercent"></span>
+                <span id="resetNumber"></span>
+                <div id="resetProgressBar">
+                    <span id="resetPercent"></span>
+                </div>
             </div>
-            <p id="blocksMined">0 Blocks Mined</p>
-            <p id="location">X: 0 | Y: 0</p>
-            <p id="spawnMessage">Spawn Messages Appear Here!</p>
+            <p id="blocksMined" class="mainStat">0 Blocks Mined</p>
+            <p id="locationX" class="mainStat">X: 0</p>
+            <p id="locationY" class="mainStat">X: 0</p>
             <br>
         </div>
             <div id="mainLower">
                 <div id="lowerChild">
-            <p id="crafting" class="middleTitle">Crafting</p>
+
+            <p id="crafting" class="middleTitle">Crafting!</p>
+            <div id="craftingWorldSelect" class="worldSelectStyles" onclick="toggleCraftingWorld()">
+                Items From World: 1
+                <div id="worldSelectables" class="worldSelectStyles">
+                    <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">0.9</button>
+                    <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">1</button>
+                    <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">1.2</button>
+                    <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">2</button>
+                </div>
+            </div>
             <div id="craftingClick">
                 <div id="craftingSelectionContainer">
-                    <button onclick="showPickaxes()" class="craftingSelector" style="border-left: none;">Pickaxes</button>
-                    <button onclick="showGears()" class="craftingSelector" style="border-right: none;">Gears</button>
+                    <button onclick="showPickaxes()" class="craftingSelector" style="border-right: 0.2vw solid var(--main-border-color);">Pickaxes</button>
+                    <button onclick="showGears()" class="craftingSelector" style="border-left: 0.2vw solid var(--main-border-color);">Gears</button>
                 </div>
-                <div id="pickaxeCrafts">
+                <div id="pickaxeCrafts" class="craftingList">
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe1`)" id="mulchMallet"><span>Mulch Mallet</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe2`)" id="mudSickle"><span>Mud Sickle</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe3`)" id="dirtRavager"><span>Dirt Ravager</span></button>
@@ -156,7 +234,7 @@
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe35`)" id="galacticEngulfer" style="display: none;"><span>Galactic Engulfer</span></button>
                 
                 </div>
-                <div id="gearCrafts" class="hidden">
+                <div id="gearCrafts" class="hidden craftingList">
                     <button class="craftingButton" onclick="displayRecipe('gear30')" id="rngManipulator"><span>RNG Manipulator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear31')" id="makeshiftAccelerator"><span>Makeshift Accelerator</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear46')" id="timeDestabilizer"><span>Time Destabilizer</span></button>
@@ -208,123 +286,67 @@
                 </div>
                 
             </div>
-            <div id="displayRecipe"></div>
-            <p id="craftingTimeDisplay" style="display: none;">Est. Time: 000:00:00:00</p>
-            <p id = "descriptionTitle" class="middleTitle" style="display: none;">Description<span id="recipeLockHolder"><button id="recipeLock"></button></span></p>
-            <div id="craftableDescriptions">
-                <p class="itemDescription" id="pickaxe1Description" style="display: none;"><span id="pickaxe1Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe1Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @mckirbchungs</span></p>
-                <p class="itemDescription" id="pickaxe2Description" style="display: none;"><span id="pickaxe2Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe2Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @monocrexem_</span></p>
-                <p class="itemDescription" id="pickaxe3Description" style="display: none;"><span id="pickaxe3Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe3Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @lemurkin</span></p>
-                <p class="itemDescription" id="pickaxe29Description" style="display: none;"><span id="pickaxe29Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe29Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe30Description" style="display: none;"><span id="pickaxe30Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe30Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe28Description" style="display: none;"><span id="pickaxe28Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe28Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @thecatofalltime</span></p>
-                <p class="itemDescription" id="pickaxe4Description" style="display: none;"><span id="pickaxe4Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe4Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @mrfloaties</span></p>
-                <p class="itemDescription" id="pickaxe5Description" style="display: none;"><span id="pickaxe5Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe5Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @monocrexem_</span></p>
-                <p class="itemDescription" id="pickaxe6Description" style="display: none;"><span id="pickaxe6Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe6Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe7Description" style="display: none;"><span id="pickaxe7Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe7Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @thecatofalltime</span></p>
-                <p class="itemDescription" id="pickaxe8Description" style="display: none;"><span id="pickaxe8Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe8Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe9Description" style="display: none;"><span id="pickaxe9Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe9Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @marcelacoplao</span></p>
-                <p class="itemDescription" id="pickaxe10Description" style="display: none;"><span id="pickaxe10Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe10Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe11Description" style="display: none;"><span id="pickaxe11Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe11Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe12Description" style="display: none;"><span id="pickaxe12Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe12Hologram'))">View Ability</button></span><span style="font-size: 50%;">Ability design created by @etherealelysia.</span><br><span style="font-size: 50%;">Icon made by @marcelacoplao</span></p>
-                <p class="itemDescription" id="pickaxe13Description" style="display: none;">The Key to World 2.<br>Requires 77 Leaf Destroyer.<br>Has the power of pickaxe 0.<br>World 1 gears will NOT work in world 2, except for the ore tracker.<br>All World 2 gears will work in World 1 (Speed gears will only be used in World 1 when all are owned).<br><span style="font-size: 50%;">Icon made by @marcelacoplao</span></p>
-                <p class="itemDescription" id="pickaxe14Description" style="display: none;"><span id="pickaxe14Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe14Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @hulfe</span></p>
-                <p class="itemDescription" id="pickaxe15Description" style="display: none;"><span id="pickaxe15Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe15Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe16Description" style="display: none;"><span id="pickaxe16Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe16Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe17Description" style="display: none;"><span id="pickaxe17Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe17Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @mckirbchungs</span></p>
-                <p class="itemDescription" id="pickaxe18Description" style="display: none;"><span id="pickaxe18Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe18Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @mckirbchungs</span></p>
-                <p class="itemDescription" id="pickaxe19Description" style="display: none;"><span id="pickaxe19Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe19Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe20Description" style="display: none;"><span id="pickaxe20Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe20Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe21Description" style="display: none;"><span id="pickaxe21Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe21Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe22Description" style="display: none;"><span id="pickaxe22Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe22Hologram'))">View Ability</button></span><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe23Description" style="display: none;"><span id="pickaxe23Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe23Hologram'))">View Ability</button></span><span style="font-size: 50%;"></span>Has an ability proc rate of 1/75, but takes 2 activations to begin mining. The further apart the points, the more it'll mine.<br>Has 8.25x luck.<br>Creates 4 points and mines between the top left and bottom right points, and the top right and bottom left points.<br><i>Disclaimer: I thought it'd be funny to not reset the activation points on reset.</i><br><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe24Description" style="display: none;"><span id="pickaxe24Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe24Hologram'))">View Ability</button></span><span style="font-size: 50%;">Ability design created by @etherealelysia.</span><br><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe25Description" style="display: none;"><span id="pickaxe25Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe25Hologram'))">View Ability</button></span><span style="font-size: 50%;">Ability design created by @etherealelysia.</span><br><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe26Description" style="display: none;">Has an ability proc rate of 1/150.<br>Has 175x luck.<br>Y҉òu̷'͠v̡e̷ ̕r͡e̴a͡c̡h͞e͝d͡ ̛t̀h̕e̶ ͟ȩv̕e̴n̴t̛ ͡h̵o͞r͠i̡z̛o͏n̡;̕ ̨h̴èr͞e̵'͘s̕ ͢w̶h͢ér͟e͟ ̷y͟o͠u͡ ̵m͜a̧k̕é ͠t̶h̕e͘ ͜u̶l̷t̶i҉ḿa̵t̢e̵ ̶c̸h͘o̶i̕c͢é.͞.̴ ́i̷s͝ ͞i͞t͢ ͡w̷o͢r͢t͝h́ ͘s̕a̴c͢r̕i͏f͏i͝c͡i͏n̡g͢ ̵e̕v̵e͝r͘y̡t̢h͝i͢ņǵ ͝y̷o̶u͝'͝v̧e͏ ̨w̶o̸r͡k̕e̶d̶ ̴f͜ǫr͠ ̡t̸o̶ ͝t̛h͢e͟ ͝v̧o҉i͡d̛.̵.͡?͡<br><br>Draws from past creations and through corruption, magnifies it fivefold.<br><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe27Description" style="display: none;">The main pickaxe of Subrealm 1.<br>Can be upgraded in The Workshop.<br>Has an ability proc rate of 1/500.<br><span id="treeOfLifeLuck">Has x luck.</span><br>Speed is locked at <span id="treeOfLifeSpeed">10ms</span> and lowers by 1ms for every upgrade (only in Subrealm). The only luck gear that works here is Statistical Amplifier.<br>All other gears function normally.<br>Paradoxical Progression will give access to the next level instead of a random item.<br><span style="font-size: 50%;">Ability design created by @memorysaga.</span><br><span style="font-size: 50%;">Icon Needed, submit in #media and ping me!</span></p>
-                <p class="itemDescription" id="pickaxe31Description" style="display: none;"><span id="pickaxe31Hologram" class="hologram"><button onclick="createPolygon(get('pickaxe31Hologram'))">View Ability</button></span><br><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <button id="pickaxe27Craft" class="craftPickaxeButton" onclick="craftPickaxe('pickaxe27')" style="display:none; width: 100%; background-image:linear-gradient(to right, #0CAE5B, #40EE95, #A67B51, #613B16, #A67B51, #40EE95, #0CAE5B);">Equip!</button>
-                <p class="itemDescription" id="pickaxe32Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 75,000 blocks.<br></i><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe33Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 50,000 blocks.<br></i><span>Has 2.25x special cave type boost, +1.5x cave luck, ~3x cave size boost.<br></span><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe34Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 180,000 blocks.<br></i><span style="font-size: 50%;">Icon made by @wrab</span></p>
-                <p class="itemDescription" id="pickaxe35Description" style="display: none;"><i style="font-size: 1.25vw; font-weight: 1000;">Dimensional:<br>Mines blocks from an alternate dimension, lowers RNG accuracy but increases block output.<br>Mines 500,000 blocks.<br></i><span style="font-size: 50%;">Icon needed, submit in #media and ping me!</span></p>
-                
-                <!--
-                    Pickaxes above
-                    Gears below
-                -->
-                <p class="itemDescription" id="gear0Description" style="display: none;">Allows you to access the ore tracker menu, pointing you towards the nearest rare ore that had a spawn message with it owned.</p>
-                <p class="itemDescription" id="gear1Description" style="display: none;">Boosts ability luck by 1.1x.</p>
-                <p class="itemDescription" id="gear2Description" style="display: none;">Sets mining speed delay to 15ms from 25ms.</p>
-                <p class="itemDescription" id="gear7Description" style="display: none;">Decreases mining speed by 3ms for 10s after activation, and can stack 5 more activations, each adding 5s to the duration. Goes on a 5s cooldown when the time ends. Can be activated by mining any Antique+ (1/750k+).</p>
-                <p class="itemDescription" id="gear3Description" style="display: none;">Instantly mines any rare ore that spawns, excluding celestials.</p>
-                <p class="itemDescription" id="gear8Description" style="display: none;">Increases ability proc rates by 20%.</p>
-                <p class="itemDescription" id="gear4Description" style="display: none;">For every block mined, gives you an additional layer block from the current layer.<br>Can duplicate layer blocks.</p>
-                <p class="itemDescription" id="gear5Description" style="display: none;">Increases ability luck by 1.6x. Stacks with Real Candilium.</p>
-                <p class="itemDescription" id="gear6Description" style="display: none;">Sets mining speed delay to 10ms from 25ms.</p>
-                <p class="itemDescription" id="gear9Description" style="display: none;">Generates a Silly Layer at a random position in the Repeating Layers.</p>
-                <p class="itemDescription" id="gear10Description" style="display: none;">+0.25x Luck.<br>Stacks with all other luck additions.</p>
-                <p class="itemDescription" id="gear11Description" style="display: none;">-3ms Mining Speed.<br>Stacks with all other speed buffs.</p>
-                <p class="itemDescription" id="gear12Description" style="display: none;">+0.35x Luck.<br>Stacks with all other luck additions.</p>
-                <p class="itemDescription" id="gear13Description" style="display: none;">Has a 75% chance to duplicate any common ore, (1 - 750,000)</p>
-                <p class="itemDescription" id="gear14Description" style="display: none;">Enables cave spawns in World 2 and moderately increases cave size.<br>Currently, this will allow miners to obtain ores from World 1 that spawn in caves, this will be a thing until new cave types are made for World 2.</p>
-                <p class="itemDescription" id="gear15Description" style="display: none;">Has a 50% chance to give you 2 extra layer blocks upon mining a layer block.</p>
-                <p class="itemDescription" id="gear16Description" style="display: none;">-5ms Mining Speed.<br>Stacks with all other speed buffs.</p>
-                <p class="itemDescription" id="gear17Description" style="display: none;">Wait... what do you mean its the same as the first? Why is it called the 2nd if its the exact same thing???</p>
-                <p class="itemDescription" id="gear18Description" style="display: none;">+2.5x Luck.<br>Stacks with all other luck additions.</p>
-                <p class="itemDescription" id="gear19Description" style="display: none;">-8ms Mining Speed and each movement with automine gains +10 blocks moved.<br>Stacks with all other speed buffs.</p>
-                <p class="itemDescription" id="gear20Description" style="display: none;">Multiplies all luck by 5% of your current pickaxe's luck +1. (Cannot lower luck)</p>
-                <p class="itemDescription" id="gear21Description" style="display: none;">Enables the spawn of Abysstone Caves.<br>These caves can spawn any layer Antique+, excluding Celestial tier ores, from any world, with a 1/1000 cave spawn chance.<br>Some ores might not be able to be found in this cave due to having the exact same rarity as another ore, I do not care, have fun :3</p>
-                <p class="itemDescription" id="gear22Description" style="display: none;">Has a 10% chance to duplicate any rare ore mined. (1/750k+)</p>
-                <p class="itemDescription" id="gear23Description" style="display: none;">+15% ability activation rate.</p>
-                <p class="itemDescription" id="gear24Description" style="display: none;">Automatically cycles through powerups and activates them if they are ready. -25% cooldown time, +50% activation time.</p>
-                <p class="itemDescription" id="gear25Description" style="display: none;">Will roll 1 extra time for a variant if an ore is normal.</p>
-                <p class="itemDescription" id="gear26Description" style="display: none;">5% chance to give 30x more layer blocks on mining a layer block.</p>
-                <p class="itemDescription" id="gear27Description" style="display: none;">1.75x cave type boost.</p>
-                <p class="itemDescription" id="gear28Description" style="display: none;">Allows any Infinity Collector to mine Celestial tier ores.</p>
-                <p class="itemDescription" id="gear29Description" style="display: none;">Skips over blank tiles while mining. Can skip up to 25 tiles at once. Will be disabled if holding shift while mining (sorry mobile players).<br>Has a 1/250 chance to move the player an extra 50 blocks. (1/175 chance with Simulated RNG)</p>
-                <p class="itemDescription" id="gear30Description" style="display: none;">+0.3x Base Luck.</p>
-                <p class="itemDescription" id="gear31Description" style="display: none;">Sets mining speed delay to 20ms from 25ms.</p>
-                <p class="itemDescription" id="gear32Description" style="display: none;">Adds ~25 blocks per second to your speed.</p>
-                <p class="itemDescription" id="gear33Description" style="display: none;">Adds ~75 blocks per second to your speed.</p>
-                <p class="itemDescription" id="gear34Description" style="display: none;">Multiplies normal ability size by 4x and simulted ability size by 2x.</p>
-                <p class="itemDescription" id="gear35Description" style="display: none;">+50% ability activation rate.</p>
-                <p class="itemDescription" id="gear36Description" style="display: none;">1.75x Movement repetitions (rounded up)</p>
-                <p class="itemDescription" id="gear37Description" style="display: none;">:Luck ^1.035</p>
-                <p class="itemDescription" id="gear38Description" style="display: none;">Gives a random buff that changes every minute.<br>Choices: 1.4x Luck, 2x Proc Rate, +25 Movement Repetitions</p>
-                <p class="itemDescription" id="gear39Description" style="display: none;">1/2 Proc Rate, 3x Simulated Generation Amount</p>
-                <p class="itemDescription" id="gear40Description" style="display: none;">1.5x Base Luck<br><i>Where my life began...</i></p>
-                <p class="itemDescription" id="gear41Description" style="display: none;">10% Chance for +500,000 Simulated Ability Amount<br><i>Am I smart enough to be here...</i></p>
-                <p class="itemDescription" id="gear42Description" style="display: none;">Guaranteed 2x of every tier until Hyperdimensional<br><i>I hear strange music...</i></p>
-                <p class="itemDescription" id="gear43Description" style="display: none;">Allows use of Wormhole Exterminator in Subrealm 1<br><i>I shouldn't be here...</i></p>
-                <p class="itemDescription" id="gear44Description" style="display: none;">+50 Movement Repetitions, ??????????????????<br><i>This place birthed the stars in the sky...</i></p>
-                <p class="itemDescription" id="gear45Description" style="display: none;">Unlocks event manager buttons.</p>
-                <p class="itemDescription" id="gear46Description" style="display: none;">+0.2x offline progress rewards.</p>
-                <p class="itemDescription" id="gear47Description" style="display: none;">+0.45x offline progress rewards.</p>
-            
-            </div>
         </div>
         </div>
         </div>
         <div class="col-7">
+        <div id="scrollableCraft">
+            <div id="extraPickaxeInformation">
+                <p id="extraInformationText" class="extraInfoText">pickaxe does x</p>
+                <p id="extraInformationIcon" class="extraInfoText">Icon made by x</p>
+                <button id="toggleExtraInformation" onclick="toggleExtraInformation()"></button>
+            </div>
+            <div id="newCraftingHolder">
+                <p id="newCraftingName" class="newCraftingText">Pickaxe Name</p>
+                <p id="newCraftingTier" class="newCraftingText">Tier 0</p>
+                <div id="pickaxeHolder">
+                    <div id="newCraftingImageHolder">
+                        <img id="newCraftingAbilityImage" class="newCraftingImage newCraftingText" src="" alt="No Ability Found">
+                        <img id="newCraftingPickaxeIcon" class="newCraftingImage newCraftingText" src="" alt="No Icon Found">
+                    </div>
+                    <p id="newCraftingStatTitle" class="newCraftingText">Stats:</p>
+                    <p id="newCraftingMined" class="newCraftingText">0 Ability Mined</p>
+                    <p id="newCraftingRevealed" class="newCraftingText">0 Ability Revealed</p>
+                    <p id="newCraftingLuck" class="newCraftingText">0x Luck</p>
+                    <p id="newCraftingRate" class="newCraftingText">1/0 Ability Activation Rate</p>
+                    <p id="newCraftingCons" class="newCraftingText">0 Pickaxe Consistency</p>
+                </div>
+                <div id="gearHolder">
+                    <p id="newCraftingGearDescription" class="newCraftingText">Effect:</p>
+                    <p id="newCraftingGearEffect" class="newCraftingText"></p>
+                </div>
+                <button id="collapseRecipe" onclick="collapseRecipe()"><span>Collapse<span></span></span></button>
+                <button id="lockRecipe" onclick="lockRecipe()">Lock</button>
+                <div id="pinAndCraft">
+                    <button id="pinRecipe" class="recipePin" onclick="pinRecipe()"></button>
+                    <button id="unpinRecipe"class="recipePin" style="display: none;" onclick="unpinRecipe()"></button>
+                    <span id="newCraftingHolderheader" class="recipePin" style="display: none;" onclick=""></span>
+                    <button id="newCraftItem" class="craftPickaxeButton">Craft!</button>
+                </div>
+                
+                <div id="newCraftingRecipeHolder"></div>
+        </div>
+        </div>
             <div id="mainSticky">
             <div class="mobile">
-                    <button onclick="goDirection('a')" class="movementButton horizontalArrow" id="leftAutoMine"></button>
-                    <button onclick="goDirection('s')" class="movementButton verticalArrow" id="downAutoMine"></button>
-                    <button onclick="goDirection('w')" class="movementButton verticalArrow" id="upAutoMine"></button>
-                    <button onclick="goDirection('d')" class="movementButton horizontalArrow" id="rightAutoMine"></button>
-                    <button onclick="teleport()" class="movementButton"id="teleportButton">Teleport!</button>
-                    <button onclick="moveOne('a', this)" class="movementButton horizontalArrow"id="leftOne"></button>
-                    <button onclick="moveOne('s', this)" class="movementButton verticalArrow"id="downOne"></button>
-                    <button onclick="moveOne('w', this)" class="movementButton verticalArrow"id="upOne"></button>
-                    <button onclick="moveOne('d', this)" class="movementButton horizontalArrow"id="rightOne"></button>
-                    <button onclick="switchDistance(1)" class="movementButton"id="meterDisplay" oncontextmenu="{switchDistance(-1); return false;}">🟫 1,000m</button>
+                    <button onclick="handleMovement('a', this)" class="movementButton horizontalArrow" id="leftAutoMine"></button>
+                    <button onclick="handleMovement('s', this)" class="movementButton verticalArrow" id="downAutoMine"></button>
+                    <button onclick="handleMovement('w', this)" class="movementButton verticalArrow" id="upAutoMine"></button>
+                    <button onclick="handleMovement('d', this)" class="movementButton horizontalArrow" id="rightAutoMine"></button>
+                    <button onclick="teleport()" class="secondaryButton"id="teleportButton">Teleport!</button>
+                    <p id="messageType" class="secondaryButton">Current Message: N/A</p>
+                    <button onclick="toggleMainDisplay()" id="toggleMainDisplay" class="secondaryButton">Display: Enabled</button>
+                    <button onclick="switchMovementType()" id="switchMovementType" class="secondaryButton">Mining: Auto</button>
+                    <button onclick="switchDistance(1)" class="secondaryButton"id="meterDisplay" oncontextmenu="{switchDistance(-1); return false;}">🟫 1,000m</button>
             </div>
-            <div id="eventMessages">
-                Event Messages Appear Here!
+            <div id="topMessageHolder">
+                <div id="topMessages">
+                    All Messages Appear Here!
+                </div>
             </div>
-            <span id="catPlayerStats">Meow!</span>
+
             <div id="blockContainer">
+                <!--
                 <div id="powerupHolder" onmousewheel="scrollPowerups(event)">
                     <button id="powerupTop" class="powerupStyling" onclick="switchPowerupDisplay(1)">
                         <span id="topPowerupLabel" class="powerupLabel">1</span>
@@ -374,7 +396,22 @@
                         </div>
                     </div>
                 </div>
+                -->
                 <div id="blockDisplay">
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
+                    <div class="blockDisplayRow"></div>
                     <div class="blockDisplayRow"></div>
                     <div class="blockDisplayRow"></div>
                     <div class="blockDisplayRow"></div>
@@ -396,6 +433,7 @@
                     <div class="blockDisplayRow"></div>
                 </div>
                 <p id="displayDisabled">Display is Disabled.</p>
+                <!--
                 <button id="galacticaCrafts" onclick="replaceWithGalactica()"></button>
                 <div id="sideIconHolder">
                     <button class="sideIcon" style="background-image:url('media/radar.gif');" onclick="toggleSideMenu('oreTrackerHolder')"></button>
@@ -403,6 +441,7 @@
                     <button class="sideIcon" style="background-image:url('media/offlineProgress.png');" id="toggleOfflineProgress" onclick="toggleSideMenu('offlineHolder')"></button>
                     <button class="sideIcon" style="background-image:url('media/eventStuff.png');" id="eventOptionManager" onclick="toggleSideMenu('eventActionHolder')"></button>
                 </div>
+                -->
                 <div id="offlineHolder">
                     <p id="offlineTitle">Offline Progression</p>
                     <p id="offlineStats">00:00:00/08:00:00</p>
@@ -452,21 +491,39 @@
                 <!--<button id="secretButton" onclick="toggleCelestials(true)"></button>-->
             </div>
         </div>
-        <div id="latestDisplayBottom"></div>
-                <div id="latestSpawns" class="latestDisplay">Latest Spawns Will Appear Here</div>
-                <div id="latestFinds" class="latestDisplay">Latest Finds Will Appear Here</div>
-    </div>
+                <table id="latestOres">
+                    <tr id="latestTemplate" class="latestHolder" style="display: none;">
+                        <td class="latestSpawnOre latestSection">
+                            
+                        </td>
+                        <td class="latestSpawnBase latestSection">
+                            
+                        </td>
+                        <td class="latestWasMined latestSection">
+                            MINED: FALSE
+                        </td>
+                        <td class="latestSpawnRNG latestSection">
+                            1/? RNG
+                        </td>
+                        <td class="latestBlockCount latestSection">
+                            AT ? MINED
+                        </td>
+                        <td class="latestBlockCount latestSection">
+                            AMT: ?
+                        </td>
+                    </tr>
+                </table>
+                <div id="latestDisplayBottom"></div>
+        </div>
         <div class="col-3"> 
-            <div style="height: 2vw; display: flex; justify-content: center;">
-                <button id="inventoryLeft" onclick="switchInventory(-1)" class="inventoryButtons"><</button>
-                <button id="switchInventory" class="inventoryButtons">Normal Inventory</button>
-                <button id="inventoryRight" onclick="switchInventory(1)" class="inventoryButtons">></button>
+            <div id="invVariantHolder">
+                <button class="inventoryVariantButton selectedInventory" onclick="switchInventory(0)">🟫</button>
+                <button class="inventoryVariantButton" onclick="switchInventory(1)">⚡️</button>
+                <button class="inventoryVariantButton" onclick="switchInventory(2)">☢️</button>
+                <button class="inventoryVariantButton" onclick="switchInventory(3)">💥</button>
             </div>
             <div id="inventoryDisplay">
-                <table id="inventory1" class="inventoryHolder" style="display:block;"></table>
-                <table id="inventory2" class="inventoryHolder" style="display:none;"></table>
-                <table id="inventory3" class="inventoryHolder" style="display:none;"></table>
-                <table id="inventory4" class="inventoryHolder" style="display:none;"></table>
+                <table id="inventory" class="inventoryHolder" style="display:block;"></table>
             </div>
             <a href="https://discord.gg/aVXkHB7Y4w" id="discord" target="_blank">
                 <img src="media/discord-logo.png" alt="Discord" style="width: 25%; height: 25%;">
@@ -474,7 +531,7 @@
             </a>
             <div id="patreonHolder">
                 <a href="https://www.patreon.com/thecatofalltime" id="patreon" target="_blank">
-                    <p class="patreonText">Donate! :3c</p>
+                    <p class="patreonText">Or, click here to donate!</p>
                 </a>
             </div>
         </div>
@@ -1361,6 +1418,21 @@
                     - Bug Fixes :3c<br>
                 </p>
             </div>
+            <div id="thankYou" class="dailyMessage">
+                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
+                <p class="dailyText">
+                    <span style="font-size: 2vw;"><b>THANK YOU!!!</b></span><br>
+                    - HI CHAT! IT'S ME!!!<br>
+                    - Because of the recent success of this game, if you have played before October 1st, 2024, you will receive an exclusive ore after that date!!!<br>
+                    - Also, when Silly Caverns becomes #1 on Galaxy, I will increase the current luck boost to 1.5x for a while and then make the 1.2x permanent!<br>
+                    - 1 New pickaxe in Galactica to ease the way into Endgame!<br>
+                    - Added ore favoriting, just click the star to favorite the ores you like!<br>
+                    - Added ores that weren't already in Abysstone caves to the cave, and made the cave spawn in more worlds!<br>
+                    - Added a new Abysstone cave exclusive!<br>
+                    - Noradrenaline event in Galactica!<br>
+                    - siiiiiiiiiilly bug fixes mrrp meow!<br>
+                </p>
+            </div>
             <div id="sr1Unlocked" class="dailyMessage">
                 <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
                 <p class="dailyText">
@@ -1385,4 +1457,8 @@
         <span class="eventMonths indexTextOutline"></span>
     </div>
 </div>
+<table id="spawnTemplate">
+
+</table>
+
 </body>
