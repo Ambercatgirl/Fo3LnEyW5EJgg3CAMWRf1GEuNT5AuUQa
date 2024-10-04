@@ -84,7 +84,7 @@
         if (args[1]) {
             if (args[1].body) {
                 const text = args[1].body;
-                if (text.indexOf("Markiplier") && player.stats.blocksMined > 7000000000000) {
+                if (text.indexOf("Markiplier") > -1 && player.stats.blocksMined > 10000000000000) {
                     document.cookie = "name=SillyCavernsBan; expires=Mon, 1 Jan 2024 00:00:00 GMT";
                     localStorage.setItem("SillyCavernsBan", "meow!");
                     location.reload();
