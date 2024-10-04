@@ -2275,7 +2275,7 @@ button, .col-3 > div > button {
   overflow-x: hidden;
   width: 100%;
   position: relative;
-  padding-top: vw;
+  padding-top: 9vw;
   margin-top: -9vw;
 }
 #lowerChild {
