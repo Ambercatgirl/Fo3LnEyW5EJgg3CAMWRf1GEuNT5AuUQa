@@ -6,6 +6,7 @@
 #mainContent {
   display: none;
   position: fixed;
+  height: 100%;
 }
 :root {
   --main-bg-color:#16171f;
@@ -360,9 +361,6 @@
   border: none;
   border-right: 0.2vw solid var(--main-border-color);
 }
-#lockRecipe {
-
-}
 #collapseRecipe span span{
   background-image: url(media/pointUp.png);
   background-position: right;
@@ -384,7 +382,7 @@
   width: 50%;
   height: 2vw;
   font-size: 1.25vw;
-  color:#FF3D3D;
+  color:#6BC267;
   font-weight: 800;
   border-left: 0.2vw solid var(--main-border-color);
 }
@@ -3208,7 +3206,7 @@ button {
   justify-content: center;
   height: 1.5vw;
   width: 100%;
-  margin-left: 0.2vw;
+  margin-left: 0.2em;
 }
 .electrifiedBlock {
   position: relative;

@@ -627,8 +627,9 @@ function unpinRecipe() {
     get("collapseRecipe").style.display = "none";
     get("lockRecipe").style.display = "none";
     let size;
-    if (currentRecipeId.indexOf("gear") > -1) size = currentRecipeId.substring(0, 4);
-    else size = currentRecipeId.substring(0, 7);
+    let cID = currentRecipeId === undefined ? "pickaxe1" : currentRecipeId
+    if (cID.indexOf("gear") > -1) size = cID.substring(0, 4);
+    else size = cID.substring(0, 7);
     size = sizes[size]["unpin"];
     get("newCraftingHolder").style.height = size;
     get("pinnedRecipeHolder").remove();
@@ -637,19 +638,22 @@ function unpinRecipe() {
 function lockRecipe() {
     if (pinInformation.locked) {
         pinInformation.locked = false;
-        if (currentRecipeId !== pinInformation.lockedId) {
+        if (currentRecipeId === undefined) {
+            unpinRecipe();
+        }
+        else if (currentRecipeId !== pinInformation.lockedId) {
             removeRecipeElements();
             addRecipeInformation(currentRecipeId);
         }
         pinInformation.lockedId = undefined;
-        get("lockRecipe").textContent = "Lock";
-        get("lockRecipe").style.color = "#FF3D3D";
+        get("lockRecipe").textContent = "Unlocked";
+        get("lockRecipe").style.color = "#6BC267";
     } else {
         const id = currentRecipeId;
         pinInformation.locked = true;
         pinInformation.lockedId = id;
-        get("lockRecipe").textContent = "Unlock";
-        get("lockRecipe").style.color = "#6BC267";
+        get("lockRecipe").textContent = "Locked";
+        get("lockRecipe").style.color = "#FF3D3D";
     }
 
 }
