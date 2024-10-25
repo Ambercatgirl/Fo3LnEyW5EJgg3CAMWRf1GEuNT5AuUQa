@@ -141,6 +141,18 @@ class playerTemplate {
             manualMined: 0,
             caveGenerated: 0
         },
+        this.loungeSettings = {
+            updateLuck : true,
+            updateGenerations: true,
+            updateLayer: true,
+            updateDirection: true,
+            updateCaveInfo: true,
+            updatePowerups: true,
+            updateSpeed: true,
+            updateOreCount: true,
+            updateEvent: true,
+            updateLastOre: true
+        }
         this.powerupCooldowns = {
             "powerup1": {cooldown: Date.now(), unlocked: false, canAuto: false},
             "powerup2": {cooldown: Date.now(), unlocked: false, canAuto: false},
@@ -225,6 +237,7 @@ class playerTemplate {
         this.eventManager = {
             cooldown: Date.now()
         }
+        this.completedMilestones = []
     }
 }
 let player = new playerTemplate();
@@ -359,50 +372,62 @@ const powerupList = {
         doAbility: "powerup5(); updatePowerupCooldowns();",
     },
 }
-function switchPowerupDisplay(num) {
-    const currentIndex = powerupOrder.indexOf(currentPowerupDisplayed);
-    let newIndex = currentIndex + num;
-    if (newIndex >= powerupOrder.length) newIndex = 0;
-    else if (newIndex < 0) newIndex = powerupOrder.length - 1;
-    currentPowerupDisplayed = powerupOrder[newIndex];
-    get("powerupLock").style.display = "none";
-    const powerup = powerupList[powerupOrder[newIndex]];
-    get("powerupTitle").children[0].textContent = powerup.title;
-    get("powerupTitle").children[0].style = `background:${powerup.gradient}; -webkit-background-clip: text; color: transparent; background-clip: text; -webkit-text-fill-color: transparent;`;
+function displayPowerup(num) {
+    if (num < 0) num = 4;
+    if (num > 4) num = 0;
+    currentPowerupDisplayed = powerupOrder[num];
+    const powerup = powerupList[powerupOrder[num]];
+    get("powerupName").children[0].textContent = powerup.title;
+    get("powerupName").children[0].style = `background:${powerup.gradient}; -webkit-background-clip: text; color: transparent; background-clip: text; -webkit-text-fill-color: transparent;`;
     get("powerupDescription").textContent = powerup.description;
-    get("powerupCooldown").setAttribute("onclick", `${powerupList[currentPowerupDisplayed].doAbility}`);
-    if (player.powerupCooldowns[currentPowerupDisplayed].canAuto) get("allowAutoPowerup").style.backgroundColor = "6BC267";
-    else get("allowAutoPowerup").style.backgroundColor = "FF3D3D";
-    applyNearbyData();
+    get("activatePowerup").setAttribute("onclick", `${powerupList[currentPowerupDisplayed].doAbility}`);
     updatePowerupCooldowns();
+    checkAllConditions();
+    if (player.powerupCooldowns[powerupOrder[num]].unlocked) get("powerupLock").style.display = "none";
+    else {
+        get("powerupLock").style.display = "block";
+        get("powerupRequirement").textContent = powerup.displayProgress();
+    }
 }
 function updatePowerupCooldowns() {
-    checkPowerupConditions(currentPowerupDisplayed);
     const cooldown = powerupList[currentPowerupDisplayed].cooldown * (player.gears["gear24"] ? 0.75 : 1);
     const canUseAt = player.powerupCooldowns[currentPowerupDisplayed].cooldown;
-    let cooldownPercent = Math.round(100000*((canUseAt - Date.now())/cooldown))/1000
+    let cooldownPercent = Math.round(100000*((canUseAt - Date.now())/cooldown))/1000;
     if (cooldownPercent <= 0) cooldownPercent = 0;
-    get("powerupCooldown").style.background = `linear-gradient(to left, #FF3D3D 0%, ${cooldownPercent}%, #6BC267 ${cooldownPercent}%`;
-    get("powerupCooldown").textContent = cooldownPercent > 0 ? `Can use in ${msToTime(canUseAt - Date.now())}` : "Activate!";
+    get("activatePowerup").style.background = `linear-gradient(to left, rgba(255, 61, 61, 0.75) 0%, ${cooldownPercent}%, rgba(107, 194, 103, 0.75) ${cooldownPercent}%`;
+    get("activatePowerup").textContent = cooldownPercent > 0 ? `Can use in ${msToTime(canUseAt - Date.now())}` : "Activate!";
     const activeNumbers = powerupList[currentPowerupDisplayed].getActiveFor();
     if (activeNumbers.active <= 0) activeNumbers.active = 1;
     let activePercent = Math.round(100000*(activeNumbers.progress/activeNumbers.active))/1000;
-    get("powerupActive").style.background = `linear-gradient(to left, #6BC267 0%, ${activePercent}%, #FF3D3D ${activePercent}%`;
-    get("powerupActive").textContent = activePercent > 0 ? `Active for ${msToTime(activeNumbers.progress)}` : "Not Active";
+    get("powerupIsActive").style.background = `linear-gradient(to left, rgba(107, 194, 103, 0.75) 0%, ${activePercent}%, rgba(255, 61, 61, 0.75) ${activePercent}%`;
+    get("powerupIsActive").textContent = activePercent > 0 ? `Active for ${msToTime(activeNumbers.progress)}` : "Not Active";
 }
-function checkPowerupConditions(powerup) {
-    const isCurrent = powerup === currentPowerupDisplayed;
-    if (player.powerupCooldowns[powerup].unlocked && isCurrent) get("powerupLock").style.display = "none";
-    else {
-        if (powerupList[powerup].checkRequirements()) {
-            player.powerupCooldowns[powerup].unlocked = true;
-            if (isCurrent) switchPowerupDisplay(0);
-        } else if (isCurrent) {
-            const lock = get("powerupLock")
-            lock.style.display = "block";
-            get("powerupRequirement").textContent = powerupList[powerup].displayProgress();
+function checkAllConditions() {
+    const elems = document.getElementsByClassName("selectPowerup");
+    for (let i = 0; i < elems.length; i++) {
+        const num = Number(elems[i].textContent) - 1;
+        const powerupName = powerupOrder[num];
+        const powerup = powerupList[powerupName];
+        if (powerupName === currentPowerupDisplayed) elems[i].classList.add("openPowerup");
+        else elems[i].classList.remove("openPowerup");
+        if (!player.powerupCooldowns[powerupName].unlocked) {
+            if (powerup.checkRequirements()) {
+                elems[i].style.backgroundColor = "rgba(107, 194, 103, 0.75)";
+                player.powerupCooldowns[powerupName].unlocked = true;
+            } else {
+                elems[i].style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+            }
+        } else {
+            if (Date.now() > player.powerupCooldowns[powerupName].cooldown) {
+                elems[i].style.backgroundColor = "rgba(107, 194, 103, 0.75)";
+            } else {
+                elems[i].style.backgroundColor = "rgba(255, 61, 61, 0.75)";
+            }
         }
     }
+}
+function displayShown() {
+    
 }
 function triggerPowerupExtension() {
     if (!get("powerupInfoExtension").style.animation === "") return;
@@ -427,46 +452,8 @@ function triggerPowerupExtension() {
     }
 }
 function scrollPowerups(event) {
-    if (event.deltaY > 0) switchPowerupDisplay(-1)
-    else switchPowerupDisplay(1);
-}
-function getNearbyGradients() {
-    const currentIndex = powerupOrder.indexOf(currentPowerupDisplayed);
-    let indexOne;
-    let indexTwo;
-    if (currentIndex + 1 >= powerupOrder.length) indexOne = 0;
-    else indexOne = currentIndex + 1;
-    if (currentIndex - 1 < 0) indexTwo = powerupOrder.length - 1;
-    else indexTwo = currentIndex - 1;
-    return {top: powerupOrder[indexOne], middle: powerupOrder[currentIndex], bottom: powerupOrder[indexTwo]}
-}
-function applyNearbyData() {
-    const powerupLocations = getNearbyGradients();
-    get("mainPowerupLabel").style = `background:${powerupList[powerupLocations.middle].gradient.replace("right", "bottom")}; -webkit-background-clip: text; color: transparent; background-clip: text; -webkit-text-fill-color: transparent;`;
-    get("topPowerupLabel").style = `background:${powerupList[powerupLocations.top].gradient.replace("right", "bottom")}; -webkit-background-clip: text; color: transparent; background-clip: text; -webkit-text-fill-color: transparent;`;
-    get("bottomPowerupLabel").style = `background:${powerupList[powerupLocations.bottom].gradient.replace("right", "bottom")}; -webkit-background-clip: text; color: transparent; background-clip: text; -webkit-text-fill-color: transparent;`;
-    get("mainPowerupLabel").textContent = powerupOrder.indexOf(powerupLocations.middle) + 1;
-    get("topPowerupLabel").textContent = powerupOrder.indexOf(powerupLocations.top) + 1;
-    get("bottomPowerupLabel").textContent = powerupOrder.indexOf(powerupLocations.bottom) + 1;
-    displayNearbyCooldowns()
-}
-function displayNearbyCooldowns() {
-    const powerupLocations = getNearbyGradients();
-    checkPowerupConditions(powerupLocations.top);
-    checkPowerupConditions(powerupLocations.middle);
-    checkPowerupConditions(powerupLocations.bottom);
-    if (player.powerupCooldowns[powerupLocations.top].unlocked) {
-        if (Date.now() >= player.powerupCooldowns[powerupLocations.top].cooldown) get("topPowerupReady").textContent = "🟢";
-        else get("topPowerupReady").textContent = "🔴";
-    } else get("topPowerupReady").textContent = "⚫";
-    if (player.powerupCooldowns[powerupLocations.bottom].unlocked) {
-        if (Date.now() >= player.powerupCooldowns[powerupLocations.bottom].cooldown) get("bottomPowerupReady").textContent = "🟢";
-        else get("bottomPowerupReady").textContent = "🔴";
-    } else get("bottomPowerupReady").textContent = "⚫";
-    if (player.powerupCooldowns[powerupLocations.middle].unlocked) {
-        if (Date.now() >= player.powerupCooldowns[powerupLocations.middle].cooldown) get("mainPowerupReady").textContent = "🟢";
-        else get("mainPowerupReady").textContent = "🔴";
-    } else get("mainPowerupReady").textContent = "⚫";
+    if (event.deltaY > 0) displayPowerup(powerupOrder.indexOf(currentPowerupDisplayed) + 1)
+    else displayPowerup(powerupOrder.indexOf(currentPowerupDisplayed) - 1);
 }
 function getItemNameFromParadoxical(item) {
     return recipes[item].name;
@@ -479,15 +466,6 @@ function toggleCanAuto(powerup) {
     } else {
         area.canAuto = true;
         get("allowAutoPowerup").style.backgroundColor = "6BC267";
-    }
-}
-function toggleSpecificPowerup(num) {
-    num--;
-    if (num > -1 && num < powerupOrder.length + 1) {
-        const curIndex = powerupOrder.indexOf(currentPowerupDisplayed);
-        const distToTravel = num - curIndex;
-        switchPowerupDisplay(distToTravel);
-        if (!powerupDisplayed || distToTravel === 0) triggerPowerupExtension();
     }
 }
 function autoPowerups() {
@@ -610,7 +588,6 @@ const replacements = {
     "pleidas" : "pleiades"
 }
 function loadNewData(data) {
-    try {
         const blocks = Object.keys(data.blocks);
         for (let i = 0; i < blocks.length; i++) if (replacements[blocks[i]] !== undefined) {data.blocks[replacements[blocks[i]]] = data.blocks[blocks[i]]; delete data.blocks[blocks[i]];}
         for (let propertyName in data.blocks) {
@@ -809,7 +786,7 @@ function loadNewData(data) {
         if (data.eventManager !== undefined) {
             player.eventManager.cooldown = data.eventManager.cooldown;
         }
-        if (player.galacticaUnlocked && player.lastWorld !== 0.9) galacticaShortcut();
+        //if (player.galacticaUnlocked && player.lastWorld !== 0.9) galacticaShortcut();
         if (data.serverHook !== undefined) player.serverHook = data.serverHook;
         if (data.serverHookName !== undefined) player.serverHookName = data.serverHookName;
         data.faqOffered ??= false;
@@ -854,6 +831,13 @@ function loadNewData(data) {
             if (data.offlineProgress > 28800000) data.offlineProgress = 28800000;
             player.offlineProgress = data.offlineProgress;
         }
+        data.completedMilestones ??= [];
+        player.completedMilestones = [...data.completedMilestones];
+        for (let i = 0; i < player.completedMilestones.length; i++) {
+            const path = player.completedMilestones[i].path;
+            const name = player.completedMilestones[i].name;
+            unlockMilestone(path, name, true);
+        }
         if (data.pb1 !== undefined) player.pb1 = data.pb1;
         else {
             if (Date.now() >= new Date("October 1, 2024").getTime()) {
@@ -876,10 +860,6 @@ function loadNewData(data) {
         } catch (err) {
 
         }
-        
-    } catch (err) {
-        window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}, ${console.log(err)}`);
-    }
 }
 beSilly = {
     isPlayer(name) {

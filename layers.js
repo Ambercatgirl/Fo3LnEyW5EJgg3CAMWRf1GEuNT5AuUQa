@@ -634,6 +634,7 @@ const layerList = {
 "borderLayer" : ["sillyMiner", "🩸", "♨️", "🚫", "🔈", "⛔", "💢", "🔇", "🛑", "⭕", "🔕", "❌"],
 "worldTwoCommons" : ["🍀", "☘️", "📘", "📙", "📕", "📗", "⏏️", "▶️", "⏸️", "⏯️", "⏺️", "⏭️", "⏮️", "⏩", "⏪", "⏬", "⏫", "◀️", "🔼", "🔽", "➡️", "↖️", "↘️", "⬇️", "⬆️", "⬅️", "↪️", "↩️", "⤴️", "⤵️", "🔀", "🔁", "🔂", "🔄", "🔃"],
 "grassLayer" : ["sillyMiner", "🌹", "🟩"],
+"unknownLayer" : [],
 "scLayer" : ["sillyMiner", '🇳🇬', '🇪🇹', '🇪🇬', '🇨🇩', '🇹🇿', '🇿🇦', '🇰🇪', '🇺🇬', '🇸🇩', '🇩🇿', '🇸🇨'],
 "bnLayer" : ["sillyMiner", '🇨🇳', '🇮🇳', '🇮🇩', '🇵🇰', '🇧🇩', '🇯🇵', '🇵🇭', '🇻🇳', '🇮🇷', '🇹🇷', '🇧🇳'],
 "knLayer" : ["sillyMiner", '🇺🇸', '🇲🇽', '🇨🇦', '🇬🇹', '🇭🇹', '🇨🇺', '🇩🇴', '🇭🇳', '🇳🇮', '🇸🇻', '🇰🇳'],
@@ -719,6 +720,7 @@ function setLayer(y) {
         } else {
             const repeatingLayerNum = Math.floor((y - 18000) / 10000);
             if (repeatingLayerNum !== lastRepeatedLayer && repeatingLayers[repeatingLayerNum] === undefined) {
+                milestoneVariables.inRepeating = true;
                 a88();
                 let force = false;
                 if (Math.random() < 1/1337) {
@@ -726,6 +728,7 @@ function setLayer(y) {
                     updateAllLayers();
                     currentLayer = "unknownLayer";
                     specialLayerLocations["unknownLayer"] ??= tempNum;
+                    milestoneVariables.unknownFound = true;
                 } else if (Math.random() < 1/77) {
                     currentLayerNum = 7777;
                     force = a87(7777)
@@ -895,6 +898,7 @@ function a87(num, force, g) {
     }
     if (g) return undefined;
     if (added) {
+        milestoneVariables.triggerFound = true;
         if (korone) typeWriter("<i>An unusual presence lurks within the silly layer, making your body feel numb...</i>", get("spawnMessage"), true);
         else typeWriter("<i>In the endless depths of the world, repetitions of earlier environments make up the lower earth, and yet.. a strange sense of unfamiliarity consumes you...</i>", get("spawnMessage"), true);
         eventSpawn.currentTime = 0;
@@ -945,6 +949,7 @@ function createAllLayers() {
     arr.splice(tier.indexOf("✴️"), 1);
     const unknownLayer = createLayer([arr, ["🥇", "🟩"]]);
     layerDictionary["unknownLayer"] = {layer: unknownLayer, probabilities: [], layerMat: "🟩"}
+    layerList["unknownLayer"] = [...unknownLayer];
     createGenerationProbabilities();
     caveList["abysstoneCave"] = createGsCave();
     //for (let i = 0; i < worldOneLayers.length; i++) layerDictionary[worldOneLayers[i]] = createLayer([layerList[worldOneLayers[i]], layerList["worldOneCommons"]]);
@@ -1293,7 +1298,7 @@ class ores {
         let tierNames = Object.keys(this.oreTiers);
         for (let i = 0; i < tierNames.length; i++) {
             if (tierNames[i] === tier) {
-                i = i === 15 ? -1 : i;
+                i = i === tierNames.length - 1 ? -1 : i;
                 return tierNames[i + 1];
             }
         }
@@ -1301,7 +1306,7 @@ class ores {
     getTierAt(num) {
         let tierNames = Object.keys(this.oreTiers);
         if (num < 0) return tierNames[0];
-        if (num > 15) return tierNames[15];
+        if (num > tierNames.length - 1) return tierNames[15];
         return tierNames[num];
     }
     isCommon(tier) {

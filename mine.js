@@ -86,12 +86,13 @@ function giveBlock(obj) {
     let oreRarity = oreList[obj.type]["numRarity"];
     let inv;
     if (obj.variant === undefined) {
-        inv = rollVariant();
-        if (player.gears["gear25"] && inv === 1) inv = rollVariant();
+        vInfo = rollVariant();
+        if (player.gears["gear25"] && vInfo.v === 1) vInfo = rollVariant();
+        inv = vInfo.v;
     } else {
         inv = obj.variant;
     }
-    const layerMaterial = getLayer(obj.y).layer.slice(-1);
+    const layerMaterial = getLayer(obj.y).layerMat;
     if (currentWorld < 2 && player.gears["gear4"]) {
         playerInventory[layerMaterial]["normalAmt"]++;
     }
@@ -133,24 +134,35 @@ function giveBlock(obj) {
     inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
-    let rng = Math.round(Math.random() * 499 + 1);
-    if (rng === 1) {return 4;} // 1:500
-    else if (rng <= 3) {return 3;} // 1:250
-    else if (rng <= 10) {return 2;} // 1:50
-    return 1;
+    let vRand = {r:  Math.round(aleaRandom() * 499 + 1), c:gameInfo.count, s:gameInfo.seed, v: 1};
+    if (vRand.r === 1) {vRand.v = 4;} // 1:500
+    else if (vRand.r <= 3) {vRand.v = 3;} // 1:250
+    else if (vRand.r <= 13) {vRand.v = 2;} // 1:50
+    return vRand;
 }
 let cat = 1;
 let mainProbabilityTable;
 let mainGenerationTable;
 let lunaY = 1;
 const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠godOfTheMine";
+function aleaRandom() {
+    if (gameInfo.count === gameInfo.loopLength) {
+        gameInfo.count = 0
+        gameInfo.loops += 123000;
+        rand = new PRNG.Alea(gameInfo.seed, gameInfo.loops);
+    }
+    gameInfo.count++;
+    gameInfo.overallCount++;
+    return rand();
+}
 const generateBlock = function(location) {
     blocksRevealedThisReset++;
     mainProbabilityTable = getLayer(location["Y"]);
     mainGenerationTable = mainProbabilityTable.probabilities;
     let arr = mainProbabilityTable.layer;
     if (location["Y"] === player.luna.layer && currentWorld === 1) {let lunaLayer = addLuna([...arr], [...mainGenerationTable]); arr = lunaLayer[0]; mainGenerationTable = lunaLayer[1];}
-    let chosenValue = Math.random();
+    const genVals = {rand: aleaRandom(), count: gameInfo.overallCount, seed: gameInfo.seed};
+    const chosenValue = genVals.rand;
     let low = 0;
     let high = arr.length;
     while (low < high) {
@@ -165,8 +177,9 @@ const generateBlock = function(location) {
     let oreRarity = oreList[blockToGive]["numRarity"];
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
-        let variant = rollVariant();
-        if (player.gears["gear25"] && variant === 1) variant = rollVariant();
+        let vInfo = rollVariant();
+        if (player.gears["gear25"] && variant === 1) vInfo = rollVariant();
+        const variant = vInfo.v;
         if (blockToGive === "sillyMiner") {
             const nextOre = layerDictionary[currentLayer].layer[layerDictionary[currentLayer].layer.indexOf("sillyMiner") + 1];
             if (oreList[nextOre]["numRarity"] >= 750000) mine[location["Y"]][location["X"]] = {ore: nextOre, variant:variant}; 
@@ -181,11 +194,11 @@ const generateBlock = function(location) {
         mine[location["Y"]][location["X"]] = {ore: blockToGive, variant: variant};
         const tier = oreList[blockToGive]["oreTier"];
         if (oreList[blockToGive]["hasLog"]) {
-            verifiedOres.createLog(location["Y"],location["X"],{ore: blockToGive, variant: variant}, new Error());
+            verifiedOres.createLog(location["Y"],location["X"],{ore: blockToGive, variant: variant}, new Error(), undefined, genVals, vInfo);
             verifiedOres.verifyLog(location["Y"], location["X"]);
         }
         playSound(oreList[blockToGive]["oreTier"], blockToGive);
-        if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant});
+        if (messageIncluded(oreList[blockToGive]["oreTier"])) spawnMessage({block: blockToGive, location: location, caveInfo: undefined, variant: variant,});
         let canCollect = (currentWorld < 2 && (player.gears["gear3"] || player.gears["gear17"]));
         if (!canCollect) (canCollect = currentWorld === 2 && player.gears["gear17"]);
         if (tier === "Celestial" && !player.gears["gear28"]) canCollect = false;
@@ -221,9 +234,10 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             estAmt = amt*generationInfo.probabilities[generationInfo.layer.indexOf(thisTable[i])];
         }
         let oldEst = estAmt;
-        if (Math.random() < estAmt%1) estAmt++;
+        const aleaVals = {rand: aleaRandom(), count: gameInfo.overallCount, seed: gameInfo.seed};
+        if (aleaVals.rand < estAmt%1) estAmt++;
         estAmt = Math.floor(estAmt);
-        results[thisTable[i]] = {est: estAmt, rand: oldEst}
+        results[thisTable[i]] = {est: estAmt, rand: oldEst, c: aleaVals}
         amt -= estAmt;
         if (estAmt > 0 && specialCases.indexOf(thisTable[i]) > -1 && !isCave && !fromOffline) {
             const celestialRoll = checkSpecials(thisTable[i], true);
@@ -232,10 +246,11 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                 let cEstAmt = results[thisTable[i]].est*(1/celestialRoll.r);
                 let cOldEst = cEstAmt;
                 if (results[thisTable[i]].rand < 1) cOldEst*=results[thisTable[i]].rand;
-                if (cEstAmt < 1 && Math.random() < cEstAmt) cEstAmt++;
+                const celestialVals = {rand: aleaRandom(), count: gameInfo.overallCount, seed: gameInfo.seed};
+                if (cEstAmt < 1 && celestialVals.rand < cEstAmt) cEstAmt++;
                 cEstAmt = Math.floor(cEstAmt);
                 results[thisTable[i]].est -= cEstAmt;
-                results[celestialRoll.c] = {est: cEstAmt, rand: cOldEst}
+                results[celestialRoll.c] = {est: cEstAmt, rand: cOldEst, c:celestialVals}
             }
         }
     }
@@ -288,7 +303,8 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             }
             for (let i = 3; i > 0; i--) {
                 let estVariantAmt = (results[blockToGive].est)/(multis[i]/variantDivide);
-                if (estVariantAmt < 1 && Math.random() < estVariantAmt) estVariantAmt++;
+                const variantRandom = {r: aleaRandom(), c: gameInfo.overallCount, s: gameInfo.seed};
+                if (variantRandom.r < estVariantAmt%1) estVariantAmt++;
                 estVariantAmt = Math.floor(estVariantAmt);
                 totalVariants += estVariantAmt;
                 if (estVariantAmt > 0) {
@@ -308,6 +324,7 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                         block: blockToGive,
                         genAt: new Date().toUTCString(),
                         variant: i+1,
+                        variantInfo: variantRandom,
                         luck: oreList[blockToGive]["decimalRarity"]*oreList[blockToGive]["numRarity"],
                         rng: rng/multis[i]/(wasDuped ? 10 : 1),
                         mod: rngModifier,
@@ -322,7 +339,8 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                         randEdited: (Math.random.toString().replace(/\n|\r| /g, "") !== "functionrandom(){[nativecode]}"),
                         from: new Error(),
                         amt: estVariantAmt,
-                        caveInfo: caveInfo
+                        caveInfo: caveInfo,
+                        generationInfo: results[blockToGive].c
                     });
                 }
             }
@@ -370,7 +388,8 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                     randEdited: (Math.random.toString().replace(/\n|\r| /g, "") !== "functionrandom(){[nativecode]}"),
                     from: new Error(),
                     amt: toGive,
-                    caveInfo:caveInfo
+                    caveInfo:caveInfo,
+                    generationInfo: results[blockToGive].c
                 });
             }
             playerInventory[blockToGive]["normalAmt"] += toGive;
@@ -658,7 +677,6 @@ function switchWorld(to, skipAnim) {
         displayArea();
         removeGalactica();
         switchWorldCraftables();
-        if (currentRecipe !== undefined) displayRecipe(currentRecipe);
         utilitySwitchActions();
         removeFromLayers({"ore":"🐢","layers":["paperLayer"]})
         removeFromLayers({"ore":"🐰","layers":["paperLayer"]});

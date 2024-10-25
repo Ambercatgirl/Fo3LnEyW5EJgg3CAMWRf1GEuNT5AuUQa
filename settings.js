@@ -1,39 +1,38 @@
-function toggleMenu() {
-    const element = document.getElementById("menuHolder");
-    element.style.display = element.style.display === "block" ? "none" : "block";
+function showLoungeScreen(id, button) {
+    const cid = showLoungeScreen.current
+    if (cid === undefined) {
+        button.classList.add("selectedLoungeArea");
+        showLoungeScreen.current = id;
+        showLoungeScreen.cButton = button;
+        get(id).style.display = "inline-flex";
+    }
+    else if (cid === id) {
+        showLoungeScreen.cButton.classList.remove("selectedLoungeArea");
+        showLoungeScreen.cButton = undefined;
+        showLoungeScreen.current = undefined;
+        get(cid).style.display = "none";
+    } else {
+        get(id).style.display = "inline-flex";
+        get(showLoungeScreen.current).style.display = "none";
+        showLoungeScreen.cButton.classList.remove("selectedLoungeArea");
+        showLoungeScreen.cButton = button;
+        button.classList.add("selectedLoungeArea");
+        showLoungeScreen.current = id;  
+    }
+
 }
-function closeMenu() {
-    const children = document.getElementsByClassName("menuCategory");
-    for (let i = 0; i < children.length; i++) children[i].style.display = "none";
-    document.getElementById("menuSelectionContainer").style.display = "none";
-    if (document.getElementById("logHolder").children.length > 0) document.getElementById("logHolder").removeChild(document.getElementById("logHolder").firstChild);
-    clearInterval(timeUpdater);
-    verifiedOres.showLogs();
-    if (get("stopOnRareList").style.display !== "none") toggleStopRareList();
-    if (get("spawnTierList").style.display !== "none") toggleSpawnMessageList();
-    get("portal").style.animation = "";
-    get("rightPortal").style.animation = "";
-    get("leftPortal").style.animation = "";
-}
-function keepShowingMenu() {
-    document.getElementById("menuHolder").style.display = "block";
-}
-function showMenuScreen(type) {
-    document.getElementById("menuSelectionContainer").style.display = "block";
-    const allFrames = document.getElementById("menuSelectionContainer").children;
-    for (let i = 0; i < allFrames.length; i++) allFrames[i].style.display = "none";
-    document.getElementById(`frame-${type}`).style.display = "block";
-    if (type === "index") switchLayerIndex(0)
-    if (type === 'settings') switchSettings('game');
-    if (type === 'statistics') createStats();
-    if (type === 'locations') {
-        get("portal").style.animation = "rotatePortal 60s linear infinite";
-        get("rightPortal").style.animation = "rotatePortal 180s linear infinite";
-        get("leftPortal").style.animation = "rotatePortal 180s linear infinite";
-        getNextPortalPosition(0);
-        showPortalRoom(true);
+showLoungeScreen.current = undefined;
+showLoungeScreen.cButton = undefined;
+function toggleLounge() {
+    if (toggleLounge.toggled) {
+        get("loungeHolder").style.display = "none";
+        toggleLounge.toggled = false;
+    } else {
+        get("loungeHolder").style.display = "inline-flex";
+        toggleLounge.toggled = true;
     }
 }
+toggleLounge.toggled = false;
 function showFaqPage(num) {
     const elements = document.getElementsByClassName("faqPage");
     for (let i = 0; i < elements.length; i++) {
@@ -366,13 +365,6 @@ function updateAutomineUpdateSpeed(element) {
     } else {
         flashRed(element);
     }
-}
-const indexOrder = {
-    "worldOne" : ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "giftLayer", "worldOneCommons", "sillyLayer", "fluteLayer", "grassLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave", "eventLayer"],
-    "worldTwo" : ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer", "worldTwoCommons", "barrierLayer", "borderLayer", "bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"],
-    "subrealmOne" : ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer", "ccCave", "moCave", "foCave", "axCave", "ioCave", "ggCave"],
-    "waterWorld" : ["waterLayer", "watrCave"],
-    "galactica" : ["starLayer", "nebulaLayer"]
 }
 let layerNum = 0;
 function switchLayerIndex(num, overrideLayer, world) {
@@ -729,6 +721,66 @@ function switchToIndex(button, num) {
     }
     
 }
+
+const indexOrder = {
+    1: {
+        "worldOne" : {l: ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "giftLayer"], req: function() {return true;}},
+        //"worldOneCommons",
+        "worldOneSpecial1" : {l: ["fluteLayer"], req: function() {return indexHasOre("🪈") > 1000000}},
+        "worldOneSpecial2" : {l: ["sillyLayer"], req: function() {return indexHasOre("🎂") > 1000000}},
+        "worldOneSpecial3" : {l: ["unknownLayer"], req: function() {return indexHasOre("🟩") > 1000000}},
+    },
+    2: {
+        "worldTwo" : {l: ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer"], req: function() {return player.pickaxes["pickaxe13"]}},
+        //"worldTwoCommons"
+        //"barrierLayer", "borderLayer"
+    },
+    1.1: {
+        "subrealmOne" : {l: ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer"], req: function() {return player.sr1Unlocked}},
+    },
+    0.9: {
+        "galactica" : {l: ["starLayer", "nebulaLayer"], req: function() {return player.galacticaUnlocked}},
+    },
+    "caves" : {
+        "caves1" : {l: ["bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"], req: function() {return player.pickaxes["pickaxe5"]}},
+        "caves2" : {l: ["ccCave", "moCave", "foCave", "axCave", "ioCave", "ggCave"], req: function() {return player.sr1Unlocked}},
+        "caves3" : {l: ["watrCave"], req: function() {return player.pickaxes["pickaxe26"]}},
+    },
+    "events" : {
+        //"eventLayer"
+    }
+}
+function addIndexLayers(world) {
+    const elems = document.getElementsByClassName("loungeLayerSelector");
+    for (let i = elems.length - 1; i >= 0; i--) elems[i].remove();
+    for (const layer in indexOrder[world]) {
+        let list = indexOrder[world][layer].l;
+        let thisUnlocked = indexOrder[world][layer].req();
+        console.log(indexOrder[world][layer].req)
+        for (let i = 0; i < list.length; i++) {
+            const button = document.createElement("button");
+            button.classList = "loungeLayerSelector";
+            if (thisUnlocked) {
+                const allOres = layerList[list[i]];
+                const thisMat = getIndexLayerOre(allOres);
+                if (layer.indexOf("worldOneSpecial") === -1) {
+                    button.textContent = `${thisMat} - ${(i * 2000)}m`
+                } else {
+                    button.textContent = `${thisMat} - ????m`
+                }
+            } else {
+                button.textContent = "[Research Required]";
+            }
+            get("loungeLayersHolder").appendChild(button);
+        }
+    }
+}
+function getIndexLayerOre(list) {
+    for (let i = list.length - 1; i >- 0; i--) {
+        if (oreList[list[i]]["oreTier"] === "Layer") return list[i];
+    }
+    return undefined;
+}
 function togglePathBlocks() {
     if (player.settings.usePathBlocks) {
         document.getElementById("pathBlocks").style.backgroundColor = "#6BC267";
@@ -795,23 +847,18 @@ function changeSpawnMessageRarity(button) {
     button.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 70%, black)";
 }
 let timeUpdater;
-function createStats() {
-    clearInterval(timeUpdater);
-    const elements2 = document.getElementsByClassName("deleteClass")
-    for (let i = elements2.length - 1; i >= 0; i--) elements2[i].remove()
-    let currentTier = "Flawless";
-    const table = document.createElement("table");
-    while (!oreInformation.tierGrOrEqTo({"tier1": "Common", "tier2": currentTier})) {
-    const tableRow = document.createElement('tr');
-    tableRow.classList = "deleteClass";
-    const ores = oreInformation.getOresByTier(currentTier);
+function showTierStats(tier) {
+    get("tierStatsHolder").style.display = "flex";
+    get("playerStatisticsHolder").style.display = "none";
+    get("currentTierInformation").style.display = "table";
+    const ores = oreInformation.getOresByTier(tier);
+    let completionAmt = 0;
     let totals = {
         "normalAmt": 0,
         "electrifiedAmt": 0,
         "radioactiveAmt": 0,
         "explosiveAmt": 0,
     }
-    let completionAmt = 0;
     for (let i = 0; i < ores.length; i++) {
         let amts = 0;
         for (let j = 0; j < variantInvNames.length; j++) {
@@ -820,35 +867,17 @@ function createStats() {
         }
         completionAmt += amts > 0 ? 1 : 0;
     }
-    let tableRowInfo = document.createElement("td");
-    tableRowInfo.classList = "statsRow";
-    tableRowInfo.innerText = currentTier;
-    tableRow.appendChild(tableRowInfo);
-    tableRowInfo = document.createElement("td");
-    tableRowInfo.classList = "statsRow";
-    const totalAmt = (totals["normalAmt"] + totals["electrifiedAmt"] + totals["radioactiveAmt"] + totals["explosiveAmt"])
-    tableRowInfo.innerText = totalAmt > 1000000000 ? formatNumber(totalAmt, 3) : totalAmt.toLocaleString();
-    tableRow.appendChild(tableRowInfo);
-    for (let property in totals) {
-        tableRowInfo = document.createElement("td");
-        tableRowInfo.classList = "statsRow";
-        tableRowInfo.innerText = totals[property] > 1000000000 ? formatNumber(totals[property], 3) : totals[property].toLocaleString();
-        tableRow.appendChild(tableRowInfo);
+    const elems = document.getElementsByClassName("tierInfoRow");
+    elems[0].textContent = "Variant Statistics For: " + tier;
+    for (let i = 1; i < 5; i++) {
+        elems[i].textContent = `${names[i - 1]} Amount: ${totals[variantInvNames[i - 1]] > 1000000000 ? formatNumber(totals[variantInvNames[i - 1]], 3) : totals[variantInvNames[i - 1]].toLocaleString()}`;
     }
-    tableRowInfo = document.createElement("td");
-    tableRowInfo.classList = "statsRow";
-    tableRowInfo.innerText = `${Math.round(completionAmt / ores.length * 100)}%`;
-    tableRow.appendChild(tableRowInfo);
-    currentTier = oreInformation.getNextTier(currentTier);
-    document.getElementById("statsTable").appendChild(tableRow);
-    }
-   updateTimes();
-   timeUpdater = setInterval(() => {
-    updateTimes();
-   }, 250);
-   
+    elems[5].textContent = `Completion Progress: ${Math.round(completionAmt / ores.length * 10000)/100}% at ${completionAmt}/${ores.length}`;
 }
 function updateTimes() {
+    get("tierStatsHolder").style.display = "none";
+    get("playerStatisticsHolder").style.display = "inline-flex";
+    get("currentTierInformation").style.display = "none";
     document.getElementById("statsTotalTime").textContent = `${longTime(player.stats.timePlayed)} Time Played.`;
     document.getElementById("statsSessionTime").textContent = `${longTime(Date.now() - verifiedOres.getStartTime())} Session Time.`;
     document.getElementById("statsCavesGenerated").textContent = `${player.stats.cavesGenerated.toLocaleString()} Caves Generated.`;
@@ -1189,14 +1218,10 @@ const editingButton = get("stopOnRareDisplay")
 if (element.style.display === "none") {
     element.style.display = "inline-flex"; 
     editingButton.textContent = "Hide Tiers"; 
-    editingButton.style.borderTopRightRadius = '0px'
-    editingButton.style.borderBottomRightRadius = '0px'
 }
   else {
     element.style.display = "none"; 
     editingButton.textContent = "Show Tiers"; 
-        editingButton.style.borderTopRightRadius = '20px';
-    editingButton.style.borderBottomRightRadius = '20px';
   }
 }
 function allowList(tier) {
@@ -1218,8 +1243,6 @@ function toggleSpawnMessageList() {
       else {
         element.style.display = "none"; 
         editingButton.textContent = "Show Spawn Message Tiers"; 
-            editingButton.style.borderTopRightRadius = '20px'
-        editingButton.style.borderBottomRightRadius = '20px'
       }
     }
 function allowMessage(tier) {
@@ -1232,51 +1255,73 @@ function allowMessage(tier) {
     for (let i = 0; i < elementsToSearch.length; i++) if (elementsToSearch[i].textContent === tier) elementsToSearch[i].style.color = (removing ? "#FF3D3D" : "#6BC267");
 }
 const portalLocations = {
-    "worldOne" : {position: 0, name: "World One", goesTo: 1, hue: "0deg"},
-    "worldTwo" : {position: 1, name: "World Two", goesTo: 2, hue: "-40deg"},
-    "trophyRoom" : {position: 2, name: "Trophy Room", goesTo: 0, hue: "150deg"},
-    "galactica" : {position: 3, name: "Galactica", goesTo: 0.9, hue: "190deg"},
-    "subrealmOne" : {position: 4, name: "Subrealm One", goesTo: 1.1, hue: "40deg"}
+    1: {
+        title: "World One",
+        desc: "The Main Silly Caverns World!<br><br>All gears work here!<br><br>All pickaxes work here!<br><br>Unlock Requirement: None!<br><br>\"<i>Where the sillies all began...</i>\" - Remsy",
+        req: function() {return true;},
+        to: 1,
+        hue: "0deg",
+        url: "worldOneImage.png"
+    },
+    2: {
+        title: "World Two",
+        desc: "The Second Silly Caverns World!<br><br>RNG Manipulator, Ore Tracker, Abyssal Leaper, Subrealm One, watr, and Galactica gears work here!<br><br>Galactica and watr pickaxes work here!<br><br>Unlock Requirement: The Key!<br><br>\"<i>The world thats just using all the unused stuff</i>\" - Remsy",
+        req: function() {return player.pickaxes["pickaxe13"];},
+        to: 2,
+        hue: "-40deg",
+        url: "worldTwoImage.png"
+    },
+    1.1: {
+        title: "Subrealm One",
+        desc: "The World of Flags!<br><br>Ore Tracker, Abyssal Leaper, Statistical Amplifier, Structural Service, Infinity Collector work here!<br><br>Tree of Life works here!<br><br>Unlock Requirement: 1 Flawless Tier Ore!<br><br>\"<i>The dreaded world of flags, the only good one being the trans flag</i>\" - Remsy",
+        req: function() {return (countFlawlessOres() > 0);},
+        to: 1.1,
+        hue: "40deg",
+        url: "subrealmOneImage.png"
+    },
+    0.9: {
+        title: "Galactica",
+        desc: "The Endgame World!<br><br>All gears work here!<br><br>Undersea Eviscerator works here!<br><br>Unlock Requirement: Omnipotent God of The Mine!<br><br>\"<i>Sometimes when I look up into the sky, I can see cheese</i>\" - Remsy",
+        req: function() {return indexHasOre("Omnipotent God of The Mine");},
+        to: 0.9,
+        hue: "190deg",
+        url: "galacticaImage.png"
+    },
+    1.2: {
+        title: "watr watr",
+        desc: "watr watr!<br><br>All gears work here!<br><br>Null Chroma, Galactica Pickaxes work here!<br><br>Unlock Requirement: Visit Watr Once!<br><br>\"<i>All I have to say is watr watr watr watr</i>\" - Remsy",
+        req: function() {return milestoneVariables.watrEntered;},
+        to: 1.2,
+        hue: "150deg",
+        url: "watrWorldImage.webp"
+    },
 }
-let currentPortalShown = 0;
-function getNextPortalPosition(num) {
-    currentPortalShown += num;
-    const portals = Object.keys(portalLocations);
-    if (currentPortalShown > portals.length - 1) currentPortalShown = 0;
-    else if (currentPortalShown < 0) currentPortalShown = portals.length - 1;
-    const portalAtLocation = portalLocations[getPortalByNum(currentPortalShown)];
-    get("portal").setAttribute("onclick", `attemptSwitchWorld(${portalAtLocation.goesTo})`);
-    get("portal").style.filter = isUnlocked(portalAtLocation) ? `hue-rotate(${portalAtLocation.hue})` : "grayscale(1)";
-    if (!isUnlocked(portalAtLocation)) {
-        get("portalLockReason").style.display = "flex";
-        get ("portalLockText").textContent = getWorldRequirements(portalAtLocation.goesTo);
-    } else get("portalLockReason").style.display = "none";
-    get("portalName").textContent = portalAtLocation.name;
-    const leftPortal = portalLocations[getPortalByNum(currentPortalShown-1)];
-    get("leftPortalName").textContent = leftPortal.name;
-    get("leftPortal").style.filter = isUnlocked(leftPortal) ? `hue-rotate(${leftPortal.hue})` : "grayscale(1)";
-    const rightPortal = portalLocations[getPortalByNum(currentPortalShown+1)];
-    get("rightPortalName").textContent = rightPortal.name;
-    get("rightPortal").style.filter = isUnlocked(rightPortal) ? `hue-rotate(${rightPortal.hue})` : "grayscale(1)";
+function displayWorldInformation(world) {
+    const info = portalLocations[world];
+    get("worldTitle").textContent = info.title;
+    get("worldDescription").innerHTML = info.desc;
+    const unlocked = isUnlocked(world);
+    if (unlocked) get("portalLock").style.display = "none";
+    else get("portalLock").style.display = "block";
+    get("worldPortal").style.filter = isUnlocked(world) ? `hue-rotate(${info.hue})` : "grayscale(1)";
+    get("loungeWorldImage").style.backgroundImage = `url("media/${info.url}")`;
 }
-function getPortalByNum(num) {
-    const list = Object.keys(portalLocations);
-    if (num < 0) num = list.length-1;
-    if (num > list.length-1) num = 0;
-    for (let portal in portalLocations) if (portalLocations[portal].position === num) return portal;
+function switchPortal(event) {
+    if (event.deltaY > 0) {
+        const portals = Object.keys(portalLocations);
+        const index = portals.indexOf(String(switchPortal.currentPortal)) - 1;
+        switchPortal.currentPortal = index < 0 ? portals[portals.length-1] : portals[index];
+    } else {
+        const portals = Object.keys(portalLocations);
+        const index = portals.indexOf(String(switchPortal.currentPortal)) + 1;
+        switchPortal.currentPortal = index > portals.length-1 ? portals[0] : portals[index];
+    }
+    switchPortal.currentPortal = Number(switchPortal.currentPortal);
+    displayWorldInformation(switchPortal.currentPortal);
 }
+switchPortal.currentPortal = 1;
 function isUnlocked(portal) {
-    if (portal.goesTo === 1) return true;
-    if (portal.goesTo === 1.1 && player.sr1Unlocked) return true;
-    if (portal.goesTo === 2 && player.pickaxes["pickaxe13"]) return true;
-    if (portal.goesTo === 0) return true;
-    if (portal.goesTo === 0.9 && player.galacticaUnlocked) return true;
-    return false;
-}
-function getWorldRequirements(world) {
-    if (world === 2) return "Craft 'The Key' to Unlock!";
-    if (world === 1.1) return "Mine 1 Flawless to Unlock!";
-    if (world === 0.9) return "Find the true God of this world."
+    return portalLocations[portal].req();
 }
 //SILLINESS BELOW!!!!!!!
 function showCatText() {
@@ -1385,5 +1430,64 @@ function toggleHideCompleted() {
     } else {
         player.settings.hideCompleted = true;
         get("hideCompleted").style.backgroundColor = "#6BC267";
+    }
+}
+//lounge stuff down here
+function updateLoungeStats() {
+    const settings = player.loungeSettings;
+    if (settings.updateLuck) {
+        get("updateLuck").textContent = `${player.displayStatistics.luck.toLocaleString()}x Luck`;
+    }
+    if (settings.updateGenerations) {
+        const blocks = getAvgBlockSpeed();
+        get("updateGenerations").textContent = `${formatNumber(blocks, 2)} Generations/Min`;
+    }
+    if (settings.updateLayer) {
+        get("updateLayer").textContent = `Mining In: ${getLayer(curY).layerMat}`
+    }
+    if (settings.updateDirection) {
+        const dir = curDirection;
+        let selDir;
+        if (curDirection === "w") selDir = "Up";
+        else if (curDirection === "a") selDir = "Left (why?)";
+        else if (curDirection === "s") selDir = "Down";
+        else if (curDirection === "d") selDir = "Right";
+        else selDir = "N/A";
+        get("updateDirection").textContent = `Current Direction: ${selDir}`;
+    }
+    if (settings.updateCaveInfo) {
+        const cl = verifiedOres.getCaveLuck();
+        const ctl = verifiedOres.getCaveTypeLuck();
+        const cm = verifiedOres.getCaveModifier();
+        get("updateCL").textContent = `${cl}x Cave Luck`;
+        get("updateCTL").textContent = `${ctl}x Cave Type Luck`;
+        get("updateCM").textContent = `${cm} Cave Modifier`;
+    }
+    if (settings.updatePowerups) {
+        const list = player.powerupCooldowns;
+        const now = Date.now();
+        let count = 0;
+        for (let p in list) {
+            if (now >= list[p].cooldown && list[p].unlocked) count++;
+        }
+        get("updatePowerups").textContent = `${count} Powerups Ready`;
+    }
+    if (settings.updateSpeed) {
+        const cs = player.avgSpeed;
+        const times = calcSpeed();
+        const es = (1000/times.speed) * (times.reps) + times.extra;
+        get("updateSpeed").textContent = `${Math.round(cs).toLocaleString()}/${Math.round(es).toLocaleString()} Speed`;
+    }
+    if (settings.updateOreCount) {
+        let c = spawnMessage.count;
+        get("updateOreCount").textContent = `${c > 0 ? `Ore Spawn Count: ${formatNumber(c, 2)}` : "No Ores Spawned Yet!"}`;
+    }
+    if (settings.updateLastOre) {
+        let o = spawnMessage.lastOre;
+        if (o !== undefined) get("updateLastOre").textContent = `Last Ore Spawned: ${o}`;
+    }
+    if (settings.updateEvent) {
+        let e = getCurrentEventOre();
+        get("updateEvent").textContent = `Current Event: ${e === undefined ? "N/A" : e}`;
     }
 }
