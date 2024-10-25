@@ -493,6 +493,7 @@ function displayRecipe(recipe) {
             getButtonByName(currentRecipeId).classList.remove("selectedOutline");
         }
         else get("scrollableCraft").style.display = "inline-flex";
+        if (pinInformation.pinned !== undefined) pinInformation.pinned = recipe;
         getButtonByName(recipe).classList.add("selectedOutline");
         currentRecipeId = recipe;
         const extraInfo = get("extraInformationText")
@@ -511,8 +512,11 @@ function displayRecipe(recipe) {
             get("pickaxeHolder").style.display = "";
             const pickaxe = pickaxeStats[recipe];
             if (recipe !== "pickaxe27") {
-                if (pinInformation.pinned) get("newCraftingHolder").style.height = "26.45vw";
-                else get("newCraftingHolder").style.height = "41.7vw";
+                get("newCraftingHolder").style.height = "26.45vw";
+                get("craftingContainer").style.top = `${origins["pickaxe"].top}vw`;
+                get("craftingContainer").style.left = `${origins["pickaxe"].left}vw`;
+                get("craftingContainer").style.borderBottomLeftRadius = `0`;
+                get("craftingContainer").style.borderTopRightRadius = `0.5vw`;
                 extraInfo.innerHTML = pickaxeStats[recipe].extraInformation;
                 if (extraInfo.innerHTML === "undefined") extraInfo.innerHTML = "No Extra Info!";
                 extraIcon.textContent = `${pickaxeStats[recipe].icon == "" ? "No Icon! You can make one!" : `Icon made by ${pickaxeStats[recipe].icon}!`}`;
@@ -538,9 +542,11 @@ function displayRecipe(recipe) {
                 }
             }
         } else {
-            //41.7
-            if (pinInformation.pinned) get("newCraftingHolder").style.height = "14vw";
-            else get("newCraftingHolder").style.height = "29.7vw";
+            get("newCraftingHolder").style.height = "14vw";
+            get("craftingContainer").style.top = `${origins["gear"].top}vw`;
+            get("craftingContainer").style.left = `${origins["gear"].left}vw`;
+            get("craftingContainer").style.borderBottomLeftRadius = `0.5vw`;
+            get("craftingContainer").style.borderTopRightRadius = `0`;
             get("gearHolder").style.display = "";
             get("pickaxeHolder").style.display = "none";
             const gear = gearInformation[recipe];
@@ -573,11 +579,21 @@ function addRecipeInformation(recipe) {
 function hideElem(elem) {
     elem.style.display = "none";
 }
-let pinInformation = {
+const pinInformation = {
     pinned: undefined,
     collapsed: false,
     locked: false,
     lockedId: undefined
+}
+const origins = {
+    "pickaxe": {
+        top: 4.2,
+        left: 24
+    },
+    "gear": {
+        top: 12.7,
+        left:0
+    }
 }
 function pinRecipe() {
     const newPin = document.createElement("div");
@@ -595,28 +611,18 @@ function pinRecipe() {
     let size;
     if (currentRecipeId.indexOf("gear") > -1) size = currentRecipeId.substring(0, 4);
     else size = currentRecipeId.substring(0, 7);
-    size = sizes[size]["pin"];
-    get("newCraftingHolder").style.height = size;
     dragElement(get("pinnedRecipeHolder"));
-    const locs = get("newCraftingHolder").getBoundingClientRect();
-    newPin.style.top = (locs.y + locs.height) + "px";
+    const locs = get("craftingContainer").getBoundingClientRect();
+    get("craftingContainer").style.display = "none";
+    newPin.style.top = (locs.y) + "px";
     newPin.style.left = (locs.right - locs.width) + "px";
     pinInformation.pinned = currentRecipeId;
-}
-const sizes = {
-    "gear" : {
-        "pin" : "14vw",
-        "unpin" : "29.7vw"
-    },
-    "pickaxe" : {
-        "pin" : "26.45vw",
-        "unpin" : "41.7vw"
-    }
 }
 function unpinRecipe() {
     if (pinInformation.locked) return;
     if (pinInformation.collapsed) collapseRecipe();
-    const oldParent = get("newCraftingHolder");
+    const oldParent = get("craftingContainer");
+    oldParent.style.display = "block";
     oldParent.appendChild(get("collapseRecipe"));
     oldParent.appendChild(get("lockRecipe"));
     oldParent.appendChild(get("pinAndCraft"));
@@ -630,8 +636,6 @@ function unpinRecipe() {
     let cID = currentRecipeId === undefined ? "pickaxe1" : currentRecipeId
     if (cID.indexOf("gear") > -1) size = cID.substring(0, 4);
     else size = cID.substring(0, 7);
-    size = sizes[size]["unpin"];
-    get("newCraftingHolder").style.height = size;
     get("pinnedRecipeHolder").remove();
     pinInformation.pinned = undefined;
 }
@@ -673,7 +677,7 @@ function toggleExtraInformation() {
     } else if (cur === "") {
         extra.style.animation = "extendExtra 0.25s linear 1";
         extra.onanimationend = () => {
-            extra.style.left = "24vw";
+            extra.style.left = "23.5vw";
             extra.style.animation = "";
             extra.onanimationend = undefined;
             extra.children[2].style.rotate = "180deg";
@@ -705,9 +709,9 @@ function collapseRecipe() {
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (document.getElementById(elmnt.id + "header")) {
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    document.getElementById(elmnt.id + "header").onpointerdown = dragMouseDown;
   } else {
-    elmnt.onmousedown = dragMouseDown;
+    elmnt.onpointerdown = dragMouseDown;
   }
 
   function dragMouseDown(e) {
@@ -715,8 +719,8 @@ function dragElement(elmnt) {
     e.preventDefault();
     pos3 = e.clientX;
     pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    document.onmousemove = elementDrag;
+    document.onpointerup = closeDragElement;
+    document.onpointermove = elementDrag;
   }
 
   function elementDrag(e) {
@@ -731,8 +735,8 @@ function dragElement(elmnt) {
   }
 
   function closeDragElement() {
-    document.onmouseup = null;
-    document.onmousemove = null;
+    document.onpointerup = null;
+    document.onpointermove = null;
   }
 }
 function removeRecipeElements() {
@@ -742,14 +746,6 @@ function removeRecipeElements() {
 }
 function toggleCraftingWorld(a) {
     const vars = toggleCraftingWorld;
-    if (a) {
-        vars.skip = true;
-    } else {
-        if (vars.skip) {
-            vars.skip = false;
-            return;
-        }
-    }
     if (vars.visible) {
         get("worldSelectables").style.display = "none";
         vars.visible = false;
@@ -759,7 +755,7 @@ function toggleCraftingWorld(a) {
     }
     showSelectedWorld();
     const text = getWorldText();
-    get("craftingWorldSelect").innerHTML = get("craftingWorldSelect").innerHTML.replace(text, `Items From World: ${vars.world} `);
+    get("worldSelectButton").textContent = `Items From World: ${vars.world}`;
     switchWorldCraftables(vars.world)
 }
 function selectCraftingWorld(num) {
@@ -769,7 +765,6 @@ function selectCraftingWorld(num) {
 }
 toggleCraftingWorld.world = 1;
 toggleCraftingWorld.visible = false;
-toggleCraftingWorld.skip = false;
 
 function showSelectedWorld() {
     const elems = document.getElementsByClassName("worldCraftSelector");
@@ -1112,7 +1107,7 @@ function showPickaxes() {
         if (show) {
             let children = document.getElementById("pickaxeCrafts").children;
             for (let i = 0; i < children.length; i++) children[i].style.display = "none";
-            document.getElementById("nullChroma").style.display = "block";
+            document.getElementById("nullChroma").style.display = "flex";
         } else m88 = 0;
     }
     let list = showOrders[`g${toggleCraftingWorld.world}`];
@@ -1123,19 +1118,21 @@ function showPickaxes() {
     else document.getElementById("sillyRecipe").style.display = "none";
     document.getElementById("oblivionFracturer").style.display = "none";
     if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
+    setListHeight();
 }
 function showGears() {
     disappear(document.getElementById("pickaxeCrafts"));
     appear(document.getElementById("gearCrafts"));
     m87++;
     m88 = 0;
-    if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "block";
+    if (m87 === 3 && currentWorld === 2) document.getElementById("oblivionFracturer").style.display = "flex";
     let list;
     list = showOrders[`p${toggleCraftingWorld.world}`]
     if (!galDis) for (let i = 0; i < list.length; i++) {
-        getButtonByName(list[i]).style.display = "block";
+        getButtonByName(list[i]).style.display = "flex";
     }
     document.getElementById("nullChroma").style.display = "none";
+    setListHeight();
 }
 function showItem(id) {
     let canCont = true;
@@ -1162,6 +1159,22 @@ function switchWorldCraftables(world=currentWorld) {
     if (indexHasOre("🎂") && currentWorld === 1) document.getElementById("sillyRecipe").style.display = "flex";
     else document.getElementById("sillyRecipe").style.display = "none";
     if (currentWorld === 1.1 && !player.gears["gear43"]) getButtonByName("pickaxe33").style.display = "none";
+    setListHeight();
+}
+function setListHeight() {
+    return;
+    let search;
+    if (get("pickaxeCrafts").classList.contains("hidden")) {
+         search = get("gearCrafts").children;
+    } else {
+        search = get("pickaxeCrafts").children;
+    }
+    let count = 0;
+    for (let i = 0; i < search.length; i++) {
+        if (search[i].style.display === "flex") count++;
+    }
+    console.log(count);
+    get("mainLower").style.height = `${19 + (count*2.3)}vw`;
 }
 function toggleOreForge() {
     let element = document.getElementById("forgeContainer")

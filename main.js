@@ -12,7 +12,12 @@ const pixelcoordinate = (x, y, width) => {
 const gameInfo = {
     selectedInventory: 0,
     movementType: "auto",
-    display: true
+    display: true,
+    seed: 654390876324,
+    count: 0,
+    loops: 0,
+    loopLength: 5000000,
+    overallCount: 0
 }
 let mine = [];
 let curX = 1000000;
@@ -44,6 +49,7 @@ let locationElementY;
 let blockElement;
 let emojiNames;
 let messageElement;
+let rand;
 function init() {
     verifiedOres.gameLoaded();
     for (let propertyName in oreList) {
@@ -56,6 +62,11 @@ function init() {
     blockElement = document.getElementById("blockDisplay");
     displayRows = document.getElementsByClassName("blockDisplayRow");
     messageElement = document.getElementById("topMessages");
+    slider = document.querySelector('.milestoneParent');
+    slider.addEventListener('pointermove', move, false);
+    slider.addEventListener('pointerdown', startDragging, false);
+    slider.addEventListener('pointerup', stopDragging, false);
+    slider.addEventListener('pointerleave', stopDragging, false);
     document.getElementById('dataFileUpload').addEventListener('change', getFileContents, false);
     document.getElementById("menuSelectionContainer").addEventListener('click', (event) => {
         if (event.target.parentElement.classList.contains("menuCategory")) closeMenu();
@@ -63,7 +74,8 @@ function init() {
     createInventory();
     assignImageNames();
     createAllLayers();
-    createMine();
+    addIndexLayers(2);
+    createMilestones();
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     removeFromLayers({"ore":"HD 160529","layers":["waterLayer"]});
     if (Math.random() < 1/1000) insertIntoLayers({"ore":"intercept", "layers":["globeLayer"], "useLuck":true})
@@ -72,7 +84,6 @@ function init() {
     if (Math.random() < 1/1000) document.getElementById("cat").innerText = "CatAxe";
     limitedTimer = setInterval(checkLimitedOres, 1000);
     inventoryTimer = setInterval(updateInventory, 500);
-    trophyTimer = setInterval(checkUnlockConditions, 5000)
     if (date.getMonth() === 3 && date.getDate() === 1) {
         document.title = "The Sily Caverns";
     }
@@ -95,14 +106,41 @@ function init() {
     });
     let canContinue = loadAllData();
     if (canContinue) {
-        repeatDataSave();
-        cat = verifiedOres.getCurrentLuck();
-        checkUnlockConditions();
-        switchWorldCraftables();
-        //switchPowerupDisplay(0);
-        utilitySwitchActions();
-        console.log("meow");
+        fetch("https://endurable-fragrant-visitor.glitch.me", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: new URLSearchParams({
+                "func" : "seed",
+            }).toString()
+          })
+          .then((res) => res.text())
+          .then((text => {
+            gameInfo.seed = JSON.parse(text);
+            finishInit();
+          }))
+          .catch((err) => {
+            console.log("Failed To Generate Seed!")
+            gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
+            finishInit();
+          });
     }
+}
+function finishInit() {
+    rand = new PRNG.Alea(gameInfo.seed, gameInfo.loops);
+    gameInfo.count = 0;
+    gameInfo.loops = 0;
+    gameInfo.overallCount = 0;
+    switchPortal({deltaY: 100});
+    switchPortal({deltaY: -100});
+    repeatDataSave();
+    cat = verifiedOres.getCurrentLuck();
+    switchWorldCraftables();
+    displayPowerup(0);
+    utilitySwitchActions();
+    createMine();
+    console.log("meow");
 }
 function assignImageNames() {
     for (let ore in oreList) {
@@ -405,6 +443,7 @@ document.addEventListener('keydown', (event) => {
         let movements = {x:0, y:0, key:name};
         movements.x = (name === "a" ? -1 : (name === "d" ? 1 : 0));
         movements.y = (name === "s" ? 1 : (name === "w" ? -1 : 0));
+        milestoneVariables.withSingle = true;
         movePlayer(movements, 1, "single");
         energySiphonerDirection = "";
     }
@@ -426,10 +465,12 @@ function handleMovement(dir, button) {
     if (gameInfo.movementType === "auto") {
         goDirection(dir);
     } else {
-        moveOne(dir, button)
+        milestoneVariables.withSingle = true;
+        moveOne(dir, button);
     }
 }
 function goDirection(direction) {
+    milestoneVariables.withAuto = true;
     if (curDirection === direction) {
         stopMining();
         curDirection = "";
@@ -448,9 +489,19 @@ function goDirection(direction) {
         movements.x = (direction === "a" ? -1 : (direction === "d" ? 1 : 0));
         movements.y = (direction === "s" ? 1 : (direction === "w" ? -1 : 0));
         miningSpeed ??= 25;
-        loopTimer = setInterval(movePlayer, miningSpeed, movements, reps, "auto");
-        if (nums.extra > 0) {
-            secondaryTimer = setInterval(movePlayer, (Math.ceil(1000/nums.extra)), movements, 1, "auto");
+        if (player.settings.accurateSpeed) {
+            let inSec = 0;
+            let div = 500;
+            while (div%nums.speed !== 0) div--;
+            inSec += (div/nums.speed) * nums.reps;
+            inSec += nums.extra;
+            console.log(inSec)
+            loopTimer = setInterval(accurateMove, 10, inSec, movements);
+        } else {
+            loopTimer = setInterval(movePlayer, miningSpeed, movements, reps, "auto");
+            if (nums.extra > 0) {
+                secondaryTimer = setInterval(movePlayer, (Math.ceil(1000/nums.extra)), movements, 1, "auto");
+            }
         }
         curDirection = direction;
         energySiphonerDirection = direction;
@@ -479,6 +530,19 @@ function speedFactorial(num) {
     if (num === 0) return 1;
     return num * speedFactorial(num-1);
 }
+function accurateMove(amt, dir) {
+    let now = Date.now();
+    let fa = Math.round(amt/5);
+    if (now >= accurateMove.nc) {
+        movePlayer(dir, fa, "auto");
+        movePlayer(dir, fa, "auto");
+        movePlayer(dir, fa, "auto");
+        movePlayer(dir, fa, "auto");
+        movePlayer(dir, fa, "auto");
+        accurateMove.nc = now + 500;
+    }
+}
+accurateMove.nc = Date.now();
 let devReps = 100;
 const calcSpeed = function() {
     let miningSpeed = baseSpeed;
@@ -555,7 +619,6 @@ function displayArea() {
             displayArea.lastPercent = tp;
             tp /= 10;
             if (tp > 9) tp = 9;
-            console.log(tp);
             removeProgressBar();
             for (let i = 0; i < tp + 1; i++) {
                 const toAddBars = get("resetProgressBar");
@@ -802,7 +865,12 @@ let lastXCheck = Date.now();
 let resetAddX = 0;
 let displayTimer = null;
 let p33CL = false;
+const thisUniqueId = Math.floor(Math.random() * 100000000000) + Math.floor(Math.random() * 100000000000);
+let idSet = false;
 function updateInventory() {
+    player.lastOnline = Date.now();
+
+    //Update Inventory Elements
     for (let propertyName in inventoryObj) {
         const inv = gameInfo.selectedInventory;
         let amt = playerInventory[propertyName][variantInvNames[inv]];
@@ -812,11 +880,15 @@ function updateInventory() {
         else (oreList[propertyName]["srcElement"].parentElement).style.display = "none";
     }
     inventoryObj = {};
+
+    //Update Current Recipe
     updateActiveRecipe();
-        if (player.powerupVariables.currentChosenOre.ore !== undefined && Date.now() >= player.powerupVariables.currentChosenOre.removeAt) {
-            player.powerupVariables.currentChosenOre.ore = undefined;
-            updateAllLayers();
-        }
+
+    //Check Things With Cooldowns
+    if (player.powerupVariables.currentChosenOre.ore !== undefined && Date.now() >= player.powerupVariables.currentChosenOre.removeAt) {
+        player.powerupVariables.currentChosenOre.ore = undefined;
+        updateAllLayers();
+    }
     if (player.powerupVariables.commonsAffected.state && Date.now() >= player.powerupVariables.commonsAffected.removeAt) {
         player.powerupVariables.commonsAffected.state = false;
         updateAllLayers();
@@ -831,56 +903,48 @@ function updateInventory() {
         player.powerupVariables.caveBoosts.removeAt = Infinity;
         player.powerupVariables.caveBoosts.active = false;
     }
-    if (!p33CL) {
-        if (player.stats.currentPickaxe === "pickaxe33") {
-            p33CL = true;
-        }
-    } else {
-        if (player.stats.currentPickaxe !== "pickaxe33") {
-            p33CL = false;
-        }
-    }
+
+    //Make Sure TOL Isn't in W1, Make sure TOL is in SR1
     if ((currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") && !(player.gears["gear43"] && player.stats.currentPickaxe === "pickaxe33")) {player.stats.currentPickaxe = "pickaxe27"; utilitySwitchActions();}
     else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions();}
-    //updatePowerupCooldowns();
-    //updateDisplayedUpgrade();
-    //displayNearbyCooldowns();
+
+    //Check Powerup Contitions and Update Cooldowns
+    checkAllConditions();
+    updatePowerupCooldowns();
     //if (player.gears["gear24"]) autoPowerups();
+
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
     if (Date.now() >= ability1RemoveTime && energySiphonerActive) removeSiphoner();
     const bodyCheck = document.body.getBoundingClientRect();
-    if (bodyCheck.height < 550) {
-        document.getElementById("mainSticky").style.position = "relative";
-        document.getElementById("mainTop").style.position = "relative";
-    } 
-    else {
-        document.getElementById("mainSticky").style.position = "sticky";
-        document.getElementById("mainTop").style.position = "sticky";
-    }
     if (currentActiveEvent !== undefined) {
         if (Date.now() >= currentActiveEvent.removeAt) endEvent();
     } else {
         activateEvent(rollEvent());
     }
+
     let speed = calcAverageSpeed();
     if (speed !== undefined) player.avgSpeed = speed;
     const avgBlocks = getAvgBlockSpeed();
-    //get("catPlayerStats").textContent = `${player.displayStatistics.luck.toLocaleString()}x Luck. ${avgBlocks > 1000000000000 ? formatNumber(avgBlocks, 3) : avgBlocks.toLocaleString()} Average Blocks Per Minute.`;
-    player.lastOnline = Date.now();
     updateOfflineProgress();
+
+    //No Dimensional when cat!!
     if (ca && pickaxeStats[player.stats.currentPickaxe].isDimensional) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions()}
+
+    //SCHIZOPHRENIA
     const aud = player.settings.audioSettings["Hyperdimensional"];
     const oH  = aud.canPlay;
     if (!oH) aud.canPlay = true;
     if (Math.random() < 1/100000000) playSound("Hyperdimensional");
     if (!oH) aud.canPlay = false;
 
+    //Check Polychromatical Progress
     checkPolys();
+
+    //Check Event Manager
     updateEventActions();
-    if (currentActiveEvent === undefined) {
-        //get("eventMessages").textContent = "All Messages";
-    }
+
+    //Gear Thing
     if (player.gears["gear38"]) {
         randBuff.count--;
         if (randBuff.count <= 0) {
@@ -900,15 +964,33 @@ function updateInventory() {
         randBuff.proc = false;
         randBuff.reps = false;
     }
+
+    //Update Lounge
+    updateLoungeStats();
+    if (showLoungeScreen.current === "loungeOverallStatistics") updateTimes();
+
+
+    //Check Milestones (this should be optimized)
+    checkCurrentMilestones(false);
+
+    //Stop Multi Instancing
+    if (idSet) {
+        const setId = JSON.parse(localStorage.getItem("meowAntiCheat"));
+        if (setId !== thisUniqueId) {
+            location.reload();
+        }
+    }
+    localStorage.setItem("meowAntiCheat", thisUniqueId);
+    idSet = true;
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
 function getAvgBlockSpeed() {
     blockAmts.push(player.stats.blocksMined - lastBlockAmt);
-    if (blockAmts.length > 40) blockAmts.splice(0, 1);
+    if (blockAmts.length > 120) blockAmts.splice(0, 1);
     let totalBlockAmts = 0;
     for (let i = 0; i < blockAmts.length; i++) totalBlockAmts += blockAmts[i];
-    totalBlockAmts *= 6;
+    totalBlockAmts *= (120 / blockAmts.length);
     lastBlockAmt = player.stats.blocksMined;
     return totalBlockAmts;
 }
@@ -944,6 +1026,8 @@ function spawnMessage(obj) {
     let caveInfo = obj.caveInfo;
     let variant = namesemojis[obj.variant - 1];
     let variantMulti = multis[obj.variant - 1];
+    spawnMessage.count++;
+    spawnMessage.lastOre = block;
     const toEdit = get("latestTemplate").cloneNode(true);
     toEdit.classList.add("notMinedLatestOre")
     spawnsToSearch.push({loc: obj.location, ore: block, element: toEdit})
@@ -1018,6 +1102,8 @@ function spawnMessage(obj) {
         }, 6000);
     }
 }
+spawnMessage.count = 0;
+spawnMessage.lastOre = undefined;
 let typeCalls = {
     currentType: "",
     num: 0,
@@ -1822,7 +1908,8 @@ function toggleSideMenu(id) {
     const animations = {
         "oreTrackerHolder" : "Tracker",
         "offlineHolder" : "Offline",
-        "eventActionHolder" : "EventActions"
+        "eventActionHolder" : "EventActions",
+        "powerupHolder" : "Powerup"
     }
     const thisAnimation = animations[id];
     if (thisAnimation === undefined) return;
@@ -1833,19 +1920,19 @@ function toggleSideMenu(id) {
         elem.style.animation = `retract${elemAnimation} 0.5s linear 1`;
         elem.onanimationend = () => {
             elem.style.display = "none";
-            const width = elem.style.width;
-            elem.style.right = `${width}px`;
+            const height = elem.style.height;
+            elem.style.top = `${height}px`;
             elem.style.animation = "";
             elem.onanimationend = undefined;
         };
     }
     if (!isOpenAlready) {
         menu.classList.add("displayedSideMenu");
-        menu.style.display = "block";
+        menu.style.display = (id === "powerupHolder" ? "flex" : "block")
         menu.style.animation = `extend${thisAnimation} 0.5s linear 1`;
         updateOfflineProgress();
         menu.onanimationend = () => {
-            menu.style.right = "2.5vw";
+            menu.style.right = "0vw";
             menu.style.animation = "";
             menu.onanimationend = undefined;
         };
@@ -1856,8 +1943,10 @@ function updateOfflineProgress() {
         let output = "";
         const layer = getLayer(curY).layer;
         let m = 1;
-        for (let i = layer.length-1; i >= 0; i--) if (oreList[layer[i]]["oreTier"] !== "Celestial") output += `${layer[i]}${(i<layer.length-1&& m%5 === 0) ? (m++, "<br>") : (m++," ")}`;
-        get("offlineLayer").innerHTML = `${output}`;
+        for (let i = layer.length-1; i >= 0; i--) if (oreList[layer[i]]["oreTier"] !== "Celestial") {
+            output += `${oreList[layer[i]]["hasImage"] ? (`<img class="offlineProgressImage" src="${oreList[layer[i]]["src"]}">`) : layer[i]}${(i<layer.length-1 && m%15 === 0) ? (m++, "<br>") : (m++," ")}`;
+        }
+        get("offlineLayer").innerHTML = output;
         if (player.offlineProgress > 28800000) player.offlineProgress = 28800000;
         get("offlineStats").textContent = `${msToTime(player.offlineProgress)}/08:00:00`;
         const percent = player.offlineProgress > 0 ? 100/(28800000/(player.offlineProgress)) : 0;

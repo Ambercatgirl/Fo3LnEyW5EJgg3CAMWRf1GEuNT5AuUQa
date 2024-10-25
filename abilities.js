@@ -57,7 +57,6 @@ function powerup1(x, y) {
         }
         displayArea();
         player.powerupCooldowns["powerup1"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
-        applyNearbyData();
     }
     
 }
@@ -66,7 +65,6 @@ function powerup2() {
         player.powerupCooldowns["powerup2"].cooldown = Date.now() + (player.gears["gear24"] ? 900000 * 0.75 : 900000);
         player.powerupVariables.caveBoosts.removeAt = Date.now() + (player.gears["gear24"] ? 150000 * 1.5 : 150000);
         player.powerupVariables.caveBoosts.active = true;
-        applyNearbyData();
     }
 }
 
@@ -81,7 +79,6 @@ function powerup3() {
         player.powerupVariables.currentChosenOre.removeAt = Date.now() + (player.gears["gear24"] ? 600000 * 1.5 : 600000);;
         updateAllLayers();
         player.powerupCooldowns["powerup3"].cooldown = Date.now() + (player.gears["gear24"] ? 3000000 * 0.75 : 3000000);
-        applyNearbyData();
     }
 }
 function powerup4() {
@@ -90,7 +87,6 @@ function powerup4() {
         player.powerupVariables.commonsAffected.removeAt = Date.now() + (player.gears["gear24"] ? 300000 * 1.5 : 300000);
         player.powerupCooldowns["powerup4"].cooldown = Date.now() + (player.gears["gear24"] ? 1200000 * 0.75 : 1200000);
         updateAllLayers();
-        applyNearbyData();
     }
 }
 function powerup5() {
@@ -145,7 +141,6 @@ function powerup5() {
                 utilitySwitchActions();
             }
         }
-        applyNearbyData();
     }
 }
 
