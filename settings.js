@@ -19,7 +19,8 @@ function showLoungeScreen(id, button) {
         button.classList.add("selectedLoungeArea");
         showLoungeScreen.current = id;  
     }
-
+    checkMilestoneStatus();
+    checkIndexStatus();
 }
 showLoungeScreen.current = undefined;
 showLoungeScreen.cButton = undefined;
@@ -27,12 +28,79 @@ function toggleLounge() {
     if (toggleLounge.toggled) {
         get("loungeHolder").style.display = "none";
         toggleLounge.toggled = false;
+        checkMilestoneStatus();
+        checkInventoryStatus();
+        checkIndexStatus();
     } else {
         get("loungeHolder").style.display = "inline-flex";
         toggleLounge.toggled = true;
+        checkMilestoneStatus();
+        checkInventoryStatus();
+        checkIndexStatus();
     }
 }
 toggleLounge.toggled = false;
+function checkMilestoneStatus() {
+    if (showLoungeScreen.current !== "loungeMilestones" && player.loungeSettings.deleteUnusedElements && checkCurrentMilestones.shown) {
+        checkCurrentMilestones.shown = false;
+        deleteMilestoneElements();
+    }
+    else if (showLoungeScreen.current === "loungeMilestones" && !toggleLounge.toggled && player.loungeSettings.deleteUnusedElements && checkCurrentMilestones.shown) {
+        checkCurrentMilestones.shown = false;
+        deleteMilestoneElements();
+    }
+    else if (showLoungeScreen.current === "loungeMilestones" && !checkCurrentMilestones.shown) {
+        checkCurrentMilestones.shown = true
+        createMilestones();
+    }
+}
+function checkInventoryStatus() {
+    if (toggleLounge.toggled && player.loungeSettings.deleteUnusedElements) {
+        const c = get("inventory");
+        while (c.firstChild) c.firstChild.remove();
+    } else if (!toggleLounge.toggled && get("inventory").children.length === 0) {
+        createInventory();
+        const list = player.settings.favoritedElements;
+        for (let i = 0; i < list.length; i++) {
+            favoriteOre(get(`${list[i]}Holder`));
+        }
+        for (const ore in oreList) inventoryObj[ore] = 0;
+        updateInventory();
+    }
+}
+checkInventoryStatus.created = true;
+function checkIndexStatus() {
+    if (toggleLounge.toggled && player.loungeSettings.deleteUnusedElements && showLoungeScreen.current !== "loungeOreIndex") {
+        const h = get("loungeCardHolder");
+        while (h.firstChild) h.firstChild.remove();
+    }
+    else if (!toggleLounge.toggled && player.loungeSettings.deleteUnusedElements && showLoungeScreen.current === "loungeOreIndex") {
+        const h = get("loungeCardHolder");
+        while (h.firstChild) h.firstChild.remove();
+    } else if (toggleLounge.toggled && get("loungeCardHolder").children.length === 0 && showLoungeScreen.current === "loungeOreIndex" && createIndexCards.indexing !== undefined) {
+        createIndexCards(createIndexCards.indexing);
+    }
+}
+function toggleUnused(b) {
+    if (player.loungeSettings.deleteUnusedElements) {
+        player.loungeSettings.deleteUnusedElements = false;
+        b.style.backgroundColor = "var(--better-red)";
+    } else {
+        player.loungeSettings.deleteUnusedElements = true;
+        b.style.backgroundColor = "var(--better-green)";
+        checkInventoryStatus();
+        checkMilestoneStatus();
+    }
+}
+function toggleUpdates(b) {
+    if (player.loungeSettings.updateElements) {
+        player.loungeSettings.updateElements = false;
+        b.style.backgroundColor = "var(--better-red)";
+    } else {
+        player.loungeSettings.updateElements = true;
+        b.style.backgroundColor = "var(--better-green)";
+    }
+}
 function showFaqPage(num) {
     const elements = document.getElementsByClassName("faqPage");
     for (let i = 0; i < elements.length; i++) {
@@ -435,137 +503,7 @@ function switchLayerIndex(num, overrideLayer, world) {
 function shouldIgnore(ore) {
     return oreInformation.tierGrOrEqTo({"tier1": oreList[ore]["oreTier"], "tier2": "Sacred"});
 }
-let noLuck = "✴️🌹";
-function createIndexCards(layer) {
-        const oldLayer = layer; 
-        let toReturn = [];
-        let minIndexRarity = 2;
-        let affectedByLuck = true;
-        let isEvent = false;
-        if (layer === "worldOneCommons" || layer === "worldTwoCommons") {
-            layer = layerList[layer];
-        } else if (layerDictionary[layer] !== undefined) {
-            layer = layerDictionary[layer].layer;
-            minIndexRarity = 5000000;
-        }
-        if (subRealmOneLayers.includes(oldLayer)) minIndexRarity = 750000;
-        else if (caveList[layer] != undefined) {
-            layer = caveList[layer];
-        }
-        if (layer === "eventLayer") {
-            isEvent = true;
-            const collect = Object.keys(limitedOres);
-            const output = [];
-            for (let i = 0; i < collect.length; i++) {
-                if (oreList[collect[i]]["oreTier"] !== "Celestial") output.push(collect[i]);
-            }
-            for (let i = 0; i < output.length; i++) {
-                for (let j = 0; j < output.length - i - 1; j++) {
-                    let rarity1 = oreList[output[j]]["numRarity"];
-                    let rarity2 = oreList[output[j + 1]]["numRarity"];
-                    if (rarity1 < rarity2) {
-                        const lesser = output[j + 1];
-                        output[j + 1] = output[j];
-                        output[j] = lesser;
-                    }
-                }
-            }
-            layer = output;
-        }
-        for (let i = 0; i < layer.length; i++) {
-        let property = layer[i];
-        let skipOre = false;
-        if ((layerList["worldOneCommons"].indexOf(property) > -1 || layerList["worldTwoCommons"].indexOf(property) > -1) && oldLayer.indexOf("Commons") === -1) {
-            skipOre = true;
-        }
-        if ((oreList[property]["numRarity"] >= minIndexRarity || property === "✴️") && oreList[property]["oreTier"] !== "Celestial" && !skipOre) {
-            if (oreInformation.isCommon(oreList[property]["oreTier"])) affectedByLuck = false;
-            if (noLuck.indexOf(property) > -1) affectedByLuck = false;
-            let blackOut = false;
-            if (shouldIgnore(property) && !indexHasOre(property)) blackOut = true;
-            let parentObject = document.createElement("div");
-            let parentWrapper = get("normalIndexCard").cloneNode(true);
-            parentObject.classList = "oreCard";
-            //Add Ore
-            const indexOre = parentWrapper.children[0];
-            let propertyToAdd;
-            if (oreList[property]["hasImage"]) {
-                propertyToAdd = `<img src="${oreList[property]["src"]}" class="indexImage"></img>`;
-            } else propertyToAdd = property;
-            if (blackOut) {
-                if (oreList[property]["hasImage"]) indexOre.classList.add("blackoutImage")
-                indexOre.classList.add("indexBlackout");
-            }
-            indexOre.setAttribute("title", oreList[property]["oreName"]);
-            indexOre.innerHTML = propertyToAdd;
-            //Add Variants
-            const indexVariant = parentWrapper.children[1];
-            indexVariant.innerHTML = indexVariants(property);
-            //Add Tier
-            const indexTier = parentWrapper.children[2];
-            if (blackOut) indexTier.textContent = "???";
-            else indexTier.textContent = oreList[property]["oreTier"];
-            //Add Rarity
-            const indexRarity = parentWrapper.children[3];
-            const indexRarityLuck = parentWrapper.children[4];
-            if (caveList[oldLayer] !== undefined) {
-                let rarity = oreList[property]["numRarity"];
-                const caveMulti = getCaveMulti(oldLayer);
-                if (oolProbabilities[property] != undefined) rarity = Math.round(1/oolProbabilities[property]);
-                if (blackOut) indexRarity.textContent = "1/??? Base Rarity.";
-                else indexRarity.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Base Rarity.`;
-                rarity *= caveMulti;
-                if (blackOut) indexRarityLuck.textContent = "1/??? Adjusted.";
-                else indexRarityLuck.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Adjusted.`
-            } else {
-                let rarity = oreList[property]["numRarity"];
-                if (blackOut) indexRarity.textContent = "1/??? Base Rarity.";
-                else indexRarity.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} Base Rarity.`;
-                rarity = Math.round(rarity / verifiedOres.getCurrentLuck());
-                if (rarity < 1000 && affectedByLuck) rarity = 1000;
-                let simAmt;
-                if (player.settings.simulatedRng || pickaxeStats[player.stats.currentPickaxe].isDimensional) {
-                    if (pickaxeStats[player.stats.currentPickaxe].isDimensional) simAmt = pickaxeStats[player.stats.currentPickaxe].mined;
-                    else {
-                        if (player.stats.currentPickaxe === "pickaxe27") simAmt = pickaxeStats["pickaxe27"][player.upgrades["pickaxe27"].level].mined;
-                        else simAmt = pickaxeStats[player.stats.currentPickaxe].mined;
-                    }
-                    if (simAmt < 35899) rarity = Math.round(1/oreList[property]["decimalRarity"]);
-                    else {
-                        let rngModifier = simAmt / 35899;
-                        rarity = oreList[property]["decimalRarity"]*simAmt;
-                        if (rarity < 1) {
-                            rarity /= simAmt;
-                            rarity *= rngModifier;
-                            rarity = Math.round(1/rarity);
-                        }
-                        else {
-                            rarity = 1;
-                        }
-                    }
-                }
-                if (affectedByLuck && blackOut) indexRarityLuck.textContent = "1/??? With Luck.";
-                else if (affectedByLuck) indexRarityLuck.textContent = `${rarity > 1000000000000000 ? formatNumber(rarity, 3) : rarity.toLocaleString()} With ${simAmt !== undefined ? "Simulated." : "Luck."}`
-                else indexRarityLuck.textContent = "Unaffected By Luck";
-            }
-            //Add Spawn Message
-            const indexSpawnMessage = parentWrapper.children[5];
-            if (blackOut) indexSpawnMessage.textContent = "???";
-            else indexSpawnMessage.textContent = oreList[property]["spawnMessage"];
-            if (isEvent) {
-                const indexEventLayers = parentWrapper.children[6];
-                indexEventLayers.textContent = formatEventLayers(limitedOres[property].layers)
-                const indexEventMonths = parentWrapper.children[7];
-                indexEventMonths.textContent = formatEventMonths(limitedOres[property].timeValues)
-            }
-            //Add Variant Gradient
-            parentWrapper = addIndexColors(parentWrapper, blackOut, property);
-            parentObject.appendChild(parentWrapper)
-            toReturn.push(parentObject);
-        }
-    }
-        return toReturn;
-}
+let noLuck = "✴️🌹";     
 function formatEventLayers(arr) {
     let layerOutput = "";
     for (let i = 0; i < arr.length; i++) {
@@ -578,7 +516,7 @@ function formatEventLayers(arr) {
         }
     }
     layerOutput = layerOutput.substring(0, layerOutput.length - 2);
-    return `Found in: ${layerOutput}`;
+    return `in ${layerOutput}`;
 }
 function formatEventMonths(arr) {
     const monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -587,7 +525,7 @@ function formatEventMonths(arr) {
         monthOutput += `${monthNames[arr[i]]}, `
     }
     monthOutput = monthOutput.substring(0, monthOutput.length - 2);
-    return `Found during: ${monthOutput}`;
+    return `${monthOutput}`;
 }
 function addIndexColors(element, blackOut, property) {
     let colors = oreInformation.getColors(oreList[property]["oreTier"]);
@@ -725,15 +663,16 @@ function switchToIndex(button, num) {
 const indexOrder = {
     1: {
         "worldOne" : {l: ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "giftLayer"], req: function() {return true;}},
-        //"worldOneCommons",
+        "worldOneCommons" : {l: ["worldOneCommons"], req: function() {return true;}},
         "worldOneSpecial1" : {l: ["fluteLayer"], req: function() {return indexHasOre("🪈") > 1000000}},
         "worldOneSpecial2" : {l: ["sillyLayer"], req: function() {return indexHasOre("🎂") > 1000000}},
         "worldOneSpecial3" : {l: ["unknownLayer"], req: function() {return indexHasOre("🟩") > 1000000}},
     },
     2: {
         "worldTwo" : {l: ["cloudLayer", "tvLayer", "doorLayer", "globeLayer", "chessLayer"], req: function() {return player.pickaxes["pickaxe13"]}},
-        //"worldTwoCommons"
-        //"barrierLayer", "borderLayer"
+        "worldTwoCommons" : {l: ["worldTwoCommons"], req: function() {return true;}},
+        "worldTwoSpecial1" : {l: ["barrierLayer"], req: function() {return indexHasOre("✴️") > 0}},
+        "worldTwoSpecial2" : {l: ["borderLayer"], req: function() {return indexHasOre("❌") > 1000000}},
     },
     1.1: {
         "subrealmOne" : {l: ["scLayer", "bnLayer", "knLayer", "vaLayer", "srLayer", "ocLayer", "catcatLayer"], req: function() {return player.sr1Unlocked}},
@@ -745,9 +684,10 @@ const indexOrder = {
         "caves1" : {l: ["bacteriaCave", "biohazardCave", "musicCave", "mysteryCave"], req: function() {return player.pickaxes["pickaxe5"]}},
         "caves2" : {l: ["ccCave", "moCave", "foCave", "axCave", "ioCave", "ggCave"], req: function() {return player.sr1Unlocked}},
         "caves3" : {l: ["watrCave"], req: function() {return player.pickaxes["pickaxe26"]}},
+        "caves4" : {l: ["abysstoneCave"], req: function() {return indexHasOre("🕳️") > 100000}},
     },
     "events" : {
-        //"eventLayer"
+        "events1" : {l: ["event"], req: function() {return true;}}
     }
 }
 function addIndexLayers(world) {
@@ -756,23 +696,40 @@ function addIndexLayers(world) {
     for (const layer in indexOrder[world]) {
         let list = indexOrder[world][layer].l;
         let thisUnlocked = indexOrder[world][layer].req();
-        console.log(indexOrder[world][layer].req)
         for (let i = 0; i < list.length; i++) {
             const button = document.createElement("button");
             button.classList = "loungeLayerSelector";
             if (thisUnlocked) {
-                const allOres = layerList[list[i]];
+                let allOres;
+                if (world === "caves") allOres = caveList[list[i]];
+                else if (world === "events") {allOres = ["🟩"]}
+                else allOres = layerList[list[i]];
                 const thisMat = getIndexLayerOre(allOres);
                 if (layer.indexOf("worldOneSpecial") === -1) {
-                    button.textContent = `${thisMat} - ${(i * 2000)}m`
+                    if (world === "caves") button.textContent = `${thisMat} - 0-∞m`;
+                    else if (list[i].indexOf("Commons") > -1) button.textContent = `${allOres[allOres.length-1]} - 0-∞m`;
+                    else if (list[i] === "event") button.textContent = "Limited Ores"
+                    else button.textContent = `${thisMat} - ${(i * 2000)}m`
                 } else {
                     button.textContent = `${thisMat} - ????m`
                 }
+                button.setAttribute("onclick", `createIndexCards("${list[i]}")`);
             } else {
                 button.textContent = "[Research Required]";
+                button.disabled = true;
             }
             get("loungeLayersHolder").appendChild(button);
         }
+    }
+}
+addIndexLayers.current = 1;
+function nextLayers(num) {
+    if (num !== 0) {
+        const l = Object.keys(indexOrder);
+        const i = l.indexOf(String(addIndexLayers.current));
+        const g = l.splice(i + num, 1);
+        addIndexLayers.current = (g[0] !== undefined ? g[0] : "1");
+        addIndexLayers(addIndexLayers.current);
     }
 }
 function getIndexLayerOre(list) {
@@ -780,6 +737,93 @@ function getIndexLayerOre(list) {
         if (oreList[list[i]]["oreTier"] === "Layer") return list[i];
     }
     return undefined;
+}
+function createIndexCards(layer) {
+    createIndexCards.indexing = layer;
+    const h = get("loungeCardHolder");
+    const ic = layer.indexOf("Commons") > -1
+    while (h.firstChild) h.firstChild.remove();
+    let list;
+    if (caveList[layer] === undefined) {
+        if (ic) list = [...layerList[layer]];
+        else if (layer === "event") {
+            list = Object.keys(limitedOres); 
+            list.splice(list.indexOf("draedon"), 1); 
+            list.splice(list.indexOf("🦋"), 1); 
+            list.splice(list.indexOf("😻"), 1);
+            for (let i = 0; i < list.length; i++) {
+                for (let j = 0; j < list.length - i - 1; j++) {
+                    let rarity1 = oreList[list[j]]["numRarity"];
+                    let rarity2 = oreList[list[j + 1]]["numRarity"];
+                    if (rarity1 < rarity2) {
+                        const lesser = list[j + 1];
+                        list[j + 1] = list[j];
+                        list[j] = lesser;
+                    }
+                }
+            }
+        }
+        else list = [...layerDictionary[layer].layer];
+        for (let i = list.length - 1; i >= 0; i--) {
+            const ore = list[i];
+            const tier = oreList[ore]["oreTier"];
+            if ((!oreInformation.tierGrOrEqTo({"tier1":tier, "tier2": "Mystical"}) && !ic) || tier === "Celestial") list.splice(i, 1);
+        }
+    } else {
+        list = [...caveList[layer]];
+        for (let i = list.length - 1; i >= 0; i--) {
+            const ore = list[i];
+            const tier = oreList[ore]["oreTier"];
+            if (tier === "Celestial" || tier === "Layer") list.splice(i, 1);
+        }
+    }
+    for (key in list) {
+        const copying = get("indexCardCopy").cloneNode(true);
+        copying.id = "";
+        get("loungeCardHolder").prepend(copying);
+        const ore = list[key];
+        const tier = oreList[ore]["oreTier"];
+        const hide = (oreInformation.tierGrOrEqTo({"tier1":tier, "tier2":"Sacred"}) && oreList[ore]["foundAt"] === undefined) && indexHasOre(ore) === 0;
+        if (oreList[ore]["hasImage"]) {
+            document.querySelector(".indexCardOre").innerHTML = `<span class="indexCardImageOre ${hide ? "indexCardBlackout" : ""}"><img src="${oreList[ore]["src"]}"></span>`;
+        } else {
+            document.querySelector(".indexCardOre").innerHTML = `<span class="${hide ? "indexCardBlackout" : ""}">${ore}</span>`;
+        }
+        let e = document.querySelector(".indexCardTier").children[0];
+        e.style.color = oreInformation.getColors(tier)["backgroundColor"];
+        e.innerHTML = e.innerHTML.replace("Polychromatical", tier);
+        const f = playerInventory[ore]["foundAt"];
+        document.querySelector(".indexCardFound").textContent = `${hide || (indexHasOre(ore) === 0 && f === undefined) ? "Never Found!" : (f === undefined ? "No Date Detected!" : new Date(f).toUTCString())}`;
+        if (caveList[layer] !== undefined) {
+            document.querySelector(".indexCardLuck").textContent = `${hide ? "1/??? Base Rarity" : `1/${(oolProbabilities[ore] !== undefined ? formatIndexNum(1/oolProbabilities[ore]) : formatIndexNum(oreList[ore]["numRarity"]))} Base Rarity`}`;
+            document.querySelector(".indexCardRng").textContent = `${hide ? "1/??? Adjusted" : `1/${(oolProbabilities[ore] !== undefined ? formatIndexNum(1/oolProbabilities[ore] * getCaveMulti(layer)) : formatIndexNum(oreList[ore]["numRarity"] * getCaveMulti(layer)))} Adjusted`}`;
+        } else {
+            document.querySelector(".indexCardLuck").textContent = `${hide ? "1/??? Base Rarity" : `1/${formatIndexNum(oreList[ore]["numRarity"])} Base Rarity`}`;
+            if (player.settings.simulatedRng || pickaxeStats[player.stats.currentPickaxe].isDimensional) {
+                let bulkAmt = 0;
+                let pickaxe = pickaxeStats[player.stats.currentPickaxe];
+                if (player.stats.currentPickaxe === "pickaxe27") bulkAmt = pickaxe[player.upgrades["pickaxe27"].level].mined;
+                else bulkAmt = pickaxe.mined;
+                if (player.gears["gear41"]) bulkAmt += 50000;
+                if (player.gears["gear34"]) bulkAmt = Math.floor(bulkAmt*2);
+                if (player.gears["gear39"]) bulkAmt = Math.floor(bulkAmt*3);
+                const rarity = oreList[ore]["decimalRarity"] * bulkAmt;
+                if (rarity > 1) document.querySelector(".indexCardRng").textContent = `${hide ? "Guaranteed ??? With Simulated" : `Guaranteed ${formatNumber(Math.floor(rarity))}x With Simulated.`}`;
+                else document.querySelector(".indexCardRng").textContent = `${hide ? "1/??? With Simulated" : `1/${formatIndexNum(Math.floor(1/oreList[ore]["decimalRarity"]))} With Simulated.`}`;
+            } else {
+                document.querySelector(".indexCardRng").textContent = `${hide ? "1/??? With Luck" : `1/${formatIndexNum(Math.floor(1/oreList[ore]["decimalRarity"]))} With Luck`}`;
+            }
+        }
+        document.querySelector(".indexCardVariants").innerHTML = indexVariants(ore);
+        if (layer === "event") document.querySelector(".indexCardEvent").textContent =`${formatEventMonths(limitedOres[ore].timeValues)} ${formatEventLayers(limitedOres[ore].layers)}`;
+        copying.remove();
+        get("loungeCardHolder").appendChild(copying);
+    }
+}
+createIndexCards.indexing = undefined;
+function formatIndexNum(num) {
+    if (num >= 1000000000000000) return formatNumber(num, 2);
+    else return num.toLocaleString();
 }
 function togglePathBlocks() {
     if (player.settings.usePathBlocks) {
@@ -1038,60 +1082,74 @@ function closeAllLocations() {
     showOreForge(false);
     showWorkshop(false)
 }
-const conversionRates = [5, 10, 30];
+const conversionRates = {
+    "Electrified" : 5,
+    "Radioactive" : 10,
+    "Explosive" : 30
+}
 let hasConverted = false;
-function convertVariants() {
-    let ore = document.getElementById("oreInput").value;
-    if (oreList[ore] === undefined) ore = ore.replaceAll(" ", "");
-    let variant = document.getElementById("currentSelectedVariant").innerText;
-    let amt = document.getElementById("amtInput").value;
-    document.getElementById("amtInput").value = "";
-    document.getElementById("oreInput").value = "";
-    if (oreList[ore] === undefined) {
-        document.getElementById("machineError").innerText = "Error! Ore Doesn't Exist!";
-        document.getElementById("machineError").style.color = "red";
-        setTimeout(() => {
-            document.getElementById("machineError").innerText = "";
-        }, 2000);
-        return;
+let isErroring = false;
+function convertVariant(type) {
+    const multi = conversionRates[type];
+    for (const ore in playerInventory) {
+        if (playerInventory[ore][variantInvNames[names.indexOf(type)]] - 1 > 0) {
+            playerInventory[ore]["normalAmt"] += ((playerInventory[ore][variantInvNames[names.indexOf(type)]] - 1) * multi);
+            playerInventory[ore][variantInvNames[names.indexOf(type)]] -= (playerInventory[ore][variantInvNames[names.indexOf(type)]] - 1);
+            inventoryObj[ore] ??= 0;
+        }
     }
-    amt = Number(amt);
-    if (isNaN(amt) || amt <= 0) {
-        document.getElementById("machineError").innerText = "Error! Invalid Amount!";
-        document.getElementById("machineError").style.color = "red";
-        setTimeout(() => {
-            document.getElementById("machineError").innerText = "";
-        }, 2000);
-        return;
-    }
-    const obj = {"ore":ore, "variant":variant, "amt":amt};
-    let amtToGive = 0;
-    if (obj["variant"] === "Explosive") amtToGive = conversionRates[2];
-    else if (obj["variant"] === "Radioactive") amtToGive = conversionRates[1];
-    else if (obj["variant"] === "Electrified") amtToGive = conversionRates[0];
-    let name = variantInvNames[names.indexOf(obj["variant"])];
-    if (obj["ore"] === "🧱" && obj["variant"] === "Electrified" && obj["amt"] === 1337) {
-        typeWriter("<i>The ground shakes beneath you as something makes its presence known...</i>", get("spawnMessage"), true);
-        eventSpawn.currentTime = 0;
-        eventSpawn.play();
-        hasConverted = true;
-    }
-    if (playerInventory[obj["ore"]][name] >= obj["amt"]) {
-        playerInventory[obj["ore"]][name] -= obj["amt"];
-        playerInventory[obj["ore"]]["normalAmt"] += (obj["amt"] * amtToGive);
-        inventoryObj[obj["ore"]] = 0;
-        document.getElementById("machineError").innerText = "Success!";
-        document.getElementById("machineError").style.color = "green";
-        setTimeout(() => {
-            document.getElementById("machineError").innerText = "";
-        }, 2000);
+    resetVariantVals();
+}
+function convertOre(ore, amt, type) {
+    if (playerInventory[ore] === undefined) {oreNotFound(); return;}
+    if (isErroring) return;
+    const multi = conversionRates[type];
+    if (amt <= playerInventory[ore][variantInvNames[names.indexOf(type)]] && amt > 0 && !isNaN(Number(amt))) {
+        playerInventory[ore]["normalAmt"] += amt*multi;
+        playerInventory[ore][variantInvNames[names.indexOf(type)]] -= amt;
+        inventoryObj[ore] ??= 0;
     } else {
-        document.getElementById("machineError").innerText = "Error! You do not own enough of this ore to perform this action!";
-        document.getElementById("machineError").style.color = "red";
-        setTimeout(() => {
-            document.getElementById("machineError").innerText = "";
-        }, 2000);
+        notEnoughOre();
+        return;
     }
+    resetVariantVals();
+}
+function allButOne(ore) {
+    if (playerInventory[ore] === undefined) {oreNotFound(); return;}
+    if (isErroring) return;
+    for (let i = 1; i < 4; i++) {
+        const multi = conversionRates[names[i]]
+        if (playerInventory[ore][variantInvNames[i]] - 1 > 0) {
+            playerInventory[ore]["normalAmt"] += (playerInventory[ore][variantInvNames[i]] - 1) * multi;
+            playerInventory[ore][variantInvNames[i]] -= (playerInventory[ore][variantInvNames[i]] - 1);
+            inventoryObj[ore] ??= 0;
+        }
+    }
+    resetVariantVals();
+}
+function resetVariantVals() {
+    get("variantInputName").value = "";
+    get("variantInputAmt").value = "";
+}
+function oreNotFound() {
+    const editing = get("variantInputName");
+    const input = editing.value;
+    editing.value = "Ore Not Found!";
+    editing.style.color = "var(--better-red)";
+    setTimeout(() => {
+        editing.value = input;
+        editing.style.color = "white";
+    }, 1000);
+}
+function notEnoughOre() {
+    const editing = get("variantInputAmt");
+    const input = editing.value;
+    editing.value = "Invalid Amount!";
+    editing.style.color = "var(--better-red)";
+    setTimeout(() => {
+        editing.value = input;
+        editing.style.color = "white";
+    }, 1000);
 }
 function timeSinceLastAutosave() {
     let milliseconds = (cloudsaving.save_interval - (cloudsaving.next_save_time - Date.now()));
@@ -1140,6 +1198,16 @@ function toggleSimulatedRng(button) {
     } else {
         button.style.backgroundColor = "#6BC267";
         player.settings.simulatedRng = true;
+    }
+    updateAllLayers();
+}
+function toggleAccurateSpeed(button) {
+    if (player.settings.accurateSpeed) {
+        button.style.backgroundColor = "var(--better-red)";
+        player.settings.accurateSpeed = false;
+    } else {
+        button.style.backgroundColor = "var(--better-green)";
+        player.settings.accurateSpeed = true;
     }
     updateAllLayers();
 }
@@ -1435,17 +1503,11 @@ function toggleHideCompleted() {
 //lounge stuff down here
 function updateLoungeStats() {
     const settings = player.loungeSettings;
-    if (settings.updateLuck) {
+    if (settings.updateElements) {
         get("updateLuck").textContent = `${player.displayStatistics.luck.toLocaleString()}x Luck`;
-    }
-    if (settings.updateGenerations) {
         const blocks = getAvgBlockSpeed();
         get("updateGenerations").textContent = `${formatNumber(blocks, 2)} Generations/Min`;
-    }
-    if (settings.updateLayer) {
         get("updateLayer").textContent = `Mining In: ${getLayer(curY).layerMat}`
-    }
-    if (settings.updateDirection) {
         const dir = curDirection;
         let selDir;
         if (curDirection === "w") selDir = "Up";
@@ -1454,16 +1516,12 @@ function updateLoungeStats() {
         else if (curDirection === "d") selDir = "Right";
         else selDir = "N/A";
         get("updateDirection").textContent = `Current Direction: ${selDir}`;
-    }
-    if (settings.updateCaveInfo) {
         const cl = verifiedOres.getCaveLuck();
         const ctl = verifiedOres.getCaveTypeLuck();
         const cm = verifiedOres.getCaveModifier();
         get("updateCL").textContent = `${cl}x Cave Luck`;
         get("updateCTL").textContent = `${ctl}x Cave Type Luck`;
         get("updateCM").textContent = `${cm} Cave Modifier`;
-    }
-    if (settings.updatePowerups) {
         const list = player.powerupCooldowns;
         const now = Date.now();
         let count = 0;
@@ -1471,23 +1529,24 @@ function updateLoungeStats() {
             if (now >= list[p].cooldown && list[p].unlocked) count++;
         }
         get("updatePowerups").textContent = `${count} Powerups Ready`;
-    }
-    if (settings.updateSpeed) {
         const cs = player.avgSpeed;
         const times = calcSpeed();
         const es = (1000/times.speed) * (times.reps) + times.extra;
         get("updateSpeed").textContent = `${Math.round(cs).toLocaleString()}/${Math.round(es).toLocaleString()} Speed`;
-    }
-    if (settings.updateOreCount) {
         let c = spawnMessage.count;
         get("updateOreCount").textContent = `${c > 0 ? `Ore Spawn Count: ${formatNumber(c, 2)}` : "No Ores Spawned Yet!"}`;
-    }
-    if (settings.updateLastOre) {
         let o = spawnMessage.lastOre;
         if (o !== undefined) get("updateLastOre").textContent = `Last Ore Spawned: ${o}`;
-    }
-    if (settings.updateEvent) {
         let e = getCurrentEventOre();
         get("updateEvent").textContent = `Current Event: ${e === undefined ? "N/A" : e}`;
+    }
+}
+function deleteMilestoneElements() {
+    const elems = get("milestonesHolder").children;
+    for (let i = elems.length - 1; i >= 0; i--) {
+        if (!(elems[i].id.toLowerCase().includes("copy"))) elems[i].remove();
+    }
+    checkCurrentMilestones.pathsAndNames = {
+        "mainPath" : "m1"
     }
 }

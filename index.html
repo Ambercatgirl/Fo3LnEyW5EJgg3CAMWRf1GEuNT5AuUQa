@@ -113,11 +113,10 @@
             <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeData', this)">Data</button>
             <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeLogs', this)">Logs</button>
             <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeOverallStatistics', this)">Overall Statistics</button>
-            <button class="loungeMenuLocationButton">Ore Index</button>
+            <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeOreIndex', this)">Ore Index</button>
             <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeWorlds', this)">Worlds</button>
-            <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeMilestones', this)">Milestones</button>
-            <button class="loungeMenuLocationButton">Variant Converter</button>
-            <button class="loungeMenuLocationButton">Ore Forge</button>
+            <button class="loungeMenuLocationButton" onclick="showLoungeScreen('loungeMilestones', this);">Milestones</button>
+            <button class="loungeMenuLocationButton"onclick="showLoungeScreen('loungeForgeAndVariants', this)">Forge/Variants</button>
         </div>
         <div id="loungeMenuLocation">
             <div id="loungeGameSettings" style="display: none;">
@@ -182,6 +181,7 @@
                     <button class="inputButton" onclick="switchHighRarity(get('logRarityInput'))">Set Minimum Log RNG</button>
                 </div>
                 <button class="gameSetting toggledOff" onclick="toggleSimulatedRng(this)" id="simulatedRng">Toggle Simulated RNG</button>
+                <button class="gameSetting toggledOff" onclick="toggleAccurateSpeed(this);" id="toggleAccurateSpeed">Accurate Speed</button>
                 <button class="gameSetting toggledOn" onclick="switchToIndex(this, 0)" id="invIndex">Travel to layer index on inventory click</button>
                 <button class="gameSetting toggledOn" onclick="switchToIndex(this, 1)" id="craftIndex">Travel to layer index on crafting click</button>
                 <!--<button class="gameSetting" onclick="changeCanDisplay(this)" id="blockUpdates">Toggle Block Updates</button>-->
@@ -192,6 +192,7 @@
                 <button class="gameSetting toggledOn" onclick="toggleCaves();" id="caveToggle">Toggle Caves</button>
                 <button class="gameSetting toggledOn" onclick="toggleSpawnEffects(this);" id="spawnEffects">Spawn Effects Enabled</button>
                 <button class="gameSetting toggledOff" onclick="toggleNyerd(this);" id="toggleNyerd">Nyerd</button>
+                
                 <!--<button class="gameSetting" onclick="AFKmode();" id="afkMode" style="background-color: #FF3D3D;">AFK Mode</button>-->
             </div>
             <div id="loungeAudioSettings" style="display: none;">
@@ -351,7 +352,7 @@
                     </div>
                     <div class="soundSliderHolder">
                         <label class="spawnSoundContainer">
-                            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Polychromatical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #5bc97e 50%);">
+                            <input type="range" min="0" max="100" value="75" onchange="changeSpawnVolume(this.value, 'Polychromatical')" class="spawnVolume" style="background-image:linear-gradient(to right, black, #ff0526 50%);">
                         </label>
                     </div>
                 </div>
@@ -443,8 +444,28 @@
                 </div>
             </div>
             <div id="loungeOreIndex" style="display: none;">
-                <div id="loungeLayersHolder">
-                    
+                <div id="worldIndexTop">
+                    <button class="switchIndexWorld" id="worldIndexLeft" onclick="nextLayers(-1)"></button>
+                    <div id="loungeLayersHolder">
+                        
+                    </div>
+                    <button class="switchIndexWorld" id="worldIndexRight" onclick="nextLayers(1)"></button>
+                </div>
+                <div id="loungeIndexCards">
+                    <div id="loungeCardHolder">
+
+                    </div>
+                    <div class="indexCard" id="indexCardCopy">
+                        <p class="indexCardText indexCardOre">😭</p>
+                        <div class="indexCardTop">
+                            <p class="indexCardText indexCardTier">Tier:<span style="color:#FF0526;" class="indexTierSpan">Polychromatical</span></p>
+                            <p class="indexCardText indexCardFound">Found On: Jan 1st, 2024</p>
+                        </div>
+                        <p class="indexCardText indexCardLuck" style="border-top:0.1vw solid var(--main-border-color)">1/1,000,000,000,000,000,000 Base Rarity</p>
+                        <p class="indexCardText indexCardLuck indexCardRng" style="border-bottom:0.1vw solid var(--main-border-color)">1/1,000,000,000,000,000,000 With Luck</p>
+                        <p class="indexCardText indexCardVariants">😭😭😭😭</p>
+                        <p class="indexCardText indexCardEvent"></p>
+                    </div>
                 </div>
             </div>
             <div id="loungeMilestones" class="milestoneParent" style="display: none;">
@@ -472,10 +493,88 @@
                     <p id="worldDescription"></p>
                 </div>
                 <div id="teleportHolder" onmousewheel="switchPortal(event);">
-                    <button class="scrollTeleport" id="teleportUp" onclick="switchPortal({deltaY: 100})"></button>
+                    <button class="scrollTeleport" id="teleportUp" onclick="switchPortal({deltaY: -100})"></button>
                     <img id="portalLock" src="media/portalChain.png">
-                    <button id="worldPortal"></button>
-                    <button class="scrollTeleport" id="teleportDown" onclick="switchPortal({deltaY: -100})"></button>
+                    <div id="worldPortalHolder">
+                        <button id="worldPortal" onclick="attemptSwitchWorld(switchPortal.currentPortal)"></button>
+                    </div>
+                    <button class="scrollTeleport" id="teleportDown" onclick="switchPortal({deltaY: 100})"></button>
+                </div>
+            </div>
+            <div id="loungeForgeAndVariants">
+                <p class="loungeMenuTitle">Variant Conversions</p>
+                <div id="variantActions">
+                    <button class="variantActionButton" onclick="convertVariant('Electrified')">Convert All Electrified But 1</button>
+                    <button class="variantActionButton" onclick="convertVariant('Radioactive')">Convert All Radioactive But 1</button>
+                    <button class="variantActionButton" onclick="convertVariant('Explosive')">Convert All Explosive But 1</button>
+                </div>
+                <div id="mainVariantArea">
+                    <input type="text" class="variantInput" id="variantInputName" placeholder="Click an Ore in a Variant Inventory!" autocomplete="off">
+                    <input type="text" class="variantInput" id="variantInputAmt" placeholder="Enter Amount to Convert!" autocomplete="off">
+                    <button class="variantType" onclick="convertOre(get('variantInputName').value, get('variantInputAmt').value, 'Electrified')">Convert Electrified</button>
+                    <button class="variantType" onclick="convertOre(get('variantInputName').value, get('variantInputAmt').value, 'Radioactive')">Convert Radioactive</button>
+                    <button class="variantType" onclick="convertOre(get('variantInputName').value, get('variantInputAmt').value, 'Explosive')">Convert Explosive</button>
+                    <button class="variantType" onclick="allButOne(get('variantInputName').value)">Convert All But 1</button>
+                </div>
+                <p class="loungeMenuTitle">Ore Forge</p>
+                <div id="forgeRecipeHolder">
+                    <div id="forgeCost">
+
+                    </div>
+                    <div id="forgeCenterHolder">
+
+                        <img id="forgeArrow" src="media/rightone.png">
+                        <p id="forgeMultiplier">
+                            1x
+                        </p>
+                        <button id="forgeOre"><span id="forgeHover" onclick="craftOre()">Forge!</span></button>
+                        <div id="forgeSetMulti">
+                            <input type="text" id="forgeMultiInput" placeholder="Enter Multiplier!">
+                            <button id="forgeChangeMulti" onclick="multiplyRecipe(Number(get('forgeMultiInput').value))">Set Multi!</button>
+                        </div>
+                    </div>
+                    <div id="forgeOutput">
+
+                    </div>
+                </div>
+                <div id="forgeRecipeInformation">
+                    <div id="oreFissionList">
+                        <p class="forgeType">Fissions</p>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('greenFission')">Fission 💚</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blueFission')">Fission 💙</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowFission')">Fission 💛</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('orangeFission')">Fission 🧡</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('redFission')">Fission ❤️</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('purpleFission')">Fission 💜</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('brownFission')">Fission 🤎</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blackFission')">Fission 🖤</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteFission')">Fission 🤍</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('idoliumFission')">Fission 💎</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('cylinderFission')">Fission 🧵</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('circleFission')">Fission ⭕</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bellFission')">Fission 🛎️</button>
+                    </div>
+                    <div id="oreCraftList">
+                        <p class="forgeType">Crafts</p>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('greenCraft')">Craft 💚</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blueCraft')">Craft 💙</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowCraft')">Craft 💛</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('orangeCraft')">Craft 🧡</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('redCraft')">Craft ❤️</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('purpleCraft')">Craft 💜</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('brownCraft')">Craft 🤎</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blackCraft')">Craft 🖤</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteCraft')">Craft 🤍</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('frisbeeCraft')">Craft 🥏</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('diamondCraft')">Craft 💠</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('gearCraft')">Craft ⚙️</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bowCraft')">Craft 🎀</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('batteryCraft')">Craft 🔋</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bambooCraft')">Craft 🎍</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('fishCraft')">Craft 🐟</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('hotspringCraft')">Craft ♨️</button>
+                        <button class="forgeCraftingButton" onclick="displayOreRecipe('wtfCraft')">Craft why</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -495,8 +594,8 @@
                 <p class="loungeStatisticText" id="updateLastOre">Last Ore Spawned: N/A</p>
             </div>
             <div id="loungeSettings">
-                <button class="loungeSettingButton">Update Elements</button>
-                <button class="loungeSettingButton">Delete Unloaded Elements</button>
+                <button class="loungeSettingButton" onclick="toggleUpdates(this)">Update Elements</button>
+                <button class="loungeSettingButton" onclick="toggleUnused(this)">Delete Unused Elements</button>
             </div>
         </div>
     </div>
@@ -1086,39 +1185,11 @@
                     </div>
                     <hr id="forgeSeparator">
                     <div class="craftingSelections" id="forgeCraft">
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bowCraft')">Craft <span class="forgeOreDisplay">🎀</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('frisbeeCraft')">Craft <span class="forgeOreDisplay">🥏</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('diamondCraft')">Craft <span class="forgeOreDisplay">💠</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('gearCraft')">Craft <span class="forgeOreDisplay">⚙️</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('batteryCraft')">Craft <span class="forgeOreDisplay">🔋</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bambooCraft')">Craft <span class="forgeOreDisplay">🎍</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('fishCraft')">Craft <span class="forgeOreDisplay">🐟</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('greenCraft')">Craft <span class="forgeOreDisplay">💚</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blueCraft')">Craft <span class="forgeOreDisplay">💙</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowCraft')">Craft <span class="forgeOreDisplay">💛</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('orangeCraft')">Craft <span class="forgeOreDisplay">🧡</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('redCraft')">Craft <span class="forgeOreDisplay">❤️</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('purpleCraft')">Craft <span class="forgeOreDisplay">💜</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('brownCraft')">Craft <span class="forgeOreDisplay">🤎</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blackCraft')">Craft <span class="forgeOreDisplay">🖤</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteCraft')">Craft <span class="forgeOreDisplay">🤍</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('wtfCraft')">Craft <span class="forgeOreDisplay">why</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('hotspringCraft')">Craft <span class="forgeOreDisplay">♨️</span></button>
+
+                        
                     </div>
                     <div class="craftingSelections" id="forgeFission" style="display: none;">
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('idoliumFission')">Fission <span class="forgeOreDisplay">💎</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('cylinderFission')">Fission <span class="forgeOreDisplay">🧵</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('bellFission')">Fission <span class="forgeOreDisplay">🛎️</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('circleFission')">Fission <span class="forgeOreDisplay">⭕</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('greenFission')">Fission <span class="forgeOreDisplay">💚</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blueFission')">Fission <span class="forgeOreDisplay">💙</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('yellowFission')">Fission <span class="forgeOreDisplay">💛</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('orangeFission')">Fission <span class="forgeOreDisplay">🧡</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('redFission')">Fission <span class="forgeOreDisplay">❤️</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('purpleFission')">Fission <span class="forgeOreDisplay">💜</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('brownFission')">Fission <span class="forgeOreDisplay">🤎</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('blackFission')">Fission <span class="forgeOreDisplay">🖤</span></button>
-                        <button class="forgeCraftingButton" onclick="displayOreRecipe('whiteFission')">Fission <span class="forgeOreDisplay">🤍</span></button>
+
                     </div>
                     <hr id="forgeSeparator">
                     <div id="forgeRecipeDisplayContainer">

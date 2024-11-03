@@ -1779,7 +1779,7 @@ const milestoneList = {
             owned: false,
             distH: 5,
             distV: 25,
-            unlocks: ["egp1.5", "wp3"],
+            unlocks: ["wp3"],
             connector: [],
             element: undefined
         },
@@ -1984,12 +1984,14 @@ const milestoneList = {
             title: "Mine Normal Replacement Celestials",
             description: "Some ores have even rarer variants, typically being 1/1000.\r\nRemaining:",
             check: function() {
-                const cels = ["⏳","🍂","👁‍🗨","📛","🏳️‍🌈","🎊","💧","🌋","🖋️","⛩️","🎥","🌶️"];
+                const cels = ["⏳","🍂","👁‍🗨","📛","🏳️‍🌈","🎊","💧","🌋","🖋️","⛩️","🎥","🌶️","watermelonDiamond"];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
                     if (!indexHasOre(cels[i])) {
-                        output += cels[i];
+                        if (oreList[cels[i]]["hasImage"]) output += `<span class="milestoneInfoImage"><img class="milestoneInfoImage" src=${oreList[cels[i]]["src"]}></span>`;
+                        else output += cels[i];
                     }
+
                 }
                 this.element.children[1].textContent = this.description + output;
                 if (output === "") return true; 
@@ -2005,12 +2007,11 @@ const milestoneList = {
             title: "Mine Replacement Celestials",
             description: "<span>These replacement celestials require you to not automine.<br>Remaining:",
             check: function() {
-                const cels = ["🩵","🦿","🪫","🌼","🔓","❤️‍🩹", "watermelonDiamond"];
+                const cels = ["🩵","🦿","🪫","🌼","🔓","❤️‍🩹", ];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
                     if (!indexHasOre(cels[i])) {
-                        if (oreList[cels[i]]["hasImage"]) output += `<span class="milestoneInfoImage"><img class="milestoneInfoImage" src=${oreList[cels[i]]["src"]}></span>`;
-                        else output += cels[i];
+                        output += cels[i];
                     }
                 }
                 this.element.children[1].innerHTML = this.description + output + "</span>";
@@ -2132,7 +2133,7 @@ const milestoneList = {
                 return indexHasOre("🖐");
             },
             owned: false,
-            distH: 4,
+            distH: 2,
             distV: 6,
             unlocks: [],
             connector: [],
@@ -2145,7 +2146,7 @@ const milestoneList = {
                 return indexHasOre("🩷");
             },
             owned: false,
-            distH: 1,
+            distH: 5,
             distV: 6,
             unlocks: [],
             connector: [],
@@ -2158,7 +2159,7 @@ const milestoneList = {
                 return indexHasOre("🩶");
             },
             owned: false,
-            distH: 2,
+            distH: 4,
             distV: 6,
             unlocks: [],
             connector: [],
@@ -2216,6 +2217,7 @@ const milestoneVariables = {
     galacticaEntered : false,
 }
 function createMilestones() {
+    if (get("milestonesHolder").children.length > 3) return;
     for (const path in milestoneList) {
         const pathInfo = milestoneList[path];
         let hide = true;
@@ -2265,7 +2267,8 @@ function createMilestones() {
                             const connector = get("connector2Copy").cloneNode(true);
                             connector.id = "";
                             if (unlockedMilestone.distV < info.distV) {
-                                connector.style.top = `${(20*(info.distV+1)-19) + (4 * info.distV+1) - 1}%`;
+                                connector.style.top = `${(20*(info.distV+1)-24) + (4 * info.distV+1) - 1}%`;
+                                console.log(connector)
                             } else {
                                 connector.style.top = `${(20*(info.distV+1)) + (4 * info.distV+1) - 1}%`;
                             }
@@ -2284,6 +2287,11 @@ function createMilestones() {
                 }
             }
         }
+    }
+    for (let i = 0; i < player.completedMilestones.length; i++) {
+        const path = player.completedMilestones[i].path;
+        const name = player.completedMilestones[i].name;
+        unlockMilestone(path, name, true);
     }
 }
 function getMilestone(name) {
@@ -2320,6 +2328,7 @@ function checkCurrentMilestones(data) {
 checkCurrentMilestones.pathsAndNames = {
     "mainPath" : "m1"
 }
+checkCurrentMilestones.shown = false;
 function unlockMilestone(path, name, data) {
     const info = milestoneList[path][name];
     if (!data) player.completedMilestones.push({path: path, name: name})
@@ -2329,13 +2338,13 @@ function unlockMilestone(path, name, data) {
     const unlocks = info.unlocks;
     if (unlocks.length === 0) {delete checkCurrentMilestones.pathsAndNames[path]; return;}
     if (checkCurrentMilestones.pathsAndNames[path] === undefined) return;
-    updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path]);
+    if (get("milestonesHolder").children.length > 3) updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path]);
     for (let i = 0; i < unlocks.length; i++) {
         let location = getMilestone(unlocks[i]);
         if (milestoneList[path][unlocks[i]] === undefined) {
             milestoneList[location.path].pathUnlocked = true;
             const showElems = milestoneList[location.path];
-            for (const m in showElems) {
+            if (get("milestonesHolder").children.length > 3) for (const m in showElems) {
                 if (m !== "pathUnlocked") {
                     showElems[m].element.style.display = "";
                     for (let i = 0; i < showElems[m].connector.length; i++) {

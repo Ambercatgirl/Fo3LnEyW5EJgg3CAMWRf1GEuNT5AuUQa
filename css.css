@@ -82,8 +82,7 @@
   filter: drop-shadow(0.1vw 0.1vw 0.25vw black);
 }
 .craftingImage img {
-  width: 3.25vw;
-  height: 3.25vw;
+  height: 100%;
   margin-left: -1.75vw;
   margin-right: 0.5vw;
 }
@@ -205,6 +204,7 @@
   display: inline-flex;
   flex-wrap: wrap;
   overflow: hidden;
+  z-index: 100;
 }
 .newCraftingText {
   margin: 0px;
@@ -605,6 +605,7 @@
   height: 10%;
   border:0.2vw solid var(--main-border-color);
   margin: 0;
+  max-height: 10vw;
 }
 .soundMuteButtonHolder {
   display: flex;
@@ -633,7 +634,7 @@
   background: none;
   color: #fff;
   border: none;
-  font-size: 50%;
+  font-size: 65%;
   white-space: nowrap;
   border: 0.1vw solid var(--main-shadow-color);
 }
@@ -646,7 +647,7 @@
   width: 50%;
   background-color: #FF3D3D;
   border: none;
-  font-size: 50%;
+  font-size: 65%;
   font-weight: 750;
   display: flex;
   align-items: center;
@@ -659,28 +660,37 @@
   width: 50%;
   height: 10%;
   border: 0.2vw solid var(--main-border-color);
+  max-height: 10vw;
 }
 #musicSettings {
   width: 50%;
   height: 10%;
+  max-height: 10vw;
 }
 #disguisedChillHolder {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  max-height: 10vw;
 }
 .otherAudio {
-  height: 100%;
+  height: 50%;
+  width: 100%;
   border: 0.2vw solid var(--main-border-color);
+  font-size: 60%;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #musicButton {
   width: 50%;
   height: 50%;
   background: none;
   border: 0.1vw solid var(--main-hl-color);
-  font-size: 50%;
+  font-size: 65%;
   font-weight: 750;
   display: flex;
   align-items: center;
@@ -909,23 +919,159 @@
 }
 #loungeLayersHolder {
   width: 80%;
-  height: auto;
+  height: 15%;
   display: flex;
   align-content: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
+}
+#worldIndexTop {
+  width: 100%;
+  height: 15%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.switchIndexWorld {
+  width: 10%;
+  height: 100%;
+  background: none;
+  border-width: 0 0.1vw;
+  border-style: solid;
+  border-color: var(--main-border-color);
+  background-size: min(20vh, 10vw);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#worldIndexRight {
+  background-image: url(media/rightone.png);
+}
+#worldIndexLeft {
+  background-image: url(media/leftone.png);
+}
+#loungeIndexCards {
+  width: 100%;
+  height: auto;
+  border-top: 0.25vw solid var(--main-border-color);
+  background: none;
+}
+#indexCardCopy {
+  display: none;
+}
+#loungeCardHolder {
+  width: 100%;
+  height: 91.8%;
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  background: none;
 }
 .loungeLayerSelector {
   width: 20%;
   height: 4vh;
   background-color: var(--main-lbg-color);
   border: 0.1vw solid var(--main-border-color);
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   line-height: 100%;
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.indexCard {
+  width: 32.8%;
+  height: min(20vh, 10vw);
+  background-color: var(--main-lbg-color);
+  border: 0.1vw solid var(--main-border-color);
+  margin: 0.25%;
+  display: flex;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+.indexCardTop {
+  height: min(7vh, 3.5vw);
+  width: auto;
+  margin: auto;
+}
+.indexTierSpan {
+  text-shadow: 0 0 0.1vw white;
+  font-weight: 1000;
+  font-size: min(2vh, 1vw);
+  margin-left: min(1vh, 0.5vw);
+}
+.indexCardText {
+  margin: 0;
+}
+.indexCardOre {
+  height: min(7vh, 3.5vw);
+  width: min(7vh, 3.5vw);
+  font-size: min(5vh, 2.5vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  border-right: 0.1vw solid var(--main-border-color);
+}
+.indexCardImageOre {
+  width: 100%;
+  height: 100%;
+}
+.indexCardImageOre img {
+  width: 100%;
+  height: 100%;
+}
+.indexCardBlackout {
+  filter:brightness(0);
+}
+.indexCardTier {
+  height: min(3.5vh, 1.75vw);
+  width: 100%;
+  font-size: min(1.5vh, 0.75vw);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.indexCardFound {
+  height: min(3.5vh, 1.75vw);
+  width: 100%;
+  font-size: min(1.5vh, 0.75vw);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.indexCardLuck {
+  height: min(5vh, 2.5vw);
+  width: 100%;
+  font-size: min(2vh, 1vw);
+  font-weight: 1000;
+  padding-left: min(1vh, 0.5vw);
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.indexCardVariants {
+  height: min(2.8vh, 1.4vw);
+  width: 8em;
+  font-size: min(1.5vh, 0.75vw);
+  font-weight: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.1vw solid var(--main-border-color);
+}
+.indexCardEvent {
+  width: auto;
+  height: min(2.8vh, 1.4vw);
+  font-size: min(1.5vh, 0.75vw);
+  font-weight: 800;
+  text-align: center;
+  margin: auto;
+}
+.loungeLayerSelector:hover {
+  background-color: var(--main-hl-color);
 }
 #loungeMilestones {
   width: 100%;
@@ -1096,10 +1242,10 @@
 }
 #worldPortal {
   width: 100%;
-  height: 50%;
+  height: 100%;
   border: none;
   background: none;
-  background-size: 30vh;
+  background-size: 15vw;
   background-image: url(media/portalTexture.png);
   background-repeat: no-repeat;
   background-position: center;
@@ -1107,6 +1253,8 @@
   transition: background-size 0.75s;
   z-index: 1;
   position: relative;
+  max-width: 50vw;
+
 }
 #portalLock {
   width: 50%;
@@ -1119,7 +1267,7 @@
   backdrop-filter: blur(1px);
 }
 #worldPortal:hover {
-  background-size: 37.5vh;
+  background-size: 20vw;
 }
 #teleportUp {
   background-image: url(media/pointUp.png);
@@ -1150,6 +1298,244 @@
   line-height: 1.5vw;
   padding-left: 0.5vw;
 }
+#loungeForgeAndVariants {
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+#variantActions {
+  width: 100%;
+  height: 5%;
+  display: flex;
+  justify-content: center;
+}
+.variantActionButton {
+  width: 33.3333%;
+  height: 100%;
+  background-color: var(--main-lbg-color);
+  border: 0.1vw solid var(--main-border-color);
+  font-weight: 800;
+  font-size: min(0.75vw, 1.5vh);
+  transition: font-size 0.1s;
+}
+.variantActionButton:hover {
+  background-color: var(--main-hl-color);
+  font-size: min(0.8vw, 1.6vh);
+}
+#mainVariantArea {
+  width: 100%;
+  height: 5%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.variantInput {
+  height: 100%;
+  width: 20%;
+  font-size: 0.5vw;
+  text-align: center;
+  border: 0.1vw solid var(--main-border-color);
+  font-weight: 1000;
+  background-color: var(--main-bg-color);
+  outline: none;
+  border-radius: 0;
+  color: white;
+}
+.variantInput::placeholder {
+  opacity: 0.5;
+  color: white;
+}
+.variantType {
+  height: 100%;
+  width: 15%;
+  background-color: var(--main-bg-color);
+  border: 0.1vw solid var(--main-border-color);
+  font-size: min(0.75vw, 1.5vh);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: font-size 0.1s;
+}
+.variantType:hover {
+  background-color: var(--main-hl-color);
+  font-size: min(0.8vw, 1.6vh);
+}
+#forgeRecipeHolder {
+  width: 60%;
+  height: 78%;
+  border-right: 0.1vw solid var(--main-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#forgeRecipeInformation {
+  width: 40%;
+  height: 78%;
+  border-left: 0.1vw solid var(--main-border-color);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#forgeCost {
+  width: 40%;
+  height: 100%;
+  border-right: 0.1vw solid var(--main-border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  overflow-y: auto;
+}
+#forgeOutput {
+  width: 40%;
+  height: 100%;
+  border-left: 0.1vw solid var(--main-border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+}
+#forgeCenterHolder {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+}
+#forgeArrow {
+  width: 100%;
+  height: 7%;
+  max-height: 3vw;
+  padding: 0.2vw;
+  border-width: 0.1vw 0;
+  border-style: solid;
+  border-color: var(--main-border-color);
+}
+#forgeMultiplier {
+  height: 5%;
+  width: 100%;
+  color: white;
+  font-size: min(1vw, 2vh);
+  font-weight: 650;
+  text-align: center;
+  border-bottom: 0.1vw solid var(--main-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+#forgeSetMulti {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  flex-wrap: wrap;
+}
+#forgeOre {
+  width: 100%;
+  height: 5%;
+  font-size: min(1vw, 2vh);
+  background-color: var(--main-bg-color);
+  border: none;
+  border-bottom: 0.1vw solid var(--main-border-color);
+  font-weight: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#forgeHover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+#forgeHover:hover {
+  font-size: min(1.1vw, 2.2vh);
+  animation: smallShake 0.2s linear infinite;
+}
+@keyframes smallShake {
+  0% {rotate: 0deg;}
+  33% {rotate: 2deg;}
+  66% {rotate: -2deg}
+  100% {rotate: 0deg;}
+}
+.forgeOreDisplay {
+  width: 100%;
+  height: 2.5vh;
+  margin: 0;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 1000;
+  font-size: min(1.25vh, 0.75vw);
+  color: white;
+  text-shadow: 0 0 min(0.2vw, 0,5vh) black;
+}
+.beginningElem {
+  border-top: 0.1vw solid white!important;
+}
+.endingElem {
+  border-bottom: 0.1vw solid white!important;
+}
+#oreFissionList {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  border-right: 0.1vw solid var(--main-border-color);
+}
+#oreCraftList {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  border-left: 0.1vw solid var(--main-border-color);
+}
+.forgeType {
+  width: 100%;
+  height: 5%;
+  font-size: min(1vw, 2vh);
+  font-weight: 1000;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 0.1vw solid var(--main-border-color);
+}
+#forgeMultiInput {
+  width: 100%;
+  height: 50%;
+  border: none;
+  background-color: var(--main-lbg-color);
+  color: white;
+  font-size: min(1vw, 2vh);
+  text-align: center;
+  border-top: 0.1vw solid var(--main-border-color);
+  outline: none;
+}
+#forgeChangeMulti {
+  width: 100%;
+  height: 50%;
+  background-color: var(--main-bg-color);
+  border: none;
+  border-top: 0.1vw solid var(--main-border-color);
+  border-bottom: 0.1vw solid var(--main-border-color);
+  font-size: min(1vw, 2vh);
+  font-weight: 700;
+}
+#forgeChangeMulti:hover {
+  background-color: var(--main-shadow-color);
+}
 .toggledOn {
   background-color: var(--better-green);
 }
@@ -1178,7 +1564,7 @@
   height: 100%;
   margin: 0;
   margin-left: 15vw;
-  font-size: 80%;
+  font-size: min(6vh, 3vw);
   font-weight: 1000;
   display: flex;
   align-items: center;
@@ -1250,17 +1636,14 @@
   line-height: 100%;
   font-weight: 750;
 }
-.loungeSettingButton:hover {
-  background-color: var(--main-shadow-color);
-}
 .loungeMenuTitle {
   width: 100%;
   height: 6%;
-  font-size: 80%;
+  font-size: min(1.25vw, 2.5vh);
   font-weight: 1000;
   text-align: center;
   margin: 0;
-  border-bottom: 0.2vw solid var(--main-border-color);
+  border-bottom: 0.1vw solid var(--main-border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1579,6 +1962,7 @@
   justify-content: center;
   border: none;
   margin: 0;
+  width: 100%;
 }
 #displayRecipe {
   margin-top: -0.25vw;
@@ -3561,14 +3945,16 @@ button {
   height: auto;
 }
 .forgeCraftingButton {
-  height: 3vw;
-  width: 10vw;
+  width: 100%;
+  height: 5%;
   margin: 0;
-  font-size: 1.5vw;
-  background: none;
+  font-size: min(1vw, 2vh);
+  background: var(--main-lbg-color);
+  border: none;
+  border-bottom:0.1vw solid var(--main-border-color);
 }
 .forgeCraftingButton:hover {
-  background-color: #494949;
+  background-color: var(--main-hl-color);
 }
 .forgeOreDisplay {
   text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
@@ -3869,8 +4255,8 @@ button {
 }
 
 .indexImageVariant {
-  width: 1vw;
-  height: 1vw;
+  width: min(2vh, 1vw);
+  height: min(2vh, 1vw);
   -webkit-user-drag: none;
 	-moz-user-select: none;
 }
@@ -3914,6 +4300,13 @@ background-size: 100%;
   height: 25vw;
   align-items: center;
   margin-top: 5vw;
+}
+#worldPortalHolder {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #portal {
   width: 30vw;

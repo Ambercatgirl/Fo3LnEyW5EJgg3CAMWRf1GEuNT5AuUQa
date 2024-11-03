@@ -178,7 +178,7 @@ const generateBlock = function(location) {
     mine[location["Y"]][location["X"]] = blockToGive;
     if (oreRarity >= 750000) {
         let vInfo = rollVariant();
-        if (player.gears["gear25"] && variant === 1) vInfo = rollVariant();
+        if (player.gears["gear25"] && vInfo.v === 1) vInfo = rollVariant();
         const variant = vInfo.v;
         if (blockToGive === "sillyMiner") {
             const nextOre = layerDictionary[currentLayer].layer[layerDictionary[currentLayer].layer.indexOf("sillyMiner") + 1];
@@ -567,7 +567,7 @@ function switchDistance(num) {
 }
 
 async function teleport() {
-    if (layerDistanceY === 7000 && currentWorld === 1 && currentLayer === "waterLayer") if (Math.random() < 1/500 || debug) {attemptSwitchWorld(1.2); return;}
+    if (layerDistanceY === 7000 && currentWorld === 1 && currentLayer === "waterLayer") if (Math.random() < 1/500 || debug) {attemptSwitchWorld(1.2); milestoneVariables.watrEntered = true; return;}
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
     clearInterval(secondaryTimer);
@@ -652,13 +652,9 @@ function attemptSwitchWorld(to) {
     if (to === 0) {showTrophyRoom(true); return;}
     if (to === 0.9 && player.galacticaUnlocked) {switchWorld(0.9); return;}
 }
-function switchWorld(to, skipAnim) {
-    get("blackScreen").style.display = "block";
-    if (!skipAnim) get("blackScreen").style.animation = "fadeToBlack 2s linear 1";
+function switchWorld(to) {
     player.settings.lastWorld = to;
-    const timeout = skipAnim ? 0 : 1000;
     canMine = false;
-    setTimeout(() => {
         get("mainSticky").style.backgroundImage = "none";
         resetForSwitch();
         if (currentWorld === 1.1) sr1Helper(false);
@@ -687,14 +683,9 @@ function switchWorld(to, skipAnim) {
         document.getElementById("teleportButton").disabled = false;
         canMine = true;
         if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
-        setTimeout(() => {
-            get("blackScreen").style.display = "none";
-            get("blackScreen").style.animation = "";
-        }, timeout);
-    }, timeout);
 }
 function resetForSwitch() {
-    closeMenu();
+    if (toggleLounge.toggled) toggleLounge();
     endEvent();
     stopMining();
     mine = [[]];
@@ -731,7 +722,6 @@ function prepareWorldOne() {
         }
     }
     layerNum = 0;
-    switchLayerIndex(0, "dirtLayer", 1);
 }
 function prepareSR1() {
     allLayers = subRealmOneLayers;
@@ -741,7 +731,6 @@ function prepareSR1() {
     curY = 0; 
     createMine();
     layerNum = 0;
-    switchLayerIndex(0, "scLayer", 1); 
     sr1Helper(true);
 }
 function prepareGalactica() {
@@ -753,7 +742,6 @@ function prepareGalactica() {
     curY = 0; 
     createMine();
     layerNum = 0;
-    switchLayerIndex(0, "starLayer", 1);
 }
 function prepareWatr() {
     allLayers = waterWorldLayers;
@@ -763,7 +751,6 @@ function prepareWatr() {
     curY = 0; 
     layerNum = 0;
     createMine();
-    switchLayerIndex(0, "waterLayer", 1);
 }
 function prepareWorldTwo() {
     distanceMulti = 1;
@@ -784,7 +771,6 @@ function prepareWorldTwo() {
         mine[curY + 1][curX] = "📺";
     }
     layerNum = 1;
-    switchLayerIndex(0, "tvLayer", 2);
     if (energySiphonerActive) removeSiphoner();
 }
 function stopMining() {

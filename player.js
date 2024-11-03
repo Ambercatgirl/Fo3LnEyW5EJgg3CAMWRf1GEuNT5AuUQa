@@ -128,6 +128,7 @@ class playerTemplate {
             simulatedRng: false,
             hideCompleted: false,
             favoritedElements: [],
+            accurateSpeed: false
         },
         this.stats = {
             currentPickaxe: "pickaxe0",
@@ -142,16 +143,8 @@ class playerTemplate {
             caveGenerated: 0
         },
         this.loungeSettings = {
-            updateLuck : true,
-            updateGenerations: true,
-            updateLayer: true,
-            updateDirection: true,
-            updateCaveInfo: true,
-            updatePowerups: true,
-            updateSpeed: true,
-            updateOreCount: true,
-            updateEvent: true,
-            updateLastOre: true
+            updateElements: true,
+            deleteUnusedElements: true,
         }
         this.powerupCooldowns = {
             "powerup1": {cooldown: Date.now(), unlocked: false, canAuto: false},
@@ -609,7 +602,6 @@ function loadNewData(data) {
                 
             }
         }
-        updateInventory();
         data = data.player;
         if (data.trophyProgress !== undefined) {
             for (let trophy in data.trophyProgress) {
@@ -733,6 +725,8 @@ function loadNewData(data) {
         if (data.settings.simulatedRng) toggleSimulatedRng(get("simulatedRng"));
         data.settings.hideCompleted ??= false;
         if (data.settings.hideCompleted) toggleHideCompleted(get("hideCompleted"));
+        data.settings.accurateSpeed ??= false;
+        if (data.settings.accurateSpeed) toggleAccurateSpeed(get("toggleAccurateSpeed"))
         if (data.settings.favoritedElements !== undefined) {
             const list = data.settings.favoritedElements;
             for (let i = 0; i < list.length; i++) {
@@ -802,7 +796,6 @@ function loadNewData(data) {
             player.luna.lastAddedOn = data.luna.lastAddedOn;
         }
         lastBlockAmt = player.stats.blocksMined;
-        if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true)
         data.name ??= "Cat";
         player.name = data.name;
         data.viewedMessages ??= {};
@@ -833,11 +826,9 @@ function loadNewData(data) {
         }
         data.completedMilestones ??= [];
         player.completedMilestones = [...data.completedMilestones];
-        for (let i = 0; i < player.completedMilestones.length; i++) {
-            const path = player.completedMilestones[i].path;
-            const name = player.completedMilestones[i].name;
-            unlockMilestone(path, name, true);
-        }
+        data.loungeSettings ??= {updateElements: true, deleteUnusedElements: true}
+        if (!data.loungeSettings.updateElements) toggleUpdates(document.querySelectorAll(".loungeSettingButton")[0]);
+        if (!data.loungeSettings.deleteUnusedElements) toggleUnused(document.querySelectorAll(".loungeSettingButton")[1]);
         if (data.pb1 !== undefined) player.pb1 = data.pb1;
         else {
             if (Date.now() >= new Date("October 1, 2024").getTime()) {
@@ -855,6 +846,7 @@ function loadNewData(data) {
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
+        //updateInventory();
         try {
             beSilly.init();
         } catch (err) {

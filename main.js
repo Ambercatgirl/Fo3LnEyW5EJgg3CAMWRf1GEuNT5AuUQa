@@ -74,8 +74,6 @@ function init() {
     createInventory();
     assignImageNames();
     createAllLayers();
-    addIndexLayers(2);
-    createMilestones();
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     removeFromLayers({"ore":"HD 160529","layers":["waterLayer"]});
     if (Math.random() < 1/1000) insertIntoLayers({"ore":"intercept", "layers":["globeLayer"], "useLuck":true})
@@ -139,7 +137,10 @@ function finishInit() {
     switchWorldCraftables();
     displayPowerup(0);
     utilitySwitchActions();
-    createMine();
+    if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true);
+    else createMine();
+    console.log(currentWorld)
+    addIndexLayers(currentWorld);
     console.log("meow");
 }
 function assignImageNames() {
@@ -583,7 +584,7 @@ let displayRows;
 const invisibleBlock = "<span class='invisible'>⚪</span>";
 const percentColors = ["#00ff22", "#67ef28", "#8ddf2c", "#a7ce30", "#bcbc33", "#cea936", "#dc9538", "#e97e3a", "#f5633c", "#ff3d3d"];
 function displayArea() {
-    if (!inafk) {
+    if (!toggleLounge.toggled) {
         if (gameInfo.display) {
             let output;
             let constraints = getParams(16, 9);
@@ -636,9 +637,9 @@ function displayArea() {
         if (player.oreTracker.tracking) {
             getAngleBetweenPoints({x : player.oreTracker.locationX, y: player.oreTracker.locationY});
         }
+        const blocksMined = player.stats.blocksMined;
+        minedElement.textContent = (blocksMined > 1e12 ? formatNumber(blocksMined, 6) : blocksMined.toLocaleString()) + " Blocks Mined";
     }
-    const blocksMined = player.stats.blocksMined;
-    minedElement.textContent = (blocksMined > 1e12 ? formatNumber(blocksMined, 6) : blocksMined.toLocaleString()) + " Blocks Mined";
 }
 displayArea.lastPercent = -10;
 function removeProgressBar() {
@@ -871,7 +872,7 @@ function updateInventory() {
     player.lastOnline = Date.now();
 
     //Update Inventory Elements
-    for (let propertyName in inventoryObj) {
+    if (!toggleLounge.toggled) for (let propertyName in inventoryObj) {
         const inv = gameInfo.selectedInventory;
         let amt = playerInventory[propertyName][variantInvNames[inv]];
         if (amt > 1e308) amt = 1e308;
@@ -967,11 +968,11 @@ function updateInventory() {
 
     //Update Lounge
     updateLoungeStats();
-    if (showLoungeScreen.current === "loungeOverallStatistics") updateTimes();
+    if (showLoungeScreen.current === "loungeOverallStatistics" && get("tierStatsHolder").style.display === "none") updateTimes();
 
 
     //Check Milestones (this should be optimized)
-    checkCurrentMilestones(false);
+    if (checkCurrentMilestones.shown) checkCurrentMilestones(false);
 
     //Stop Multi Instancing
     if (idSet) {
@@ -982,6 +983,19 @@ function updateInventory() {
     }
     localStorage.setItem("meowAntiCheat", thisUniqueId);
     idSet = true;
+
+    //Update Forge
+    if (currentOreRecipe !== undefined && showLoungeScreen.current === "loungeForgeAndVariants") updateCurrentForgeCraft();
+
+    //Tunneler
+    if (player.stats.currentPickaxe === "pickaxe20" && curY === 9999 && curDirection === "" && Math.random() < 1/25) {
+        mine[curY][curX] = "⚪"; 
+        curY += 2; 
+        mine[curY] ??= [];
+        mine[curY][curX] = "⛏️"; 
+        checkAllAround(curX, curY); 
+        displayArea();
+    }
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
