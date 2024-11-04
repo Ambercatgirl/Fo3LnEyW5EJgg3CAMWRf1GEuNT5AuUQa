@@ -659,8 +659,6 @@ function switchWorld(to) {
         resetForSwitch();
         if (currentWorld === 1.1) sr1Helper(false);
         currentWorld = to;
-        if (currentWorld !== 0.9 && player.galacticaUnlocked) galacticaShortcut();
-        //else get("galacticaCrafts").style.display = "none";
         if (currentWorld === 2) {
             prepareWorldTwo();
         } else if (currentWorld < 2) {
@@ -782,7 +780,6 @@ function stopMining() {
     displayTimer = null;
 }
 function sr1Helper(state) {
-    updateTolLuck();
     removeParadoxical();
     const lock = document.getElementsByClassName("lockedRecipe");
     for (let i = 0; i < lock.length; i++) lock[i].classList.remove("lockedRecipe");
