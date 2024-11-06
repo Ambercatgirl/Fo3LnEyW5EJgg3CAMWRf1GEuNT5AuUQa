@@ -122,6 +122,8 @@ function init() {
             gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
             finishInit();
           });
+    } else {
+        canMine = false;
     }
 }
 function finishInit() {
@@ -1974,7 +1976,21 @@ function updateOfflineProgress() {
 }
 function generateOfflineProgress() {
     const offlineAmt = updateOfflineProgress();
-    if (offlineAmt > 0) {bulkGenerate(curY, offlineAmt, undefined, true); player.offlineProgress = 0; updateOfflineProgress();}
+    if (offlineAmt > 0) {
+        let oldState = true;
+        if (!player.settings.simulatedRng) {
+            oldState = false;
+            player.settings.simulatedRng = true;
+            updateAllLayers();
+        }
+        bulkGenerate(curY, offlineAmt, undefined, true); 
+        player.offlineProgress = 0; 
+        updateOfflineProgress();
+        if (!oldState) {
+            player.settings.simulatedRng = false;
+            updateAllLayers();
+        }
+    }
 }
 function preventCrash(event) {
     if (event.key === "Enter") event.preventDefault();
