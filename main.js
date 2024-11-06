@@ -68,9 +68,6 @@ function init() {
     slider.addEventListener('pointerup', stopDragging, false);
     slider.addEventListener('pointerleave', stopDragging, false);
     document.getElementById('dataFileUpload').addEventListener('change', getFileContents, false);
-    document.getElementById("menuSelectionContainer").addEventListener('click', (event) => {
-        if (event.target.parentElement.classList.contains("menuCategory")) closeMenu();
-    }, false);
     createInventory();
     assignImageNames();
     createAllLayers();
@@ -123,6 +120,7 @@ function init() {
             finishInit();
           });
     } else {
+        console.log("meow")
         canMine = false;
     }
 }
@@ -372,7 +370,6 @@ document.addEventListener('keydown', (event) => {
     let name = event.key;
     let validInput = false;
     name = name.toLowerCase();
-    if (get("menuSelectionContainer").style.display !== "block") {
         switch(name) {
             case "w":
                 if (!buttonClicked && Date.now() >= keyCooldown) {validInput = true; keyCooldown = Date.now() + 15;}
@@ -436,7 +433,6 @@ document.addEventListener('keydown', (event) => {
             default:
                 break;
         }
-    }
     if (name !== ":") catstuff[":"] = false;
     if (validInput) {
         stopMining();
