@@ -1026,7 +1026,6 @@ function applyLuckToLayer(layer, luck) {
 }
 
 function changeLayerOres() {
-    console.log("meow")
     if (player.stats.currentPickaxe === "pickaxe13" && currentWorld === 2) {
         insertIntoLayers({"ore":"☯️", "layers":undefined, "useLuck":true})
     } else {

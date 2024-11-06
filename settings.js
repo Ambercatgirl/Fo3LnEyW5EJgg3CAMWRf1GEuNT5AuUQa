@@ -544,14 +544,16 @@ function addIndexColors(element, blackOut, property) {
     if (blackOut) element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, #383838 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
     return element
 }
+
 let isPlacing = false;
+function handleInventoryClick(element, from) {
+    const ore = element.id.substring(0, element.id.length - 6);
+    const elemInv = gameInfo.selectedInventory;
+    if (isPlacing) {mine[curY][curX + 1] = {ore: ore, variant: elemInv+1, isPlaced: true}; displayArea();}
+    else if (elemInv === 0) randomFunction(ore, from);
+    else goToConvert(ore, elemInv);
+}
 function randomFunction(ore, cause, elem) {
-    if (elem && elem.srcElement.classList.contains("inventoryElement4")) return;
-    if (isPlacing) {
-        mine[curY][curX + 1] = {ore: ore, variant:1, isPlaced: true};
-        displayArea();
-        return;
-    }
     if ((cause === "inv" && player.settings.inventorySettings.invToIndex) || (cause === "crafting" && player.settings.inventorySettings.craftingToIndex)) {
         let layer = undefined;
         let world = currentWorld;
@@ -620,8 +622,16 @@ function randomFunction(ore, cause, elem) {
             }
             
             if (layer != undefined) {
-                showMenuScreen('index');
-                switchLayerIndex(0, layer, world);
+                for (const s in indexOrder) {
+                    for (const l in indexOrder[s]) {
+                        if ((indexOrder[s][l].l.includes(layer)) && indexOrder[s][l].req()) {
+                            toggleLounge();
+                            if (showLoungeScreen.current !== "loungeOreIndex") showLoungeScreen("loungeOreIndex", document.querySelectorAll(".loungeMenuLocationButton")[6]);
+                            createIndexCards(layer);
+                            return;
+                        }
+                    }
+                }
             }
         }
     }
@@ -816,6 +826,9 @@ function createIndexCards(layer) {
         }
         document.querySelector(".indexCardVariants").innerHTML = indexVariants(ore);
         if (layer === "event") document.querySelector(".indexCardEvent").textContent =`${formatEventMonths(limitedOres[ore].timeValues)} ${formatEventLayers(limitedOres[ore].layers)}`;
+        if (oreList[ore]["hasImage"] && !hide) document.querySelector(".indexCardBackground").style.backgroundImage = `url("${oreList[ore]["src"]}")`;
+        else if (!hide) document.querySelector(".indexCardBackground").textContent = ore;
+        if (!hide) document.querySelector(".indexCardBackground").style.backgroundColor = oreInformation.getColors(tier)["backgroundColor"];
         copying.remove();
         get("loungeCardHolder").appendChild(copying);
     }
@@ -838,7 +851,7 @@ function togglePathBlocks() {
 let testSoundTimeout = null;
 function testSound(name, element) {
     if (allAudios[name].currentTime === 0) {
-        closeMenu();
+        toggleLounge();
         playSound(name);
         element.style.backgroundColor = "#6BC267";
         allAudios[name].onended = (event) => {
@@ -932,10 +945,6 @@ function updateTimes() {
     get("furthestNegX").textContent = `${player.stats.furthestNegX - 1000000} Furthest -X.`
     get("furthestY").textContent = `-${player.stats.furthestY} Furthest Y.`;
     get("sessionMined").textContent = `${formatNumber((player.stats.blocksMined-player.startingBlocks), 3)} Session Mined.`
-    const total = player.avgSpeed;
-    const speeds = calcSpeed();
-    const output = `${Math.floor(total)} Average Speed/${Math.floor(1000/speeds.speed * speeds.reps) + speeds.extra} Estimated Speed`;
-    document.getElementById("statsSpeed").textContent = output;
 }
 function calcAverageSpeed() {
     if (movementsX > 0) {
@@ -980,19 +989,11 @@ function switchHighRarity(element) {
 }
 function setWebhookLink(element) {
     if (element.value !== "") {
-        player.serverHook = element.value;
+        player.webhookKey = element.value;
         flashGreen(element);
     } else {
-        player.serverHook = undefined;
+        player.webhookKey = undefined;
         flashGreen(element);
-    }
-}
-function setWebhookName(element) {
-    if (element.value !== "") {
-        player.serverHookName = element.value;
-        flashGreen(element);
-    } else {
-        flashRed(element);
     }
 }
 function createWebhookId(parent) {
@@ -1103,14 +1104,22 @@ function convertVariant(type) {
 function convertOre(ore, amt, type) {
     if (playerInventory[ore] === undefined) {oreNotFound(); return;}
     if (isErroring) return;
+    amt = Number(amt);
     const multi = conversionRates[type];
-    if (amt <= playerInventory[ore][variantInvNames[names.indexOf(type)]] && amt > 0 && !isNaN(Number(amt))) {
+    if (amt <= playerInventory[ore][variantInvNames[names.indexOf(type)]] && amt > 0 && !isNaN(amt)) {
         playerInventory[ore]["normalAmt"] += amt*multi;
         playerInventory[ore][variantInvNames[names.indexOf(type)]] -= amt;
         inventoryObj[ore] ??= 0;
     } else {
         notEnoughOre();
         return;
+    }
+    if (ore === "🧱" && amt === 1337 && type === "Electrified") {
+        typeWriter("<i>The ground shakes beneath you as something makes its presence known...</i>");
+        eventSpawn.currentTime = 0;
+        eventSpawn.play();
+        toggleLounge();
+        hasConverted = true;
     }
     resetVariantVals();
 }
@@ -1223,18 +1232,11 @@ function togglePlacement() {
         isPlacing = true;
     }
 }
-function goToConvert(ore, variant, event) {
-    if (event.srcElement.classList.contains("inventoryElement4")) return;
-    if (isPlacing) {
-        mine[curY][curX + 1] = {ore: ore, variant:variant, isPlaced: true};
-        displayArea();
-        return;
-    }
-    showMenuScreen("locations");
-    showVariantConversion(true);
-    document.getElementById("oreInput").value = ore;
-    document.getElementById("amtInput").value = playerInventory[ore][variantInvNames[variant - 1]];
-    document.getElementsByClassName("potentialVariant")[variant - 2].click();
+function goToConvert(ore, variant) {
+    toggleLounge();
+    if (showLoungeScreen.current !== "loungeForgeAndVariants") showLoungeScreen("loungeForgeAndVariants", document.querySelectorAll(".loungeMenuLocationButton")[9]);
+    document.getElementById("variantInputName").value = ore;
+    document.getElementById("variantInputAmt").value = playerInventory[ore][variantInvNames[variant]];
 }
 let inafk = false
 function AFKmode(){
@@ -1342,7 +1344,7 @@ const portalLocations = {
     1.1: {
         title: "Subrealm One",
         desc: "The World of Flags!<br><br>Ore Tracker, Abyssal Leaper, Statistical Amplifier, Structural Service, Infinity Collector work here!<br><br>Tree of Life works here!<br><br>Unlock Requirement: 1 Flawless Tier Ore!<br><br>\"<i>The dreaded world of flags, the only good one being the trans flag</i>\" - Remsy",
-        req: function() {return (countFlawlessOres() > 0);},
+        req: function() {return player.sr1Unlocked;},
         to: 1.1,
         hue: "40deg",
         url: "subrealmOneImage.png"
@@ -1350,7 +1352,7 @@ const portalLocations = {
     0.9: {
         title: "Galactica",
         desc: "The Endgame World!<br><br>All gears work here!<br><br>Undersea Eviscerator works here!<br><br>Unlock Requirement: Omnipotent God of The Mine!<br><br>\"<i>Sometimes when I look up into the sky, I can see cheese</i>\" - Remsy",
-        req: function() {return indexHasOre("Omnipotent God of The Mine");},
+        req: function() {return player.galacticaUnlocked;},
         to: 0.9,
         hue: "190deg",
         url: "galacticaImage.png"
@@ -1358,7 +1360,7 @@ const portalLocations = {
     1.2: {
         title: "watr watr",
         desc: "watr watr!<br><br>All gears work here!<br><br>Null Chroma, Galactica Pickaxes work here!<br><br>Unlock Requirement: Visit Watr Once!<br><br>\"<i>All I have to say is watr watr watr watr</i>\" - Remsy",
-        req: function() {return milestoneVariables.watrEntered;},
+        req: function() {return indexHasOre("Omnipotent God of The Mine");},
         to: 1.2,
         hue: "150deg",
         url: "watrWorldImage.webp"
@@ -1545,8 +1547,5 @@ function deleteMilestoneElements() {
     const elems = get("milestonesHolder").children;
     for (let i = elems.length - 1; i >= 0; i--) {
         if (!(elems[i].id.toLowerCase().includes("copy"))) elems[i].remove();
-    }
-    checkCurrentMilestones.pathsAndNames = {
-        "mainPath" : "m1"
     }
 }

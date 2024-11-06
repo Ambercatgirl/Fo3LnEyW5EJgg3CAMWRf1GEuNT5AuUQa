@@ -138,12 +138,22 @@ function powerup5() {
                 goDirection(tempDirection);
                 player.powerupVariables.fakeTreeLevel.removeAt = Date.now() + (player.gears["gear24"] ? 60000 * 1.5 : 60000);
                 player.powerupCooldowns["powerup5"].cooldown = Date.now() + (player.gears["gear24"] ? 3600000 * 0.75 : 3600000);
+                if (currentRecipeId === "pickaxe27" || pinInformation.pinned === "pickaxe27") {
+                    bypassLockParadoxical();
+                }
                 utilitySwitchActions();
             }
         }
     }
 }
-
+function bypassLockParadoxical() {
+    if (player.upgrades["pickaxe27"].level < 5) {
+        removeRecipeElements();
+        addRecipeInformation("pickaxe27");
+    } else {
+        removeRecipeElements();
+    }
+}
 let ability1RemoveTime = 0;
 let ability1Stacks = 0;
 let energySiphonerCooldown = 0;

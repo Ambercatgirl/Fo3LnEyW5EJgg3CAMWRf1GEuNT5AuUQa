@@ -209,15 +209,13 @@ class playerTemplate {
             },
             "subrealmOneCompletion" : {
                 trophyOwned : false
-
             },
         }
         this.displayStatistics = {
             blocksPerMinute: 0,
             luck: 1
         },
-        this.serverHook = undefined;
-        this.serverHookName = undefined;
+        this.webhookKey = "";
         this.lastOnline = Date.now();
         this.offlineProgress = 0;
         this.p = {
@@ -394,6 +392,8 @@ function updatePowerupCooldowns() {
     let activePercent = Math.round(100000*(activeNumbers.progress/activeNumbers.active))/1000;
     get("powerupIsActive").style.background = `linear-gradient(to left, rgba(107, 194, 103, 0.75) 0%, ${activePercent}%, rgba(255, 61, 61, 0.75) ${activePercent}%`;
     get("powerupIsActive").textContent = activePercent > 0 ? `Active for ${msToTime(activeNumbers.progress)}` : "Not Active";
+    if (player.powerupCooldowns[currentPowerupDisplayed].canAuto) get("allowAutoPowerup").style.backgroundColor = "var(--better-green)";
+    else get("allowAutoPowerup").style.backgroundColor = "var(--better-red)";
 }
 function checkAllConditions() {
     const elems = document.getElementsByClassName("selectPowerup");
@@ -451,21 +451,21 @@ function scrollPowerups(event) {
 function getItemNameFromParadoxical(item) {
     return recipes[item].name;
 }
-function toggleCanAuto(powerup) {
-    const area = player.powerupCooldowns[powerup];
+function toggleCanAuto() {
+    const area = player.powerupCooldowns[currentPowerupDisplayed];
     if (area.canAuto) {
         area.canAuto = false;
-        get("allowAutoPowerup").style.backgroundColor = "FF3D3D";
+        get("allowAutoPowerup").style.backgroundColor = "var(--better-red)";
     } else {
         area.canAuto = true;
-        get("allowAutoPowerup").style.backgroundColor = "6BC267";
+        get("allowAutoPowerup").style.backgroundColor = "var(--better-green)";
     }
 }
 function autoPowerups() {
     if (Date.now() >= player.powerupVariables.nextAuto) {
         if (player.powerupCooldowns[powerupOrder[player.powerupVariables.autoNum]].canAuto && player.powerupCooldowns[powerupOrder[player.powerupVariables.autoNum]].unlocked) {
             const powerup = powerupList[powerupOrder[player.powerupVariables.autoNum]];
-            const toExecute = powerup.doAbility.substring(0, powerup.doAbility.indexOf(";") + 1);
+            const toExecute = powerup.doAbility;
             eval(toExecute);
             player.powerupVariables.nextAuto += 30000;
         }
@@ -755,8 +755,8 @@ function loadNewData(data) {
         //unlock locked features
         if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";
-        //if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
-        //else get("allowAutoPowerup").style.display = "none";
+        if (player.gears["gear24"]) get("allowAutoPowerup").style.display = "block";
+        else get("allowAutoPowerup").style.display = "none";
         if (player.gears["gear45"]) showEventOptions();
         else hideEventOptions();
         if (data.webHook !== undefined) {
@@ -780,9 +780,7 @@ function loadNewData(data) {
         if (data.eventManager !== undefined) {
             player.eventManager.cooldown = data.eventManager.cooldown;
         }
-        //if (player.galacticaUnlocked && player.lastWorld !== 0.9) galacticaShortcut();
-        if (data.serverHook !== undefined) player.serverHook = data.serverHook;
-        if (data.serverHookName !== undefined) player.serverHookName = data.serverHookName;
+        if (data.webhookKey !== undefined) player.webhookKey = data.webhookKey;
         data.faqOffered ??= false;
         data.luna ??= {
             layer: Math.round(Math.random() * 100000),

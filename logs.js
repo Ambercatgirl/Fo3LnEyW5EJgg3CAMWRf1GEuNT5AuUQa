@@ -121,7 +121,7 @@ class secureLogs {
                         if (log.amt > 1) log.rng/=10;
                         if (log.variant === undefined) log.variant = variant;
                         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
-                        if (log.rng < 1/5000000000 && player.serverHook !== undefined && !debug) serverWebhook(log, player.stats.blocksMined);
+                        if (log.rng <= 1/10000000000 && player.webhookKey !== "" && !debug) serverWebhook(log, player.stats.blocksMined, player.webhookKey);
                         const webhookString = `${player.name} has found ${names[log.variant - 1]} ${log.block} ${log.amt > 1 ? `(x${log.amt}) ` : ""}with a rarity of 1/${Math.round(1/log.rng).toLocaleString()} ${log.caveInfo[0] ? (log.caveInfo[1] > 1 ? "(" + caveList[log.caveInfo[2]].slice(-1) + " Cave)" : "(Layer Cave)") : ""} at ${player.stats.blocksMined.toLocaleString()} mined. X: ${(log.x - 1000000).toLocaleString()}, Y: ${(-1 * log.y).toLocaleString()}${(log.paradoxical === "pickaxe26" ? " " : "")}`;           
                         log.output = webhookString;
                         this.#verifiedLogs["All"][i] = log;
@@ -167,7 +167,7 @@ class secureLogs {
         else if (log.variant === 2) this.#verifiedLogs["Electrified"].push(log);
         else if (log.variant === 3) this.#verifiedLogs["Radioactive"].push(log);
         else if (log.variant === 4) this.#verifiedLogs["Explosive"].push(log);
-        if (log.rng <= 1/10000000000) serverWebhook(log, player.stats.blocksMined);
+        if (log.rng <= 1/10000000000 && player.webhookKey !== "" && !debug) serverWebhook(log, player.stats.blocksMined, player.webhookKey);
         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
     }
     showLogs() {
@@ -299,7 +299,6 @@ class secureLogs {
         element.id = "generatedLogs";
         document.getElementById("logHolder").appendChild(element);
         const toDisplay = JSON.parse(localStorage.getItem("SillyCavernsLogStorage"));
-        console.log(toDisplay)
         let output = "";
         for (let log in toDisplay) {
             if (toDisplay[log].toDelete) {
@@ -423,8 +422,7 @@ const worlds = {
     2: "W2",
     0.9: "Galactica"
 }
-function serverWebhook(log, mined) {
-    return;
+function serverWebhook(log, mined, key) {
     const logObj = {
         "variantName" : names[log.variant - 1],
         "worldName" : worlds[log.world],
@@ -438,7 +436,6 @@ function serverWebhook(log, mined) {
         "formattedEvent" : log.withEvent,
         "rng" : log.rng
     }
-    console.log("cat!")
     fetch("https://endurable-fragrant-visitor.glitch.me", {
         method: "POST",
         headers: {
@@ -448,8 +445,14 @@ function serverWebhook(log, mined) {
         body: new URLSearchParams({
             "func" : "hook",
             "logInfo" : JSON.stringify(logObj),
-            "key": "no key for u!"
+            "key": key
         }).toString()
+    })
+    .then(function (res) {
+                 
+    })
+    .catch(function (res) {
+        console.log(res);
     });
 }
 function getCurrentWebhookId(num) {

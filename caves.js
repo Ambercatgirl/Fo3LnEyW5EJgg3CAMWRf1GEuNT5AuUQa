@@ -360,7 +360,7 @@ function generateCaveBlock(y, x, type, luck) {
                 caveOreLocations.push({"X":x, "Y":y, "type":type, "caveMulti":multi});
             }
             let vInfo = rollVariant();
-            if (player.gears["gear25"] && variant === 1) vInfo = rollVariant();
+            if (player.gears["gear25"] && vInfo.v === 1) vInfo = rollVariant();
             const variant = vInfo.v;
             const tier = oreList[blockToGive]["oreTier"];
             mine[y][x] = {ore: blockToGive, variant: variant};
@@ -382,7 +382,7 @@ function generateCaveBlock(y, x, type, luck) {
     } else {
         if (oreList[blockToGive]["numRarity"] >= 750000) {
             let vInfo = rollVariant();
-            if (player.gears["gear25"] && variant === 1) vInfo = rollVariant();
+            if (player.gears["gear25"] && vInfo.v === 1) vInfo = rollVariant();
             const variant = vInfo.v;
             const tier = oreList[blockToGive]["oreTier"];
             mine[y][x] = {ore: blockToGive, variant: variant};

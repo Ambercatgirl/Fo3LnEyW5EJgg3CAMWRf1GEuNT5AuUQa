@@ -669,8 +669,6 @@ function switchWorld(to) {
         }
         switchDistance(0);
         displayArea();
-        removeGalactica();
-        switchWorldCraftables();
         utilitySwitchActions();
         removeFromLayers({"ore":"🐢","layers":["paperLayer"]})
         removeFromLayers({"ore":"🐰","layers":["paperLayer"]});
@@ -730,6 +728,7 @@ function prepareSR1() {
     createMine();
     layerNum = 0;
     sr1Helper(true);
+    milestoneVariables.sr1Entered = true;
 }
 function prepareGalactica() {
     get("mainSticky").style.backgroundImage = `url("media/starryBackground.jpg")`;
@@ -740,6 +739,7 @@ function prepareGalactica() {
     curY = 0; 
     createMine();
     layerNum = 0;
+    milestoneVariables.galacticaEntered = true;
 }
 function prepareWatr() {
     allLayers = waterWorldLayers;
@@ -748,6 +748,7 @@ function prepareWatr() {
     curX = 1000000;
     curY = 0; 
     layerNum = 0;
+    milestoneVariables.watrEntered = true;
     createMine();
 }
 function prepareWorldTwo() {
@@ -779,6 +780,7 @@ function stopMining() {
     clearInterval(displayTimer);
     displayTimer = null;
 }
+let beforeEntering;
 function sr1Helper(state) {
     removeParadoxical();
     const lock = document.getElementsByClassName("lockedRecipe");
@@ -790,7 +792,9 @@ function sr1Helper(state) {
         }
         if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.wasUsing = player.stats.currentPickaxe;
         player.stats.currentPickaxe = "pickaxe27";
-        document.getElementById("theWorkshop").style.display = "block";
+        switchWorldCraftables(1.1);
+        beforeEntering = currentWorld;
+        toggleCraftingWorld.world = 1.1;
     } else {
         if (!player.settings.usingNewEmojis) {
             document.body.style.fontFamily = "";
@@ -798,7 +802,7 @@ function sr1Helper(state) {
         }
         if (player.wasUsing !== undefined) player.stats.currentPickaxe = player.wasUsing;
         player.wasUsing = undefined;
-        document.getElementById("theWorkshop").style.display = "none";
+        toggleCraftingWorld.world = beforeEntering;
     }
 }
 function removeParadoxical() {
@@ -828,6 +832,9 @@ function removeParadoxical() {
         player.powerupVariables.fakeTreeLevel.level = undefined;
         player.powerupVariables.fakeTreeLevel.originalState = undefined;
         player.powerupVariables.fakeTreeLevel.removeAt = Infinity;
+        if (currentRecipeId === "pickaxe27" || pinInformation.pinned === "pickaxe27") {
+            bypassLockParadoxical();
+        }
         utilitySwitchActions();
     }
     updateSpeed();

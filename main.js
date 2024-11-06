@@ -77,7 +77,6 @@ function init() {
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true});
     removeFromLayers({"ore":"HD 160529","layers":["waterLayer"]});
     if (Math.random() < 1/1000) insertIntoLayers({"ore":"intercept", "layers":["globeLayer"], "useLuck":true})
-    formatEventText();
     document.getElementById('dataText').value = "";
     if (Math.random() < 1/1000) document.getElementById("cat").innerText = "CatAxe";
     limitedTimer = setInterval(checkLimitedOres, 1000);
@@ -139,7 +138,6 @@ function finishInit() {
     utilitySwitchActions();
     if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true);
     else createMine();
-    console.log(currentWorld)
     addIndexLayers(currentWorld);
     console.log("meow");
 }
@@ -496,7 +494,6 @@ function goDirection(direction) {
             while (div%nums.speed !== 0) div--;
             inSec += (div/nums.speed) * nums.reps;
             inSec += nums.extra;
-            console.log(inSec)
             loopTimer = setInterval(accurateMove, 10, inSec, movements);
         } else {
             loopTimer = setInterval(movePlayer, miningSpeed, movements, reps, "auto");
@@ -746,14 +743,7 @@ function createInventory() {
             let tempElement = document.createElement('tr');
             tempElement.classList = "oreDisplay";
             tempElement.id = `${propertyName}Holder`;
-            tempElement.setAttribute("onclick", "handleInventoryClick();")
-                /*
-                if (i === 1) {
-                    tempElement.setAttribute("onclick", "randomFunction(\"" + propertyName + "\", 'inv', event)");
-                } else {
-                    tempElement.setAttribute("onclick", `goToConvert("${propertyName}", ${i}, event)`);
-                }
-                    */
+            tempElement.setAttribute("onclick", "handleInventoryClick(this, 'inv');")
             let colors = oreInformation.getColors(oreList[propertyName]["oreTier"]);
             tempElement.style.backgroundImage = "linear-gradient(to right, " + colors["backgroundColor"] + " 90%, black)"
             tempElement.style.color = colors["textColor"];
@@ -865,11 +855,12 @@ let lastX = 0;
 let lastXCheck = Date.now();
 let resetAddX = 0;
 let displayTimer = null;
-let p33CL = false;
+let smallDisplay = false;
 const thisUniqueId = Math.floor(Math.random() * 100000000000) + Math.floor(Math.random() * 100000000000);
 let idSet = false;
 function updateInventory() {
     player.lastOnline = Date.now();
+
 
     //Update Inventory Elements
     if (!toggleLounge.toggled) for (let propertyName in inventoryObj) {
@@ -912,7 +903,7 @@ function updateInventory() {
     //Check Powerup Contitions and Update Cooldowns
     checkAllConditions();
     updatePowerupCooldowns();
-    //if (player.gears["gear24"]) autoPowerups();
+    if (player.gears["gear24"]) autoPowerups();
 
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
@@ -2008,7 +1999,7 @@ function checkPolys() {
         const poly = polys[i];
         if (player.p[poly]) {
             insertIntoLayers({"ore":`${poly}`, "layers":[polyLocations[`${poly}`]], "useLuck":true});
-            if (currentWorld === 0.9 || galDis) showItem(polyIds[`${poly}`]);
+            if (currentWorld === 0.9) showItem(polyIds[`${poly}`]);
         }
         else {
             if (!player.p["orbOfLife"] && indexHasOre("noradrenaline") > 0) {

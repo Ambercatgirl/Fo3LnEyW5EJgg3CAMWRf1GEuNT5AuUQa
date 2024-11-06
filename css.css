@@ -135,12 +135,12 @@
 }
 #latestOres {
   width: 100%;
-  height: 10vw;
+  height: 3vw;
   overflow-y: auto;
 }
 #latestOresHolder {
   width: 100%;
-  height: 39vw;
+  height: 31.5vw;
   overflow-y: scroll!important;
 }
 .latestHolder {
@@ -292,13 +292,14 @@
 }
 #newCraftingRecipeHolder {
   width: 100%;
-  height: 17vw;
-  overflow: scroll;
+  height: 14.6vw;
+  overflow: auto;
   line-height: 100%;
-  padding-bottom: 0.6vw;
   border-top: 0.2vw solid var(--main-border-color);
   position: relative;
   z-index: 20;
+  padding-bottom: 0vw;
+  display: block;
 }
 #pinAndCraft {
   width: 100%;
@@ -320,6 +321,17 @@
   border-bottom-left-radius: 0vw;
   pointer-events: all!important;
   z-index: 21;
+}
+#estimatedTimeHolder {
+  width: 100%;
+  height: 2vw;
+  margin: 0;
+  border-top: 0.1vw solid var(--main-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1vw;
+  font-weight: 500;
 }
 .recipePin {
   width: 50%;
@@ -574,15 +586,15 @@
 }
 .gameSetting {
   width: 33.333%;
-  height: 7%;
+  height: min(8vh, 4vw);
   border-radius: 0;
   border: 0.2vw solid var(--main-border-color);
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   font-weight: 700;
 }
 .inputAndButton {
     width: 33.333%;
-    height: 7%;
+    height: min(8vh, 4vw);
     border-radius: 0;
     position: relative;
     display: flex;
@@ -596,13 +608,14 @@
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
+  overflow-y: auto;
 }
 .spawnSoundSettings {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   width: 50%;
-  height: 10%;
+  height: min(8vh, 4vw);
   border:0.2vw solid var(--main-border-color);
   margin: 0;
   max-height: 10vw;
@@ -634,7 +647,7 @@
   background: none;
   color: #fff;
   border: none;
-  font-size: 65%;
+  font-size: min(2.5vh, 1.25vw);
   white-space: nowrap;
   border: 0.1vw solid var(--main-shadow-color);
 }
@@ -647,7 +660,7 @@
   width: 50%;
   background-color: #FF3D3D;
   border: none;
-  font-size: 65%;
+  font-size: min(2.5vh, 1.25vw);
   font-weight: 750;
   display: flex;
   align-items: center;
@@ -658,13 +671,12 @@
 }
 #musicStuff {
   width: 50%;
-  height: 10%;
+  height: min(10vh, 5vw);
   border: 0.2vw solid var(--main-border-color);
-  max-height: 10vw;
 }
 #musicSettings {
   width: 50%;
-  height: 10%;
+  height: min(10vh, 5vw);
   max-height: 10vw;
 }
 #disguisedChillHolder {
@@ -679,7 +691,7 @@
   height: 50%;
   width: 100%;
   border: 0.2vw solid var(--main-border-color);
-  font-size: 60%;
+  font-size: min(2.5vh, 1.25vw);
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -690,7 +702,7 @@
   height: 50%;
   background: none;
   border: 0.1vw solid var(--main-hl-color);
-  font-size: 65%;
+  font-size: min(2.5vh, 1.25vw);
   font-weight: 750;
   display: flex;
   align-items: center;
@@ -755,15 +767,16 @@
 }
 #dataFileLabel {
   width: 20%;
-  font-size: 1vw;
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   cursor: pointer;
+  font-size: min(2vh, 1vw);
+  font-weight: 500;
 }
 .dataDiv {
-  height: 7%;
+  height: min(10vh, 5vw);
   width: 100%;
   display: flex;
   align-items: center;
@@ -773,7 +786,8 @@
   height: 100%;
   background-color: var(--main-lbg-color);
   border: 0.2vw solid var(--main-border-color);
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
+  font-weight: 500;
 }
 .dataButton:hover {
   background-color: var(--main-hl-color);
@@ -799,27 +813,27 @@
 #logHolder {
   width: 70%;
   height: 94%;
-  font-size: 1vw;
+  font-size: min(2vh, 1vw);
   text-align: center;
 }
 #logsButton {
   width: 100%;
-  height: 10%;
+  height: min(10vh, 5vw);
   background: none;
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   font-weight: 750;
 }
 #savedLogsButton {
   width: 100%;
-  height: 10%;
+  height: min(10vh, 5vw);
   background: none;
-  font-size: 1vw;
+  font-size: min(2vh, 1vw);
   font-weight: 750;
 }
 #logSort {
-  height: 10%;
+  height: min(10vh, 5vw);
   width: 100%;
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   text-align: center;
   background-color: var(--main-bg-color);
   outline: none;
@@ -828,7 +842,7 @@
   border: 0.1vw solid var(--main-border-color);
 }
 #logButtonHolder {
-  height: 4vw;
+  height: min(10vh, 5vw);
   width: 40vw;
   display: inline-flex; 
   justify-content: center; 
@@ -836,9 +850,9 @@
   flex-wrap: wrap;
 }
 .logFilters {
-  height: 10%;
+  height: min(10vh, 5vw);
   width: 100%;
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   text-align: center;
   font-weight: 750;
 }
@@ -857,7 +871,7 @@
   flex-wrap: wrap;
 }
 #tierStatSelectors {
-  width: 20%;
+  width: 25%;
   height: 100%;
   display: flex;
   align-content: flex-start;
@@ -867,18 +881,18 @@
 .tierSelector {
   width: 100%;
   margin-right: 20%;
-  height: 7%;
+  height:min(6vh, 3vw);
   background-color: var(--main-bg-color);
   border: 0.2vw solid var(--main-border-color);
   transition: margin-right 50ms 100ms;
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   font-weight: 750;
 }
 .tierSelector:hover {
   margin-right: 0%;
 }
 #tierStatsHolder {
-  width: 80%;
+  width: 75%;
   height: 100%;
 }
 #currentTierInformation {
@@ -889,19 +903,19 @@
   width: 100%;
   height: 10%;
   color: white;
-  font-size: 200%;
+  font-size: min(3vh, 1.5vw);
   font-weight: 1000;
   text-align: center;
 }
 #playerStatisticsHolder {
   padding: 2%;
-  width: 80%;
+  width: 75%;
   height: 50%;
   display: inline-flex;
   flex-wrap: wrap;
 }
 .playerStat {
-  font-size: 55%;
+  font-size: min(2vh, 1vw);
   font-weight: 1000;
   width: 50%;
   height: 10%;
@@ -919,7 +933,7 @@
 }
 #loungeLayersHolder {
   width: 80%;
-  height: 15%;
+  height: min(16vh, 8vw);
   display: flex;
   align-content: flex-start;
   justify-content: flex-start;
@@ -927,7 +941,7 @@
 }
 #worldIndexTop {
   width: 100%;
-  height: 15%;
+  height: min(16vh, 8vw);
   display: flex;
   flex-wrap: nowrap;
 }
@@ -969,7 +983,7 @@
 }
 .loungeLayerSelector {
   width: 20%;
-  height: 4vh;
+  height: min(4vh, 2vw);
   background-color: var(--main-lbg-color);
   border: 0.1vw solid var(--main-border-color);
   font-size: min(2vh, 1vw);
@@ -988,6 +1002,7 @@
   display: flex;
   align-content: flex-start;
   flex-wrap: wrap;
+  position: relative;
 }
 .indexCardTop {
   height: min(7vh, 3.5vw);
@@ -1002,6 +1017,7 @@
 }
 .indexCardText {
   margin: 0;
+  z-index: 10;
 }
 .indexCardOre {
   height: min(7vh, 3.5vw);
@@ -1070,6 +1086,19 @@
   text-align: center;
   margin: auto;
 }
+.indexCardBackground {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: min(14vh, 7vw);
+  background-size: min(18vh, 9vw);
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 5%;
+}
 .loungeLayerSelector:hover {
   background-color: var(--main-hl-color);
 }
@@ -1105,12 +1134,12 @@
   display: none;
 }
 .milestoneInfoHolder {
-  width: 30%;
-  height: 20%;
+  width: min(45vh, 22.5vw);
+  height: min(18vh, 9vw);
   background-color: var(--main-lbg-color);
   border: 0.1vw solid var(--main-hl-color);
   position: absolute;
-  top: 5%;
+  top: min(5vh, 2.5vw);
   z-index: 10;
   touch-action: none;
   user-select: none;
@@ -1120,8 +1149,7 @@
   height: 55%;
   margin: 0;
   overflow-y: auto;
-  font-size: 35%;
-  line-height: 100%;
+  font-size: min(1.5vh, 0.75vw);
   font-weight: 700;
   display: flex;
   justify-content: center;
@@ -1129,17 +1157,18 @@
   border-bottom: 0.2vh solid var(--main-border-color);
   text-align: center;
   white-space: pre-line;
+  line-height: min(2vh, 1vw);
 }
 .milestoneInfoImage {
-  width: 1.4vh;
-  height: 1.4vh;
+  width: min(1.5vh, 0.75vw);
+  height: min(1.5vh, 0.75vw);
   margin-top: -0.25vh;
 }
 .milestoneInfoTitle {
   width: 100%;
   height: 25%;
   margin: 0;
-  font-size: 50%;
+  font-size: min(2vh, 1vw);
   line-height: 100%;
   font-weight: 800;
   display: flex;
@@ -1152,7 +1181,7 @@
   width: 100%;
   height: 20%;
   margin: 0;
-  font-size: 40%;
+  font-size: min(1.5vh, 0.75vw);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -1160,8 +1189,8 @@
 }
 .verticalConnector {
   position: absolute;
-  width: 30%;
-  height: 6%;
+  width: min(45vh, 22.5vw);
+  height: min(8vh, 4vw);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1176,8 +1205,8 @@
 }
 .horizontalConnector {
   position: absolute;
-  width: 6%;
-  height: 20%;
+  width: min(8vh, 4vw);
+  height: min(18vh, 9vw);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1214,7 +1243,7 @@
   background-size:cover;
   background-repeat: no-repeat;
   opacity: 5%;
-  filter: blur(7px);
+  filter: blur(0.1vw);
 }
 #worldInformation {
   width: 50%;
@@ -1263,8 +1292,8 @@
   position: absolute;
   top: 25%;
   z-index: 3;
-  filter: blur(5px);
-  backdrop-filter: blur(1px);
+  filter: blur(min(0.8vh, 0.4vw));
+  backdrop-filter: blur(min(0.4vh, 0.2vw));
 }
 #worldPortal:hover {
   background-size: 20vw;
@@ -1279,20 +1308,20 @@
 }
 #worldTitle {
   width: 100%;
-  height: 20%;
+  height: min(15vh, 7.5vw);
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3.5vw;
+  font-size: min(5vh, 2.5vw);
   font-weight: 1000;
   border-bottom: 0.2vw solid var(--main-border-color);
 }
 #worldDescription {
   width: 100%;
-  height: 50%;
+  height: auto;
   margin: 0;
-  font-size: 1.2vw;
+  font-size: min(2vh, 1vw);
   text-align: left;
   font-weight: 800;
   line-height: 1.5vw;
@@ -1306,6 +1335,7 @@
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
+  overflow-y: hidden;
 }
 #variantActions {
   width: 100%;
@@ -1376,11 +1406,12 @@
 }
 #forgeRecipeInformation {
   width: 40%;
-  height: 78%;
+  height: 100%;
   border-left: 0.1vw solid var(--main-border-color);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  padding-bottom: min(20vh, 10vw);
 }
 #forgeCost {
   width: 40%;
@@ -1492,6 +1523,8 @@
   flex-wrap: wrap;
   align-content: flex-start;
   border-right: 0.1vw solid var(--main-border-color);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 #oreCraftList {
   width: 50%;
@@ -1500,6 +1533,8 @@
   flex-wrap: wrap;
   align-content: flex-start;
   border-left: 0.1vw solid var(--main-border-color);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .forgeType {
   width: 100%;
@@ -1536,6 +1571,16 @@
 #forgeChangeMulti:hover {
   background-color: var(--main-shadow-color);
 }
+#loungeWebhookSettings {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  overflow-y: hidden;
+}
 .toggledOn {
   background-color: var(--better-green);
 }
@@ -1547,7 +1592,7 @@
 }
 #loungeHeader {
   width: 100%;
-  height: 10%;
+  height: min(10vh, 5vw);
   border-bottom: 0.25vw solid var(--main-border-color);
   display: flex;
   align-items: center;
@@ -1558,6 +1603,8 @@
   height: 100%;
   border: 0.2vw solid var(--main-border-color);
   background-color: var(--better-red);
+  font-size: min(3vh, 1.5vw);
+  font-weight: 1000;
 }
 #loungeTitle {
   width: 70vw;
@@ -1572,10 +1619,13 @@
 }
 #loungeMenuList {
   width: 15vw;
-  height: 80%;
+  height: 100%;
   border-right: 0.25vw solid var(--main-border-color);
   border-bottom: 0.25vw solid var(--main-border-color);
   overflow-y: auto;
+  padding-bottom: min(20vh, 10vw);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 #loungeMenuLocation {
   width: 70vw;
@@ -1605,12 +1655,16 @@
 }
 .loungeMenuLocationButton {
   width: 100%;
-  height: 10%;
+  height: min(9vh, 4.5vw);
   background-color: var(--main-lbg-color);
-  border: 0.1vw solid var(--main-border-color);
+  border-width: min(0.5vh, 0.1vw);
+  border-style: solid;
+  border-color: var(--main-border-color);
   border-top: none;
-  font-size: 60%;
+  font-size: min(2.8vh, 1.4vw);
   font-weight: 1000;
+  white-space: nowrap;
+  text-align: center;
 }
 .loungeMenuLocationButton:hover {
   background-color: var(--main-shadow-color);
@@ -1618,8 +1672,7 @@
 .loungeStatisticText {
   width: 100%;
   height: 7%;
-  font-size: 30%;
-  line-height: 100%;
+  font-size: min(1.5vh, 0.75vw);
   text-align: center;
   margin: 0px;
   font-weight: 800;
@@ -1629,10 +1682,10 @@
 }
 .loungeSettingButton {
   width: 100%;
-  height: 20%;
+  height: min(7vh, 3.5vw);
   border: 0.1vw solid var(--main-border-color);
   background-color: var(--better-green);
-  font-size: 30%;
+  font-size: min(2vh, 1vw);
   line-height: 100%;
   font-weight: 750;
 }
@@ -2423,14 +2476,17 @@ img.roundcat {
 }
 #webhookSettings {
   display: flex;
-  align-items: center;
+  align-content: flex-start;
   justify-content: center;
   flex-wrap: wrap;
+  height: 100%;
+  overflow-y: auto;
 }
 #serverHook {
   width: 100%;
   display: flex;
   justify-content: center;
+  height: min(8vh, 4vw);
 }
 #customHookContainer {
   width: 100%;
@@ -2438,11 +2494,10 @@ img.roundcat {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 2vw;
 }
 .webhookInfoInputSection {
   width: 100%;
-  height: 3vw;
+  height: min(6vh, 3vw);
   overflow-y: auto;
   display: flex;
   justify-content: center;
@@ -2450,17 +2505,23 @@ img.roundcat {
 }
 .webhookInputSection {
   width: 100%;
-  height: 5vw;
+  height: min(10vh,5vw);
 }
 .webhookInfoSection {
-  width: 15vw;
+  width: 20%;
   height: 100%;
+  text-align: center;
 }
 .webhookInfo {
   margin: 0px;
   width: 100%;
   height: 100%;
-  font-size: 1vw;
+  font-size: min(2vh,1vw);
+  text-align: center;
+  background-color: var(--main-lbg-color);
+  border: 0.15vw solid var(--main-border-color);
+  color: white;
+  outline: none;
 }
 .createButton {
   border: 0.1vw solid white;
@@ -2471,35 +2532,40 @@ img.roundcat {
 }
 #createdWebhooks {
   width: 100%;
-  margin-top: 2vw;
+  margin-top: min(4vh,2vw);
   height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  overflow-y: auto;
 }
 .createdHookDisplay {
   width: 100%;
-  height: 3vw;
-  margin-top: 0.5vw;
+  height: min(6vh, 3vw);
+  margin-top: min(1vh,0.5vw);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: nowrap;
 }
 .createdHookInfo {
-  width: 20vw;
-  height: 3vw;
-  background-color: white;
-  border: 0.1vw solid black;
+  width: 20%;
+  height: 100%;
+  background-color: var(--main-lbg-color);
+  border: 0.15vw solid var(--main-border-color);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1vw;
+  font-size: min(2vh,1vw);
+  color: white;
+  text-align: center;
+  font-weight: 750;
 }
 .deleteHookButton {
   background-color: #FF3D3D;
-  font-size: 1.5vw;
+  font-size: min(3vh,1.5vw);
+  color: white;
 }
 .deleteHookButton:hover {
   background-color: #ba0d0d;
@@ -2511,25 +2577,35 @@ img.roundcat {
   display: none;
 }
 #createNewWebhook {
-  width: 4vw;
-  height: 4vw;
-  font-size: 1vw;
-  margin-top: 1vw;
+  width: min(8vh,4vw);
+  height: min(8vh,4vw);
+  font-size: min(2vh,1vw);
+  margin-top: min(2vh,1vw);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10vw;
+  border-radius: 100%;
   background-color: #6BC267;
+  border: 0.1vw solid var(--main-border-color);
+  margin-bottom: min(2vh, 1vw);
 }
 #createNewWebhook:hover {
   background-color: #6ad466;
 }
 .createdWebhooksLabel {
   width: 100%;
-  font-size: 2vw;
+  font-size: min(4vh,2vw);
   color: white;
   font-weight: 1000;
-  margin-top: 1vw;
+  text-align: center;
+  height: min(6vh, 3vw);
+}
+#webhookDescription {
+  width: 100%;
+  height: min(20vh, 10vw);
+  font-size: min(2vh, 1vw);
+  text-align: center;
+  font-weight: 1000;
 }
 @keyframes invisible {
   0% {filter: opacity(100%);}
@@ -2688,6 +2764,16 @@ img.roundcat {
   z-index: 50;
   display: inline-flex;
   flex-wrap: wrap;
+}
+#allowAutoPowerup {
+  position: absolute;
+  right: 0px;
+  width: 6vw;
+  font-size: 0.75vw;
+  background-color: var(--better-green);
+  color: white;
+  font-weight: 1000;
+  border: 0.1vw solid  var(--main-border-color);
 }
 #powerupName {
   height: 2vw;
@@ -3215,7 +3301,6 @@ button, .col-3 > div > button {
   border-bottom:0.2vw solid var(--main-border-color);
   margin-bottom: 0px;
 }
-
 .col-2 {
   overflow-y: scroll;
   overscroll-behavior-y: contain;
@@ -3425,10 +3510,12 @@ button, .col-3 > div > button {
 .textInput {
   width: 50%;
   height: 100%;
-  font-size: 0.75vw;
+  font-size: min(1.5vh, 0.75vw);
   font-weight: 1000;
   border: 0.2vw solid var(--main-border-color);
   text-align: center;
+  border-radius: 0;
+  outline: none;
 }
 .inputAndButton2 {
   border-style: solid;
@@ -3450,7 +3537,7 @@ button, .col-3 > div > button {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75vw;
+  font-size: min(1.5vh, 0.75vw);
   font-weight: 800;
 }
 .stopOnRareButton {
@@ -3459,6 +3546,7 @@ button, .col-3 > div > button {
   border-style: solid;
   background-color: #FF3D3D;
   border: 0.2vw solid var(--main-border-color);
+  font-size:min(2vh, 1vw);
 }
 .stopOnRareSelector {
   width:50%;
@@ -3711,7 +3799,7 @@ button, .col-3 > div > button {
 #changeSMrarityDisplay {
   width: 100%;
   height: 100%;
-  font-size:1vw;
+  font-size:min(2vh, 1vw);
   font-weight: 750;
   position: relative;
   z-index: 13;
@@ -3946,12 +4034,13 @@ button {
 }
 .forgeCraftingButton {
   width: 100%;
-  height: 5%;
+  height: min(4vh, 2vw);
   margin: 0;
   font-size: min(1vw, 2vh);
   background: var(--main-lbg-color);
   border: none;
   border-bottom:0.1vw solid var(--main-border-color);
+  font-weight: 600;
 }
 .forgeCraftingButton:hover {
   background-color: var(--main-hl-color);

@@ -1,113 +1,13 @@
 const trophyList = {
     "worldOneCompletion" : {
-        name : "World One Completionist",
-        requirement: function(get) {
-            const blocksMinedNow = player.stats.blocksMined;
-            if (player.trophyProgress["worldOneCompletion"].lastPickaxeUsed === "pickaxe12" && player.stats.currentPickaxe === "pickaxe12") {
-                const totalMinedWithWOG = blocksMinedNow - player.trophyProgress["worldOneCompletion"].lastMinedAmt;
-                player.trophyProgress["worldOneCompletion"].blocksWithWOG += totalMinedWithWOG;
-            }
-            player.trophyProgress["worldOneCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
-            player.trophyProgress["worldOneCompletion"].lastMinedAmt = player.stats.blocksMined;
-            if (get) return `${player.trophyProgress["worldOneCompletion"].blocksWithWOG.toLocaleString()}/1,000,000,000 blocks mined with Wings of Glory.`
-            if (player.trophyProgress["worldOneCompletion"].blocksWithWOG > 1000000000) {
-                return true;
-            }
-        },
         reward: {type: "luck", do: "multiply", amt: 1.1},
-        icon: "<span class='trophyIcon'>Trophy made by @lxzy.</span>"
     },
     "worldTwoCompletion" : {
-        name : "World Two Completionist",
-        requirement: function(get) {
-            const blocksMinedNow = player.stats.blocksMined;
-            if (player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed === "pickaxe25" && player.stats.currentPickaxe === "pickaxe25" && currentWorld === 2) {
-                const totalMinedWithCoronary = blocksMinedNow - player.trophyProgress["worldTwoCompletion"].lastMinedAmt;
-                player.trophyProgress["worldTwoCompletion"].blocksWithCoronary += totalMinedWithCoronary;
-            }
-            player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
-            player.trophyProgress["worldTwoCompletion"].lastMinedAmt = player.stats.blocksMined;
-            if (get) return `${player.trophyProgress["worldTwoCompletion"].blocksWithCoronary.toLocaleString()}/10,000,000,000 blocks mined with Coronary Catastrophe in World 2.<br>Oblivion Fracturer: ${player.gears["gear21"] ? "Obtained." : "Required."}`
-            if (player.trophyProgress["worldTwoCompletion"].blocksWithCoronary > 10000000000 && player.gears["gear21"]) {
-                return true;
-            }
-        },
         reward: {type: "luck", do: "multiply", amt: 1.25},
-        icon: "<span class='trophyIcon'>Trophy made by @wrab</span>"
     },
     "subrealmOneCompletion" : {
-        name : "Subrealm One Completion",
-        requirement: function(get) {
-            if (get) return `${indexHasOre("🏁")}/1 🏁 found.`
-            if (indexHasOre("🏁") > 0) {
-                return true;
-            }
-        },
         reward: {type: "allow", do: "usage", amt: "pickaxe27"},
-        icon: "<span class='trophyIcon'>Trophy made by @hulfe</span>"
     },
-}
-function getUnownedTrophies() {
-    const list = [];
-    for (let trophy in trophyList) if (!player.trophyProgress[trophy].trophyOwned) list.push(trophy);
-    return list;
-}
-function checkUnlockConditions() {
-    updateRequirementAtLocation();
-    const trophiesToCheck = getUnownedTrophies();
-    for (let i = 0; i < trophiesToCheck.length; i++) {
-        const trophy = trophyList[trophiesToCheck[i]];
-        if (trophy.requirement()) {
-            player.trophyProgress[trophiesToCheck[i]].trophyOwned = true;
-            get(`${trophiesToCheck[i]}`).classList.remove("unownedTrophy");
-        }
-    }
-}
-function getTrophyRequirement(id) {
-    return trophyList[id].requirement(true);
-}
-let currentInsertedElement;
-function displayRequirementAtLocation(child) {
-    if (currentInsertedElement !== undefined) {
-        const thisId = currentInsertedElement.parentElement.children[0].id;
-        currentInsertedElement.parentElement.removeChild(currentInsertedElement);
-        currentInsertedElement = undefined;
-        if (thisId === child.id) return;
-    }
-    const areaToInsert = child.parentElement;
-    const elementToInsert = get("requirementTextArea").cloneNode(true);
-    elementToInsert.style.display = "flex";
-    elementToInsert.children[0].innerHTML = `<span class="trophyRequirements">${getTrophyRequirement(child.id)}</span><span class="trophyReward">${formatReward(trophyList[child.id].reward)}</span>${trophyList[child.id].icon}`;
-    elementToInsert.setAttribute("onclick", 'displayRequirementAtLocation(this.parentElement)')
-    currentInsertedElement = elementToInsert;
-    areaToInsert.appendChild(elementToInsert);
-}
-function updateRequirementAtLocation() {
-    if (currentInsertedElement !== undefined) {
-        const id = currentInsertedElement.parentElement.children[0].id;
-        currentInsertedElement.children[0].innerHTML = `<span class="trophyRequirements">${getTrophyRequirement(id)}</span><span class="trophyReward">${formatReward(trophyList[id].reward)}</span>${trophyList[id].icon}`;
-    }
-}
-function checkAllTrophies() {
-    for (let trophy in trophyList) {
-        if (player.trophyProgress[trophy].trophyOwned) {
-            if (get(`${trophy}`) !== null) {
-                get(`${trophy}`).classList.remove("unownedTrophy");
-            }
-        }
-    }
-}
-function formatReward(reward) {
-    let output = "";
-    if (reward.type === "luck") {
-        if (reward.do === "add") output += "Adds " + reward.amt + " to base luck.";
-        else if (reward.do === "multiply") output += "Multiplies base luck by " + reward.amt + "x";
-    } else if (reward.type === "allow") {
-        if (reward.do === "usage") {
-            if (reward.amt === "pickaxe27") output += "Allows usage of the Tree of Life in World 1.";
-        }
-    }
-    return output;
 }
 function getRewardTypes(affects, type) {
     let num = type === "add" ? 0 : 1;
@@ -122,19 +22,6 @@ function getRewardTypes(affects, type) {
         }
     }
     return num;
-}
-function showTrophyRoom(state) {
-    get("blackScreen").style.display = "block";
-    get("blackScreen").style.animation = "fadeToBlack 2s linear 1";
-    checkUnlockConditions();
-    checkAllTrophies();
-    setTimeout(() => {
-        if (state) {closeMenu(); get("trophyRoom").style.display = "block";}
-        else get("trophyRoom").style.display = "none";
-    }, 1000);
-    setTimeout(() => {
-        get("blackScreen").style.display = "none";
-    }, 2000);
 }
 const milestoneList = {
     "mainPath" : {
@@ -388,7 +275,7 @@ const milestoneList = {
         },
         "m19" : {
             title: "its so meowver",
-            description: "Mine 1,000,000,000 Blocks in World 1 with Wings of Glory\r\nRequired for Null Chroma!",
+            description: "Mine 1,000,000,000 Blocks in World 1 with Wings of Glory\r\nRequired for Null Chroma!\r\nGives 1.1x Luck.",
             check: function() {
                 const blocksMinedNow = player.stats.blocksMined;
                 if (player.trophyProgress["worldOneCompletion"].lastPickaxeUsed === "pickaxe12" && player.stats.currentPickaxe === "pickaxe12") {
@@ -399,6 +286,7 @@ const milestoneList = {
                 player.trophyProgress["worldOneCompletion"].lastMinedAmt = player.stats.blocksMined;
                 this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldOneCompletion"].blocksWithWOG)}/1B`;
                 if (player.trophyProgress["worldOneCompletion"].blocksWithWOG > 1000000000) {
+                    player.trophyProgress["worldOneCompletion"].trophyOwned = true;
                     return true;
                 }
             },
@@ -990,9 +878,11 @@ const milestoneList = {
         },
         "sr1.7" : {
             title: "Subrealm One Trophy",
-            description: "Mine :that one flag! Good Luck ;3\r\nRequired For: Null Chroma!",
+            description: "Mine 🏁! Good Luck ;3\r\nRequired For: Null Chroma!\r\nAllows for usage of TOL in World 1.",
             check: function() {
-                return indexHasOre("🏁");
+                const has = indexHasOre("🏁") > 0;
+                player.trophyProgress["subrealmOneCompletion"].trophyOwned = has;
+                return has;
             },
             owned: false,
             distH: 9,
@@ -1646,13 +1536,13 @@ const milestoneList = {
             owned: false,
             distH: 5,
             distV: 23,
-            unlocks: ["gp1.7.3", "gp1.7.4"],
+            unlocks: ["gp1.7.3", "gp1.7.1.1"],
             connector: [],
             element: undefined
         },
         "gp1.7.3" : {
             title: "World Two Trophy",
-            description: "Mine 10,000,000,000 Blocks with Coronary Catastrophe!\r\nRequired for Null Chroma!",
+            description: "Mine 10,000,000,000 Blocks with Coronary Catastrophe!\r\nRequired for Null Chroma!\r\nGives 1.25x Luck.",
             check: function() {
                 const blocksMinedNow = player.stats.blocksMined;
                 if (player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed === "pickaxe25" && player.stats.currentPickaxe === "pickaxe25" && currentWorld === 2) {
@@ -1673,7 +1563,11 @@ const milestoneList = {
             connector: [],
             element: undefined
         },
-        "gp1.7.4" : {
+
+    },
+    "gearPath1.7.1" : {
+        pathUnlocked : false,
+        "gp1.7.1.1" : {
             title: "what...",
             description: "Find ✡️ in an Abysstone Cave",
             check: function() {
@@ -1982,7 +1876,7 @@ const milestoneList = {
         },
         "acp1.2" : {
             title: "Mine Normal Replacement Celestials",
-            description: "Some ores have even rarer variants, typically being 1/1000.\r\nRemaining:",
+            description: "<span>Some ores have even rarer variants, typically being 1/1000.<br>Remaining:",
             check: function() {
                 const cels = ["⏳","🍂","👁‍🗨","📛","🏳️‍🌈","🎊","💧","🌋","🖋️","⛩️","🎥","🌶️","watermelonDiamond"];
                 let output = "";
@@ -1993,7 +1887,7 @@ const milestoneList = {
                     }
 
                 }
-                this.element.children[1].textContent = this.description + output;
+                this.element.children[1].innerHTML = this.description + output + "</span>";
                 if (output === "") return true; 
             },
             owned: false,
@@ -2007,7 +1901,7 @@ const milestoneList = {
             title: "Mine Replacement Celestials",
             description: "<span>These replacement celestials require you to not automine.<br>Remaining:",
             check: function() {
-                const cels = ["🩵","🦿","🪫","🌼","🔓","❤️‍🩹", ];
+                const cels = ["🩵","🦿","🪫","🌼","🔓","❤️‍🩹"];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
                     if (!indexHasOre(cels[i])) {
@@ -2218,6 +2112,18 @@ const milestoneVariables = {
 }
 function createMilestones() {
     if (get("milestonesHolder").children.length > 3) return;
+    if (milestonesCreated) {
+        for (const p in milestoneList) {
+            const a = get("milestonesHolder");
+            for (const m in milestoneList[p]) {
+                const info = milestoneList[p][m];
+                if (info === true || info === false) continue;
+                a.append(info.element)
+                for (let i = 0; i < info.connector.length; i++) a.appendChild(info.connector[i])
+            }
+        }
+        return;
+    }
     for (const path in milestoneList) {
         const pathInfo = milestoneList[path];
         let hide = true;
@@ -2231,13 +2137,14 @@ function createMilestones() {
                 children[0].textContent = info.title;
                 children[1].innerHTML = `${info.description.indexOf("<span>") > -1 ? info.description + "</span>" : info.description}`;
                 children[2].textContent = `Completed: ${info.owned ? "True" : "False"}`;
-                elem.style.top = `${(20*info.distV) + (4 * info.distV+1)}%`;
-                if (info.distH < 0) {
-                    elem.style.right = `${(35 + (-30*info.distH)) + (-4*info.distH)}%`;
-                } else if (info.distH > 0) {
-                    elem.style.left = `${(35 + (30*info.distH)) + (4*info.distH)}%`;
+                let l;
+                l = (18*info.distV) + (6 * info.distV+1);
+                elem.style.top = `min(${l}vh,${0.5*l}vw)`;
+                if (info.distH !== 0) {
+                    l = (55 + (45*info.distH)) + (6*info.distH);
+                    elem.style.left = `min(${l}vh,${0.5*l}vw)`;
                 } else {
-                    elem.style.left = "35%";
+                    elem.style.left = "min(55vh,27.5vw)";
                 }
                 info.element = elem;
                 if (hide) elem.style.display = "none";
@@ -2250,36 +2157,52 @@ function createMilestones() {
                         if (unlockedMilestone.distH !== info.distH) {
                             const connector = get("connectorCopy").cloneNode(true);
                             connector.id = "";
-                            connector.style.top = `${(20*info.distV) + (4 * info.distV) + 1}%`;
-                            const usingRight = elem.style.right !== "";
-                            const val = usingRight ? Number(elem.style.right.substring(0, elem.style.right.length - 1)) : Number(elem.style.left.substring(0, elem.style.left.length - 1));
+                            l = (18*info.distV) + (6 * info.distV) + 1;
+                            connector.style.top = `min(${l}vh,${0.5*l}vw)`;
+                            const val = elem.style.left.substring(4, elem.style.left.length - 3).replace(" ", "").split(",");
+                            val[0] = val[0].substring(0, val[0].length - 2);
+                            val[0] = Number(val[0]);
                             if (unlockedMilestone.distH < 0) {
-                                if (usingRight) connector.style.right = `${val-35}%`;
-                                else connector.style.right = `${val+29}%`;
+                                l = val[0]-7;
+                                connector.style.left = `min(${l}vh,${0.5*l}vw)`;
                             } else if (unlockedMilestone.distH > 0) {
-                                if (usingRight) connector.style.left = `${val+35}%`;
-                                else connector.style.left = `${val+29}%`;
+                                l = val[0]+44;
+                                connector.style.left = `min(${l}vh,${0.5*l}vw)`;
                             }
                             info.connector.push(connector);
+                            if (info.owned) {
+                                connector.children[0].classList.add("greenConnector");
+                                connector.children[0].classList.remove("redConnector");
+                            } else {
+                                connector.children[0].classList.add("redConnector");
+                                connector.children[0].classList.remove("greenConnector");
+                            }
                             if (hide) connector.style.display = "none";
                             get("milestonesHolder").appendChild(connector);
                         } else {
                             const connector = get("connector2Copy").cloneNode(true);
                             connector.id = "";
                             if (unlockedMilestone.distV < info.distV) {
-                                connector.style.top = `${(20*(info.distV+1)-24) + (4 * info.distV+1) - 1}%`;
-                                console.log(connector)
+                                l = (18*(info.distV+1)-23) + (6 * info.distV+1) - 2;
+                                connector.style.top = `min(${l}vh, ${0.5*l}vw)`;
                             } else {
-                                connector.style.top = `${(20*(info.distV+1)) + (4 * info.distV+1) - 1}%`;
+                                l = (18*(info.distV+1)) + (6 * info.distV+1) - 1;
+                                connector.style.top = `min(${l}vh, ${0.5*l}vw)`;
                             }
-                            if (info.distH < 0) {
-                                connector.style.right = `${(35 + (-30*info.distH)) + (-4*info.distH)}%`;
-                            } else if (info.distH > 0) {
-                                connector.style.left = `${(35 + (30*info.distH)) + (4*info.distH)}%`;
+                            if (info.distH !== 0) {
+                                l = (55 + (45*info.distH)) + (6*info.distH)
+                                connector.style.left = `min(${l}vh, ${0.5*l}vw)`;
                             } else {
-                                connector.style.left = "35%";
+                                connector.style.left = "min(55vh,27.5vw)";
                             }
                             info.connector.push(connector);
+                            if (info.owned) {
+                                connector.children[0].classList.add("greenConnector");
+                                connector.children[0].classList.remove("redConnector");
+                            } else {
+                                connector.children[0].classList.add("redConnector");
+                                connector.children[0].classList.remove("greenConnector");
+                            }
                             if (hide) connector.style.display = "none";
                             get("milestonesHolder").appendChild(connector);
                         }
@@ -2293,7 +2216,9 @@ function createMilestones() {
         const name = player.completedMilestones[i].name;
         unlockMilestone(path, name, true);
     }
+    milestonesCreated = true;
 }
+let milestonesCreated = false;
 function getMilestone(name) {
     for (const path in milestoneList) {
         for (const milestone in milestoneList[path]) {
@@ -2303,11 +2228,17 @@ function getMilestone(name) {
         }
     }
 }
-function updateMilestoneConnectors(path, name) {
+function updateMilestoneConnectors(path, name, state) {
     const connectors = milestoneList[path][name].connector;
     for (let i = 0; i < connectors.length; i++) {
-        connectors[i].children[0].classList.remove("redConnector");
-        connectors[i].children[0].classList.add("greenConnector");
+        if (milestoneList[path][name].owned) {
+            connectors[i].children[0].classList.remove("redConnector");
+            connectors[i].children[0].classList.add("greenConnector");
+        } else {
+            connectors[i].children[0].classList.remove("greenConnector");
+            connectors[i].children[0].classList.add("redConnector");
+        }
+
     }
 
 }
@@ -2338,7 +2269,7 @@ function unlockMilestone(path, name, data) {
     const unlocks = info.unlocks;
     if (unlocks.length === 0) {delete checkCurrentMilestones.pathsAndNames[path]; return;}
     if (checkCurrentMilestones.pathsAndNames[path] === undefined) return;
-    if (get("milestonesHolder").children.length > 3) updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path]);
+    if (get("milestonesHolder").children.length > 3) if (info.owned) updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path], true);
     for (let i = 0; i < unlocks.length; i++) {
         let location = getMilestone(unlocks[i]);
         if (milestoneList[path][unlocks[i]] === undefined) {
