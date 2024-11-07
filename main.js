@@ -788,7 +788,7 @@ function createInventory() {
             let favoriteBlock = document.createElement("td");
             favoriteBlock.classList.add("inventoryElement4");
             favoriteBlock.textContent = "☆";
-            favoriteBlock.setAttribute("onclick", "favoriteOre(this.parentElement);");
+            favoriteBlock.setAttribute("onclick", "favoriteOre(this.parentElement); event.stopPropagation();");
             tempElement.appendChild(oreNameBlock);
             tempElement.appendChild(oreRarityBlock);
             tempElement.appendChild(oreList[propertyName]["srcElement"]);

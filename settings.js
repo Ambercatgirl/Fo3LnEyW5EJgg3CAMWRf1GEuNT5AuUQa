@@ -60,7 +60,8 @@ function checkInventoryStatus() {
         while (c.firstChild) c.firstChild.remove();
     } else if (!toggleLounge.toggled && get("inventory").children.length === 0) {
         createInventory();
-        const list = player.settings.favoritedElements;
+        const list = [...player.settings.favoritedElements];
+        player.settings.favoritedElements = [];
         for (let i = 0; i < list.length; i++) {
             favoriteOre(get(`${list[i]}Holder`));
         }
@@ -137,12 +138,15 @@ function openFrame(frameId) {
 function toggleMainDisplay() {
     if (gameInfo.display) {
         gameInfo.display = false;
+        player.settings.display = false;
         get("blockDisplay").style.display = "none";
         get("displayDisabled").style.display = "block";
     } else {
         gameInfo.display = true;
+        player.settings.display = true;
         get("blockDisplay").style.display = "flex";
         get("displayDisabled").style.display = "none";
+        displayArea();
     }
     get("toggleMainDisplay").textContent = "Display: " + (gameInfo.display ? "Enabled" : "Disabled");
 }
@@ -703,7 +707,6 @@ function addIndexLayers(world) {
                 else allOres = layerList[list[i]];
                 const thisMat = getIndexLayerOre(allOres);
                 if (layer.indexOf("worldOneSpecial") === -1) {
-                    console.log(world, i)
                     if (world === "caves") button.textContent = `${thisMat} - 0-∞m`;
                     else if (list[i].indexOf("Commons") > -1) button.textContent = `${allOres[allOres.length-1]} - 0-∞m`;
                     else if (list[i] === "event") button.textContent = "Limited Ores"
@@ -1228,25 +1231,13 @@ function goToConvert(ore, variant) {
     document.getElementById("variantInputAmt").value = playerInventory[ore][variantInvNames[variant]];
 }
 let inafk = false
-function AFKmode(){
+function AFKmode(button){
     if(!inafk){
-        let element = document.createElement("div")
-        element.id = 'afkModeScreen'
-        element.style = 'width:100vw;height:100vh;z-index:2'
-        element.innerHTML = "<h1>AFK</h1></br><p id='blocksMinedafk'></p><br><button onclick='AFKmode()'>bnack</button>"
-        document.body.prepend(element)
-        document.getElementById("inventory1").textContent = ""
-        document.getElementById("inventory2").textContent = ""
-        document.getElementById("inventory3").textContent = ""
-        document.getElementById("inventory4").textContent = ""
-        minedElement = document.getElementById("blocksMinedafk")
-        document.getElementById("mainContent").style.display="none"
+        get("loungeExit").textContent = "bnack";
+        button.style.backgroundColor = "var(--better-green)"
     } else {
-        document.getElementById("afkModeScreen").remove()
-        minedElement = document.getElementById("blocksMined");
-        document.getElementById("mainContent").style.display="block"
-        inventoryObj = {...oreList}
-        createInventory();
+        get("loungeExit").textContent = "Exit";
+        button.style.backgroundColor = "var(--better-red)"
     }
     inafk = !inafk
 }

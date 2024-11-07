@@ -128,7 +128,8 @@ class playerTemplate {
             simulatedRng: false,
             hideCompleted: false,
             favoritedElements: [],
-            accurateSpeed: false
+            accurateSpeed: false,
+            display: true
         },
         this.stats = {
             currentPickaxe: "pickaxe0",
@@ -422,34 +423,14 @@ function checkAllConditions() {
         }
     }
 }
-function displayShown() {
-    
-}
-function triggerPowerupExtension() {
-    if (!get("powerupInfoExtension").style.animation === "") return;
-    if (powerupDisplayed) {
-        powerupDisplayed = false;
-        get("mainPowerup").style.backgroundImage = "url('media/rightArrowIcon.png')";
-        get("powerupInfoExtension").style.animation = "retractPowerup 0.25s ease-out 1";
-        setTimeout(() => {
-            get("powerupInfoExtension").style.animation = "";
-            get("powerupInfoExtension").style.display = "none";
-            get("powerupInfoExtension").style.left = "-25vw";
-        }, 240);
-    } else {
-        powerupDisplayed = true;
-        get("mainPowerup").style.backgroundImage = "url('media/leftArrowIcon.png')";
-        get("powerupInfoExtension").style.display = "block";
-        get("powerupInfoExtension").style.animation = "extendPowerup 0.25s ease-out 1";
-        setTimeout(() => {
-            get("powerupInfoExtension").style.left = "4vw";
-            get("powerupInfoExtension").style.animation = "";
-        }, 240);
-    }
-}
 function scrollPowerups(event) {
     if (event.deltaY > 0) displayPowerup(powerupOrder.indexOf(currentPowerupDisplayed) + 1)
     else displayPowerup(powerupOrder.indexOf(currentPowerupDisplayed) - 1);
+}
+function toggleSpecificPowerup(num) {
+    if (powerupOrder[num-1] === currentPowerupDisplayed) toggleSideMenu('powerupHolder');
+    else if (!(get("powerupHolder").classList.contains("displayedSideMenu"))) toggleSideMenu('powerupHolder');
+    displayPowerup(num-1);
 }
 function getItemNameFromParadoxical(item) {
     return recipes[item].name;
@@ -730,7 +711,9 @@ function loadNewData(data) {
         data.settings.hideCompleted ??= false;
         if (data.settings.hideCompleted) toggleHideCompleted(get("hideCompleted"));
         data.settings.accurateSpeed ??= false;
-        if (data.settings.accurateSpeed) toggleAccurateSpeed(get("toggleAccurateSpeed"))
+        if (data.settings.accurateSpeed) toggleAccurateSpeed(get("toggleAccurateSpeed"));
+        data.settings.display ??= true;
+        if (!data.settings.display) toggleMainDisplay();
         if (data.settings.favoritedElements !== undefined) {
             const list = data.settings.favoritedElements;
             for (let i = 0; i < list.length; i++) {

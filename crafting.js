@@ -172,7 +172,7 @@ const recipes = {
         active : [],
         pUnob: true,
         req: function() {
-            return (toggleCraftingWorld.world === 1.1 || toggleCraftingWorld.world === 1.1) && player.gears["gear43"];
+            return (toggleCraftingWorld.world === 1.1 || toggleCraftingWorld.world === 1.1) ? player.gears["gear43"] : true;
         }
     },
     "pickaxe34" : {
