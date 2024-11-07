@@ -348,19 +348,6 @@ function flashGreen(element) {
 //latestDisplay
 //inventoryDisplay
 //col-2
-
-function showSettings() {
-    canMine = false;
-    document.getElementById("mainContent").style.display = "none";
-    document.getElementById("settingsContainer").style.display = "block";
-    createStats();
-}
-
-function hideSettings() {
-    canMine = true;
-    document.getElementById("settingsContainer").style.display = "none";
-    document.getElementById("mainContent").style.display = "block";
-}
 /*
 let chill;
 let ringing;
@@ -716,10 +703,11 @@ function addIndexLayers(world) {
                 else allOres = layerList[list[i]];
                 const thisMat = getIndexLayerOre(allOres);
                 if (layer.indexOf("worldOneSpecial") === -1) {
+                    console.log(world, i)
                     if (world === "caves") button.textContent = `${thisMat} - 0-∞m`;
                     else if (list[i].indexOf("Commons") > -1) button.textContent = `${allOres[allOres.length-1]} - 0-∞m`;
                     else if (list[i] === "event") button.textContent = "Limited Ores"
-                    else button.textContent = `${thisMat} - ${(i * 2000)}m`
+                    else button.textContent = `${thisMat} - ${(world === "2" ? i - 1 : i) * 2000}m`
                 } else {
                     button.textContent = `${thisMat} - ????m`
                 }
@@ -732,7 +720,7 @@ function addIndexLayers(world) {
         }
     }
 }
-addIndexLayers.current = 1;
+addIndexLayers.current = "1";
 function nextLayers(num) {
     if (num !== 0) {
         const l = Object.keys(indexOrder);
@@ -774,10 +762,11 @@ function createIndexCards(layer) {
             }
         }
         else list = [...layerDictionary[layer].layer];
+        console.log(list)
         for (let i = list.length - 1; i >= 0; i--) {
             const ore = list[i];
             const tier = oreList[ore]["oreTier"];
-            if ((!oreInformation.tierGrOrEqTo({"tier1":tier, "tier2": "Mystical"}) && !ic) || tier === "Celestial") list.splice(i, 1);
+            if (((!oreInformation.tierGrOrEqTo({"tier1":tier, "tier2": "Mystical"}) && !ic) || tier === "Celestial") && ore !== "✴️") list.splice(i, 1);
         }
     } else {
         list = [...caveList[layer]];
@@ -1360,7 +1349,7 @@ const portalLocations = {
     1.2: {
         title: "watr watr",
         desc: "watr watr!<br><br>All gears work here!<br><br>Null Chroma, Galactica Pickaxes work here!<br><br>Unlock Requirement: Visit Watr Once!<br><br>\"<i>All I have to say is watr watr watr watr</i>\" - Remsy",
-        req: function() {return indexHasOre("Omnipotent God of The Mine");},
+        req: function() {return player.watrEntered;},
         to: 1.2,
         hue: "150deg",
         url: "watrWorldImage.webp"

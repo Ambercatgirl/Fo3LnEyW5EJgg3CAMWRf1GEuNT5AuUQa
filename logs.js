@@ -171,32 +171,28 @@ class secureLogs {
         if (Object.keys(player.webHook.ids).length > 0) webHook(log, player.stats.blocksMined);
     }
     showLogs() {
-        if (document.getElementById("menuSelectionContainer").style.display !== "none") {
-                this.#clearLogs()
-                let element = document.createElement("p");
-                if (document.getElementById("generatedLogs") !== null)
-                    document.getElementById("generatedLogs").remove();
-                element.id = "generatedLogs";
-                document.getElementById("logHolder").appendChild(element);
-                let output = "";
-                const list = this.#verifiedLogs[document.getElementById("logSort").value];
-                for (let i = 0; i < list.length; i++) {
-                    if (list[i].output === undefined) {
-                        output += `<span  style="color:${variantInformation[names[list[i].variant - 1]].color};">${player.name} has NOT found ${names[list[i].variant - 1]} ${list[i].block} (Voided).</span><br>`
-                    } else {
-                        output += `<span  style="color:${variantInformation[names[list[i].variant - 1]].color};">${list[i].output}.</span><br>`;
-                    }
-                    let times;
-                    
-                    if (list[i - 1] !== undefined) times = list[i].genAt - list[i - 1].genAt;
-                    else times = list[i].genAt;
-                    if (times === 0) times = 1;
-                    output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this); return false;">Click Me To Copy Verification</span> | <span onclick="saveLogToStorage(decryptLogData(this.parentElement.children[0].textContent))">Click Me To Save Me</span></span><br>`
+            this.#clearLogs()
+            let element = document.createElement("p");
+            if (document.getElementById("generatedLogs") !== null)
+                document.getElementById("generatedLogs").remove();
+            element.id = "generatedLogs";
+            document.getElementById("logHolder").appendChild(element);
+            let output = "";
+            const list = this.#verifiedLogs[document.getElementById("logSort").value];
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].output === undefined) {
+                    output += `<span  style="color:${variantInformation[names[list[i].variant - 1]].color};">${player.name} has NOT found ${names[list[i].variant - 1]} ${list[i].block} (Voided).</span><br>`
+                } else {
+                    output += `<span  style="color:${variantInformation[names[list[i].variant - 1]].color};">${list[i].output}.</span><br>`;
                 }
-                if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
-        } else {
-            this.#clearLogs();
-        }
+                let times;
+                
+                if (list[i - 1] !== undefined) times = list[i].genAt - list[i - 1].genAt;
+                else times = list[i].genAt;
+                if (times === 0) times = 1;
+                output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this); return false;">Click Me To Copy Verification</span> | <span onclick="saveLogToStorage(decryptLogData(this.parentElement.children[0].textContent))">Click Me To Save Me</span></span><br>`
+            }
+            if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
     }
     filterByRarity(num) {
         let rarity = Number(num);

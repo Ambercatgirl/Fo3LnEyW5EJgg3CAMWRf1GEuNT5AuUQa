@@ -284,7 +284,7 @@ const milestoneList = {
                 }
                 player.trophyProgress["worldOneCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
                 player.trophyProgress["worldOneCompletion"].lastMinedAmt = player.stats.blocksMined;
-                this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldOneCompletion"].blocksWithWOG)}/1B`;
+                if (this.element) this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldOneCompletion"].blocksWithWOG)}/1B`;
                 if (player.trophyProgress["worldOneCompletion"].blocksWithWOG > 1000000000) {
                     player.trophyProgress["worldOneCompletion"].trophyOwned = true;
                     return true;
@@ -1053,7 +1053,7 @@ const milestoneList = {
             title: "hololive reference",
             description: "Use the SILLYYYY! gear to generate a special layer and find its secret...",
             check: function() {
-                return indexHasOre("korosan");
+                return indexHasOre("korosan") > 0;
             },
             owned: false,
             distH: 2,
@@ -1124,7 +1124,7 @@ const milestoneList = {
             title: "musicccc :3",
             description: "Find Flute Layer in the Repeating Layers!",
             check: function() {
-                return indexHasOre("🪈");
+                return indexHasOre("🪈") > 0;
             },
             owned: false,
             distH: 1,
@@ -1137,7 +1137,7 @@ const milestoneList = {
             title: "pregnant man isnt coming back",
             description: "Find Silly Layer in the Repeating Layers!",
             check: function() {
-                return indexHasOre("🎂");
+                return indexHasOre("🎂") > 0;
             },
             owned: false,
             distH: 1,
@@ -1551,7 +1551,7 @@ const milestoneList = {
                 }
                 player.trophyProgress["worldTwoCompletion"].lastPickaxeUsed = player.stats.currentPickaxe;
                 player.trophyProgress["worldTwoCompletion"].lastMinedAmt = player.stats.blocksMined;
-                this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldTwoCompletion"].blocksWithCoronary)}/10B`;
+                if (this.element) this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldTwoCompletion"].blocksWithCoronary)}/10B`;
                 if (player.trophyProgress["worldTwoCompletion"].blocksWithCoronary > 10000000000) {
                     return true;
                 }
@@ -1571,7 +1571,7 @@ const milestoneList = {
             title: "what...",
             description: "Find ✡️ in an Abysstone Cave",
             check: function() {
-                return indexHasOre("✡️");
+                return indexHasOre("✡️") > 0;
             },
             owned: false,
             distH: 5,
@@ -1600,7 +1600,7 @@ const milestoneList = {
             title: "watr watr watr",
             description: "Visit Watr World!\r\n(Spam water layer teleport, 1/500 to tp)",
             check: function() {
-                return milestoneVariables.watrEntered;
+                return player.watrEntered;
             },
             owned: false,
             distH: 3,
@@ -1613,7 +1613,7 @@ const milestoneList = {
             title: "religion is real!",
             description: "Mine 1 God of The Mine!\r\n(1/1qd in most W1 Layers)",
             check: function() {
-                return indexHasOre("godOfTheMine");
+                return indexHasOre("godOfTheMine") > 0;
             },
             owned: false,
             distH: 3,
@@ -1626,7 +1626,7 @@ const milestoneList = {
             title: "religion is REALER!",
             description: "Mine 1 Omnipotent God of The Mine!\r\n(1/3 chance to get when mining God of The Mine)",
             check: function() {
-                return indexHasOre("Omnipotent God of The Mine");
+                return indexHasOre("Omnipotent God of The Mine") > 0
             },
             owned: false,
             distH: 3,
@@ -1639,7 +1639,7 @@ const milestoneList = {
             title: "jcjenson... IN SPAAAACE!",
             description: "Visit Galactica! Portal found in the Worlds tab!",
             check: function() {
-                return milestoneVariables.galacticaEntered;
+                return player.galacticaEntered;
             },
             owned: false,
             distH: 3,
@@ -1660,7 +1660,7 @@ const milestoneList = {
             owned: false,
             distH: 4,
             distV: 25,
-            unlocks: ["egp1.4", "wp2"],
+            unlocks: ["wp2"],
             connector: [],
             element: undefined
         },
@@ -1807,7 +1807,7 @@ const milestoneList = {
             title: "WHYYYY :SOB:",
             description: "Craft Why! (In the Ore Forge)",
             check: function() {
-                return indexHasOre("singularityEgg");
+                return indexHasOre("singularityEgg") > 0;
             },
             owned: false,
             distH: 6,
@@ -1823,7 +1823,7 @@ const milestoneList = {
             title: "Mine ☯️",
             description: "Mine in any normal W2 layer with The Key.",
             check: function() {
-                return indexHasOre("☯️");
+                return indexHasOre("☯️") > 0;
             },
             owned: false,
             distH: -1,
@@ -1839,7 +1839,7 @@ const milestoneList = {
             title: "Mine ⛏️",
             description: "Mine into the barrier below chess layer, you'll get it eventually.",
             check: function() {
-                return indexHasOre("⛏️");
+                return indexHasOre("⛏️") > 0;
             },
             owned: false,
             distH: 5,
@@ -1860,11 +1860,11 @@ const milestoneList = {
                 const cels = ["🐸","📜","🍖","🚨","🪦","🪸","🚬","🥈", "🐞"];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
-                    if (!indexHasOre(cels[i])) {
+                    if (!(indexHasOre(cels[i]) > 0)) {
                         output += cels[i];
                     }
                 }
-                this.element.children[1].innerHTML = this.description + output + "</span>";
+                if (this.element) this.element.children[1].innerHTML = this.description + output + "</span>";
                 if (output === "") return true;
             },
             owned: false,
@@ -1881,13 +1881,13 @@ const milestoneList = {
                 const cels = ["⏳","🍂","👁‍🗨","📛","🏳️‍🌈","🎊","💧","🌋","🖋️","⛩️","🎥","🌶️","watermelonDiamond"];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
-                    if (!indexHasOre(cels[i])) {
+                    if (!(indexHasOre(cels[i]) > 0)) {
                         if (oreList[cels[i]]["hasImage"]) output += `<span class="milestoneInfoImage"><img class="milestoneInfoImage" src=${oreList[cels[i]]["src"]}></span>`;
                         else output += cels[i];
                     }
 
                 }
-                this.element.children[1].innerHTML = this.description + output + "</span>";
+                if (this.element) this.element.children[1].innerHTML = this.description + output + "</span>";
                 if (output === "") return true; 
             },
             owned: false,
@@ -1904,11 +1904,11 @@ const milestoneList = {
                 const cels = ["🩵","🦿","🪫","🌼","🔓","❤️‍🩹"];
                 let output = "";
                 for (let i = 0; i < cels.length; i++) {
-                    if (!indexHasOre(cels[i])) {
+                    if (!(indexHasOre(cels[i]) > 0)) {
                         output += cels[i];
                     }
                 }
-                this.element.children[1].innerHTML = this.description + output + "</span>";
+                if (this.element) this.element.children[1].innerHTML = this.description + output + "</span>";
                 if (output === "") return true;
             },
             owned: false,
@@ -1925,12 +1925,12 @@ const milestoneList = {
                 const cels = ["jellyfish", "Omnipotent God of The Mine", "pixel"];
                 let output = " ";
                 for (let i = 0; i < cels.length; i++) {
-                    if (!indexHasOre(cels[i])) {
+                    if (!(indexHasOre(cels[i]) > 0)) {
                         if (oreList[cels[i]]["hasImage"]) output += `<span class="milestoneInfoImage"><img class="milestoneInfoImage" src=${oreList[cels[i]]["src"]}></span>`;
                         else output += cels[i];
                     }
                 }
-                this.element.children[1].innerHTML = this.description + output + "</span>";
+                if (this.element) this.element.children[1].innerHTML = this.description + output + "</span>";
                 if (output === "") return true;
             },
             owned: false,
@@ -1945,7 +1945,7 @@ const milestoneList = {
             title: "the 27th minute calls your name...",
             description: "Dirt layer might hold something interesting when the time is right.\r\nMine 😻",
             check: function() {
-                return indexHasOre("😻");
+                return indexHasOre("😻") > 0;
             },
             owned: false,
             distH: 4,
@@ -1958,7 +1958,7 @@ const milestoneList = {
             title: "put stuff not in dirt please",
             description: "When the hour is right, go back to dirt again.\r\nMine 🦋",
             check: function() {
-                return indexHasOre("🦋");
+                return indexHasOre("🦋") > 0;
             },
             owned: false,
             distH: 5,
@@ -1971,7 +1971,7 @@ const milestoneList = {
             title: "The surface has Got to have an ore!",
             description: "Mine 🌹",
             check: function() {
-                return indexHasOre("🌹");
+                return indexHasOre("🌹") > 0;
             },
             owned: false,
             distH: 4,
@@ -1984,7 +1984,7 @@ const milestoneList = {
             title: "All those speed gears for nothing!",
             description: "Teleport to surface, a lot, and then mine in Paper layer with your slower speeds.\r\nMine 🐢",
             check: function() {
-                return indexHasOre("🐢");
+                return indexHasOre("🐢") > 0;
             },
             owned: false,
             distH: 5,
@@ -1997,7 +1997,7 @@ const milestoneList = {
             title: "no automine!!!",
             description: "Mine without using Automine in Brick or TV Layer\r\nMine 🦾",
             check: function() {
-                return indexHasOre("🦾");
+                return indexHasOre("🦾") > 0;
             },
             owned: false,
             distH: 1,
@@ -2011,7 +2011,7 @@ const milestoneList = {
             title: "fuck this ore",
             description: "Convert 1337 Electrified Bricks and mine in Dirt layer.\r\nMine 🤫",
             check: function() {
-                return indexHasOre("🤫");
+                return indexHasOre("🤫") > 0;
             },
             owned: false,
             distH: 3,
@@ -2024,7 +2024,7 @@ const milestoneList = {
             title: "I BELIEVE I CAN FLY!",
             description: "Mine at the top of Cloud layer\r\nMine 🖐",
             check: function() {
-                return indexHasOre("🖐");
+                return indexHasOre("🖐") > 0;
             },
             owned: false,
             distH: 2,
@@ -2037,7 +2037,7 @@ const milestoneList = {
             title: "hehe teleporting",
             description: "Teleport to World Two with Coronary Equipped.\r\nMine 🩷",
             check: function() {
-                return indexHasOre("🩷");
+                return indexHasOre("🩷") > 0;
             },
             owned: false,
             distH: 5,
@@ -2050,7 +2050,7 @@ const milestoneList = {
             title: "hehe teleporting 2",
             description: "Teleport to World One with Mulch Mallet equipped.\r\nMine 🩶",
             check: function() {
-                return indexHasOre("🩶");
+                return indexHasOre("🩶") > 0;
             },
             owned: false,
             distH: 4,
@@ -2063,7 +2063,7 @@ const milestoneList = {
             title: "i hate mon- thursdays",
             description: "Mine Draedon, found in Radioactive layer.",
             check: function() {
-                return indexHasOre("draedon");
+                return indexHasOre("draedon") > 0;
             },
             owned: false,
             distH: 1,
@@ -2076,7 +2076,7 @@ const milestoneList = {
             title: "idk get lucky",
             description: "Find Luna. Generates at a random depth from 0-100,000.",
             check: function() {
-                return indexHasOre("luna");
+                return indexHasOre("luna") > 0;
             },
             owned: false,
             distH: 2,
@@ -2089,7 +2089,7 @@ const milestoneList = {
             title: "this isnt possible??",
             description: "Mine Silly Miner. Only found in layer caves.",
             check: function() {
-                return indexHasOre("sillyMiner");
+                return indexHasOre("sillyMiner") > 0;
             },
             owned: false,
             distH: 3,
@@ -2249,6 +2249,7 @@ function checkCurrentMilestones(data) {
             unlockMilestone(path, checkCurrentMilestones.pathsAndNames[path], data);
         }
     }
+    
     for (const celestialReq in milestoneList["allCelestialsPath"]) {
         const thisCelestial = milestoneList["allCelestialsPath"][celestialReq]
         if (!data && celestialReq !== "pathUnlocked" && !thisCelestial.owned && thisCelestial.check()) {
@@ -2260,22 +2261,22 @@ checkCurrentMilestones.pathsAndNames = {
     "mainPath" : "m1"
 }
 checkCurrentMilestones.shown = false;
-function unlockMilestone(path, name, data) {
+function unlockMilestone(path, name, data, ) {
     const info = milestoneList[path][name];
-    if (!data) player.completedMilestones.push({path: path, name: name})
+    if (!data) player.completedMilestones.push({path: path, name: name});
     info.owned = true;
     info.element.children[2].textContent = "Completed: True";
     if (data) info.check();
     const unlocks = info.unlocks;
     if (unlocks.length === 0) {delete checkCurrentMilestones.pathsAndNames[path]; return;}
     if (checkCurrentMilestones.pathsAndNames[path] === undefined) return;
-    if (get("milestonesHolder").children.length > 3) if (info.owned) updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path], true);
+    if (info.owned) updateMilestoneConnectors(path, checkCurrentMilestones.pathsAndNames[path], true);
     for (let i = 0; i < unlocks.length; i++) {
         let location = getMilestone(unlocks[i]);
         if (milestoneList[path][unlocks[i]] === undefined) {
             milestoneList[location.path].pathUnlocked = true;
             const showElems = milestoneList[location.path];
-            if (get("milestonesHolder").children.length > 3) for (const m in showElems) {
+            for (const m in showElems) {
                 if (m !== "pathUnlocked") {
                     showElems[m].element.style.display = "";
                     for (let i = 0; i < showElems[m].connector.length; i++) {

@@ -228,7 +228,10 @@ class playerTemplate {
         this.eventManager = {
             cooldown: Date.now()
         }
-        this.completedMilestones = []
+        this.completedMilestones = [],
+        this.watrEntered = false,
+        this.galacticaEntered = false,
+        this.sr1Entered = false
     }
 }
 let player = new playerTemplate();
@@ -578,7 +581,8 @@ function oldDataToNew(data) {
 }
 const replacements = {
     "Wavaderg" : "Goober",
-    "pleidas" : "pleiades"
+    "pleidas" : "pleiades",
+    "⠀" : "stars"
 }
 function loadNewData(data) {
         const blocks = Object.keys(data.blocks);
@@ -822,6 +826,12 @@ function loadNewData(data) {
             if (data.offlineProgress > 28800000) data.offlineProgress = 28800000;
             player.offlineProgress = data.offlineProgress;
         }
+        data.watrEntered ??= false;
+        player.watrEntered = data.watrEntered;
+        data.galacticaEntered ??= false;
+        player.galacticaEntered = data.galacticaEntered;
+        data.sr1Entered ??= false;
+        player.sr1Entered = data.sr1Entered;
         data.completedMilestones ??= [];
         player.completedMilestones = [...data.completedMilestones];
         data.loungeSettings ??= {updateElements: true, deleteUnusedElements: true}
@@ -844,7 +854,7 @@ function loadNewData(data) {
         if (data.faqOffered) player.faqOffered = true;
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
-        //updateInventory();
+        updateInventory(false);
         try {
             beSilly.init();
         } catch (err) {

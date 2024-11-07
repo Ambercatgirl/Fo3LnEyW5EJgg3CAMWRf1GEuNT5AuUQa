@@ -77,7 +77,6 @@ function init() {
     document.getElementById('dataText').value = "";
     if (Math.random() < 1/1000) document.getElementById("cat").innerText = "CatAxe";
     limitedTimer = setInterval(checkLimitedOres, 1000);
-    inventoryTimer = setInterval(updateInventory, 500);
     if (date.getMonth() === 3 && date.getDate() === 1) {
         document.title = "The Sily Caverns";
     }
@@ -138,7 +137,9 @@ function finishInit() {
     utilitySwitchActions();
     if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true);
     else createMine();
-    addIndexLayers(currentWorld);
+    addIndexLayers(String(currentWorld));
+    createMilestones();
+    inventoryTimer = setInterval(updateInventory, 500);
     console.log("meow");
 }
 function assignImageNames() {
@@ -856,7 +857,7 @@ let displayTimer = null;
 let smallDisplay = false;
 const thisUniqueId = Math.floor(Math.random() * 100000000000) + Math.floor(Math.random() * 100000000000);
 let idSet = false;
-function updateInventory() {
+function updateInventory(m = true) {
     player.lastOnline = Date.now();
 
 
@@ -961,7 +962,7 @@ function updateInventory() {
 
 
     //Check Milestones (this should be optimized)
-    if (checkCurrentMilestones.shown) checkCurrentMilestones(false);
+    if (m) checkCurrentMilestones(false);
 
     //Stop Multi Instancing
     if (idSet) {

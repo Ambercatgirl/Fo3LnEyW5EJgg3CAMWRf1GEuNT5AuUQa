@@ -567,7 +567,7 @@ function switchDistance(num) {
 }
 
 async function teleport() {
-    if (layerDistanceY === 7000 && currentWorld === 1 && currentLayer === "waterLayer") if (Math.random() < 1/500 || debug) {attemptSwitchWorld(1.2); milestoneVariables.watrEntered = true; return;}
+    if (layerDistanceY === 7000 && currentWorld === 1 && currentLayer === "waterLayer") if (Math.random() < 1/500 || debug) {attemptSwitchWorld(1.2); player.watrEntered = true; return;}
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
     clearInterval(secondaryTimer);
@@ -678,6 +678,7 @@ function switchWorld(to) {
         verifiedOres.checkCaves();
         document.getElementById("teleportButton").disabled = false;
         canMine = true;
+        
         if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
 }
 function resetForSwitch() {
@@ -728,7 +729,8 @@ function prepareSR1() {
     createMine();
     layerNum = 0;
     sr1Helper(true);
-    milestoneVariables.sr1Entered = true;
+    player.sr1Entered = true;
+    get("worldSelectButton").textContent = `Items From World: ${1.1}`;
 }
 function prepareGalactica() {
     get("mainSticky").style.backgroundImage = `url("media/starryBackground.jpg")`;
@@ -739,7 +741,7 @@ function prepareGalactica() {
     curY = 0; 
     createMine();
     layerNum = 0;
-    milestoneVariables.galacticaEntered = true;
+    player.galacticaEntered = true;
 }
 function prepareWatr() {
     allLayers = waterWorldLayers;
@@ -748,7 +750,7 @@ function prepareWatr() {
     curX = 1000000;
     curY = 0; 
     layerNum = 0;
-    milestoneVariables.watrEntered = true;
+    player.watrEntered = true;
     createMine();
 }
 function prepareWorldTwo() {
@@ -792,9 +794,9 @@ function sr1Helper(state) {
         }
         if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) player.wasUsing = player.stats.currentPickaxe;
         player.stats.currentPickaxe = "pickaxe27";
-        switchWorldCraftables(1.1);
         beforeEntering = currentWorld;
         toggleCraftingWorld.world = 1.1;
+        switchWorldCraftables(1.1);
     } else {
         if (!player.settings.usingNewEmojis) {
             document.body.style.fontFamily = "";

@@ -170,7 +170,10 @@ const recipes = {
         name: "Wormhole Exterminator",
         recipe : [{ore:"australiumIngot", amt:66000000},{"ore":"⚙️","amt":250000000},{"ore":"🃏","amt":250000000},{"ore":"🖍️","amt":250000000},{"ore":"✂️","amt":250000000},{"ore":"⚱️","amt":250000000},{"ore":"🎲","amt":250000000},{"ore":"📟","amt":250000000},{"ore":"🗡️","amt":250000000},{"ore":"🎀","amt":250000000},{"ore":"🏆","amt":250000000},{"ore":"🗜️","amt":250000000},{"ore":"⌚","amt":206000000},{"ore":"⭐","amt":152000000},{"ore":"🔆","amt":143000000},{"ore":"🔥","amt":67200000},{"ore":"📝","amt":53800000},{"ore":"🌟","amt":41800000},{"ore":"💥","amt":28600000},{"ore":"🪐","amt":15100000},{"ore":"👀","amt":11200000},{"ore":"🏵️","amt":4130000},{"ore":"🪅","amt":3310000},{"ore":"🐪","amt":1370000},{"ore":"💵","amt":1200000},{"ore":"🦴","amt":61400},{"ore":"🎩","amt":35800},{"ore":"J1407b","amt":1},{"ore":"ascendedArtifact","amt":1}],
         active : [],
-        pUnob: true
+        pUnob: true,
+        req: function() {
+            return (toggleCraftingWorld.world === 1.1 || toggleCraftingWorld.world === 1.1) && player.gears["gear43"];
+        }
     },
     "pickaxe34" : {
         name: "Supercluster Capsizer",
@@ -1152,7 +1155,7 @@ function switchWorldCraftables(world=currentWorld) {
         pickaxeList = showOrders[`p${world}`];
         gearList = showOrders[`g${world}`];
         for (let i = 0; i < gearList.length; i++) showItem(gearList[i]);
-        for (let i = 0; i < pickaxeList.length; i++) getButtonByName(pickaxeList[i]).style.display = "flex";
+        for (let i = 0; i < pickaxeList.length; i++) showItem(pickaxeList[i]);
         document.getElementById("nullChroma").style.display = "none";
         document.getElementById("oblivionFracturer").style.display = "none";
         if (indexHasOre("🎂") && toggleCraftingWorld.world === 1) document.getElementById("sillyRecipe").style.display = "flex";
