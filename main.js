@@ -118,7 +118,6 @@ function init() {
             finishInit();
           });
     } else {
-        console.log("meow")
         canMine = false;
     }
 }
@@ -909,7 +908,6 @@ function updateInventory(m = true) {
 
 
     const bodyCheck = document.body.getBoundingClientRect();
-    console.log(bodyCheck.height)
     if (bodyCheck.height < 550) {
         document.getElementById("mainSticky").style.position = "relative";
         document.getElementById("bottomButtonHolder").style.position = "relative";

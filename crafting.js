@@ -516,7 +516,7 @@ function displayRecipe(recipe) {
             let pickaxe = pickaxeStats[recipe];
             get("newCraftingHolder").style.height = "min(52.9vh,26.45vw)";
             get("craftingContainer").style.top = `min(${2 * origins["pickaxe"].top}vh,${origins["pickaxe"].top}vw)`;
-            get("craftingContainer").style.left = `min(2 * ${origins["pickaxe"].left}vh,${origins["pickaxe"].left}vw)`;
+            get("craftingContainer").style.left = `min(${2 *origins["pickaxe"].left}vh,${origins["pickaxe"].left}vw)`;
             get("craftingContainer").style.borderBottomLeftRadius = `0`;
             get("craftingContainer").style.borderTopRightRadius = `0.5vw`;
             extraInfo.innerHTML = pickaxeStats[recipe].extraInformation;
@@ -570,7 +570,7 @@ function displayRecipe(recipe) {
         } else {
             get("newCraftingHolder").style.height = "min(28vh,14vw)";
             get("craftingContainer").style.top = `min(${2*origins["gear"].top}vh,${origins["gear"].top}vw)`;
-            get("craftingContainer").style.left = `min(${2*origins["gear"].left}vh.${origins["gear"].left}vw)`;
+            get("craftingContainer").style.left = `min(${2*origins["gear"].left}vh,${origins["gear"].left}vw)`;
             get("craftingContainer").style.borderBottomLeftRadius = `0.5vw`;
             get("craftingContainer").style.borderTopRightRadius = `0`;
             get("gearHolder").style.display = "";
@@ -1193,7 +1193,6 @@ function setWorldSelectors() {
     }
     const e = document.getElementsByClassName("worldCraftSelector");
     for (let i = 0; i < e.length; i++) {
-        console.log(e[i].textContent)
         if (er[worldFromName(e[i].textContent)]()) e[i].style.display = "flex";
         else e[i].style.display = "none";
     }
