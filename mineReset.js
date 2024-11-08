@@ -34,7 +34,7 @@ function toSurface() {
     mine[curY][curX] = "⛏️";
     checkAllAround(curX, curY, 1);
     displayArea();
-    document.getElementById("resetNumber").innerHTML = blocksRevealedThisReset.toLocaleString() + "/" + mineCapacity.toLocaleString() + " Blocks Revealed This Reset";
+    document.getElementById("resetNumber").innerHTML = blocksRevealedThisReset.toLocaleString() + " Revealed.";
 }
 let resetting = false;
 function mineReset() {
@@ -58,7 +58,7 @@ function mineReset() {
     for (let i = spawnsToSearch.length - 1; i >= 0; i--) {
         if (spawnsToSearch[i].element) {
             const e = spawnsToSearch[i].element;
-            e.children[2].textContent = "MINED: VOIDED";
+            e.children[0].children[2].textContent = "MINED: VOIDED";
             e.classList.add("voidedLatestOre");
             e.classList.remove("notMinedLatestOre");
         }

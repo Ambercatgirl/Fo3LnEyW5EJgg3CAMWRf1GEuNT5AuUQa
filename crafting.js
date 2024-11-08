@@ -719,14 +719,14 @@ function collapseRecipe() {
         pinInformation.collapsed = false;
         get("newCraftingRecipeHolder").style.display = "block";
         get("pinnedRecipeHolder").style.height = "min(42vh, 21vw)";
-        get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/pointUp.png')";
+        get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/upone.png')";
         const textEdit = get("collapseRecipe").children[0];
         textEdit.innerHTML = textEdit.innerHTML.replace("Expand", "Collapse");
     } else {
         pinInformation.collapsed = true;
         get("newCraftingRecipeHolder").style.display = "none";
         get("pinnedRecipeHolder").style.height = "min(8.8vh,4.4vw)";
-        get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/pointDown.png')";
+        get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/downone.png')";
         const textEdit = get("collapseRecipe").children[0];
         textEdit.innerHTML = textEdit.innerHTML.replace("Collapse", "Expand");
     }
@@ -2299,7 +2299,8 @@ function ct() {
     if (randBuff.proc) m *= 2;
     if (player.gears["gear39"]) m *= 0.5;
     const abilityRate = pickaxeUsing !== "pickaxe27" ? pickaxeStats[pickaxeUsing].rate/m : 500/m;
-    const recipe = pickaxeUsing !== "pickaxe27" ? recipes[currentRecipeId].recipe : player.upgrades["pickaxe27"].level === player.upgrades["pickaxe27"].maxLevel ? "RETURN" : upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].recipe;
+    const rId = currentRecipeId === undefined ? pinInformation.pinned : currentRecipeId;
+    const recipe = pickaxeUsing !== "pickaxe27" ? recipes[rId].recipe : player.upgrades["pickaxe27"].level === player.upgrades["pickaxe27"].maxLevel ? "RETURN" : upgradeRecipes["pickaxe27"][`upgrade${player.upgrades["pickaxe27"].level}`].recipe;
     if (recipe === "RETURN") return msToTime(0);
     const recipeLayers = {
     }

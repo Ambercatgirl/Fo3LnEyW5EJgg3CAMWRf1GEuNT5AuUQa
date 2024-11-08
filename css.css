@@ -415,13 +415,13 @@
   border-right: 0.2vw solid var(--main-border-color);
 }
 #collapseRecipe span span{
-  background-image: url(media/pointUp.png);
+  background-image: url(media/upone.png);
   background-position: right;
   background-repeat: no-repeat;
   position: absolute;
   left: 0;
-  background-size: min(6vh,3vw);
-  width: 50%;
+  background-size: min(9vh,4.5vw);
+  width: 52.5%;
   height: min(4vh,2vw);
   
 }
