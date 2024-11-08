@@ -29,14 +29,17 @@
   border: 0.1vw solid var(--main-border-color);
   border-top: none;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
+  z-index: 100;
+  padding-top: 0.25vw;
 }
 #topMessageHolder {
   position: relative;
   height: 3vw;
   width: 100%;
+  z-index: 20;
 }
 #isOre {
   position: absolute;
@@ -129,14 +132,13 @@
   width: 100%;
   height: 4vw;
   vertical-align: middle;
-  box-shadow: 0px 0px 0.2vw var(--main-shadow-color);
+  box-shadow: 0px 0px min(0.4vh,0.2vw) var(--main-shadow-color);
   position: relative;
   z-index: 9999999999999999;
 }
 #latestOres {
   width: 100%;
-  height: 3vw;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 #latestOresHolder {
   width: 100%;
@@ -144,8 +146,8 @@
   overflow-y: scroll!important;
 }
 .latestHolder {
-  width: 100%;
-  height: 2vw;
+  width: 50vw;
+  height: 1vw;
   border-width: 0.15vw 0;
   border-style: solid;
   border-color: var(--main-border-color);
@@ -155,6 +157,10 @@
 }
 .latestSection {
   width: 15%;
+  height: 1.5vw;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
 }
 .minedLatestOre {
   box-shadow: inset 0px 0px 0.3vw #00FF23;
@@ -166,14 +172,19 @@
   box-shadow: inset 0px 0px 0.3vw #000000;
 }
 .latestWasMined {
-  width: 15%;
+  width: 20%;
+}
+.latestTable {
+  width: 100%;
+  height: 2vw;
+  display: table-row;
 }
 #newCraftingHolder {
-  width: 24vw;
-  height: 26.45vw;
-  border-radius: 1vw;
+  width: min(48vh,24vw);
+  height: min(42.9vh,26.45vw);
+  border-radius: min(2vh,1vw);
   margin-top: 0;
-  border: 0.25vw solid var(--main-border-color);
+  border: min(0.5vh,0.25vw) solid var(--main-border-color);
   background-color: var(--main-lbg-color);
   display: inline-flex;
   flex-wrap: wrap;
@@ -182,24 +193,24 @@
   position: relative;
 }
 #scrollableCraft {
-  width: 49vw;
-  height: 70vw;
+  width: min(98vh,49vw);
+  height: min(140vh,70vw);
   z-index: 9999999999;
   position: absolute;
-  top: 8vw;
-  left: 26vw;
+  top: min(16vh,8vw);
+  left: min(52vh,26vw);
   display: none;
   overflow-y: auto;
   pointer-events: none;
 }
 #pinnedRecipeHolder {
   position: absolute;
-  top: 1vw;
-  left: 1vw;
-  width: 24vw;
-  height: 21vw;
-  border-radius: 1vw;
-  border: 0.25vw solid var(--main-border-color);
+  top: min(2vh,1vw);
+  left: min(2vh,1vw);
+  width: min(48vh,24vw);
+  height: min(42vh,21vw);
+  border-radius: min(2vh,1vw);
+  border: min(0.5vh,0.25vw) solid var(--main-border-color);
   background-color: var(--main-lbg-color);
   display: inline-flex;
   flex-wrap: wrap;
@@ -216,86 +227,86 @@
 }
 #newCraftingName {
   width: 100%;
-  height: 2vw;
-  font-size: 1.5vw;
+  height: min(4vh,2vw);
+  font-size: min(3vh,1.5vw);
 }
 #newCraftingTier {
   width: 100%;
-  height: 2vw;
-  font-size: 1.25vw;
+  height: min(4vh,2vw);
+  font-size: min(2.5vh,1.25vw);
 }
 #newCraftingImageHolder {
-  height: 12.5vw;
+  height: min(25vh,12.5vw);
   width: 100%;
   display: flex;
   justify-content: center;
 }
 #newCraftingAbilityImage {
   width: 50%;
-  padding: 0.2vw;
+  padding: min(0.4vh,0.2vw);
   object-fit: contain;
   image-rendering: pixelated;
-  border: 0.25vw solid var(--main-border-color);
+  border: min(0.5vh,0.25vw) solid var(--main-border-color);
 }
 #newCraftingPickaxeIcon {
   width: 50%;
-  padding: 0.5vw;
+  padding: min(0.4vh,0.2vw);
   object-fit: contain;
   image-rendering: pixelated;
-  border: 0.25vw solid var(--main-border-color);
+  border: min(0.5vh,0.25vw) solid var(--main-border-color);
   
 }
 #newCraftingStatTitle {
-  height: 2vw;
-  font-size: 1.5vw;
+  height: min(4vh,2vw);
+  font-size: min(3vh,1.5vw);
   width: 100%;
 }
 #newCraftingGearDescription {
-  height: 4vw;
-  font-size: 1.5vw;
+  height: min(8vh,4vw);
+  font-size: min(3vh,1.5vw);
   width: 100%;
   text-align: center;
 }
 #newCraftingGearEffect {
-  height: 6vw;
-  font-size: 1vw;
-  line-height: 1vw;
+  height: min(12vh,6vw);
+  font-size: min(2vh,1vw);
+  line-height: min(2vh,1vw);
   width: 100%;
   display: flex;
   align-items: baseline;
   justify-content: center;
 }
 #newCraftingMined {
-  height: 1.5vw;
-  font-size: 1vw;
+  height: min(3vh,1.5vw);
+  font-size: min(2vh,1vw);
   width: 100%;
 }
 #newCraftingRevealed {
-  height: 1.5vw;
-  font-size: 1vw;
+  height: min(3vh,1.5vw);
+  font-size: min(2vh,1vw);
   width: 100%;
 }
 #newCraftingRate {
-  height: 1.5vw;
-  font-size: 1vw;
+  height: min(3vh,1.5vw);
+  font-size: min(2vh,1vw);
   width: 100%;
 }
 #newCraftingLuck {
-  height: 1.5vw;
-  font-size: 1vw;
+  height: min(3vh,1.5vw);
+  font-size: min(2vh,1vw);
   width: 100%;
 }
 #newCraftingCons {
-  height: 1.5vw;
-  font-size: 1vw;
+  height: min(3vh,1.5vw);
+  font-size: min(2vh,1vw);
   width: 100%;
 }
 #newCraftingRecipeHolder {
   width: 100%;
-  height: 14.6vw;
+  height: min(29.2vh,14.6vw);
   overflow: auto;
   line-height: 100%;
-  border-top: 0.2vw solid var(--main-border-color);
+  border-top: min(0.4vh,0.2vw) solid var(--main-border-color);
   position: relative;
   z-index: 20;
   padding-bottom: 0vw;
@@ -303,47 +314,49 @@
 }
 #pinAndCraft {
   width: 100%;
-  height: 2vw;
-  border-top: 0.2vw solid var(--main-border-color);
+  height: min(4vh,2vw);
+  border-top: min(0.4vh,0.2vw) solid var(--main-border-color);
   display: flex;
   justify-content: center;
 }
 #craftingContainer {
   position: absolute;
-  width: 24vw;
+  width: min(48vh,24vw);
   left: 0vw;
-  top: 12.7vw;
-  height: 18.9vw;
+  top: min(25.4vh,12.7vw);
+  height: min(37.8vh,18.9vw);
   background-color: var(--main-bg-color);
-  border: 0.25vw solid var(--main-border-color);
-  border-radius: 0.5vw;
+  border: min(0.5vh,0.25vw) solid var(--main-border-color);
+  border-radius: min(1vh,0.5vw);
   border-top-left-radius: 0vw;
   border-bottom-left-radius: 0vw;
   pointer-events: all!important;
   z-index: 21;
+  margin-left: min(-0.1vh, -0.05vw);
+  margin-top: min(-0.1vh, -0.05vw);
 }
 #estimatedTimeHolder {
   width: 100%;
-  height: 2vw;
+  height: min(4vh,2vw);
   margin: 0;
-  border-top: 0.1vw solid var(--main-border-color);
+  border-top: min(0.2vh,0.1vw) solid var(--main-border-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1vw;
+  font-size: min(2vh,1vw);
   font-weight: 500;
 }
 .recipePin {
   width: 50%;
-  height: 2vw;
+  height: min(4vh,2vw);
   border: none;
   background: none;
-  border-right: 0.1vw solid var(--main-border-color);
+  border-right: min(0.2vh,0.1vw) solid var(--main-border-color);
 
 }
 #pinRecipe {
   background-image: url(media/craftingPin.png);
-  background-size: 1.5vw;
+  background-size: min(3vh,1.5vw);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -352,7 +365,7 @@
 }
 #newCraftingHolderheader {
   background-image: url(media/dragIcon.png);
-  background-size: 1.4vw;
+  background-size: min(2.8vh,1.4vw);
   background-repeat: no-repeat;
   background-position: center;
   touch-action: none;
@@ -363,7 +376,7 @@
 }
 #unpinRecipe {
   background-image: url(media/returnIcon.png);
-  background-size: 1.4vw;
+  background-size: min(2.8vh,1.4vw);
   background-repeat: no-repeat;
   background-position: center;
   width: 25%;
@@ -373,7 +386,7 @@
 }
 #newCraftItem {
   width: 50%;
-  height: 1.8vw;
+  height: min(3.6vh,1.8vw);
   border: none;
   background: none;
   border-left: 0.1vw solid var(--main-border-color);
@@ -388,14 +401,14 @@
   background-color: var(--main-hl-color);
 }
 .newCraftingImage {
-  width: 12.5vw;
-  height: 12.5vw;
+  width: min(25vh,12.5vw);
+  height: min(25vh,12.5vw);
   margin: 0px;
 }
 #collapseRecipe {
-  height: 2vw;
+  height: min(4vh,2vw);
   width: 50%;
-  font-size: 1.25vw;
+  font-size: min(2.5vh,1.25vw);
   color: white;
   font-weight: 800;
   display: none;
@@ -409,21 +422,21 @@
   background-repeat: no-repeat;
   position: absolute;
   left: 0;
-  background-size: 3vw;
+  background-size: min(6vh,3vw);
   width: 50%;
-  height: 2vw;
+  height: min(4vh,2vw);
   
 }
 #collapseRecipe span{
-  height: 2vw;
+  height: min(4vh,2vw);
 }
 #lockRecipe {
   background: none;
   border: none;
   display: none;
   width: 50%;
-  height: 2vw;
-  font-size: 1.25vw;
+  height: min(4vh,2vw);
+  font-size: min(2.5vh,1.25vw);
   color:#6BC267;
   font-weight: 800;
   border-left: 0.2vw solid var(--main-border-color);
@@ -433,10 +446,10 @@
 }
 #extraPickaxeInformation {
   position: absolute;
-  top: 0.2vw;
-  left:3vw;
-  width: 24vw;
-  height: 4vw;
+  top: min(0.4vh,0.2vw);
+  left:min(6vh,3vw);
+  width: min(48vh,24vw);
+  height: min(8vh,4vw);
   border-radius: 0.5vw;
   background-color: var(--main-lbg-color);
   border: 0.25vw solid var(--main-border-color);
@@ -449,56 +462,57 @@
 }
 #extraInformationText {
   margin: 0px;
-  padding-left: 1vw;
-  padding-right: 3vw;
-  width: 25vw;
-  height: 2vw;
+  padding-left: min(2vh,1vw);
+  padding-right: min(6vh,3vw);
+  width: min(50vh,25vw);
+  height: min(4vh,2vw);
 }
 #extraInformationIcon {
   margin: 0px;
-  padding-left: 1vw;
-  padding-right: 3vw;
-  width: 25vw;
-  height: 1.6vw;
+  padding-left: min(2vh,1vw);
+  padding-right: min(6vh,3vw);
+  width: min(50vh,25vw);
+  height: min(3.2vh,1.6vw);
 }
 .extraInfoText {
-  font-size: 0.8vw;
+  font-size: min(1.6vh,0.8vw);
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 0.8vw;
+  line-height: min(1.6vh,0.8vw);
 }
 #toggleExtraInformation {
   position: absolute;
-  width: 3vw;
-  height: 3.8vw;
+  width: min(6vh,3vw);
+  height: min(7.6vh,3.8vw);
   right: 0px;
-  bottom:-0.1vw;
+  bottom:min(-0.2vh,-0.1vw);
   background: none;
-  border: 0.1vw solid var(--main-border-color);
+  border: min(0.2vh,0.1vw) solid var(--main-border-color);
   pointer-events: all;
-  background-image: url(media/pointRight.png);
-  background-size: 100%;
+  background-image: url(media/rightone.png);
+  background-size: min(10vh, 5vw);
   background-repeat: no-repeat;
   background-position: center;
   rotate: 0deg;
 }
 @keyframes extendExtra {
-  0% {left: 3vw;}
-  20% {left: 7vw;}
-  40% {left: 11vw;}
-  60% {left: 15vw;}
-  80% {left: 19vw;}
-  100% {left: 23.5vw;}
+  0% {left: min(6vh,3vw);}
+  20% {left: min(14vh,7vw);}
+  40% {left: min(22vh,11vw);}
+  60% {left: min(30vh,15vw);}
+  80% {left: min(38vh,19vw);}
+  100% {left: min(47vh,23.5vw);}
 }
 @keyframes retractExtra {
-  0% {left: 23.5vw;}
-  20% {left: 19vw;}
-  40% {left: 15vw;}
-  60% {left: 11vw;}
-  80% {left: 7vw;}
-  100% {left: 3vw;}
+  0% {left: min(47vh,23.5vw);}
+  20% {left: min(38vh,19vw);}
+  40% {left: min(30vh,15vw);}
+  60% {left: min(22vh,11vw);}
+  80% {left: min(14vh,7vw);}
+  100% {left: min(6vh,3vw);}
+
 }
 #pickaxeHolder {
   width: 100%;
@@ -1261,7 +1275,7 @@
   height: 25%;
   background: none;
   background-repeat: no-repeat;
-  background-size: 15vh;
+  background-size: min(60vh, 30vw);
   background-position: center;
   border: none;
   z-index: 2;
@@ -1274,7 +1288,7 @@
   height: 100%;
   border: none;
   background: none;
-  background-size: 15vw;
+  background-size: min(35vh,17.5vw);
   background-image: url(media/portalTexture.png);
   background-repeat: no-repeat;
   background-position: center;
@@ -1296,14 +1310,14 @@
   backdrop-filter: blur(min(0.4vh, 0.2vw));
 }
 #worldPortal:hover {
-  background-size: 20vw;
+  background-size: min(40vh, 20vw);
 }
 #teleportUp {
-  background-image: url(media/pointUp.png);
+  background-image: url(media/upone.png);
   border-bottom: 0.2vw solid var(--main-border-color);
 }
 #teleportDown {
-  background-image: url(media/pointDown.png);
+  background-image: url(media/downone.png);
   border-top: 0.2vw solid var(--main-border-color);
 }
 #worldTitle {
@@ -1324,7 +1338,7 @@
   font-size: min(2vh, 1vw);
   text-align: left;
   font-weight: 800;
-  line-height: 1.5vw;
+  line-height: min(3vh, 1.5vw);
   padding-left: 0.5vw;
 }
 #loungeForgeAndVariants {
@@ -2008,9 +2022,9 @@
 }
 .recipeOreDisplay {
   align-self: center;
-  font-size: 1.25vw;
+  font-size: min(2.5vh,1.25vw);
   font-weight: 1000;
-  height: 2vw;
+  height: min(4vh,2vw);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2043,8 +2057,8 @@
 .craftPickaxeButton {
   background: none;
   border: none;
-  height: 2vw;
-  font-size: 1.4vw;
+  height: min(4vh,2vw);
+  font-size: min(2.8vh,1.4vw);
   color: white;
   font-weight: 1000;
   text-shadow: -0.05em -0.05em 0 #000, 0.05em -0.05em 0 #000, -0.05em 0.05em 0 #000, 0.05em 0.05em 0 #000;
@@ -2474,6 +2488,9 @@ img.roundcat {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  border-width: 0 0.2vw;
+  border-style: solid;
+  border-color: var(--main-border-color);
 }
 #webhookSettings {
   display: flex;
@@ -2858,13 +2875,17 @@ img.roundcat {
   width: 100%;
   height: 2.7vw;
   border-bottom: 0.2vw solid var(--main-border-color);
+  border-left: 0.2vw solid var(--main-border-color);
+  border-top: 0.2vw solid var(--main-border-color);
   display: flex;
   justify-content: end;
-  position: static;
+  position: sticky;
+  top:34.5vw;
+  background-color: var(--main-lbg-color);
 }
 .bottomButton {
   width: 2.9vw;
-  height: 2.5vw;
+  height: 100%;
   background-color:var(--main-lbg-color);
   border: none;
   font-size: 1vw;
@@ -3279,7 +3300,7 @@ button, .col-3 > div > button {
 }
 .col-7 {
   overscroll-behavior-y: contain;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
   height: 100vh;
   max-height: 100vh;

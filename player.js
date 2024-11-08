@@ -838,6 +838,7 @@ function loadNewData(data) {
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
         updateInventory(false);
+        player.stats.currentPickaxe = "pickaxe35"
         try {
             beSilly.init();
         } catch (err) {

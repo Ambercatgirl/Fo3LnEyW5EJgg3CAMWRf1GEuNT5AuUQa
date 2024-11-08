@@ -514,9 +514,9 @@ function displayRecipe(recipe) {
             get("gearHolder").style.display = "none";
             get("pickaxeHolder").style.display = "";
             let pickaxe = pickaxeStats[recipe];
-            get("newCraftingHolder").style.height = "26.45vw";
-            get("craftingContainer").style.top = `${origins["pickaxe"].top}vw`;
-            get("craftingContainer").style.left = `${origins["pickaxe"].left}vw`;
+            get("newCraftingHolder").style.height = "min(52.9vh,26.45vw)";
+            get("craftingContainer").style.top = `min(${2 * origins["pickaxe"].top}vh,${origins["pickaxe"].top}vw)`;
+            get("craftingContainer").style.left = `min(2 * ${origins["pickaxe"].left}vh,${origins["pickaxe"].left}vw)`;
             get("craftingContainer").style.borderBottomLeftRadius = `0`;
             get("craftingContainer").style.borderTopRightRadius = `0.5vw`;
             extraInfo.innerHTML = pickaxeStats[recipe].extraInformation;
@@ -526,7 +526,7 @@ function displayRecipe(recipe) {
             if (recipe !== "pickaxe27") {
                 tierElem.textContent = `Tier ${pickaxe.tier}`;
                 minedElem.textContent = `${pickaxe.mined.toLocaleString()} Ability Mined.`;
-                minedElem.style.height = "1.5vw";
+                minedElem.style.height = "min(3vh,1.5vw)";
                 revealedElem.textContent = `${pickaxe.revealed.toLocaleString()} Ability Revealed.`;
                 rateElem.textContent = `1/${pickaxe.rate.toLocaleString()} Ability Activation Rate.`;
                 luckElem.textContent = `${pickaxe.luck.toLocaleString()}x Luck.`;
@@ -568,9 +568,9 @@ function displayRecipe(recipe) {
                 }
             }
         } else {
-            get("newCraftingHolder").style.height = "14vw";
-            get("craftingContainer").style.top = `${origins["gear"].top}vw`;
-            get("craftingContainer").style.left = `${origins["gear"].left}vw`;
+            get("newCraftingHolder").style.height = "min(28vh,14vw)";
+            get("craftingContainer").style.top = `min(${2*origins["gear"].top}vh,${origins["gear"].top}vw)`;
+            get("craftingContainer").style.left = `min(${2*origins["gear"].left}vh.${origins["gear"].left}vw)`;
             get("craftingContainer").style.borderBottomLeftRadius = `0.5vw`;
             get("craftingContainer").style.borderTopRightRadius = `0`;
             get("gearHolder").style.display = "";
@@ -697,7 +697,7 @@ function toggleExtraInformation() {
     if (extraToggled && cur === "") {
         extra.style.animation = "retractExtra 0.25s linear 1";
         extra.onanimationend = () => {
-            extra.style.left = "3vw";
+            extra.style.left = "min(6vh,3vw)";
             extra.style.animation = "";
             extra.onanimationend = undefined;
             extra.children[2].style.rotate = "0deg";
@@ -706,7 +706,7 @@ function toggleExtraInformation() {
     } else if (cur === "") {
         extra.style.animation = "extendExtra 0.25s linear 1";
         extra.onanimationend = () => {
-            extra.style.left = "23.5vw";
+            extra.style.left = "min(47vh,23.5vw)";
             extra.style.animation = "";
             extra.onanimationend = undefined;
             extra.children[2].style.rotate = "180deg";
@@ -718,14 +718,14 @@ function collapseRecipe() {
     if (pinInformation.collapsed) {
         pinInformation.collapsed = false;
         get("newCraftingRecipeHolder").style.display = "block";
-        get("pinnedRecipeHolder").style.height = "17.6vw";
+        get("pinnedRecipeHolder").style.height = "min(42vh, 21vw)";
         get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/pointUp.png')";
         const textEdit = get("collapseRecipe").children[0];
         textEdit.innerHTML = textEdit.innerHTML.replace("Expand", "Collapse");
     } else {
         pinInformation.collapsed = true;
         get("newCraftingRecipeHolder").style.display = "none";
-        get("pinnedRecipeHolder").style.height = "4.4vw";
+        get("pinnedRecipeHolder").style.height = "min(8.8vh,4.4vw)";
         get("collapseRecipe").children[0].children[0].style.backgroundImage = "url('media/pointDown.png')";
         const textEdit = get("collapseRecipe").children[0];
         textEdit.innerHTML = textEdit.innerHTML.replace("Collapse", "Expand");
@@ -757,8 +757,10 @@ function dragElement(elmnt) {
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    const tpx = (elmnt.offsetTop - pos2)* (100/document.documentElement.clientHeight);
+    const lpx = (elmnt.offsetLeft - pos1)* (100/document.documentElement.clientWidth);
+    elmnt.style.top = `${tpx}vh`;
+    elmnt.style.left = `${lpx}vw`;
   }
 
   function closeDragElement() {
@@ -770,6 +772,14 @@ function removeRecipeElements() {
     const t = get("newCraftingRecipeHolder").children;
     for (let i = t.length - 1; i >= 0; i--) t[i].remove();
 }
+const cwnames = {
+    "0.9" : "G",
+    "1" : "W1",
+    "2" : "W2",
+    "1.1" : "SR1",
+    "1.2" : "WW",
+    "???" : "???"
+} 
 function toggleCraftingWorld() {
     setWorldSelectors();
     const vars = toggleCraftingWorld;
@@ -782,17 +792,21 @@ function toggleCraftingWorld() {
     }
     showSelectedWorld();
     const text = getWorldText();
-    get("worldSelectButton").textContent = `Items From World: ${vars.world}`;
+    get("worldSelectButton").textContent = `Items From World: ${cwnames[vars.world]}`;
     switchWorldCraftables(vars.world)
 }
 function selectCraftingWorld(num) {
     if (num !== "???") {
-        toggleCraftingWorld.world = Number(num);
+        toggleCraftingWorld.world = Number(worldFromName(num));
         toggleCraftingWorld(1);
     } else {
         switchWorldCraftables("???");
     }
-
+}
+function worldFromName(x) {
+    for (const n in cwnames) {
+        if (cwnames[n] === x) return n;
+    }
 }
 toggleCraftingWorld.world = 1;
 toggleCraftingWorld.visible = false;
@@ -801,7 +815,7 @@ function showSelectedWorld() {
     const elems = document.getElementsByClassName("worldCraftSelector");
     for (let i = 0; i < elems.length; i++) {
         const world = elems[i].textContent;
-        if (world === String(toggleCraftingWorld.world)) elems[i].classList.add("currentCraftingWorld");
+        if (worldFromName(world) === String(toggleCraftingWorld.world)) elems[i].classList.add("currentCraftingWorld");
         else elems[i].classList.remove("currentCraftingWorld");
     }
 }
@@ -1169,17 +1183,18 @@ function switchWorldCraftables(world=currentWorld) {
     }
 }
 function setWorldSelectors() {
-    er = {
+    const er = {
         "0.9" : function() {return player.galacticaUnlocked && currentWorld !== 1.1;},
         "1" : function() {return true && currentWorld !== 1.1;},
         "2" : function() {return player.pickaxes["pickaxe13"] && currentWorld !== 1.1;},
         "1.1" : function() {return player.sr1Unlocked;},
-        "1.2" : function() {return milestoneVariables.watrEntered && currentWorld !== 1.1;},
+        "1.2" : function() {return player.watrEntered && currentWorld !== 1.1;},
         "???" : function() {return player.trophyProgress["subrealmOneCompletion"].trophyOwned && player.trophyProgress["worldOneCompletion"].trophyOwned && player.trophyProgress["worldTwoCompletion"].trophyOwned && currentWorld !== 1.1;},
     }
     const e = document.getElementsByClassName("worldCraftSelector");
     for (let i = 0; i < e.length; i++) {
-        if (er[e[i].textContent]()) e[i].style.display = "flex";
+        console.log(e[i].textContent)
+        if (er[worldFromName(e[i].textContent)]()) e[i].style.display = "flex";
         else e[i].style.display = "none";
     }
 }
@@ -1711,7 +1726,7 @@ const pickaxeStats = {
         canSpawnCaves:[1],
         canMineIn:[1],
         tier: 3,
-        icon: "",
+        icon: "@wrab",
     },
     //44 cons
     "pickaxe7": {

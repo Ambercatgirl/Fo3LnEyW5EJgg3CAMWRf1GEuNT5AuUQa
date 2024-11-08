@@ -35,7 +35,6 @@ const birthdays = {
     "12/23" : "Amber",
     "8/8" : "Korone",
     "4/8" : "REEKY",
-    "4/27" : "Tetra (if you changed your name i am Not changing it here)"
 }
 //IMPORTANT
 const date = new Date();
@@ -902,12 +901,26 @@ function updateInventory(m = true) {
     //Check Powerup Contitions and Update Cooldowns
     checkAllConditions();
     updatePowerupCooldowns();
-    if (player.gears["gear24"]) autoPowerups();
+    if (m && player.gears["gear24"]) autoPowerups();
 
     player.stats.timePlayed += Date.now() - lastTime;
     lastTime = Date.now();
     if (Date.now() >= ability1RemoveTime && energySiphonerActive) removeSiphoner();
+
+
     const bodyCheck = document.body.getBoundingClientRect();
+    console.log(bodyCheck.height)
+    if (bodyCheck.height < 550) {
+        document.getElementById("mainSticky").style.position = "relative";
+        document.getElementById("bottomButtonHolder").style.position = "relative";
+        document.getElementById("bottomButtonHolder").style.top = "0";
+    } 
+    else {
+        document.getElementById("mainSticky").style.position = "sticky";
+        document.getElementById("bottomButtonHolder").style.position = "sticky";
+        document.getElementById("bottomButtonHolder").style.top = "34.5vw";
+    }
+
     if (currentActiveEvent !== undefined) {
         if (Date.now() >= currentActiveEvent.removeAt) endEvent();
     } else {
@@ -1037,7 +1050,7 @@ function spawnMessage(obj) {
     spawnsToSearch.push({loc: obj.location, ore: block, element: toEdit})
     toEdit.id = "";
     toEdit.style.display = "table";
-    const editing = toEdit.children;
+    const editing = toEdit.children[0].children;
     const loc = mine[location["Y"]][location["X"]];
     if (loc.ore === block || loc === block) player.oreTracker.existingOres.push({block: block, posX : location["X"], posY : location["Y"]});
     let oreRarity = oreList[block]["numRarity"];
@@ -1061,7 +1074,7 @@ function spawnMessage(obj) {
         rng = caveInfo["adjRarity"];
     } else rng = oreRarity;
     editing[1].textContent = `1/${formatNumber(rng * variantMulti)} BASE`;
-    const toAppendTo = get("latestOres").children[0];
+    const toAppendTo = get("latestOres");
     if (toAppendTo.children.length > 1) {
         toAppendTo.insertBefore(toEdit, toAppendTo.children[1]);
     } else {
@@ -1216,7 +1229,7 @@ function logFind(type, x, y, variant, atMined, fromReset, amt, fromCave, bulkRar
     if (wasFound) {
         foundElement.classList.add("minedLatestOre");
         foundElement.classList.remove("notMinedLatestOre");
-        let elemChildren = foundElement.children;
+        let elemChildren = foundElement.children[0].children;
         elemChildren[2].textContent = "MINED: TRUE";
         elemChildren[4].textContent = `AT ${formatNumber(atMined)} MINED`;
         let rng;

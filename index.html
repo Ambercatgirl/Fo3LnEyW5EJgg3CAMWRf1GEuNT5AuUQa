@@ -610,13 +610,13 @@
 
             <p id="crafting" class="middleTitle">Crafting!</p>
             <div id="craftingWorldSelect" class="worldSelectStyles">
-                <button id="worldSelectButton" class="worldSelectStyles" onclick="toggleCraftingWorld()">Items From World: 1</button>
+                <button id="worldSelectButton" class="worldSelectStyles" onclick="toggleCraftingWorld()">Items From World: W1</button>
                     <div id="worldSelectables" class="worldSelectStyles">
-                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">0.9</button>
-                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">1</button>
-                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">1.1</button>
-                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">1.2</button>
-                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">2</button>
+                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">G</button>
+                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">W1</button>
+                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">SR1</button>
+                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">WW</button>
+                        <button class="worldCraftSelector" onclick="selectCraftingWorld(this.textContent)">W2</button>
                         <button class="worldCraftSelector" onclick="selectCraftingWorld('???')">???</button>
                     </div>
             </div>
@@ -903,30 +903,30 @@
                 <button class="bottomButton" style="background-image:url('media/eventStuff.png');" id="eventOptionManager" onclick="toggleSideMenu('eventActionHolder')"></button>
                 <button class="bottomButton" id="displayPowerups" onclick="toggleSideMenu('powerupHolder')">Powerups</button>
             </div>
-                <div id="latestOresHolder">
-                    <table id="latestOres">
-                        <tr id="latestTemplate" class="latestHolder" style="display: none;">
-                            <td class="latestSpawnOre latestSection">
+                    <div id="latestOres">
+                        <div id="latestTemplate" class="latestHolder" style="display: none;">
+                            <div class="latestTable">
+                                <div class="latestSpawnOre latestSection">
                                 
-                            </td>
-                            <td class="latestSpawnBase latestSection">
-                                
-                            </td>
-                            <td class="latestWasMined latestSection">
-                                MINED: FALSE
-                            </td>
-                            <td class="latestSpawnRNG latestSection">
-                                1/? RNG
-                            </td>
-                            <td class="latestBlockCount latestSection">
-                                AT ? MINED
-                            </td>
-                            <td class="latestBlockCount latestSection">
-                                AMT: ?
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                                </div>
+                                <div class="latestSpawnBase latestSection">
+                                    
+                                </div>
+                                <div class="latestWasMined latestSection">
+                                    MINED: FALSE
+                                </div>
+                                <div class="latestSpawnRNG latestSection">
+                                    1/? RNG
+                                </div>
+                                <div class="latestBlockCount latestSection">
+                                    AT ? MINED
+                                </div>
+                                <div class="latestBlockCount latestSection">
+                                    AMT: ?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         <div class="col-3"> 
             <div id="invVariantHolder">

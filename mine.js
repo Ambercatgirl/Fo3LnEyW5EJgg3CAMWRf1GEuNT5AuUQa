@@ -730,7 +730,7 @@ function prepareSR1() {
     layerNum = 0;
     sr1Helper(true);
     player.sr1Entered = true;
-    get("worldSelectButton").textContent = `Items From World: ${1.1}`;
+    get("worldSelectButton").textContent = `Items From World: SR1`;
 }
 function prepareGalactica() {
     get("mainSticky").style.backgroundImage = `url("media/starryBackground.jpg")`;

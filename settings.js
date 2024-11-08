@@ -707,12 +707,16 @@ function addIndexLayers(world) {
                 else allOres = layerList[list[i]];
                 const thisMat = getIndexLayerOre(allOres);
                 if (layer.indexOf("worldOneSpecial") === -1) {
-                    if (world === "caves") button.textContent = `${thisMat} - 0-∞m`;
-                    else if (list[i].indexOf("Commons") > -1) button.textContent = `${allOres[allOres.length-1]} - 0-∞m`;
+                    if (world === "caves") button.textContent = `${thisMat} 0-∞m`;
+                    else if (list[i].indexOf("Commons") > -1) button.textContent = `${allOres[allOres.length-1]} 0-∞m`;
                     else if (list[i] === "event") button.textContent = "Limited Ores"
-                    else button.textContent = `${thisMat} - ${(world === "2" ? i - 1 : i) * 2000}m`
+                    else if (world === "2") {
+                        if (thisMat === "✖️") button.textContent = `${thisMat} ${8000}m`
+                        else if (thisMat === "❌") button.textContent = `${thisMat} ${8001}-∞m`
+                        else button.textContent = `${thisMat} ${(i - 1) * 2000}-∞m`
+                    } else button.textContent = `${thisMat} ${i * 2000}m`
                 } else {
-                    button.textContent = `${thisMat} - ????m`
+                    button.textContent = `${thisMat} ????m`
                 }
                 button.setAttribute("onclick", `createIndexCards("${list[i]}")`);
             } else {
