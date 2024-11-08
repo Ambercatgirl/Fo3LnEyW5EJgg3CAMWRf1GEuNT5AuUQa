@@ -102,39 +102,6 @@ function toggleUpdates(b) {
         b.style.backgroundColor = "var(--better-green)";
     }
 }
-function showFaqPage(num) {
-    const elements = document.getElementsByClassName("faqPage");
-    for (let i = 0; i < elements.length; i++) {
-        if (i === num) elements[i].style.display = "block";
-        else elements[i].style.display = "none";
-    }
-}
-function doTutorial() {
-    showMenuScreen("faq");
-    showFaqPage(0);
-    player.faqOffered = true;
-    showNextInQueue();
-}
-const settingsTabs = ["game", "audio", "webhook"]
-function switchSettings(type) {
-    for (let i = 0; i < settingsTabs.length; i++) document.getElementById(`${settingsTabs[i]}Settings`).style.display = "none";
-    document.getElementById(`${type}Settings`).style.display = "block";
-    if (type === "webhook") get("webhookSettings").style.display = "flex"; 
-}
-function openFrame(frameId) {
-    document.querySelectorAll('.frame').forEach(frame => {
-      frame.style.display = 'none';
-    });
-    
-    const selectedFrame = document.getElementById(frameId + "-frame");
-    if (selectedFrame) {
-      selectedFrame
-      .style.display = 'block';
-    }
-    if (frameId === "stats") createStats();
-}
-
-
 function toggleMainDisplay() {
     if (gameInfo.display) {
         gameInfo.display = false;
@@ -198,36 +165,6 @@ let allPickaxeNames =
 "N̴̡̠͍̰̓̀̉́͘͟͜͠͠͝uͧ̆̃͂̔̂͛̆̇ͫ̍̒̍͑̅̎̾͒҉̶̶̧̡̨͘͟͟͡͞͡͏̷̧͈̣̱͚̼̹̤̘̹l̷̷̸̴̨̡̢̜͈̭̰͕̪̯̭͓͓̲̱̹̥̜̝̩̝ͤ̀̕͝͠͠͝͠l̴͋̄̋͐ͪ̒ͦ̄̆̅̂̍͂ͧ͛ͮ̏̒̓ͨ̓͊̓̆ͤ̓̇̽̎͏̷͔̬̟̣͍̗̦̝̮̱̳̼͔̻̭͍̗̦͉̗̥͍͇̭̘͉̕͜͡ ̸̸̶̨̢̳̍̐̓ͪͥ̐͋̃̉͒̓̓̀̌͑̾ͩͯ͋ͦ͗ͮͯͪͥ̅͊ͩͣͨ̆̒̂̂̽̀̀͘͘͘͜͞͠C̵̵̷̸̸̵ͦ͒͆͡͞͡͏̶̵̡͔̙̱͢ḩ̸͙͙̼̖̥̦̻͈̖̫̖̯̣̣͍͎̖̹̜͇̯ͧͥ̎̒ͨ̎̓ͫ͛̅ͨͧͤͤͫ̊̓̈̒͐ͥ̎̓ͤ̃ͧͣ͊̉̄͛͡r̵̸̴̢̢͒ͮ̈́̓ͬ̉͆ͪ̀̓͋̉́͌̾ͬ̾̐ͫ̑ͮ̒̂̈͆͆̆͌̿ͭ́͑̂ͯ͛ͩ̇̚͜͡͏̸̼̫̪̮̲͉͔͇̯̻͇̫͚̰̦̤͈͉̟̙̻̖͇͖̱͕̘̣̫̥̝͍͔͝o̷͐̏̈́ͭ̔̇ͬͣ͑̂̉̑̓̊ͯͪ͏̶̸͏̷̴̴̶̷̷̧́̀̀͘͟͢͞҉̠̩͇͙̥̫̻̮̯̳̖̙͕̹̤͈͓̻͇̘͖͔m͑͐̃́̚͏̷̶̸̴̧̢̧̡̭̰́̕̕͢͡a̷̶̛̓̉͐͋̄̍͊̓ͪ̏̑̍͋ͮ̔͋̒ͧͭ̐̋͛͆̌̚̕͏͏̶͜͢͞͏̵̸̧̢̹̯͎̫̜̪̪̥̫̖̻̝̘͖̼̰̝͈͝͝͡",
 "The Tree of Life"
 ];
-function changeUseNumbers(button) {
-    if (!player.settings.useNumbers) {
-        const list = pickaxeStats;
-        let i = 1;
-        for (let name in list) {
-            if (name !== "pickaxe0") {
-                getButtonByName(name).firstChild.textContent = `Pickaxe ${i}`;
-                i++;
-            }
-        }
-        if (button != undefined) {
-            button.style.backgroundColor = "#6BC267";
-        }
-        player.settings.useNumbers = true;
-    } else {
-        const list = pickaxeStats;
-        let i = 0;
-        for (let name in list) {
-            if (name !== "pickaxe0") {
-                getButtonByName(name).firstChild.textContent = allPickaxeNames[i];
-                i++;
-            }
-        }
-        if (button != undefined) {
-            button.style.backgroundColor = "#FF3D3D";
-        }
-        player.settings.useNumbers = false;
-    }
-}
-
 function changeLatestMax(button) {
     amt = Number(button.value);
     if (!isNaN(amt) && amt > 0 && amt < 1000) {
@@ -245,95 +182,6 @@ function changeStopOnRare(button) {
         player.settings.stopOnRare.active = true;
         button.style.backgroundColor = "#6BC267";
     }   
-}
-
-//TY TETRA FOR THE BACKGROUND CHANGING FUNCTION!!
-function changeBackgroundColor() {
-    // Get the input value
-    let element = document.getElementById("colorInput");
-    let hexColor = element.value;
-  
-    // Validate if the input is a valid hex color
-    if (/^#[0-9A-F]{6}$/i.test(hexColor)) {
-      // Set the background color
-      document.getElementById("mainContent").style.backgroundColor = hexColor;
-      flashGreen(element);
-    } else {
-        flashRed(element);
-    }
-}
-function changeLatestColors(num) {
-    let toChange = document.getElementsByClassName("latestDisplay");
-    let element = document.getElementById("latestColor");
-    let value = element.value;
-    if (/^#[0-9A-F]{6}$/i.test(value)) {
-        if (num === 0) {
-            toChange[0].style.color = value;
-            toChange[1].style.color = value;
-        } else if (num === 1) {
-            toChange[0].style.borderColor = value;
-            toChange[1].style.borderColor = value;
-        } else if (num === 2) {
-            toChange[0].style.backgroundColor = value;
-            toChange[1].style.backgroundColor = value;
-        }
-    flashGreen(element);
-    } else {
-        flashRed(element);
-    }
-    
-}
-function getLatestColors() {
-    let colors = [];
-    let element = document.getElementsByClassName("latestDisplay")[0];
-    colors.push(element.style.color);
-    colors.push(element.style.borderColor);
-    colors.push(element.style.backgroundColor);
-    return colors;
-}
-function changeInventoryColors(num) {
-    let toChange = document.getElementById("inventoryDisplay");
-    let element = document.getElementById("inventoryColors");
-    let value = element.value;
-    if (/^#[0-9A-F]{6}$/i.test(value)) {
-        if (num === 0) {
-            toChange.style.borderColor = value;
-        } else if (num === 1) {
-            toChange.style.backgroundColor = value;
-        }
-    flashGreen(element);
-    } else {
-        flashRed(element);
-    }
-}
-function getInventoryColors() {
-        let colors = [];
-        let element = document.getElementById("inventoryDisplay");
-        colors.push(element.style.borderColor);
-        colors.push(element.style.backgroundColor);
-        return colors;
-}
-function changeCraftingColors(num) {
-    let toChange = document.getElementsByClassName("col-2")[0];
-    let element = document.getElementById("craftingColors");
-    let value = element.value;
-    if (/^#[0-9A-F]{6}$/i.test(value)) {
-        if (num === 0) {
-            toChange.style.borderColor = value;
-        } else if (num === 1) {
-            toChange.style.backgroundColor = value;
-        }
-    flashGreen(element);
-    } else {
-        flashRed(element);
-    }
-}
-function getCraftingColors() {
-    let colors = [];
-    let element = document.getElementsByClassName("col-2")[0];
-    colors.push(element.style.borderColor);
-    colors.push(element.style.backgroundColor);
-    return colors;
 }
 function flashRed(element) {
     element.style.animation = "flashRed 1s linear 1";
@@ -425,72 +273,6 @@ function updateAutomineUpdateSpeed(element) {
         flashRed(element);
     }
 }
-let layerNum = 0;
-function switchLayerIndex(num, overrideLayer, world) {
-    while (document.getElementById("oreCardHolder").firstChild) {
-        document.getElementById("oreCardHolder").removeChild(document.getElementById("oreCardHolder").firstChild);
-    }
-    let layerToIndex;
-    let worldLayer;
-    if (world === undefined) {
-        if (currentWorld === 1) worldLayer = indexOrder["worldOne"];
-        else if (currentWorld === 1.1) worldLayer = indexOrder["subrealmOne"];
-        else if (currentWorld === 1.2) worldLayer = indexOrder["waterWorld"];
-        else if (currentWorld === 2) worldLayer = indexOrder["worldTwo"];
-        else if (currentWorld === 0.9) worldLayer = indexOrder["galactica"];
-    } else {
-        if (world === 1) worldLayer = indexOrder["worldOne"];
-        else if (world === 1.1) worldLayer = indexOrder["subrealmOne"];
-        else if (world === 1.2) worldLayer = indexOrder["waterWorld"];
-        else if (world === 2) worldLayer = indexOrder["worldTwo"];
-        else if (world === 0.9) worldLayer = indexOrder["galactica"];
-    }
-    if (overrideLayer === undefined) {
-        layerNum += num;
-        if (layerNum < 0) layerNum = worldLayer.length - 1;
-        else if (layerNum > worldLayer.length - 1) layerNum = 0;
-        layerToIndex = worldLayer[layerNum];
-    } else {
-        layerToIndex = overrideLayer;
-    }
-    
-    if (layerToIndex === "sillyLayer") if (playerInventory["🎂"]["normalAmt"] < 1000000) {
-        if (num === undefined) return; else {
-            switchLayerIndex(num);
-            return;
-        }
-    }
-    if (layerToIndex === "borderLayer") if (playerInventory["❌"]["normalAmt"] < 1000000) {
-        if (num === undefined) return; else {
-            switchLayerIndex(num);
-            return;
-        }
-    }
-    if (layerToIndex === "fluteLayer") if (playerInventory["🪈"]["normalAmt"] < 1000000) {
-        if (num === undefined) return; else {
-            switchLayerIndex(num);
-            return;
-        }
-    }
-    if (layerToIndex === "grassLayer") if (playerInventory["🟩"]["normalAmt"] < 1000000) {
-        if (num === undefined) return; else {
-            switchLayerIndex(num);
-            return;
-        }
-    }
-    let layerMaterial;
-    if (layerList[layerToIndex] != undefined) layerMaterial = layerList[layerToIndex].slice(-1);
-    if (caveList[layerToIndex] != undefined) layerMaterial = caveList[layerToIndex].slice(-1);
-    if (layerToIndex === "eventLayer") get("indexSwitchButton").textContent = "Events";
-    else document.getElementById("indexSwitchButton").innerHTML = `<span title="${oreList[layerMaterial]["oreName"]}">${layerMaterial}</span>`;
-    let oreIndexCards = [];
-    let elements = createIndexCards(layerToIndex);
-    for (let i = 0; i < elements.length; i++) oreIndexCards.push(elements[i])
-    for (let i = oreIndexCards.length - 1; i >= 0; i--) {
-        document.getElementById("oreCardHolder").appendChild(oreIndexCards[i]);
-    }
-    return 0;
-}
 function shouldIgnore(ore) {
     return oreInformation.tierGrOrEqTo({"tier1": oreList[ore]["oreTier"], "tier2": "Sacred"});
 }
@@ -517,23 +299,6 @@ function formatEventMonths(arr) {
     }
     monthOutput = monthOutput.substring(0, monthOutput.length - 2);
     return `${monthOutput}`;
-}
-function addIndexColors(element, blackOut, property) {
-    let colors = oreInformation.getColors(oreList[property]["oreTier"]);
-    if (playerInventory[property]["explosiveAmt"]) {
-        element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #c91800, #ff722b, #383838)"
-    } else if (playerInventory[property]["radioactiveAmt"]) {
-        element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #062404, #c9fc3a, #062404)"
-    } else if (playerInventory[property]["electrifiedAmt"]) {
-        element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to bottom right, #f7f368, #ffc629, #e365fc)"
-    } else if (playerInventory[property]["normalAmt"]) {
-        element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to top right, #6BC267 20%, black, #6BC267 80%)"
-    } else {
-        element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, " + colors["backgroundColor"] + " 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
-    }
-    //Add Tier Gradient
-    if (blackOut) element.style.backgroundImage = "linear-gradient(to bottom right, black 5%, #383838 30%, 70%, black 95%), linear-gradient(to top right, #FF3D3D 20%, black, #FF3D3D 80%)"
-    return element
 }
 
 let isPlacing = false;
@@ -660,7 +425,6 @@ function switchToIndex(button, num) {
     }
     
 }
-
 const indexOrder = {
     1: {
         "worldOne" : {l: ["dirtLayer", "brickLayer", "foggyLayer", "waterLayer", "rockLayer", "radioactiveLayer", "cactusLayer",  "paperLayer", "giftLayer"], req: function() {return true;}},
@@ -833,16 +597,6 @@ createIndexCards.indexing = undefined;
 function formatIndexNum(num) {
     if (num >= 1000000000000000) return formatNumber(num, 2);
     else return num.toLocaleString();
-}
-function togglePathBlocks() {
-    if (player.settings.usePathBlocks) {
-        document.getElementById("pathBlocks").style.backgroundColor = "#6BC267";
-        player.settings.usePathBlocks = false;
-    } else {
-        document.getElementById("pathBlocks").style.backgroundColor = "#FF3D3D";
-        player.settings.usePathBlocks = true;
-    }
-    displayArea();
 }
 let testSoundTimeout = null;
 function testSound(name, element) {
@@ -1038,46 +792,6 @@ function removeWebhookId(element, id) {
         element.remove();
     }
 
-}
-function toggleVariantList(state) {
-    const elements = document.getElementsByClassName("potentialVariant");
-    for (let i = 0; i < elements.length; i++) elements[i].style.display = state ? "flex" : "none";
-}
-function switchCurrentSelectedVariant(type) {
-    document.getElementById("currentSelectedVariant").innerText = type;
-    toggleVariantList(false)
-}
-function showPortalRoom(state) {
-    if (state) closeAllLocations();
-    get("portalRoom").style.display = state ? "block" : "none";
-}
-function showVariantConversion(state) {
-    if (state) closeAllLocations();
-    document.getElementById("conversionContainer").style.display = state ? "block" : "none";
-}
-function showOreForge(state) {
-    if (state) closeAllLocations();
-    document.getElementById("forgeContainer").style.display = state ? "block" : "none";
-}
-function showOreCrafts(state) {
-    if (state) showOreFissions(false);
-    document.getElementById("forgeCraft").style.display = state ? "inline-flex" : "none";
-}
-function showOreFissions(state) {
-    if (state) showOreCrafts(false);
-    document.getElementById("forgeFission").style.display = state ? "inline-flex" : "none";
-}
-function showWorkshop(state) {
-    if (state) closeAllLocations();
-    document.getElementById("workshopContainer").style.display = state ? "block" : "none";
-    currentDisplayedUpgrade = undefined;
-    updateDisplayedUpgrade();
-}
-function closeAllLocations() {
-    showVariantConversion(false);
-    showPortalRoom(false);
-    showOreForge(false);
-    showWorkshop(false)
 }
 const conversionRates = {
     "Electrified" : 5,

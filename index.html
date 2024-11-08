@@ -950,86 +950,53 @@
         </div>
         <div id="dailyMessages">
             <div id="newPlayer" class="dailyMessage">
-                <p class="dailyText">You appear to be new to this game, would you like to see how to play? The information can be viewed at any time by selecting 'FAQ' in the menu.</p>
-                <button class="newPlayerButton" style="background-color:#6BC267;" onclick="doTutorial()">Yes</button>
-                <button class="newPlayerButton" style="background-color:#FF3D3D;" onclick="player.faqOffered = true; showNextInQueue()">No</button>
+                <p class="dailyText">Welcome to The Silly Caverns! It's great to have you here :><br>This game is simple, mine blocks, upgrade, mine more!<br>If you ever feel stuck, feel free to check out Milestones in The Silly Lounge!</p>
+                <button class="newPlayerButton" style="background-color:#6BC267;" onclick="showNextInQueue()">LETS GAMBLE!!!</button>
             </div>
             <div id="chooseName" class="dailyMessage">
                 <p class="dailyText">It doesn't appear like you have a name yet! Pick one out for yourself!<br>(Make sure your name is appropriate as it will appear when you generate ore logs)</p>
-                <form id="nameHolder">
-                    <input id="enterName" type="text" placeholder="Enter Name" autocomplete="off">
-                </form>
-                <button id="submitName" onclick="(player.name = get('enterName').value); showNextInQueue();">Confirm!</button>
-            </div>
-            <div id="worldTwoRevamp" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
-                <p class="dailyText">
-                    - World Two Revamp!!! (kinda)<br>
-                    - Balanced the commons (and some rares) for all World 2 craftables.<br>
-                    - 2 New World 2 gears.<br>
-                    - Bug Fixes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<br>
-                    - Let me know if progression needs any more tweaking and I'll try to make it better.
-                </p>
-            </div>
-            <div id="summerEvent" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
-                <p class="dailyText">
-                    <b>Summer Event + Powerup Revamp!</b><br>
-                    - 9 New event ores found in a few World 1 layers.<br>
-                    - 1 New celestial.<br>
-                    - Overhauled Powerup UI.<br>
-                    - Changed a few powerup effects.<br>
-                    - A few QOL changes with crafting.<br>
-                    - Bug Fixes!!!!!!!!!!!!!!!! YAYYYYYYYYYY!!!!!!<br>
-                </p>
-            </div>
-            <div id="waterWorld" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
-                <p class="dailyText">
-                    <b>WATR</b><br>
-                    - New World<br>
-                    - 2 new ore tiers<br>
-                    - New endgame pickaxe<br>
-                    - Minimum log RNG is now an input setting<br>
-                    - Added Webhook section to the settings, put any webhook link here for an embed webhook in any desired channel.<br>
-                    - Added limited event section to the index<br>
-                    - Bug Fixes<br>
-                </p>
-            </div>
-            <div id="simRng" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
-                <p class="dailyText">
-                    <b>Dimensional Update</b><br>
-                    - New Simulated RNG setting, view information in the FAQ!<br>
-                    - New World! Mostly used for crafting purposes but has many very rare ores.<br>
-                    - New Pickaxe! Uses the power of alternate dimensions to mine an insane amount of blocks.<br>
-                    - 2 New Gears!<br>
-                    - Added offline progress, stacks up to 8 hours and you get a percentage of what you would normally get in that time.<br>
-                    - Revamped right side of the display, added ore placer and offline progress buttons there along with the ore tracker.<br>
-                    - Added new ores and replaced Wavaderg with Goober for personal reasons.<br>
-                    - Bug Fixes :3c<br>
-                </p>
-            </div>
-            <div id="thankYou" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
-                <p class="dailyText">
-                    <span style="font-size: 2vw;"><b>THANK YOU!!!</b></span><br>
-                    - HI CHAT! IT'S ME!!!<br>
-                    - Because of the recent success of this game, if you have played before October 1st, 2024, you will receive an exclusive ore after that date!!!<br>
-                    - Also, when Silly Caverns becomes #1 on Galaxy, I will increase the current luck boost to 1.5x for a while and then make the 1.2x permanent!<br>
-                    - 1 New pickaxe in Galactica to ease the way into Endgame!<br>
-                    - Added ore favoriting, just click the star to favorite the ores you like!<br>
-                    - Added ores that weren't already in Abysstone caves to the cave, and made the cave spawn in more worlds!<br>
-                    - Added a new Abysstone cave exclusive!<br>
-                    - Noradrenaline event in Galactica!<br>
-                    - siiiiiiiiiilly bug fixes mrrp meow!<br>
-                </p>
+                <input id="enterName" type="text" placeholder="Enter Name" autocomplete="off" onkeyup="if(event.key === 'Enter') {(player.name = get('enterName').value); showNextInQueue();}">
+                <button id="submitName" onclick="if (setPlayerName(get('enterName').value)) {showNextInQueue();}">Confirm!</button>
             </div>
             <div id="sr1Unlocked" class="dailyMessage">
-                <button class="closeDailyMessage" onclick="showNextInQueue()">X</button>
+                <button class="closeDailyMessage" onclick="showNextInQueue()">❌</button>
                 <p class="dailyText">
-                    Hey! I notice you mined a Flawless tier ore!<br>
-                    I think there's something new for you to check out in the Portal Room, you should head on over there!
+                    Hey! I noticed you mined a Flawless tier ore!<br>
+                    I think there's something new for you to check out in Worlds!
+                </p>
+            </div>
+            <div id="uiUpdate" class="dailyMessage">
+                <button class="closeDailyMessage" onclick="showNextInQueue()">❌</button>
+                <p class="dailyText">
+                    The UI Overhaul is finally complete!<br>
+                    Almost every aspect of the game has had its design redone!!<br>
+                    Scroll to see everything :3<br>
+                    - Revamped Entire Game UI<br>
+                    - Merged all messages into the topbar<br>
+                    - Message indicator to display if the current message is an event or an ore spawn<br>
+                    - Easy access to toggle the display<br>
+                    - Auto/Single mining toggle<br>
+                    - Made mine reset progress look cooler<br>
+                    - Redid variant inventories, also increases performance while looking better<br>
+                    - Redid crafting UI to allow you to view recipes and item information more easily<br>
+                    - Added a button to change what world items in the crafting list are from<br>
+                    - Added indicators to latest finds (mined/unmined/voided)<br>
+                    - Added the Silly Lounge to replace the menu (it's kind of like a budget afk mode, deletes lots of elements and stops lots of element updates)<br>
+                    - Redid game settings UI<br>
+                    - New setting, accurate speed, that should get most people up to their max speed with simulated rng on.<br>
+                    - Redid audio settings UI (I FINALLY GAVE MUSIC VOLUME STYLING OH MY GOD)<br>
+                    - Redid Data UI<br>
+                    - Redid Logs UI<br>
+                    - Heavily shortened log verification<br>
+                    - Redid Statistics UI, now includes all tiers and has x% and x/x for completion<br>
+                    - Redid Ore Index UI, easier to switch between worlds and select layers from said worlds. More accurate rarities with Simulated RNG, locked layers say [Research Required] before you are able to view them<br>
+                    - Redid Worlds UI, world information included, unlock requirement, and what works there (probably inaccurate)<br>
+                    - watr portal<br>
+                    - Added Milestones to replace the trophy room<br>
+                    - This serves as a kind of progression guide, and the old trophies are found at the end of their respective paths<br>
+                    - Redid Forge / Variant Conversion UI. Merged them into one page.<br>
+                    - Added more conversion options, should be helpful<br>
+                    - Tree Of Life now uses normal crafting!! yayayay!!<br>
                 </p>
             </div>
         </div>

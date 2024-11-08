@@ -236,6 +236,20 @@ class playerTemplate {
     }
 }
 let player = new playerTemplate();
+function setPlayerName(val) {
+    if (get("submitName").textContent === "Enter a name!") return;
+    if (val !== "") {
+        player.name = val;
+        return true;
+    } else {
+        flashRed(get("submitName"));
+        get("submitName").textContent = "Enter a name!";
+        setTimeout(() => {
+            get("submitName").textContent = "Confirm!";  
+        }, 1500);
+    }
+    return false;
+}
 const powerupOrder = ["powerup1", "powerup2", "powerup3", "powerup4", "powerup5"];
 let currentPowerupDisplayed = "powerup1";
 let powerupDisplayed = false;
@@ -838,7 +852,6 @@ function loadNewData(data) {
         for (let message in dailyMessages) checkMessages(message);
         showNextInQueue();
         updateInventory(false);
-        player.stats.currentPickaxe = "pickaxe35"
         try {
             beSilly.init();
         } catch (err) {
@@ -906,23 +919,11 @@ const dailyMessages = {
     "chooseName" : {
         showUntil : "June 25, 9999",
     },
-    "summerEvent" : {
-        showUntil : "August 30, 2024",
-    },
-    "waterWorld" : {
-        showUntil : "July 21, 2024",
-    },
     "sr1Unlocked" : {
         showUntil : "June 25, 0000",
     },
-    "worldTwoRevamp" : {
-        showUntil : "August 1, 2024",
-    },
-    "simRng" : {
-        showUntil : "August 16, 2024",
-    },
-    "thankYou" : {
-        showUntil : "October 2, 2024",
+    "uiUpdate" : {
+        showUntil : "December 1, 2025",
     },
 }
 function checkMessages(message) {
