@@ -330,8 +330,9 @@ function movePlayer(dir, reps, type) {
                             if (dir.y !== 0) setLayer(curY)
                             mine[curY][curX] = "⛏️";
                             lastDirection = dir.key;
-                            let variant = rollVariant();
-                            if (player.gears["gear25"] && variant === 1) variant = rollVariant();
+                            let vInfo = rollVariant();
+                            if (player.gears["gear25"] && vInfo.v === 1) vInfo = rollVariant();
+                            let variant = vInfo.v;
                             spawnMessage({block: "⛏️", location: {"X" : curX, "Y" : curY}, caveInfo: undefined, variant: variant, amt:1})
                             giveBlock({type: "⛏️", x:curX, y:curY, fromReset: false, variant: variant, amt:1});
                             checkAllAround(curX, curY);
@@ -1094,33 +1095,18 @@ function spawnMessage(obj) {
         let spawnText;
         if (currentWorld === 1.1) {
             spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreInformation.getTierMessage(curTier) + "</span></i><br>";
-            typeWriter(spawnText, "spawn");
+            typeWriter(spawnText, 2);
         } else {
             spawnText = `<i><span title="${oreList[block]["oreName"]}">` + oreList[block]["spawnMessage"] + "</span></i>";
-            typeWriter(spawnText, "spawn")
+            typeWriter(spawnText, 2)
         }
         get("topMessages").style.color = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
-
-        clearTimeout(spawnOre);
-        spawnOre = setTimeout(() => {
-            document.getElementById("topMessages").classList = ""; 
-            get("topMessages").style.color = "#ffffff";
-            document.getElementById("topMessages").innerHTML = "All Messages Appear Here!";
-            typeCalls.currentType = "";
-            removeIndicators();
-            if (currentActiveEvent !== undefined) {
-                const text = events[currentActiveEvent.name].message;
-                typeWriter(text, "event");
-            }
-            spawnOre = null;
-            currentSpawnTier = "";
-        }, 6000);
     }
 }
 spawnMessage.count = 0;
 spawnMessage.lastOre = undefined;
 let typeCalls = {
-    currentType: "",
+    curPriority: 0,
     num: 0,
 };
 function removeIndicators() {
@@ -1129,8 +1115,9 @@ function removeIndicators() {
 function addIndicator(type) {
     if (type === "ore") get("messageType").textContent = "Current Message: Ore Spawn";
     else if (type === "event") get("messageType").textContent = "Current Message: Event Message";
+    else if (type === "other") get("messageType").textContent = "Current Message: ?????";
 }
-function typeWriter(string, type) {
+function typeWriter(string, priority) {
     let char;
     let hex;
     let emoji
@@ -1141,22 +1128,19 @@ function typeWriter(string, type) {
     loc.style.fontSize = "1.25vw";
     loc.style.lineHeight = "1vw";
     const originalSize = loc.offsetHeight;
-    const fonts = ["1.25vw", "1.1vw", "0.95vw","0.8vw","0.65vw","0.5vw", "0.35vw"]
+    const fonts = ["1.25vw", "1.1vw", "0.95vw","0.8vw","0.65vw","0.5vw", "0.35vw"];
     let cfi = 0;
-    typeCalls.num++;
-    removeIndicators();
-    if (type === "spawn") {
-        typeCalls.currentType = "spawn";
-        addIndicator("ore");
+    if (priority >= typeCalls.curPriority) {
+        typeCalls.curPriority = priority;
+        typeCalls.num++;
     } else {
-        if (typeCalls.currentType === "spawn") {
-            addIndicator("ore");
-            return;
-        } else {
-            typeCalls.currentType = "event";
-            addIndicator("event");
-        }
+        return;
     }
+    if (priority === 0) removeIndicators();
+    else if (priority === 1) addIndicator("event");
+    else if (priority === 2) addIndicator("ore");
+    else if (priority === 3) addIndicator("other");
+    queueTypeRemoval();
     const thisTypeNum = typeCalls.num;
     const elements = [];
     const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
@@ -1208,9 +1192,23 @@ function typeWriter(string, type) {
             else return;
         }, 10 * multi);
     }
-    
 }
-
+let typeTimer = null;
+function queueTypeRemoval() {
+    clearTimeout(typeTimer);
+    typeTimer = setTimeout(() => {
+        document.getElementById("topMessages").classList = ""; 
+        get("topMessages").style.color = "#ffffff";
+        document.getElementById("topMessages").innerHTML = "All Messages Appear Here!";
+        removeIndicators();
+        typeCalls.curPriority = 0;
+        if (currentActiveEvent !== undefined) {
+            const text = events[currentActiveEvent.name].message;
+            typeWriter(text, 1);
+        }
+        typeTimer = null;
+    }, 20000);
+}
 let loggedFinds = [];
 function logFind(type, x, y, variant, atMined, fromReset, amt, fromCave, bulkRarity) {
     let foundElement;
@@ -1273,12 +1271,12 @@ function checkExistingOres() {
     if (mine[curY] !== undefined && mine[curY][curX+5] !== undefined && mine[curY][curX+5].what === 99999) {
         if (Math.random() < 1/(Math.log2(player.stats.blocksMined))) {
             insertIntoLayers({"ore":"catgirl", "layers":["unknownLayer"], "useLuck":true});
-            typeWriter("<i>The appearance of THE cat of all time shakes the universe to it's core...</i>", "event");
+            typeWriter("<i>The appearance of THE cat of all time shakes the universe to it's core...</i>", 3);
             playSound("Infinitesimal");
             ca = true;
         } else {
             delete mine[curY][curX+5].what;
-            typeWriter("<i>lol get fucked you have to do that all over again</i>", "event");
+            typeWriter("<i>lol get fucked you have to do that all over again</i>", 3);
             playSound("Infinitesimal");
         }
     }
@@ -1749,7 +1747,7 @@ function activateEvent(name) {
     currentActiveEvent = {name: name, removeAt: Date.now() + events[name].duration, extraBoost: 0}
     events[name].specialEffect(true);
     const text = events[name].message;
-    typeWriter(text, "event");
+    typeWriter(text, 1);
     updateAllLayers();
 }
 function endEvent() {
@@ -1757,9 +1755,9 @@ function endEvent() {
     events[currentActiveEvent.name].specialEffect(false);
     events[currentActiveEvent.name].boost -= currentActiveEvent.extraBoost;
     currentActiveEvent = undefined;
-    if (typeCalls.currentType === "event") messageElement.textContent = "All Messages Appear Here!";
+    if (typeCalls.currentType === 1) messageElement.textContent = "All Messages Appear Here!";
     typeCalls.currentType = "";
-    removeIndicators();
+    if (typeCalls.priority === 1) removeIndicators();
     updateAllLayers();
 }
 function getCurrentEventOre() {

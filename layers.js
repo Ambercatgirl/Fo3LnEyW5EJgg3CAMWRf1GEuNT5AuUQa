@@ -899,8 +899,8 @@ function a87(num, force, g) {
     if (g) return undefined;
     if (added) {
         milestoneVariables.triggerFound = true;
-        if (korone) typeWriter("<i>An unusual presence lurks within the silly layer, making your body feel numb...</i>", get("spawnMessage"), true);
-        else typeWriter("<i>In the endless depths of the world, repetitions of earlier environments make up the lower earth, and yet.. a strange sense of unfamiliarity consumes you...</i>", get("spawnMessage"), true);
+        if (korone) typeWriter("<i>An unusual presence lurks within the silly layer, making your body feel numb...</i>", get("spawnMessage"), 3);
+        else typeWriter("<i>In the endless depths of the world, repetitions of earlier environments make up the lower earth, and yet.. a strange sense of unfamiliarity consumes you...</i>", 3);
         eventSpawn.currentTime = 0;
         eventSpawn.play();
     }

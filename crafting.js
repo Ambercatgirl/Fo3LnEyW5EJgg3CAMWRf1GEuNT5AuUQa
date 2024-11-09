@@ -565,6 +565,8 @@ function displayRecipe(recipe) {
                 iconElem.src = curSrc;
                 if (!pinInformation.locked && player.upgrades["pickaxe27"].level < 5) {
                     addRecipeInformation(currentRecipeId);
+                } else if (!pinInformation.locked && player.upgrades["pickaxe27"].level === 5) {
+                    get("newCraftItem").setAttribute("onclick", `craftPickaxe('pickaxe27')`);
                 }
             }
         } else {

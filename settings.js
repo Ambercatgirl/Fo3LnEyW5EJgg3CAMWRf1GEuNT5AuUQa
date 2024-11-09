@@ -825,7 +825,7 @@ function convertOre(ore, amt, type) {
         return;
     }
     if (ore === "🧱" && amt === 1337 && type === "Electrified") {
-        typeWriter("<i>The ground shakes beneath you as something makes its presence known...</i>");
+        typeWriter("<i>The ground shakes beneath you as something makes its presence known...</i>", 3);
         eventSpawn.currentTime = 0;
         eventSpawn.play();
         toggleLounge();
@@ -1123,10 +1123,10 @@ function sillyKittyCat(text) {
             curCatStep++;
             new Audio("audios/meow-1.mp3").play();
             if (curCatStep === catFaceOrder.length) {
-                typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", get("spawnMessage"));
+                typeWriter("WHY DO YOU KNOW SO MANY CAT EMOTICONS YOU FUCKING FURRY :SOB:", 3);
                 get("catStuff").style.display = "none";
                 catstuff.layer = currentLayer;
-                insertIntoLayers({ore: "Goober", layers:[currentLayer], "useLuck": true})
+                insertIntoLayers({ore: "Goober", layers:[currentLayer], "useLuck": true});
             }
         } else {
             new Audio("audios/meow-2.mp3").play();

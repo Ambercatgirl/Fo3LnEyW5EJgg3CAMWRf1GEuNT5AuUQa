@@ -802,7 +802,7 @@ const milestoneList = {
             title: "this place SUCKS",
             description: "Enter Subrealm One! (found in the Worlds tab in the lounge)",
             check: function() {
-                return milestoneVariables.sr1Entered;
+                return player.sr1Entered;
             },
             owned: false,
             distH: 3,
@@ -1553,6 +1553,7 @@ const milestoneList = {
                 player.trophyProgress["worldTwoCompletion"].lastMinedAmt = player.stats.blocksMined;
                 if (this.element) this.element.children[1].textContent = `${this.description}\r\n${formatNumber(player.trophyProgress["worldTwoCompletion"].blocksWithCoronary)}/10B`;
                 if (player.trophyProgress["worldTwoCompletion"].blocksWithCoronary > 10000000000) {
+                    player.trophyProgress["worldTwoCompletion"].trophyOwned = true;
                     return true;
                 }
             },
