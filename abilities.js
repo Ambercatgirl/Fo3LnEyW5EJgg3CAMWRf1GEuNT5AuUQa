@@ -200,7 +200,7 @@ function gearAbility2() {
 let pickaxe1Nums = [];
 function pickaxeAbility1(x, y) {
     x -= 7;
-    y -= 7;
+    y -= 14;
     if (player.gears["gear34"]) {pickaxeArrayLoop(increaseAbilitySize(pickaxe1Nums, 1), x, y); return;}
     pickaxeArrayLoop(pickaxe1Nums, x, y);
 }
@@ -894,7 +894,7 @@ function pickaxeAbilityMineBlock(x, y) {
     if (y > 0) {
         mine[y] ??= [];
         if (mine[y][x] === undefined) 
-            generateBlock({"Y":y, "X":x});
+            generateBlock({"Y":y, "X":x}, true);
         mineBlock(x, y, "ability"); 
     }
 }

@@ -595,6 +595,13 @@ let oreList = {
     'estrogen???':{ 'decimalRarity': 1 / 500000000000, 'numRarity': 500000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': true, 'spawnMessage': 'this shit soooo tasty i need more i need more i need more', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/estrogen.gif", "oreName" : "Estrogen",},
     'YourReward':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/thankyou.png", "oreName" : "Your Reward!",},
     'luna2':{ 'decimalRarity': 1 / 1000000000000000, 'numRarity': 1000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'crunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunchcrunch', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/luna2.gif", "oreName" : "Luna 2",},
+    'Desolation':{ 'decimalRarity': 1 / 247000000423000000, 'numRarity': 247000000423000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A powerful and formidable force drags you into the emptiness of the great void...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/desolation.png", "oreName" : "Desolation",},
+    'Sakura':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/sakura.png", "oreName" : "Sakura",},
+    'Omniscient Clover':{ 'decimalRarity': 1 / 3450000000000000, 'numRarity': 3450000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A viridescent clover shines and floats, the luck itself materializes before your eyes...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/omniscientClover.png", "oreName" : "Omniscient Clover",},
+    'Koreosensei':{ 'decimalRarity': 1 / 153454153454153454153, 'numRarity': 153454153454153454153, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'The tentacles asked him "what do you want to be?" and he answered "I want to be weak." He is now here to teach you the truth of the mines.', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/COREosensei.png", "oreName" : "Koreosensei",},
+    'Saitamore':{ 'decimalRarity': 1 / 100100100010365001000, 'numRarity': 100100100010365001000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Ok.', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/Saitamore.gif", "oreName" : "Saitamore",},
+    'Hyper':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/Hyper.png", "oreName" : "Hyper",},
+    'Panselinos':{ 'decimalRarity': 1 / 430000000000000000, 'numRarity': 430000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Hidden away from astronomers for centuries, the envenomed planet comes into view at last...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/panselinos.png", "oreName" : "Panselinos",},
     
     
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
@@ -632,7 +639,7 @@ const layerList = {
 "chessLayer" : ["sillyMiner", "⚖️", "🌱", "🎓", "📍", "📌", "🔎", "🖊️", "📚", "📐", "📖", "🧠", "✏️", "♟️"],
 "barrierLayer" : ["❔",  "✴️", "✖️"],
 "borderLayer" : ["sillyMiner", "🩸", "♨️", "🚫", "🔈", "⛔", "💢", "🔇", "🛑", "⭕", "🔕", "❌"],
-"worldTwoCommons" : ["🍀", "☘️", "📘", "📙", "📕", "📗", "⏏️", "▶️", "⏸️", "⏯️", "⏺️", "⏭️", "⏮️", "⏩", "⏪", "⏬", "⏫", "◀️", "🔼", "🔽", "➡️", "↖️", "↘️", "⬇️", "⬆️", "⬅️", "↪️", "↩️", "⤴️", "⤵️", "🔀", "🔁", "🔂", "🔄", "🔃"],
+"worldTwoCommons" : ["Omniscient Clover", "🍀", "☘️", "📘", "📙", "📕", "📗", "⏏️", "▶️", "⏸️", "⏯️", "⏺️", "⏭️", "⏮️", "⏩", "⏪", "⏬", "⏫", "◀️", "🔼", "🔽", "➡️", "↖️", "↘️", "⬇️", "⬆️", "⬅️", "↪️", "↩️", "⤴️", "⤵️", "🔀", "🔁", "🔂", "🔄", "🔃"],
 "grassLayer" : ["sillyMiner", "🌹", "🟩"],
 "unknownLayer" : [],
 "scLayer" : ["sillyMiner", '🇳🇬', '🇪🇹', '🇪🇬', '🇨🇩', '🇹🇿', '🇿🇦', '🇰🇪', '🇺🇬', '🇸🇩', '🇩🇿', '🇸🇨'],
@@ -642,8 +649,8 @@ const layerList = {
 "srLayer" : ["sillyMiner", '🇧🇷', '🇨🇴', '🇦🇷', '🇵🇪', '🇻🇪', '🇨🇱', '🇪🇨', '🇧🇴', '🇵🇾', '🇺🇾', '🇸🇷'],
 "ocLayer" : ["sillyMiner", '🇦🇺', '🇵🇬', '🇳🇿', '🇫🇯', '🇸🇧', '🇫🇲', '🇻🇺', '🇵🇫', '🇳🇨', '🇼🇸', '🇹🇻'],
 "catcatLayer" : [ '🏳️‍⚧️', '🏁', '🇺🇳'],
-"starLayer" : ["txtfile", "cosmicIridium", "unstableCore", "pleiades", "australiumIngot", "stars"],
-"nebulaLayer" : ["noradrenaline", "otherside", "ascendedArtifact", "J1407b", "nebula"]
+"starLayer" : ["Koreosensei", "Panselinos", "txtfile", "cosmicIridium", "unstableCore", "pleiades", "australiumIngot", "stars"],
+"nebulaLayer" : ["Koreosensei", "noradrenaline", "Desolation", "otherside", "ascendedArtifact", "J1407b", "nebula"]
 }
 const createdLayers = {
 
@@ -947,7 +954,7 @@ function createAllLayers() {
             tier = oreInformation.getNextTier(tier);
     }
     arr.splice(tier.indexOf("✴️"), 1);
-    const unknownLayer = createLayer([arr, ["🥇", "🟩"]]);
+    const unknownLayer = createLayer([arr, ["🥇", "🟩"], ["Saitamore"]]);
     layerDictionary["unknownLayer"] = {layer: unknownLayer, probabilities: [], layerMat: "🟩"}
     layerList["unknownLayer"] = [...unknownLayer];
     createGenerationProbabilities();

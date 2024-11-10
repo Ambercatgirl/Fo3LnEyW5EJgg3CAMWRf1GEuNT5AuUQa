@@ -14,21 +14,21 @@ function checkAllAround(x, y) {
     mine[y] ??= [];
     if (x - 1 >= 0) {
         if (mine[y][x - 1] === undefined) {
-            generateBlock({"Y" : y, "X" : x-1});
+            generateBlock({"Y" : y, "X" : x-1}, curDirection === "a");
         }
     }
     if (mine[y][x + 1] === undefined) {
-        generateBlock({"Y" : y, "X" : x+1});
+        generateBlock({"Y" : y, "X" : x+1}, curDirection === "d");
     }
     mine[y + 1] ??= [];
     if (mine[y + 1][x] === undefined) {
-        generateBlock({"Y" : y + 1, "X" : x}); 
+        generateBlock({"Y" : y + 1, "X" : x}, curDirection === "s"); 
     }
         
     if (y - 1 >= 0) {
         mine[y - 1] ??= [];
         if (mine[y - 1][x] === undefined) {
-            generateBlock({"Y" : y - 1, "X" : x});
+            generateBlock({"Y" : y - 1, "X" : x}, curDirection === "w");
         }
         
     }
@@ -155,7 +155,8 @@ function aleaRandom() {
     gameInfo.overallCount++;
     return rand();
 }
-const generateBlock = function(location) {
+const generateBlock = function(location, wbm) {
+    wbm ??= false;
     blocksRevealedThisReset++;
     mainProbabilityTable = getLayer(location["Y"]);
     mainGenerationTable = mainProbabilityTable.probabilities;
@@ -204,7 +205,7 @@ const generateBlock = function(location) {
         if (tier === "Celestial" && !player.gears["gear28"]) canCollect = false;
         if (canCollect) mineBlock(location["X"], location["Y"], "infinity");
         if (blocksRevealedThisReset / mineCapacity >= 0.9) mineBlock(location["X"], location["Y"], "reset");
-        if (player.settings.stopOnRare.active && stopIncluded(oreList[blockToGive]["oreTier"])) stopMining();
+        if (player.settings.stopOnRare.active && stopIncluded(oreList[blockToGive]["oreTier"]) && !wbm) stopMining();
         if (currentActiveEvent !== undefined) {
             if (getCurrentEventOre() === blockToGive && blockToGive !== "🪸") endEvent();
         } 
@@ -678,7 +679,6 @@ function switchWorld(to) {
         verifiedOres.checkCaves();
         document.getElementById("teleportButton").disabled = false;
         canMine = true;
-        
         if (debug) adminChangeLuck(verifiedOres.getCurrentLuck());
 }
 function resetForSwitch() {
@@ -775,12 +775,15 @@ function prepareWorldTwo() {
     if (energySiphonerActive) removeSiphoner();
 }
 function stopMining() {
+    let stopped = canMine;
+    canMine = false;
     curDirection = "";
     insertIntoLayers({"ore":"🦾", "layers":["tvLayer", "brickLayer"], "useLuck":true})
     clearInterval(loopTimer);
     clearInterval(secondaryTimer);
     clearInterval(displayTimer);
     displayTimer = null;
+    canMine = stopped;
 }
 let beforeEntering;
 function sr1Helper(state) {

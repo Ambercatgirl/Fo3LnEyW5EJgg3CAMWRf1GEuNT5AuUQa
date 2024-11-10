@@ -49,6 +49,7 @@ let blockElement;
 let emojiNames;
 let messageElement;
 let rand;
+let seedSuccess = false;
 function init() {
     verifiedOres.gameLoaded();
     for (let propertyName in oreList) {
@@ -97,6 +98,21 @@ function init() {
         failedFetch();
     });
     let canContinue = loadAllData();
+    setTimeout(() => {
+        if (!seedSuccess) {
+            seedSuccess = true;
+            console.log("Failed To Generate Seed!")
+            gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
+            finishInit(disabled);
+        }
+    }, 15000);
+    canMine = false;
+    const buttons = document.querySelectorAll("button");
+    const disabled = [];
+    for (let i = 0; i < buttons.length; i++) if (!buttons[i].disabled) {
+        buttons[i].disabled = true;
+        disabled.push(buttons[i])
+    }
     if (canContinue) {
         fetch("https://endurable-fragrant-visitor.glitch.me", {
             method: "POST",
@@ -109,19 +125,24 @@ function init() {
           })
           .then((res) => res.text())
           .then((text => {
-            gameInfo.seed = JSON.parse(text);
-            finishInit();
+            if (!seedSuccess) {
+                seedSuccess = true;
+                gameInfo.seed = JSON.parse(text);
+                finishInit(disabled);
+            }
           }))
           .catch((err) => {
-            console.log("Failed To Generate Seed!")
-            gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
-            finishInit();
+            if (!seedSuccess) {
+                seedSuccess = true;
+                console.log("Failed To Generate Seed!")
+                gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
+                finishInit(disabled);
+            }
           });
-    } else {
-        canMine = false;
     }
 }
-function finishInit() {
+function finishInit(disabled) {
+    get("generatingSeed").style.display = "none";
     rand = new PRNG.Alea(gameInfo.seed, gameInfo.loops);
     gameInfo.count = 0;
     gameInfo.loops = 0;
@@ -138,6 +159,10 @@ function finishInit() {
     addIndexLayers(String(currentWorld));
     createMilestones();
     inventoryTimer = setInterval(updateInventory, 500);
+    for (let message in dailyMessages) checkMessages(message);
+    showNextInQueue();
+    canMine = true;
+    for (let i = 0; i < disabled.length; i++) disabled[i].disabled = false;
     console.log("meow");
 }
 function assignImageNames() {
@@ -280,7 +305,6 @@ function loadContent() {
     }
     document.getElementById("pressPlay").style.display = "none";
     document.getElementById("mainContent").style.display = "block";
-    canMine = true;
     init();
 }
 
@@ -1140,7 +1164,7 @@ function typeWriter(string, priority) {
     else if (priority === 1) addIndicator("event");
     else if (priority === 2) addIndicator("ore");
     else if (priority === 3) addIndicator("other");
-    queueTypeRemoval();
+    if (priority !== 1) queueTypeRemoval();
     const thisTypeNum = typeCalls.num;
     const elements = [];
     const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;

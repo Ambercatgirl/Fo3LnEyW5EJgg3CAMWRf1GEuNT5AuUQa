@@ -849,8 +849,6 @@ function loadNewData(data) {
             }
         }
         if (data.faqOffered) player.faqOffered = true;
-        for (let message in dailyMessages) checkMessages(message);
-        showNextInQueue();
         updateInventory(false);
         try {
             beSilly.init();

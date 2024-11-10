@@ -533,7 +533,7 @@ function createIndexCards(layer) {
             }
         }
         else list = [...layerDictionary[layer].layer];
-        console.log(list)
+
         for (let i = list.length - 1; i >= 0; i--) {
             const ore = list[i];
             const tier = oreList[ore]["oreTier"];
