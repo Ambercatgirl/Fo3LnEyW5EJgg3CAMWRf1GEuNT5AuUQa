@@ -85,26 +85,6 @@ function fromBinary(encoded) {
         bytes[i] = binary.charCodeAt(i);
     return String.fromCharCode(...new Uint16Array(bytes.buffer));
 }
-
-function exportData() {
-    let data;
-    if (!debug && localStorage.getItem("newPlayerData") !== null) data = localStorage.getItem("newPlayerData");
-    else if (localStorage.getItem("newTestingData") !== null) data = localStorage.getItem("newTestingData");
-    else data = !debug ? localStorage.getItem("playerData") : localStorage.getItem("testingData");
-    data = JSON.parse(data)
-    if (data.player.webhookKey !== undefined) delete data.player.webhookKey;
-    data = JSON.stringify(data);
-    data = toBinary(data);
-    let textField = document.getElementById("dataText");
-    textField.value = data;
-    if (confirm("Download save data as file?"))
-        exportDataAsFile(data, "data.txt", "text/plain");
-    else {
-        textField.select();
-        textField.setSelectionRange(0, 250000);
-        alert("The textbox has been selected for you; make sure to copy your data to your clipboard so you don't lose it!");
-    }
-}
 function getFileContents(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
