@@ -119,6 +119,9 @@ function giveBlock(obj) {
             playerInventory["bitcoin"]["normalAmt"]++;
             inventoryObj["bitcoin"] = 0;
         }
+        if (oreList[obj.type]["oreTier"] === "Hyperdimensional") {
+            verifiedOres.addHyperdimensionalCount(obj.amt)
+        }
         playerInventory[obj.type]["foundAt"] ??= Date.now();
     } else {
         if (oreRarity === 1) {
@@ -134,22 +137,23 @@ function giveBlock(obj) {
     inventoryObj[obj.type] = 0;
 }
 function rollVariant() {
-    let vRand = {r:  Math.round(aleaRandom() * 499 + 1), c:gameInfo.count, s:gameInfo.seed, v: 1};
-    if (vRand.r === 1) {vRand.v = 4;} // 1:500
-    else if (vRand.r <= 3) {vRand.v = 3;} // 1:250
-    else if (vRand.r <= 13) {vRand.v = 2;} // 1:50
+    let vRand = {r: aleaRandom(), c:gameInfo.overallCount, s:gameInfo.seed, v: 1};
+    vRand.rand = Math.round(vRand.r * 499 + 1)
+    if (vRand.rand === 1) {vRand.v = 4;} // 1:500
+    else if (vRand.rand <= 3) {vRand.v = 3;} // 1:250
+    else if (vRand.rand <= 13) {vRand.v = 2;} // 1:50
     return vRand;
 }
 let cat = 1;
 let mainProbabilityTable;
 let mainGenerationTable;
 let lunaY = 1;
-const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠godOfTheMine";
+const specialCases = "💙🌻🔋⌛🦾👀🌈🍃⛔🎉🔒📽️🧂🏯🖊️🏔️💔🩸💎🔮💠godOfTheMine♾️👁️";
 function aleaRandom() {
     if (gameInfo.count === gameInfo.loopLength) {
         gameInfo.count = 0
         gameInfo.loops += 123000;
-        rand = new PRNG.Alea(gameInfo.seed, gameInfo.loops);
+        rand = new Math.seedrandom(gameInfo.seed + String(gameInfo.loops));
     }
     gameInfo.count++;
     gameInfo.overallCount++;
@@ -301,7 +305,11 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
                     if (getCurrentEventOre() === blockToGive && blockToGive !== "🪸") endEvent();
                 } 
                 playSound(oreList[blockToGive]["oreTier"], blockToGive);
+                if (oreList[blockToGive]["oreTier"] === "Hyperdimensional") {
+                    verifiedOres.addHyperdimensionalCount(results[blockToGive].est);
+                }
             }
+
             for (let i = 3; i > 0; i--) {
                 let estVariantAmt = (results[blockToGive].est)/(multis[i]/variantDivide);
                 const variantRandom = {r: aleaRandom(), c: gameInfo.overallCount, s: gameInfo.seed};
@@ -347,7 +355,6 @@ const bulkGenerate = function(y, amt, caveInfo, fromOffline) {
             }
             let toGive = results[blockToGive].est;
             if (toGive > 0) {
-                if (player.gears["gear42"] && !oreInformation.tierGrOrEqTo({"tier1": oreList[blockToGive]["oreTier"], "tier2": "Hyperdimensional"})) toGive *= 2;
                 wasDuped = false;
                 if (oreList[blockToGive]["numRarity"] >= 750000) {
                     if (player.gears["gear7"] && currentWorld < 2) gearAbility1();
@@ -422,6 +429,8 @@ const checkSpecials = function(block, get) {
     let rand = 1000;
     if (block === "🔮") rand = 10000;
     if (block === "godOfTheMine") rand = 3;
+    if (block === "♾️") rand = 1000000000;
+    if (block === "👁️") rand = 1920000000;
     if (Math.random() < 1/rand || get) {
         switch(block) {
             case "💙" : 
@@ -497,6 +506,12 @@ const checkSpecials = function(block, get) {
             break;
             case "godOfTheMine" :
                 if (player.stats.currentPickaxe === "pickaxe31") block = "Omnipotent God of The Mine";
+                break;
+            case "♾️":
+                block = "True Infinity";
+                break;
+            case "👁️":
+                block = "Flaroreon";
                 break;
         }
     }
@@ -650,8 +665,10 @@ function attemptSwitchWorld(to) {
     if (to === 1.1 && player.sr1Unlocked && currentWorld !== 1.1) {switchWorld(1.1); return;}
     if (to === 1 && currentWorld !== 1) {switchWorld(1); return;}
     if (to === 1.2 && currentWorld !== 1.2) {switchWorld(1.2); return;}
-    if (to === 0) {showTrophyRoom(true); return;}
-    if (to === 0.9 && player.galacticaUnlocked) {switchWorld(0.9); return;}
+    if (to === 0.9 && (player.galacticaUnlocked || indexHasOre("Omnipotent God of The Mine") > 0)) {switchWorld(0.9); return;}
+    if (to === 11252023) {
+        goToAnniversary();
+    }
 }
 function switchWorld(to) {
     player.settings.lastWorld = to;
@@ -742,6 +759,7 @@ function prepareGalactica() {
     createMine();
     layerNum = 0;
     player.galacticaEntered = true;
+    player.galacticaUnlocked = true;
 }
 function prepareWatr() {
     allLayers = waterWorldLayers;
@@ -844,4 +862,20 @@ function removeParadoxical() {
     }
     updateSpeed();
     saveNewData({override: undefined, return: false});
+}
+function goToAnniversary() {
+    const anniversaryData = localStorage.getItem("sillyCavernsAnniversaryData");
+    if (anniversaryData === null || anniversaryData === undefined) {
+        localStorage.setItem("sillyCavernsAnniversaryData", JSON.stringify({sf: false, p8: false, hk: false}));
+    }
+    clearInterval(dataTimer);
+    clearInterval(sinceLastAutosaveTimer);
+    clearInterval(limitedTimer);
+    clearInterval(inventoryTimer);
+    clearInterval(loopTimer);
+    clearInterval(secondaryTimer);
+    clearInterval(displayTimer);
+    if (musicPlayer["songs"][musicPlayer.currentSong] !== undefined) musicPlayer["songs"][musicPlayer.currentSong].src.pause();
+    keepRunningAudio.pause();
+    document.body.innerHTML = '<iframe src="https://ambercatgirl.github.io/silly-caverns-anniversary-event/" title="The Silly Caverns" style="width:100vw; height:100vh; overflow:hidden;"></iframe>';
 }

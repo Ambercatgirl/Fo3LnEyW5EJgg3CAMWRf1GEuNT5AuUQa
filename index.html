@@ -121,7 +121,6 @@
                 <button class="gameSetting toggledOff" onclick="toggleAccurateSpeed(this);" id="toggleAccurateSpeed">Accurate Speed</button>
                 <button class="gameSetting toggledOn" onclick="switchToIndex(this, 0)" id="invIndex">Travel to layer index on inventory click</button>
                 <button class="gameSetting toggledOn" onclick="switchToIndex(this, 1)" id="craftIndex">Travel to layer index on crafting click</button>
-                <button class="gameSetting toggledOff" onclick="toggleHideCompleted(this)" id="hideCompleted">Hide Completed Recipe Ores</button>
                 <button class="gameSetting toggledOff" onclick="switchFont();" id="switchFont">Use Different Emojis (for improper display)</button>
                 <button class="gameSetting toggledOn" onclick="toggleCaves();" id="caveToggle">Toggle Caves</button>
                 <button class="gameSetting toggledOn" onclick="toggleSpawnEffects(this);" id="spawnEffects">Spawn Effects Enabled</button>
@@ -291,7 +290,6 @@
             </div>
             <div id="loungeData" style="display: none;">
                 <div class="dataDiv">
-                    <button class="dataButton" id="dataExport" onclick="exportData()">Export Data</button>
                     <input type="text" id="dataText">
                     <button class="dataButton" id="dataImport" onclick="importData(document.getElementById('dataText').value)">Import Data</button>
                     <label for="dataFileUpload" id="dataFileLabel" class="dataButton">
@@ -303,7 +301,6 @@
             </div>
             <div id="loungeLogs" style="display: none;">
                 <div id="logsButtons">
-                    <button onclick="verifiedOres.showLogs()" id="logsButton">Generate Ore Logs</button>
                     <select name="sortType" id="logSort">
                         <option value="All">All</option>
                         <option value="Cave">Cave</option>
@@ -661,7 +658,7 @@
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe33`)" id="wormholeExterminator" style="display: none;"><span>Wormhole Exterminator</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe34`)" id="superclusterCapsizer" style="display: none;"><span>Supercluster Capsizer</span></button>
                     <button class="craftingButton" onclick="displayRecipe(`pickaxe35`)" id="galacticEngulfer" style="display: none;"><span>Galactic Engulfer</span></button>
-                
+                    <button class="craftingButton" onclick="displayRecipe('pickaxe36')" style="display: none;" id="pickaxeOfFlight"><span>Pickaxe of Flight</span></button>
                 </div>
                 <div id="gearCrafts" class="hidden craftingList">
                     <button class="craftingButton" onclick="displayRecipe('gear30')" id="rngManipulator"><span>RNG Manipulator</span></button>
@@ -712,6 +709,7 @@
                     <button class="craftingButton" onclick="displayRecipe('gear42')" style="display: none;" id="ringOfSound"><span>Ring of Sound</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear43')" style="display: none;" id="ringOfTheUnknown"><span>Ring of The Unknown</span></button>
                     <button class="craftingButton" onclick="displayRecipe('gear44')" style="display: none;" id="ringOfCreation"><span>Ring of Creation</span></button>
+                    <button class="craftingButton" onclick="displayRecipe('gear48')" style="display: none;" id="ringOfFire"><span>Ring of Fire</span></button>
                 </div>
                 
             </div>
@@ -734,7 +732,10 @@
                 </div>
                 
                 <div id="newCraftingRecipeHolder"></div>
-                <p id="estimatedTimeHolder">Time Goes Here</p>
+                <div id="estimatedTime">
+                  <button id="hideCompleted" onclick="toggleHideCompleted()"></button>
+                  <p id="estimatedTimeHolder">Time Goes Here</p>
+                </div>
             </div>
             <div id="newCraftingHolder">
                 <p id="newCraftingName" class="newCraftingText">Pickaxe Name</p>
@@ -755,7 +756,7 @@
                     <p id="newCraftingGearDescription" class="newCraftingText">Effect:</p>
                     <p id="newCraftingGearEffect" class="newCraftingText"></p>
                 </div>
-                <button id="collapseRecipe" onclick="collapseRecipe()"><span>Collapse<span></span></span></button>
+                <button id="collapseRecipe" onclick="collapseRecipe()"><span>Expand<span></span></span></button>
                 <button id="lockRecipe" onclick="lockRecipe()">Unlocked</button>
 
         </div>
@@ -970,7 +971,19 @@
                 <p class="dailyText">
                     The UI Overhaul is finally complete!<br>
                     Almost every aspect of the game has had its design redone!!<br>
-                    Scroll to see everything :3<br>
+                    Scroll to see everything :3<br><br>
+
+                    Misc. Changes:<br>
+                    <span style="font-size: min(2vh, 1vw);">
+                    - Stop on rare will not stop if the ore is automined, wont be 100% consistent depending on overlapping abilities.<br>
+                    - 8 New Ores<br>
+                    - Multiple new pickaxe icons<br>
+                    - Gave Gamblers Fallacy a new ability<br>
+                    - Added seeded generation<br>
+                    - Changed the webhook to be server based, learn more in the discord server!<br><br>
+                    </span>
+                    UI Changes:<br>
+                    <span style="font-size: min(2vh, 1vw);">
                     - Revamped Entire Game UI<br>
                     - Merged all messages into the topbar<br>
                     - Message indicator to display if the current message is an event or an ore spawn<br>
@@ -997,10 +1010,19 @@
                     - Redid Forge / Variant Conversion UI. Merged them into one page.<br>
                     - Added more conversion options, should be helpful<br>
                     - Tree Of Life now uses normal crafting!! yayayay!!<br>
+                    </span>
                 </p>
             </div>
-            <div id="generatingSeed" class="dailyMessage">
-                Generating Seed... This will take a maximum of 15 seconds!
+            <div id="theAnniversary" class="dailyMessage">
+                <button class="closeDailyMessage" onclick="showNextInQueue()">❌</button>
+                <p class="dailyText">
+                    Silly Caverns Turns 1 Year Old On November 25th!<br>
+                    <span style="font-size: min(2vh,1vw);">
+                    From November 16th to December 31st 2024, there will be a limited time event where you get to travel to one of the earliest versions of the game!<br>
+                    There are 3 unique rewards for completing certain milestones listed at the portal to the Event World!<br>
+                    Thank you all so much for sticking around for so long, it means the world to me <3
+                    </span>
+                </p>
             </div>
         </div>
 

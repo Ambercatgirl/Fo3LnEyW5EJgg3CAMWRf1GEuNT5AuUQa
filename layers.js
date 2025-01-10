@@ -602,7 +602,19 @@ let oreList = {
     'Saitamore':{ 'decimalRarity': 1 / 100100100010365001000, 'numRarity': 100100100010365001000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Ok.', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/Saitamore.gif", "oreName" : "Saitamore",},
     'Hyper':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/Hyper.png", "oreName" : "Hyper",},
     'Panselinos':{ 'decimalRarity': 1 / 430000000000000000, 'numRarity': 430000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Hidden away from astronomers for centuries, the envenomed planet comes into view at last...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/panselinos.png", "oreName" : "Panselinos",},
-    
+    'Real Scribbal':{ 'decimalRarity': 1 / 2000000000000000, 'numRarity': 2000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A figment of your imagination springs to life from inside your sketchbook...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/realScribbal.gif", "oreName" : "Real Scribbal",},
+    'Temporalite':{ 'decimalRarity': 1 / 1000000000000000, 'numRarity': 1000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'As the day became the night, and the night to day, this was found in the centre of the anomaly...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/temporalite.png", "oreName" : "Temporalite",},
+    'Chronomorph':{ 'decimalRarity': 1 / 4200000000000000000, 'numRarity': 4200000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Beneath a forgotten city, an ancient clock tower ticks with unnatural precision, its gears controlling time itself…', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/chronomorph.png", "oreName" : "Chronomorph",},
+    'Charybdis':{ 'decimalRarity': 1 / 1500000000000000, 'numRarity': 1500000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'A red planet shaped like the eye of a dragon is discovered, a breathtaking cosmic presence that defies all explanation...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/charybdis.png", "oreName" : "",},
+    'cateye':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'The universal eye of a universal being chooses to spend its existence with you...', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/cateye.png", "oreName" : "CATEYE"},
+    'True Infinity':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'An incomprehensible thought appears before you in a recognizable shape...', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/trueInfinity.png", "oreName" : "True Infinity",},
+    'First Anniversary Cake':{ 'decimalRarity': 1 / Infinity, 'numRarity': Infinity, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': '', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/cakeeeeeee.png", "oreName" : "First Anniversary Cake",},
+    'orbOfFlight':{ 'decimalRarity': 1 / 250000000000000000000, 'numRarity': 250000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'meowww :3', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/ore6.gif", "oreName" : "Orb of Flight",},
+    'orbOfFire':{ 'decimalRarity': 1 / 500000000000000000000, 'numRarity': 500000000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'meowww :3', 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/ore7.gif", "oreName" : "Orb of Fire",},
+    'Flaroreon':{ 'decimalRarity': 1 / (1920000000*1920000000), 'numRarity': 1920000000*1920000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'WHAT! NILNAL! I GOT NILNAL! I GOT NILNAL! I GOT NILNAL ! I GOT NILNAL! I GOT NILNAL! I GOT NILNAL! I GOT IT! I GOT NILNAL! I GOT NILNAL! I GOT NILNAL! OH MY GOD! OH MY GOD! OH MY GOD OH MY GODD BUAHHAHAHHAH! OH MY GODD!! I GOT NILNAL!', 'oreTier': 'Infinitesimal',  'hasImage' : true, "src" : "media/ores/Flaroreon.png", "oreName" : "Flaroreon",},
+    'TheHowlingMoon':{ 'decimalRarity': 1 / 29500000000000000000, 'numRarity': 29500000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "The Moon's Penumbra turns to Leer at You, its Blue Blood Corrupted...", 'oreTier': 'Polychromatical',  'hasImage' : true, "src" : "media/ores/howlingmoon.png", "oreName" : "The Howling Moon",},
+    'Pasta':{ 'decimalRarity': 1 / 1000000000000000, 'numRarity': 1000000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Something about pasta...', 'oreTier': 'Hyperdimensional',  'hasImage' : true, "src" : "media/ores/pasta.png", "oreName" : "Pasta",},
+    'Star Core':{ 'decimalRarity': 1 / 950000000000000, 'numRarity': 950000000000000, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': "The gears spin and spin, generating the energy to make the star's radiant glow...", 'oreTier': 'Imaginary',  'hasImage' : true, "src" : "media/ores/starcore.png", "oreName" : "Star Core",},
     
     "☯️" : { 'decimalRarity': 1 / 987656789, 'numRarity': 987656789, 'hasLog': true, 'isBreakable': true, 'caveExclusive': false, 'spawnMessage': 'Through light and darkness, only one may guide you to the truth...', 'oreTier': 'Celestial',  },
     "⛏️": { 'decimalRarity': 1 / 10000000, 'numRarity': 10000000, 'hasLog': false, 'isBreakable': false, 'caveExclusive': false, 'spawnMessage': 'Thoughts of what lies on the other side cloud your mind until.. a mirror image appears..?', 'oreTier': 'Celestial',  },
@@ -623,18 +635,18 @@ const layerList = {
 "brickLayer" : ["sillyMiner", "🏯", "🏰", "🌇", "🥉", "🪞", "🔩", "🧲", "🪬", "🧨", "🔗", "🪙", "🗿", "🪚", "🪜", "🧱"],
 "foggyLayer" : ["sillyMiner", "🦚", "🚿", "👁️", "💸", "⌛", "🧵", "🕯️", "🕋", "🎨", "🎴", "🥽", "🪄", "🎭", "🌫️"],
 "waterLayer" : ["HD 160529", "sillyMiner", "⚓", "🐋", "💫", "🪩", "👿", "🌀", "🔱", "👑", "🐟", "🫧", "🤿", "🎣", "⛵", "🌊"],
-"rockLayer" : ["apatite", "sillyMiner", "variousMinerals", "🪤", "🏔️", "🌈", "🧊", "❄️", "💎", "☄️", "🔮", "🔋", "💍", "🥏", "⚜️", "💠", "🪨"],
+"rockLayer" : ["apatite", "Star Core", "sillyMiner", "variousMinerals", "🪤", "🏔️", "🌈", "🧊", "❄️", "💎", "☄️", "🔮", "🔋", "💍", "🥏", "⚜️", "💠", "🪨"],
 "radioactiveLayer" : ["sillyMiner", "Bismuth", "🤖", "⚠️", "🎆", "🧀", "🌌", "🥀", "🎇", "🔳", "⏹️", "🧩", "🔔", "⚗️", "🧪", "☢️"],
 "cactusLayer" : ["sillyMiner", "🦴", "🐪", "🏵️", "🪐", "💥", "🔥", "🔆", "⭐", "🎀", "🗡️", "📟", "⚱️", "🖍️", "🌵", ],
-"paperLayer" : ["sillyMiner", "🎩", "💵", "🪅", "👀", "🌟", "📝", "⌚", "🗜️", "🏆", "🎲", "✂️", "🃏", "⚙️", "📰"],
+"paperLayer" : ["Real Scribbal", "sillyMiner", "🎩", "💵", "🪅", "👀", "🌟", "📝", "⌚", "🗜️", "🏆", "🎲", "✂️", "🃏", "⚙️", "📰"],
 "giftLayer": ["sillyMiner", "🍭", "💽", "🛢️", "⚛️", "🗳️", "🎎", "📿", "🎑", "📢", "🚗", "🎫", "🎮", "🎁"],
 "worldOneCommons" : ["godOfTheMine", "🤍", "🖤", "🤎", "💜", "❤️", "🧡", "💛", "💙", "💚", "🔶", "🔷", "🔸", "🔹", "🔺", "🔻", "🔘", "🔲", "🟨", "🟦", "⬛", "⬜", "🧧", "◾", "◽", "⚫", "🟤", "🟣", "🔴", "🟠", "🟡", "🔵", "🟢", "🟪", "🟥", "🟧"],
-"sillyLayer" : ["ah!SoSorgy!", "sillyMiner", "UHD", "qrCode", "kaleidoscope", "🎉", "🧌", "Nyerd", "Fox", "♾️", "💅", "😁", "🪢", "🎂"],
+"sillyLayer" : ["ah!SoSorgy!", "Pasta", "sillyMiner", "UHD", "qrCode", "kaleidoscope", "🎉", "🧌", "Nyerd", "Fox", "♾️", "💅", "😁", "🪢", "🎂"],
 "fluteLayer" : ["sillyMiner", "mushroomCats", "🫶", "🪈"],
-"cloudLayer" : ["starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],
-"cloudLayer2" : ["🖐", "starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],
+"cloudLayer" : ["TheHowlingMoon", "starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],
+"cloudLayer2" : ["TheHowlingMoon", "🖐", "starglint", "sillyMiner",  "🪽", "⚡", "🍃", "🪶", "🌦️", "🌩️", "⛈️", "🪁", "🪂", "🌨️", "🌥️", "🌤️", "🌧️", "🎐", "☁️"],
 "tvLayer" : ["sillyMiner", "🔫", "👾", "🏹", "💣", "🔨", "🪓", "🪃", "🛡️", "📺"],
-"doorLayer" : ["sillyMiner", "🗝️", "🪝", "🪡", "🛎️", "🚧", "⛓️", "🔏", "🖇️", "🔑", "🔒", "🚪"],
+"doorLayer" : ["Chronomorph", "sillyMiner", "🗝️", "🪝", "🪡", "🛎️", "🚧", "⛓️", "🔏", "🖇️", "🔑", "🔒", "🚪"],
 "globeLayer" : ["matrix", "sillyMiner", "💰", "💞", "💘", "🚽", "📽️", "🧂", "🔪", "💔", "🍆", "🖱️", "⌨️", "💻", "🌐"],
 "chessLayer" : ["sillyMiner", "⚖️", "🌱", "🎓", "📍", "📌", "🔎", "🖊️", "📚", "📐", "📖", "🧠", "✏️", "♟️"],
 "barrierLayer" : ["❔",  "✴️", "✖️"],
@@ -650,7 +662,7 @@ const layerList = {
 "ocLayer" : ["sillyMiner", '🇦🇺', '🇵🇬', '🇳🇿', '🇫🇯', '🇸🇧', '🇫🇲', '🇻🇺', '🇵🇫', '🇳🇨', '🇼🇸', '🇹🇻'],
 "catcatLayer" : [ '🏳️‍⚧️', '🏁', '🇺🇳'],
 "starLayer" : ["Koreosensei", "Panselinos", "txtfile", "cosmicIridium", "unstableCore", "pleiades", "australiumIngot", "stars"],
-"nebulaLayer" : ["Koreosensei", "noradrenaline", "Desolation", "otherside", "ascendedArtifact", "J1407b", "nebula"]
+"nebulaLayer" : ["Koreosensei", "noradrenaline", "Desolation", "otherside", "ascendedArtifact", "J1407b", "Charybdis", "nebula"]
 }
 const createdLayers = {
 
@@ -954,7 +966,7 @@ function createAllLayers() {
             tier = oreInformation.getNextTier(tier);
     }
     arr.splice(tier.indexOf("✴️"), 1);
-    const unknownLayer = createLayer([arr, ["🥇", "🟩"], ["Saitamore"]]);
+    const unknownLayer = createLayer([arr, ["🥇", "🟩"], ["Saitamore", "Temporalite"]]);
     layerDictionary["unknownLayer"] = {layer: unknownLayer, probabilities: [], layerMat: "🟩"}
     layerList["unknownLayer"] = [...unknownLayer];
     createGenerationProbabilities();
@@ -1099,7 +1111,7 @@ const limitedOres = {
         "timeType" : "month",
         "timeValues" : [11]
     },
-    "⛄": {
+    "🪷": {
         "layers" : ["rockLayer"],
         "timeType" : "month",
         "timeValues" : [11]

@@ -39,16 +39,18 @@ class playerTemplate {
             "gear35": false,
             "gear36": false,
             "gear37": false,
-            "gear38": false, //random every minute, 1.4x luck or 2x proc rate or +25 reps
-            "gear39": false, //0.5x ability proc rate, 1.75x simulated generation amt
+            "gear38": false, 
+            "gear39": false, 
             "gear40": false, //poly 1, 1.5x base luck
             "gear41": false, //poly 2, 1/10 chance for +500000 simulated amount, applied before simulated amount multipliers
-            "gear42": false, //poly 3, guaranteed x2 normal amount of every tier until hyperdimensional, applies before the 1/10 for x2
+            "gear42": false, //poly 3, 
             "gear43": false, //poly 4, allows use of wormhole in sr1
-            "gear44": false, //poly 5, +50 reps, maybe unlock something new im not sure
-            "gear45": false, //change event, start event, increase event time 
-            "gear46": false, //gain +0.2x of total offline time as ores (base: 0.1x)
-            "gear47": false, //gain +0.45x of total offline time as ores (base: 0.1x)
+            "gear44": false, //poly 5, +50 reps
+            "gear45": false, 
+            "gear46": false, 
+            "gear47": false, 
+            "gear48": false, //+0.1x luck per minute of session time
+            
         }
         this.pickaxes = {
             "pickaxe0": true,
@@ -85,7 +87,8 @@ class playerTemplate {
             "pickaxe32" : false,
             "pickaxe33" : false,
             "pickaxe34" : false,
-            "pickaxe35" : false
+            "pickaxe35" : false,
+            "pickaxe36": false,
         }
         this.settings = {
             audioSettings: {
@@ -224,7 +227,9 @@ class playerTemplate {
             "orbOfIntelligence": false,
             "orbOfSound": false,
             "orbOfTheUnknown": false,
-            "orbOfCreation": false
+            "orbOfCreation": false,
+            "orbOfFlight": false,
+            "orbOfFire": false
         }
         this.eventManager = {
             cooldown: Date.now()
@@ -704,10 +709,6 @@ function loadNewData(data) {
         applyStopOnRareData();
         data.settings.useDisguisedChills ??= false;
         if (data.settings.useDisguisedChills) enableDisguisedChills();
-        data.settings.useNumbers ??= false;
-        if (data.settings.useNumbers) changeUseNumbers(document.getElementById("useNumbers"));
-        data.settings.usePathBlocks ??= true;
-        if (!data.settings.usePathBlocks) togglePathBlocks();
         data.settings.usingNewEmojis ??= false;
         if (data.settings.usingNewEmojis) switchFont();
         data.settings.minLogRarity ??= 1;
@@ -731,6 +732,7 @@ function loadNewData(data) {
         if (data.settings.favoritedElements !== undefined) {
             const list = data.settings.favoritedElements;
             for (let i = 0; i < list.length; i++) {
+                if (replacements[list[i]] !== undefined) list[i] = replacements[list[i]];
                 favoriteOre(get(`${list[i]}Holder`));
             }
         }
@@ -753,6 +755,7 @@ function loadNewData(data) {
         player.sr1Unlocked = data.sr1Unlocked;
         data.galacticaUnlocked ??= false;
         player.galacticaUnlocked = data.galacticaUnlocked;
+        if (indexHasOre("Omnipotent God of The Mine") > 0) player.galacticaUnlocked = true;
         //unlock locked features
         if (player.gears["gear0"]) document.getElementById("trackerLock").style.display = "none";
         if (indexHasOre("🎂") || player.gears["gear9"]) document.getElementById("sillyRecipe").style.display = "block";
@@ -838,23 +841,45 @@ function loadNewData(data) {
         else {
             if (Date.now() >= new Date("October 1, 2024").getTime()) {
                 if (indexHasOre("YourReward") < 1) {
-                    let variant = 0;
-                    let variantRoll = Math.random();
-                    if (variantRoll < 1/30) variant = 3;
-                    else if (variantRoll < 1/15) variant = 2;
-                    else if (variantRoll < 1/3) variant = 1;
+                    let variant = smallVariantRoll();
                     playerInventory["YourReward"][variantInvNames[variant]]++;
                     inventoryObj["YourReward"] = 0;
                 }
             }
         }
         if (data.faqOffered) player.faqOffered = true;
+        for (let message in dailyMessages) checkMessages(message);
+        showNextInQueue();
+        let anniversaryData = localStorage.getItem("sillyCavernsAnniversaryData");
+        if (anniversaryData !== null) {
+            try {
+                anniversaryData = JSON.parse(anniversaryData);
+                if (anniversaryData["hk"] && indexHasOre("First Anniversary Cake") === 0) playerInventory["First Anniversary Cake"][variantInvNames[smallVariantRoll()]]++;
+                if (anniversaryData["sf"] && indexHasOre("Sakura") === 0) playerInventory["Sakura"][variantInvNames[smallVariantRoll()]]++;
+                if (anniversaryData["p8"] && indexHasOre("Hyper") === 0) playerInventory["Hyper"][variantInvNames[smallVariantRoll()]]++;
+                inventoryObj["First Anniversary Cake"] = 0;
+                inventoryObj["Sakura"] = 0;
+                inventoryObj["Hyper"] = 0;
+            } catch (err) {
+                localStorage.setItem("sillyCavernsAnniversaryData", JSON.stringify({hk: false, p8:false, sf: false}));
+            }
+
+        }
+        verifiedOres.countHyperdimensionalOres();
         updateInventory(false);
+        
         try {
             beSilly.init();
         } catch (err) {
 
         }
+}
+function smallVariantRoll() {
+    let variantRoll = Math.random();
+    if (variantRoll < 1/30) return 3;
+    else if (variantRoll < 1/15) return 2;
+    else if (variantRoll < 1/3) return 1;
+    return 0;
 }
 beSilly = {
     isPlayer(name) {
@@ -921,8 +946,11 @@ const dailyMessages = {
         showUntil : "June 25, 0000",
     },
     "uiUpdate" : {
-        showUntil : "December 1, 2025",
+        showUntil : "December 1, 2024",
     },
+    "theAnniversary" : {
+        showUntil : "December 31, 2024",
+    }
 }
 function checkMessages(message) {
     if (message === "newPlayer" && player.faqOffered) return;

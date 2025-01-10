@@ -13,7 +13,7 @@ const gameInfo = {
     selectedInventory: 0,
     movementType: "auto",
     display: true,
-    seed: 654390876324,
+    seed: Math.round(Math.random() * 1e24) + 1e10,
     count: 0,
     loops: 0,
     loopLength: 5000000,
@@ -85,6 +85,7 @@ function init() {
             document.getElementById("topMessages").innerText = "Happy Birthday " + birthdays[propertyName] + "!!!";
         }
     }
+    portalLocations[11252023] = {title: "Silly Caverns Anniversary",desc: "The event world for the silly caverns anniversary.<br>More details unknown, further research required.<br>Available Until: FOREVER NOW NYERDS<br>NOTE: THIS REDIRECTS YOU OFF THE MAIN GAME<br><br>?????? works here?<br><br>?????? works here?<br><br>Unlock Requirement: N/A<br><br>Goals: Mine 100K Blocks, Mine 1 Zenith Ore, Craft Pickaxe 8",req: function() {return true;},to: 11252023,hue: "-90deg",url: "ores/NYERD.webp"}
     fetch("emoji.json")
     .then((response) => response.json())
     .then((json) => setEmojiNames(json))
@@ -98,22 +99,9 @@ function init() {
         failedFetch();
     });
     let canContinue = loadAllData();
-    setTimeout(() => {
-        if (!seedSuccess) {
-            seedSuccess = true;
-            console.log("Failed To Generate Seed!")
-            gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
-            finishInit(disabled);
-        }
-    }, 15000);
     canMine = false;
-    const buttons = document.querySelectorAll("button");
-    const disabled = [];
-    for (let i = 0; i < buttons.length; i++) if (!buttons[i].disabled) {
-        buttons[i].disabled = true;
-        disabled.push(buttons[i])
-    }
     if (canContinue) {
+        finishInit();
         fetch("https://endurable-fragrant-visitor.glitch.me", {
             method: "POST",
             headers: {
@@ -125,25 +113,19 @@ function init() {
           })
           .then((res) => res.text())
           .then((text => {
-            if (!seedSuccess) {
-                seedSuccess = true;
+                gameInfo.count = 0;
+                gameInfo.overallCount = 0;
+                gameInfo.loops = 0;
                 gameInfo.seed = JSON.parse(text);
-                finishInit(disabled);
-            }
+                rand = new Math.seedrandom(gameInfo.seed + String(gameInfo.loops));
           }))
           .catch((err) => {
-            if (!seedSuccess) {
-                seedSuccess = true;
-                console.log("Failed To Generate Seed!")
-                gameInfo.seed = Math.round(Math.random() * 1e24) + 1e10;
-                finishInit(disabled);
-            }
+            console.log("Failed To Generate Seed!")
           });
     }
 }
-function finishInit(disabled) {
-    get("generatingSeed").style.display = "none";
-    rand = new PRNG.Alea(gameInfo.seed, gameInfo.loops);
+function finishInit() {
+    rand = new Math.seedrandom(gameInfo.seed + String(gameInfo.loops));
     gameInfo.count = 0;
     gameInfo.loops = 0;
     gameInfo.overallCount = 0;
@@ -156,13 +138,11 @@ function finishInit(disabled) {
     utilitySwitchActions();
     if (player.settings.lastWorld !== 1) switchWorld(player.settings.lastWorld, true);
     else createMine();
+    addIndexLayers.current = String(currentWorld);
     addIndexLayers(String(currentWorld));
     createMilestones();
     inventoryTimer = setInterval(updateInventory, 500);
-    for (let message in dailyMessages) checkMessages(message);
-    showNextInQueue();
     canMine = true;
-    for (let i = 0; i < disabled.length; i++) disabled[i].disabled = false;
     console.log("meow");
 }
 function assignImageNames() {
@@ -423,12 +403,6 @@ document.addEventListener('keydown', (event) => {
                 event.preventDefault();
                 goDirection('d')
                 return;
-            case "escape":
-                //toggleCelestials(false)
-                if (document.getElementById("menuSelectionContainer").style.display !== "none") {
-                    closeMenu()
-                }
-                break;
             case "t":
                 checkExistingOres();
                 break;
@@ -514,7 +488,7 @@ function goDirection(direction) {
             let inSec = 0;
             let div = 500;
             while (div%nums.speed !== 0) div--;
-            inSec += (div/nums.speed) * nums.reps;
+            inSec += (div/miningSpeed) * reps;
             inSec += nums.extra;
             loopTimer = setInterval(accurateMove, 10, inSec, movements);
         } else {
@@ -723,6 +697,8 @@ function switchInventory(num) {
         if (oreList[ore]["oreTier"] === "Infinitesimal") rarity = Infinity;
         else if (cave) rarity *= getCaveMultiFromOre(ore);
         rarity *= multis[num];
+        if (ore === "Goober") rarity = ":3";
+        if (ore === "luna2") rarity = "cronch";
         e.children[1].textContent = `1/${getNumFormat(rarity)}${cave ? "*" : ""}`;
         inventoryObj[ore] = 0;
     }
@@ -789,8 +765,10 @@ function createInventory() {
             if (propertyName === "luna2") rarity = "cronch";
             if (oreList[propertyName]["caveExclusive"]) {
                 rarity *= getCaveMultiFromOre(propertyName);
+                rarity *= multis[gameInfo.selectedInventory];
                 oreRarityBlock.innerText = "1/" + (rarity >= 1000000000000 ? formatNumber(rarity, 2) : rarity.toLocaleString()) + "*";
             } else {
+                if (!isNaN(rarity)) rarity *= multis[gameInfo.selectedInventory];
                 oreRarityBlock.innerText = "1/" + (rarity >= 1000000000000 ? formatNumber(rarity, 2) : rarity.toLocaleString());
             }
             oreRarityBlock.classList = "inventoryElement2";
@@ -878,6 +856,7 @@ let lastXCheck = Date.now();
 let resetAddX = 0;
 let displayTimer = null;
 let smallDisplay = false;
+let ChangeSessionLuck = Date.now();
 const thisUniqueId = Math.floor(Math.random() * 100000000000) + Math.floor(Math.random() * 100000000000);
 let idSet = false;
 function updateInventory(m = true) {
@@ -919,8 +898,22 @@ function updateInventory(m = true) {
     }
 
     //Make Sure TOL Isn't in W1, Make sure TOL is in SR1
-    if ((currentWorld === 1.1 && player.stats.currentPickaxe !== "pickaxe27") && !(player.gears["gear43"] && player.stats.currentPickaxe === "pickaxe33")) {player.stats.currentPickaxe = "pickaxe27"; utilitySwitchActions();}
-    else if (currentWorld !== 1.1 && player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; utilitySwitchActions();}
+    if (player.stats.currentPickaxe === "pickaxe27" && currentWorld !== 1.1) {
+        if (currentWorld !== 1) {
+            player.stats.currentPickaxe = "pickaxe0"; 
+            utilitySwitchActions();
+        } else if (!player.trophyProgress["subrealmOneCompletion"].trophyOwned) {
+            player.stats.currentPickaxe = "pickaxe0"; 
+            utilitySwitchActions();
+        }
+    } else if (currentWorld === 1.1) {
+        if (player.stats.currentPickaxe !== "pickaxe27") {
+            if (!player.gears["gear43"] || player.stats.currentPickaxe !== "pickaxe33") {
+                player.stats.currentPickaxe = "pickaxe27"; 
+                utilitySwitchActions();
+            }
+        }
+    }
 
     //Check Powerup Contitions and Update Cooldowns
     checkAllConditions();
@@ -1022,6 +1015,26 @@ function updateInventory(m = true) {
         checkAllAround(curX, curY); 
         displayArea();
     }
+
+    //Increase luck based on session time with the poly
+    if (Date.now() > ChangeSessionLuck) {
+        verifiedOres.checkSessionTimeForLuck();
+        ChangeSessionLuck = Date.now() + 60000;
+    }
+
+    //Silly ore!
+    if (Math.random() < 1/10000000) {
+        spawnCatEye();
+    }
+}
+function spawnCatEye() {
+    let v = rollVariant();
+    if (player.gears["gear25"]) v = rollVariant();
+    const variant = v.v;
+    playerInventory["cateye"][variantInvNames[variant-1]]++;
+    typeWriter(oreList["cateye"]["spawnMessage"], 2);
+    inventoryObj["cateye"] = 0;
+    playSound("Infinitesimal")
 }
 const blockAmts = [];
 let lastBlockAmt = 0;
@@ -1779,9 +1792,9 @@ function endEvent() {
     events[currentActiveEvent.name].specialEffect(false);
     events[currentActiveEvent.name].boost -= currentActiveEvent.extraBoost;
     currentActiveEvent = undefined;
-    if (typeCalls.currentType === 1) messageElement.textContent = "All Messages Appear Here!";
-    typeCalls.currentType = "";
-    if (typeCalls.priority === 1) removeIndicators();
+    if (typeCalls.curPriority === 1) messageElement.textContent = "All Messages Appear Here!";
+    if (typeCalls.curPriority === 1) removeIndicators();
+    typeCalls.curPriority = 0;
     updateAllLayers();
 }
 function getCurrentEventOre() {
@@ -2032,6 +2045,8 @@ const polyLocations = {
     "orbOfSound" : "fluteLayer",
     "orbOfTheUnknown" : "borderLayer",
     "orbOfCreation" : "nebulaLayer",
+    "orbOfFlight" : "cloudLayer",
+    "orbOfFire" : "cactusLayer"
 }
 const polyIds = {
     "orbOfLife" : "gear40",
@@ -2039,6 +2054,8 @@ const polyIds = {
     "orbOfSound" : "gear42",
     "orbOfTheUnknown" : "gear43",
     "orbOfCreation" : "gear44",
+    "orbOfFlight" : "pickaxe36",
+    "orbOfFire" : "gear48",
 }
 function checkPolys() {
     const polys = Object.keys(polyLocations);
