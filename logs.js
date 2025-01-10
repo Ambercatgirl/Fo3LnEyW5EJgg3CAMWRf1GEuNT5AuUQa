@@ -9,6 +9,8 @@ class secureLogs {
     #isRightPickaxe;
     #canGenCaves;
     #isLoaded;
+    #hyperdimensionalCount;
+    #playtimeLuck;
     constructor() {
         if (logCreated["created"]) location.reload();
         this.#spawnLogs = [];
@@ -23,6 +25,8 @@ class secureLogs {
         this.#logsTimer = null;
         this.#isRightPickaxe = true;
         this.#canGenCaves = false;
+        this.#hyperdimensionalCount = 0;
+        this.#playtimeLuck = 1;
         this.#onLoad()
     }
     createLog(r, c, intended, obj, fromCave, gnums, vnums) {
@@ -190,7 +194,7 @@ class secureLogs {
                 if (list[i - 1] !== undefined) times = list[i].genAt - list[i - 1].genAt;
                 else times = list[i].genAt;
                 if (times === 0) times = 1;
-                output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], times)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this); return false;">Click Me To Copy Verification</span> | <span onclick="saveLogToStorage(decryptLogData(this.parentElement.children[0].textContent))">Click Me To Save Me</span></span><br>`
+                output += `<span><span style="font-size:0vw;">${encryptLogData(list[i], false)}</span><span onclick="copyText(this.parentElement.children[0]); copiedLog(this); return false;">Click Me To Copy Verification</span> | <span onclick="saveLogToStorage(decryptLogData(this.parentElement.children[0].textContent))">Click Me To Save Me</span></span><br>`
             }
             if (document.getElementById("generatedLogs") !== undefined) document.getElementById("generatedLogs").innerHTML = output;
     }
@@ -234,20 +238,24 @@ class secureLogs {
         if (player.gears["gear40"]) baseLuck *= 1.5;
         let luck = baseLuck;
         if (currentWorld === 1.1) {
+            if (player.gears["gear42"]) luck += (this.#hyperdimensionalCount * 0.01);
             if (player.gears["gear20"]) luck *= ((baseLuck * 0.05) + 1);
             if (player.gears["gear37"]) luck = luck ** 1.035;
             luck *= 1.5;
             if (randBuff.luck) luck *= 1.4;
+            if (player.gears["gear48"]) luck *= this.#playtimeLuck;
             if (isNaN(luck)) return 1;
             else return luck;
         }
         if (player.stats.currentPickaxe === "pickaxe27" && !player.trophyProgress["subrealmOneCompletion"].trophyOwned) {player.stats.currentPickaxe = "pickaxe0"; baseLuck = 1;}
         luck += (player.gears["gear18"] ? 2.5 : 0) + (player.gears["gear12"] ? 0.35 : 0) + (player.gears["gear10"] ? 0.25 : 0);
+        if (player.gears["gear42"]) luck += (this.#hyperdimensionalCount * 0.01);
         if (currentWorld < 2) luck *= (player.gears["gear1"] ? 1.1 : 1) * (player.gears["gear5"] ? 1.6 : 1);
         if (player.gears["gear20"]) luck *= (baseLuck * 0.05) + 1;
         if (player.gears["gear37"]) luck = luck ** 1.035;
         luck *= 1.5;
         if (randBuff.luck) luck *= 1.4;
+        if (player.gears["gear48"]) luck *= this.#playtimeLuck;
         if (isNaN(luck)) return 1;
         else return luck;
     }
@@ -326,6 +334,24 @@ class secureLogs {
         if (player.powerupVariables.caveBoosts.active) caveRateModifier *= 2;
         if (player.stats.currentPickaxe === "pickaxe33") caveRateModifier *= 3;
         return caveRateModifier;
+    }
+    addHyperdimensionalCount(amt) {
+        this.#hyperdimensionalCount += amt;
+        player.displayStatistics.luck = Math.floor(verifiedOres.getCurrentLuck())
+        updateAllLayers();
+    }
+    countHyperdimensionalOres() {
+        const ores = oreInformation.getOresByTier("Hyperdimensional")
+        let total = 0;
+        for (let i = 0; i < ores.length; i++) {
+            total += playerInventory[ores[i]]["normalAmt"] + playerInventory[ores[i]]["electrifiedAmt"] + playerInventory[ores[i]]["radioactiveAmt"] + playerInventory[ores[i]]["explosiveAmt"]
+        }
+        this.#hyperdimensionalCount = total;
+    }
+    checkSessionTimeForLuck() {
+        let playTime = 1 + Math.ceil((Date.now() - verifiedOres.getStartTime()) / 60000) * 0.01
+        this.#playtimeLuck = playTime;
+        updateAllLayers();
     }
 }
 const neededProperties = ["block", "genAt", "variant", "luck", "rng", "generationInfo", "variantInfo", "bulkAmt"]
@@ -430,7 +456,11 @@ function serverWebhook(log, mined, key) {
         "formattedTitle" : ` has found ${names[log.variant - 1]} ${oreList[log.block]["eId"] ? oreList[log.block]["eId"] : log.block} ${log.amt > 1 ? `(x${log.amt})` : ""}! ${log.caveInfo[1] > 1 ? `(${caveList[log.caveInfo[2]].slice(-1)} Cave)` : ""}`,
         "formattedLuck" : `${(Math.round(log.luck*1000)/1000).toLocaleString()}x`,
         "formattedEvent" : log.withEvent,
-        "rng" : log.rng
+        "rng" : log.rng,
+        "verification" : log.generationInfo,
+    }
+    if (log.variantInfo !== undefined) {
+        logObj["varVerification"] = {"rand": log.variantInfo.r, "count": log.variantInfo.c, "seed": log.variantInfo.s};
     }
     fetch("https://endurable-fragrant-visitor.glitch.me", {
         method: "POST",
@@ -471,6 +501,10 @@ function copiedLog(element) {
     element.style.animation = "";
     setTimeout(() => {
         element.style.animation = "textGreen 1s linear 1";
+        element.onanimationend = () => {
+            element.style.animation = "";
+            element.onanimationend = undefined;
+        }
     }, 25);
 }
 function saveLogToStorage(log) {

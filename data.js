@@ -101,7 +101,7 @@ function exportData() {
         exportDataAsFile(data, "data.txt", "text/plain");
     else {
         textField.select();
-        textField.setSelectionRange(0, 99999);
+        textField.setSelectionRange(0, 250000);
         alert("The textbox has been selected for you; make sure to copy your data to your clipboard so you don't lose it!");
     }
 }
@@ -164,7 +164,7 @@ function importData(data) {
                     if (!debug) localStorage.setItem("newPlayerData", localStorage.getItem("dataBackup"));
                     else localStorage.setItem("newTestingData", localStorage.getItem("dataBackup"));
                 }
-                window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${err}`);
+                window.alert(`DATA CORRUPTION DETECTED, CONTACT A MODERATOR IN THE DISCORD, ${error}`);
             }
         }
     }
@@ -226,7 +226,7 @@ function cloudSave(data,forceCloudSave) {
 
 	}
 }
-
+let sinceLastAutosaveTimer;
 window.addEventListener("message", e => {
 	if (e.origin === cloudsaving.website_name) {
 		//this is the initial message
@@ -271,5 +271,13 @@ window.addEventListener("message", e => {
 				}
 			}
 		}
-	}
+	} else if (e.origin === "https://ambercatgirl.github.io") {
+        try {
+            const isCorrectData = JSON.parse(e.data);
+            if (Object.keys(isCorrectData).length === 3) localStorage.setItem("sillyCavernsAnniversaryData", e.data);
+        } catch (err) {
+            localStorage.setItem("sillyCavernsAnniversaryData", JSON.stringify({hk: false, p8:false, sf: false}));
+        }
+
+    }
 })
