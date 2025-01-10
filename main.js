@@ -85,7 +85,6 @@ function init() {
             document.getElementById("topMessages").innerText = "Happy Birthday " + birthdays[propertyName] + "!!!";
         }
     }
-    portalLocations[11252023] = {title: "Silly Caverns Anniversary",desc: "The event world for the silly caverns anniversary.<br>More details unknown, further research required.<br>Available Until: FOREVER NOW NYERDS<br>NOTE: THIS REDIRECTS YOU OFF THE MAIN GAME<br><br>?????? works here?<br><br>?????? works here?<br><br>Unlock Requirement: N/A<br><br>Goals: Mine 100K Blocks, Mine 1 Zenith Ore, Craft Pickaxe 8",req: function() {return true;},to: 11252023,hue: "-90deg",url: "ores/NYERD.webp"}
     fetch("emoji.json")
     .then((response) => response.json())
     .then((json) => setEmojiNames(json))
